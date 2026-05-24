@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JoshAnswers — Watchlist Dashboard</title>
+  <style>
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111318;
+      --surface2:  #181c24;
+      --border:    #222830;
+      --accent:    #f0a500;
+      --accent2:   #c97f00;
+      --green:     #00c87a;
+      --green-dim: rgba(0,200,122,0.1);
+      --red:       #e03e3e;
+      --red-dim:   rgba(224,62,62,0.1);
+      --blue:      #4f9cf9;
+      --muted:     #5a6275;
+      --text:      #dde1ea;
+      --text-dim:  #8b929f;
+      --tier1:     #f0a500;
+      --tier2:     #4f9cf9;
+      --tier3:     #e03e3e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo { display: flex; align-items: center; gap: 14px; }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: #000;
+    }
+
+    .logo-text h1 { font-size: 17px; font-weight: 700; color: var(--accent); }
+    .logo-text p  { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-top: 2px; }
+
+    .header-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+    .market-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    }
+    .market-badge.open   { background: var(--green-dim); color: var(--green);  border: 1px solid rgba(0,200,122,0.4); }
+    .market-badge.closed { background: #181818;           color: var(--muted);  border: 1px solid var(--border); }
+    .market-badge .dot   { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .market-badge.open .dot { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+    #timestamp { font-size: 11px; color: var(--muted); }
+
+    .refresh-btn {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-dim); padding: 6px 14px; border-radius: 6px;
+      font-size: 12px; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .refresh-btn:hover  { border-color: var(--accent); color: var(--accent); }
+    .refresh-btn svg    { transition: transform 0.5s; }
+    .refresh-btn.spinning svg { animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .countdown { font-size: 11px; color: var(--muted); min-width: 120px; }
+
+    /* ─── Summary strip ─── */
+    .strip {
+      display: flex; overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .strip-item {
+      display: flex; flex-direction: column; gap: 3px;
+      padding: 12px 24px; border-right: 1px solid var(--border);
+      min-width: 130px; flex-shrink: 0;
+    }
+    .strip-item .s-ticker { font-size: 13px; font-weight: 800; color: var(--text); }
+    .strip-item .s-price  { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .strip-item .s-chg    { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .up   { color: var(--green); }
+    .down { color: var(--red); }
+    .flat { color: var(--muted); }
+
+    /* ─── Main ─── */
+    main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--muted); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    /* ─── Cards ─── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; margin-bottom: 40px; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .card:hover { border-color: var(--accent2); transform: translateY(-1px); }
+    .card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .card.t1::before { background: var(--tier1); }
+    .card.t2::before { background: var(--tier2); }
+    .card.t3::before { background: var(--tier3); }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+
+    .c-ticker { font-size: 26px; font-weight: 800; letter-spacing: 1px; line-height: 1; }
+    .c-company { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+
+    .tier-badge {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; padding: 4px 9px; border-radius: 4px;
+    }
+    .t1 .tier-badge { background:rgba(240,165,0,.1);   color:var(--tier1); border:1px solid rgba(240,165,0,.3); }
+    .t2 .tier-badge { background:rgba(79,156,249,.1);  color:var(--tier2); border:1px solid rgba(79,156,249,.3); }
+    .t3 .tier-badge { background:rgba(224,62,62,.1);   color:var(--tier3); border:1px solid rgba(224,62,62,.3); }
+
+    /* price row */
+    .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+    .c-price { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .c-price.loading { color: var(--muted); font-size: 22px; }
+
+    .c-delta { display: flex; flex-direction: column; }
+    .c-chgval { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .c-pct    { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* OHLC boxes */
+    .ohlc { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .obox { background: var(--surface2); border-radius: 6px; padding: 8px 12px; }
+    .obox-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+    .obox-val   { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .obox-val.skeleton { color: var(--border); }
+
+    /* range bar */
+    .rangebar { margin-bottom: 14px; }
+    .rlabels  { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); margin-bottom:4px; }
+    .rtrack   { height:4px; background:var(--surface2); border-radius:2px; position:relative; }
+    .rfill    { position:absolute; left:0;top:0;bottom:0; background:linear-gradient(90deg,var(--red),var(--green)); border-radius:2px; }
+    .rdot     { position:absolute; top:50%; width:10px; height:10px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); transform:translate(-50%,-50%); }
+
+    /* levels */
+    .levels { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:14px; }
+    .litem  { text-align:center; padding:6px 4px; background:var(--surface2); border-radius:5px; }
+    .litem .llabel { font-size:9px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); }
+    .litem .lval   { font-size:12px; font-weight:700; margin-top:2px; }
+    .litem.entry .lval  { color: var(--blue); }
+    .litem.target .lval { color: var(--green); }
+    .litem.stop .lval   { color: var(--red); }
+
+    /* josh note */
+    .josh-note { border-top:1px solid var(--border); padding-top:12px; font-size:11px; color:var(--text-dim); line-height:1.5; font-style:italic; }
+    .josh-note strong { color:var(--accent); font-style:normal; font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+    .josh-note .catalyst-line { color:var(--muted); font-style:normal; font-size:10px; margin-top:4px; display:block; }
+
+    /* ─── Table ─── */
+    .tbl-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:10px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead tr { background: var(--surface2); }
+    th { padding:12px 16px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; border-bottom:1px solid var(--border); }
+    th.r, td.r { text-align:right; }
+    tbody tr { background:var(--surface); border-bottom:1px solid var(--border); transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:var(--surface2); }
+    td { padding:14px 16px; font-variant-numeric:tabular-nums; }
+    .tk  { font-size:14px; font-weight:800; }
+    .co  { font-size:10px; color:var(--muted); margin-top:2px; }
+    .tdot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+
+    /* ─── Status bar ─── */
+    .status-bar {
+      text-align:center; padding:8px; font-size:11px; color:var(--muted);
+      background:var(--surface); border-bottom:1px solid var(--border);
+    }
+    .status-bar.err { color: var(--red); }
+
+    /* ─── Footer ─── */
+    footer { text-align:center; padding:24px; color:var(--muted); font-size:11px; border-top:1px solid var(--border); margin-top:40px; }
+    footer a { color:var(--accent2); text-decoration:none; }
+
+    @media(max-width:700px){
+      header { padding:12px 16px; }
+      main   { padding:14px; }
+      .cards { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">J</div>
+    <div class="logo-text">
+      <h1>JoshAnswers</h1>
+      <p>Trading Fraternity Watchlist</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="market-badge closed" id="mkt-badge">
+      <div class="dot"></div>
+      <span id="mkt-label">Checking…</span>
+    </div>
+    <span class="countdown" id="countdown"></span>
+    <span id="timestamp"></span>
+    <button class="refresh-btn" id="refresh-btn" onclick="loadAll()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="23 4 23 10 17 10"/>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Refresh
+    </button>
+  </div>
+</header>
+
+<div class="status-bar" id="status-bar">Fetching quotes…</div>
+
+<!-- Summary strip -->
+<div class="strip" id="strip"></div>
+
+<main>
+  <div class="section-label">Live Positions</div>
+  <div class="cards" id="cards"></div>
+
+  <div class="section-label">Quick Reference</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Tier</th>
+          <th class="r">Open</th>
+          <th class="r">Price</th>
+          <th class="r">Chg $</th>
+          <th class="r">Chg %</th>
+          <th class="r">High</th>
+          <th class="r">Low</th>
+          <th class="r">Prev Close</th>
+          <th>Catalyst</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <p>JoshAnswers Watchlist &mdash; The Trading Fraternity framework &mdash; data via Yahoo Finance</p>
+  <p style="margin-top:6px">
+    Educational use only &mdash; not financial advice &mdash;
+    <a href="https://www.youtube.com/channel/UCymzDnu-l3vZ1fxuqvRePOA" target="_blank">@TradingFraternity ↗</a>
+  </p>
+</footer>
+
+<script>
+// ─── Watchlist definition ───────────────────────────────────────────────────
+const WATCHLIST = [
+  {
+    ticker:  'ORCL',
+    company: 'Oracle Corporation',
+    tier:    'Long-Term Hold',
+    tc:      't1',
+    entry:   '$175–$185',
+    target:  '$275',
+    stop:    '$165',
+    catalyst:'AI cloud RPO $523B; recovering from $134 low; Wedbush PT $275',
+    note:    'Benjamin Graham value buy — March 2026 at −50% from ATH',
+  },
+  {
+    ticker:  'AMD',
+    company: 'Advanced Micro Devices',
+    tier:    'Momentum / Swing',
+    tc:      't2',
+    entry:   '$390–$400',
+    target:  '$469',
+    stop:    '$370',
+    catalyst:'MI400 series Q3 2026 launch; $60B hyperscaler commitments',
+    note:    'Data center dominance — fundamental + momentum play',
+  },
+  {
+    ticker:  'TAP',
+    company: 'Molson Coors Beverage',
+    tier:    'Dividend Hold',
+    tc:      't1',
+    entry:   '$40–$44',
+    target:  '$49',
+    stop:    '$38',
+    catalyst:'4.58% dividend yield; ex-div May 29 🔔; analyst PT $49',
+    note:    'Long-term buy Dec 2025 — boring stock, real dividend while you wait',
+  },
+  {
+    ticker:  'SG',
+    company: 'Sweetgreen Inc.',
+    tier:    'Swing / Growth',
+    tc:      't2',
+    entry:   '$9.00–$9.50',
+    target:  '$13',
+    stop:    '$7.50',
+    catalyst:'Wrap menu launch; JPMorgan upgrade to Overweight, PT $13',
+    note:    'Oct 2025 rate-cut buy — menu pivot +45% off May lows',
+  },
+  {
+    ticker:  'INTC',
+    company: 'Intel Corporation',
+    tier:    'Watch Only ⚠',
+    tc:      't3',
+    entry:   '$95–$105 on pullback',
+    target:  '$132+',
+    stop:    'N/A',
+    catalyst:'Terafab (SpaceX/xAI/Tesla); CHIPS Act; Apple foundry talks',
+    note:    'RSI 80+ — DO NOT CHASE. Josh\'s top 2026 call but up 5× from lows. Wait.',
+  },
+];
+
+const SYMBOLS = WATCHLIST.map(s => s.ticker).join(',');
+
+// ─── Data fetching ───────────────────────────────────────────────────────────
+// Primary: Yahoo Finance direct (works from most local browsers)
+// Fallback: same URL via corsproxy.io (adds CORS headers for restricted environments)
+const YF_URL   = `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${SYMBOLS}&fields=regularMarketPrice,regularMarketOpen,regularMarketDayHigh,regularMarketDayLow,regularMarketPreviousClose,regularMarketChange,regularMarketChangePercent,regularMarketVolume,marketState`;
+const PROXY_URL = `https://corsproxy.io/?${encodeURIComponent(YF_URL)}`;
+
+async function fetchQuotes() {
+  // Try direct first
+  try {
+    const r = await fetch(YF_URL, { method: 'GET', headers: { Accept: 'application/json' } });
+    if (r.ok) {
+      const d = await r.json();
+      if (d?.quoteResponse?.result?.length) {
+        setStatus('Live data — Yahoo Finance (direct)', false);
+        return d.quoteResponse.result;
+      }
+    }
+  } catch (_) {}
+
+  // Fallback via CORS proxy
+  try {
+    const r = await fetch(PROXY_URL);
+    if (r.ok) {
+      const d = await r.json();
+      if (d?.quoteResponse?.result?.length) {
+        setStatus('Live data — Yahoo Finance (via proxy)', false);
+        return d.quoteResponse.result;
+      }
+    }
+  } catch (_) {}
+
+  setStatus('Could not reach Yahoo Finance. Check network / try opening locally.', true);
+  return null;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function usd(v) {
+  if (v == null) return '—';
+  return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function pctFmt(v) {
+  if (v == null) return '—';
+  const s = v > 0 ? '+' : '';
+  return s + Number(v).toFixed(2) + '%';
+}
+
+function sign(v) { return v > 0 ? '+' : ''; }
+
+function cls(v) { return v > 0 ? 'up' : v < 0 ? 'down' : 'flat'; }
+
+function tierColor(tc) {
+  return tc === 't1' ? 'var(--tier1)' : tc === 't2' ? 'var(--tier2)' : 'var(--tier3)';
+}
+
+function setStatus(msg, isErr) {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.className = 'status-bar' + (isErr ? ' err' : '');
+}
+
+function marketStatus(state) {
+  const badge = document.getElementById('mkt-badge');
+  const label = document.getElementById('mkt-label');
+  const isOpen = state === 'REGULAR';
+  badge.className = 'market-badge ' + (isOpen ? 'open' : 'closed');
+  label.textContent = isOpen ? 'Market Open' : state === 'PRE' ? 'Pre-Market' : state === 'POST' ? 'After-Hours' : 'Market Closed';
+}
+
+function timestamp() {
+  const now = new Date();
+  document.getElementById('timestamp').textContent =
+    now.toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' ET';
+}
+
+// ─── DOM builders ────────────────────────────────────────────────────────────
+function buildUI() {
+  buildStrip();
+  buildCards();
+  buildTable();
+}
+
+function buildStrip() {
+  const strip = document.getElementById('strip');
+  strip.innerHTML = WATCHLIST.map(s => `
+    <div class="strip-item">
+      <span class="s-ticker">${s.ticker}</span>
+      <span class="s-price flat" id="sp-${s.ticker}">—</span>
+      <span class="s-chg  flat" id="sc-${s.ticker}">—</span>
+    </div>
+  `).join('');
+}
+
+function buildCards() {
+  const grid = document.getElementById('cards');
+  grid.innerHTML = WATCHLIST.map(s => `
+    <div class="card ${s.tc}">
+      <div class="card-top">
+        <div>
+          <div class="c-ticker">${s.ticker}</div>
+          <div class="c-company">${s.company}</div>
+        </div>
+        <span class="tier-badge">${s.tier}</span>
+      </div>
+
+      <div class="price-row">
+        <span class="c-price loading" id="cp-${s.ticker}">Loading…</span>
+        <div class="c-delta">
+          <span class="c-chgval flat" id="cv-${s.ticker}">—</span>
+          <span class="c-pct   flat" id="pp-${s.ticker}">—</span>
+        </div>
+      </div>
+
+      <div class="ohlc">
+        <div class="obox">
+          <div class="obox-label">Open</div>
+          <div class="obox-val skeleton" id="op-${s.ticker}">—</div>
+        </div>
+        <div class="obox">
+          <div class="obox-label">Prev Close</div>
+          <div class="obox-val skeleton" id="pc-${s.ticker}">—</div>
+        </div>
+        <div class="obox">
+          <div class="obox-label">Day High</div>
+          <div class="obox-val skeleton" id="dh-${s.ticker}">—</div>
+        </div>
+        <div class="obox">
+          <div class="obox-label">Day Low</div>
+          <div class="obox-val skeleton" id="dl-${s.ticker}">—</div>
+        </div>
+      </div>
+
+      <div class="rangebar" id="rb-${s.ticker}" style="display:none">
+        <div class="rlabels">
+          <span id="rlo-${s.ticker}">L</span>
+          <span style="color:var(--muted);font-size:10px">Day Range</span>
+          <span id="rhi-${s.ticker}">H</span>
+        </div>
+        <div class="rtrack">
+          <div class="rfill" id="rf-${s.ticker}" style="width:50%"></div>
+          <div class="rdot"  id="rd-${s.ticker}" style="left:50%"></div>
+        </div>
+      </div>
+
+      <div class="levels">
+        <div class="litem entry">
+          <div class="llabel">Entry</div>
+          <div class="lval">${s.entry}</div>
+        </div>
+        <div class="litem target">
+          <div class="llabel">Target</div>
+          <div class="lval">${s.target}</div>
+        </div>
+        <div class="litem stop">
+          <div class="llabel">Stop</div>
+          <div class="lval">${s.stop}</div>
+        </div>
+      </div>
+
+      <div class="josh-note">
+        <strong>Josh —</strong> ${s.note}
+        <span class="catalyst-line">${s.catalyst}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildTable() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = WATCHLIST.map(s => `
+    <tr>
+      <td>
+        <span class="tdot" style="background:${tierColor(s.tc)}"></span>
+        <span class="tk">${s.ticker}</span>
+        <div class="co">${s.company}</div>
+      </td>
+      <td style="font-size:11px;color:var(--text-dim)">${s.tier}</td>
+      <td class="r" id="to-${s.ticker}">—</td>
+      <td class="r flat" id="tp-${s.ticker}">—</td>
+      <td class="r flat" id="tc-${s.ticker}">—</td>
+      <td class="r flat" id="tpc-${s.ticker}">—</td>
+      <td class="r" id="th-${s.ticker}">—</td>
+      <td class="r" id="tl-${s.ticker}">—</td>
+      <td class="r" id="tprev-${s.ticker}">—</td>
+      <td style="font-size:11px;color:var(--text-dim);max-width:180px">${s.catalyst}</td>
+    </tr>
+  `).join('');
+}
+
+// ─── Update DOM with data ─────────────────────────────────────────────────────
+function applyQuote(q) {
+  const t = q.symbol;
+  const price  = q.regularMarketPrice;
+  const open   = q.regularMarketOpen;
+  const high   = q.regularMarketDayHigh;
+  const low    = q.regularMarketDayLow;
+  const prev   = q.regularMarketPreviousClose;
+  const chg    = q.regularMarketChange;
+  const pct    = q.regularMarketChangePercent;
+  const c      = cls(chg);
+  const s      = sign(chg);
+
+  // Strip
+  const sp = document.getElementById('sp-' + t);
+  if (sp) { sp.textContent = usd(price); sp.className = 's-price ' + c; }
+  const sc = document.getElementById('sc-' + t);
+  if (sc) { sc.textContent = s + usd(chg).replace('$','') + ' (' + pctFmt(pct) + ')'; sc.className = 's-chg ' + c; }
+
+  // Card price
+  const cp = document.getElementById('cp-' + t);
+  if (cp) { cp.textContent = usd(price); cp.className = 'c-price ' + c; }
+  const cv = document.getElementById('cv-' + t);
+  if (cv) { cv.textContent = s + usd(chg); cv.className = 'c-chgval ' + c; }
+  const pp = document.getElementById('pp-' + t);
+  if (pp) { pp.textContent = pctFmt(pct); pp.className = 'c-pct ' + c; }
+
+  // OHLC boxes
+  const set = (id, val) => { const el = document.getElementById(id); if (el) { el.textContent = usd(val); el.classList.remove('skeleton'); } };
+  set('op-'+t, open); set('pc-'+t, prev); set('dh-'+t, high); set('dl-'+t, low);
+
+  // Range bar
+  if (high && low && price) {
+    const pct2 = ((price - low) / (high - low)) * 100;
+    const p = Math.min(100, Math.max(0, pct2));
+    const rb = document.getElementById('rb-'+t);
+    if (rb) rb.style.display = 'block';
+    const rf = document.getElementById('rf-'+t); if (rf) rf.style.width = p + '%';
+    const rd = document.getElementById('rd-'+t); if (rd) rd.style.left  = p + '%';
+    const rlo = document.getElementById('rlo-'+t); if (rlo) rlo.textContent = usd(low);
+    const rhi = document.getElementById('rhi-'+t); if (rhi) rhi.textContent = usd(high);
+  }
+
+  // Table
+  const tset = (id, val, klass='') => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = val; if (klass) el.className = 'r ' + klass; }
+  };
+  tset('to-'+t,    usd(open));
+  tset('tp-'+t,    usd(price),           c);
+  tset('tc-'+t,    s + usd(chg),         c);
+  tset('tpc-'+t,   pctFmt(pct),          c);
+  tset('th-'+t,    usd(high));
+  tset('tl-'+t,    usd(low));
+  tset('tprev-'+t, usd(prev));
+}
+
+// ─── Auto-refresh countdown ───────────────────────────────────────────────────
+let timer = null;
+let secs  = 60;
+
+function startCountdown() {
+  clearInterval(timer);
+  secs = 60;
+  timer = setInterval(() => {
+    secs--;
+    const el = document.getElementById('countdown');
+    if (secs <= 0) {
+      if (el) el.textContent = 'Refreshing…';
+      clearInterval(timer);
+      loadAll();
+    } else {
+      if (el) el.textContent = `Auto-refresh in ${secs}s`;
+    }
+  }, 1000);
+}
+
+// ─── Main load ────────────────────────────────────────────────────────────────
+async function loadAll() {
+  document.getElementById('refresh-btn').classList.add('spinning');
+  timestamp();
+
+  const results = await fetchQuotes();
+
+  if (results) {
+    results.forEach(q => applyQuote(q));
+    // Market state from first result
+    if (results[0]?.marketState) marketStatus(results[0].marketState);
+  }
+
+  document.getElementById('refresh-btn').classList.remove('spinning');
+  startCountdown();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildUI();
+loadAll();
+</script>
+</body>
+</html>
