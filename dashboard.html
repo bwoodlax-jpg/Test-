@@ -224,6 +224,77 @@
       header{padding:12px 14px} main{padding:14px}
       .cards{grid-template-columns:1fr}
     }
+
+    /* ── Weekly Swing Desk ── */
+    .swing-banner{
+      background:var(--surf);border:1px solid var(--border);border-radius:10px;
+      padding:18px 22px;margin-bottom:12px;
+    }
+    .swing-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .swing-wk{font-size:13px;font-weight:700;color:var(--accent)}
+    .swing-strat-badge{
+      background:rgba(79,156,249,.12);color:var(--blue);border:1px solid rgba(79,156,249,.3);
+      font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;
+      text-transform:uppercase;letter-spacing:.5px;
+    }
+    .swing-bk-badge{
+      background:rgba(0,200,122,.1);color:var(--green);border:1px solid rgba(0,200,122,.25);
+      font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;
+    }
+    .swing-short-flag{
+      background:rgba(224,62,62,.1);color:var(--red);border:1px solid rgba(224,62,62,.3);
+      font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;display:none;
+    }
+    .swing-thesis{
+      font-size:12px;color:var(--dim);line-height:1.65;
+      border-top:1px solid var(--border);padding-top:11px;
+    }
+    .swing-thesis strong{color:var(--accent)}
+    .swing-thesis em{color:var(--text);font-style:normal}
+
+    .swing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+    @media(max-width:860px){.swing-grid{grid-template-columns:1fr}}
+    .sw-col{
+      background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:16px 18px;
+    }
+    .sw-col-hd{
+      font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);
+      margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:8px;
+    }
+    .sw-col-hd::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    .sw-rule{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px;font-size:12px;color:var(--dim);line-height:1.45}
+    .sw-rn{
+      background:var(--surf2);color:var(--accent);font-weight:800;font-size:10px;
+      min-width:18px;height:18px;border-radius:3px;display:flex;align-items:center;
+      justify-content:center;flex-shrink:0;margin-top:1px;
+    }
+    .sw-rule strong{color:var(--text)}
+
+    .fil-item{background:var(--surf2);border-radius:6px;padding:9px 12px;margin-bottom:7px}
+    .fil-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+    .fil-val{font-size:12px;color:var(--text);line-height:1.4}
+    .fil-val .hi{color:var(--accent);font-weight:700}
+    .fil-on{color:var(--green);font-weight:700;font-size:11px}
+
+    .sw-strat-item{margin-bottom:10px}
+    .sw-strat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+    .sw-strat-val{font-size:12px;color:var(--text);line-height:1.45}
+
+    .rank-dot{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:22px;height:22px;border-radius:50%;font-size:10px;font-weight:800;
+    }
+    .r1{background:rgba(240,165,0,.2);color:var(--accent)}
+    .r2{background:rgba(0,200,122,.15);color:var(--green)}
+    .r3{background:rgba(79,156,249,.15);color:var(--blue)}
+    .r4{background:var(--surf2);color:var(--muted)}
+    .sma-a{color:var(--green);font-size:11px;font-weight:700}
+    .sma-t{color:var(--accent);font-size:11px;font-weight:700}
+    .sma-b{color:var(--red);font-size:11px;font-weight:700}
+    .fit-hi{color:var(--green);font-weight:700;font-size:11px}
+    .fit-md{color:var(--accent);font-weight:700;font-size:11px}
+    .fit-lo{color:var(--muted);font-size:11px}
   </style>
 </head>
 <body>
@@ -315,6 +386,269 @@
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- ── Weekly Swing Desk ─────────────────────────────── -->
+  <div class="sec-label" style="margin-top:36px">Weekly Swing Desk &mdash; 1% Bankroll</div>
+
+  <!-- Strategy banner: week label + thesis -->
+  <div class="swing-banner">
+    <div class="swing-meta">
+      <span class="swing-wk" id="swing-wk">Week of —</span>
+      <span class="swing-strat-badge">Catalyst-Confirmed Technical</span>
+      <span class="swing-bk-badge">Allocation: 1% of Bankroll</span>
+      <span class="swing-short-flag" id="sw-short-flag">&#9889; Short Week</span>
+    </div>
+    <div class="swing-thesis">
+      <strong>Strategy thesis (refreshes each session):</strong> Hybrid technical + catalyst
+      swing — every entry requires <em>two concurrent signals</em>: a specific, identifiable
+      catalyst (Josh Rule 7) confirmed by technical alignment — price above SMA50 and entry
+      candle volume &ge;1.5&times; the 20-day average. With only 1% of bankroll deployed,
+      focus shifts to <em>highest-beta, lowest-priced candidates</em> where full-share
+      positions are achievable and a 10&ndash;15% weekly move delivers meaningful return.
+      <strong>SG</strong> and <strong>LMND</strong> are the primary candidates for a
+      short-week setup; <strong>AMD</strong> is the anchor if the $390&ndash;$400 zone
+      re-tests. No entries on low-volume sessions. No averaging down. Exit by Thursday
+      close if the target is not reached &mdash; never carry a swing thesis into the weekend
+      without a hard, named catalyst still live.
+    </div>
+  </div>
+
+  <!-- Three-column framework grid -->
+  <div class="swing-grid">
+
+    <!-- Col 1 — Strategy methodology -->
+    <div class="sw-col">
+      <div class="sw-col-hd">Strategy Methodology</div>
+      <div class="sw-strat-item">
+        <div class="sw-strat-lbl">Strategy type</div>
+        <div class="sw-strat-val">
+          <strong style="color:var(--accent)">Catalyst-Confirmed Technical Swing.</strong>
+          Hybrid approach: a news catalyst (earnings, upgrade, launch, macro event) triggers
+          the search for a trade; a technical setup confirms the entry. Neither signal alone
+          is sufficient — both must align before the order is placed.
+        </div>
+      </div>
+      <div class="sw-strat-item">
+        <div class="sw-strat-lbl">Does volume play into this strategy?</div>
+        <div class="sw-strat-val">
+          <span class="fil-on">YES &mdash; REQUIRED</span><br>
+          Volume &ge;1.5&times; the 20-day ADV on the entry candle. Volume is the institutional
+          participation signal. High volume + catalyst = real money moving = tradeable setup.
+          Low volume + catalyst = retail noise — the move will likely fade. Skip thin entries.
+        </div>
+      </div>
+      <div class="sw-strat-item">
+        <div class="sw-strat-lbl">Does SMA50 play into this strategy?</div>
+        <div class="sw-strat-val">
+          <span class="fil-on">YES &mdash; TREND FILTER</span><br>
+          Long entries only when price is <em>above</em> the 50-day SMA. If price is below
+          the 50-day, the trend is against you — do not fight it on a weekly swing.
+          Exception: price <em>testing</em> SMA50 with a live catalyst and volume surge is
+          valid with a tighter stop. A declining SMA50 negates even that exception.
+        </div>
+      </div>
+      <div class="sw-strat-item">
+        <div class="sw-strat-lbl">Holding period</div>
+        <div class="sw-strat-val">2&ndash;4 trading days maximum. Enter Mon/Tue on confirmation;
+        target hit or hard exit by Thursday close. Zero weekend holds on a swing position.</div>
+      </div>
+    </div>
+
+    <!-- Col 2 — Technical entry filters -->
+    <div class="sw-col">
+      <div class="sw-col-hd">Technical Entry Filters</div>
+      <div class="fil-item">
+        <div class="fil-lbl">1. Catalyst trigger (primary signal)</div>
+        <div class="fil-val">Must identify a <span class="hi">specific, verifiable catalyst</span>
+          before entry: earnings beat, product launch, analyst upgrade, macro data print.
+          No catalyst = no trade. If you cannot name the catalyst precisely, you do not have a trade.
+        </div>
+      </div>
+      <div class="fil-item">
+        <div class="fil-lbl">2. Volume confirmation (entry gate)</div>
+        <div class="fil-val">Entry candle must show <span class="hi">&ge;1.5&times; 20-day ADV</span>.
+          Green candle on 2&times; average volume = institutional accumulation. That is the wave
+          you want to ride — not lead.
+        </div>
+      </div>
+      <div class="fil-item">
+        <div class="fil-lbl">3. SMA50 position (trend gate)</div>
+        <div class="fil-val">Price <span class="hi">above SMA50</span> = uptrend confirmed, take
+          the long. Price at SMA50 with catalyst + volume = valid entry with tighter stop.
+          Price below SMA50 = <strong style="color:var(--red)">no new longs, no exceptions.</strong>
+        </div>
+      </div>
+      <div class="fil-item">
+        <div class="fil-lbl">4. Risk/reward minimum (quality gate)</div>
+        <div class="fil-val">Minimum <span class="hi">2:1 R/R</span> before the order button
+          is touched. Preferred 3:1. If the stop is $1 below entry, the target must be &ge;$2
+          above. Below 2:1 the math does not work over a sample of trades.
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 3 — Rules & Guardrails -->
+    <div class="sw-col">
+      <div class="sw-col-hd">Rules &amp; Guardrails</div>
+      <div class="sw-rule"><span class="sw-rn">1</span><span>
+        <strong>Size = exactly 1% of total bankroll.</strong> No exceptions, no adding. The full
+        position is at risk from entry.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">2</span><span>
+        <strong>Stop set at entry — non-negotiable.</strong> Place it at the recent swing low
+        or 2&times; the daily ATR below entry. It does not move after placement.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">3</span><span>
+        <strong>Minimum 2:1 R/R before the order is placed.</strong> Preferred 3:1. Calculate
+        it before touching the button — not after.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">4</span><span>
+        <strong>Volume &ge;1.5&times; the 20-day ADV on entry candle.</strong> If volume is
+        thin on your entry bar, wait for the next candle or skip the trade entirely.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">5</span><span>
+        <strong>SMA50 trend filter applies to every new long.</strong> Price must be above the
+        50-day moving average. TAP is the current example of a Rule 5 violation — below SMA50,
+        no new swing longs.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">6</span><span>
+        <strong>Name the catalyst before entry.</strong> Earnings beat, product launch, analyst
+        upgrade, macro print. If you cannot name it specifically, you do not have a trade.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">7</span><span>
+        <strong>Exit by Thursday close.</strong> Weekly swings expire on a weekly clock. No
+        carrying a swing thesis into the weekend without a hard, live catalyst still open.
+      </span></div>
+      <div class="sw-rule"><span class="sw-rn">8</span><span>
+        <strong>No averaging down.</strong> One entry. One stop. One exit. If the stop is hit,
+        the thesis was wrong. Accept the loss and move on.
+      </span></div>
+    </div>
+  </div>
+
+  <!-- Swing candidates ranked table -->
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Swing Rank</th>
+          <th>Ticker</th>
+          <th>Setup Type</th>
+          <th>SMA50 Position</th>
+          <th>Vol Confirm Threshold</th>
+          <th class="r">Target R/R</th>
+          <th class="r">Stop Zone</th>
+          <th>1% Fit</th>
+          <th>Weekly Swing Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-dot r1">1</span></td>
+          <td><span class="tk">SG</span><div class="co">Sweetgreen</div></td>
+          <td style="font-size:11px">Momentum + Wrap Catalyst</td>
+          <td><span class="sma-t">Testing (~$8.50&ndash;$9.00)</span></td>
+          <td style="font-size:11px">&ge;4M shares/day<div class="co">Avg ~2.5M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">3.5:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$7.50</td>
+          <td><span class="fit-hi">BEST</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Small price ($9.60) = most shares per 1% bankroll dollar. Wrap catalyst still live.
+            High beta = 10&ndash;15% weekly moves possible. Watch SMA50 — if lost, Rule 5 voids the entry.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r2">2</span></td>
+          <td><span class="tk">LMND</span><div class="co">Lemonade</div></td>
+          <td style="font-size:11px">Catalyst Recovery + Momentum</td>
+          <td><span class="sma-t">Testing (~$62&ndash;$64)</span></td>
+          <td style="font-size:11px">&ge;3M shares/day<div class="co">Avg ~2M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">3:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$52</td>
+          <td><span class="fit-hi">GOOD</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Tesla partnership + Q4 EBITDA path = live, multi-leg catalyst. Recovery momentum from $67.
+            $65 is the near-term support trigger — dip-and-hold there with volume is the entry signal.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r3">3</span></td>
+          <td><span class="tk">AMD</span><div class="co">Advanced Micro Devices</div></td>
+          <td style="font-size:11px">Dip-to-Support + MI400 Catalyst</td>
+          <td><span class="sma-a">Above (strong uptrend)</span></td>
+          <td style="font-size:11px">&ge;35M shares/day<div class="co">Avg ~25M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">2.5:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$370</td>
+          <td><span class="fit-md">MEDIUM</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Best fundamentals in the watchlist. Entry only on dip to $390&ndash;$400 support.
+            At $421 today — <strong style="color:var(--red)">do not chase.</strong>
+            Large share price limits count on 1% bankroll; consider ITM calls (Ghetto Spread setup).
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r4">4</span></td>
+          <td><span class="tk">NVDA</span><div class="co">NVIDIA</div></td>
+          <td style="font-size:11px">News Catalyst + Volatility Play</td>
+          <td><span class="sma-a">Above (bullish)</span></td>
+          <td style="font-size:11px">&ge;350M shares/day<div class="co">Avg ~280M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">3:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$112</td>
+          <td><span class="fit-md">MEDIUM</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Blackwell + China reopening catalysts are live but need a news <em>trigger</em>
+            to move within a single week. Unusual call premium (CNBC May 20) is the institutional tell.
+            Best executed via ITM calls on a named catalyst event, not a market order.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r4">5</span></td>
+          <td><span class="tk">ORCL</span><div class="co">Oracle</div></td>
+          <td style="font-size:11px">Pullback to Support</td>
+          <td><span class="sma-a">Above (recovering)</span></td>
+          <td style="font-size:11px">&ge;10M shares/day<div class="co">Avg ~8M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">2:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$165</td>
+          <td><span class="fit-md">MEDIUM</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Slower mover — structurally better for multi-week holds than 4-day swings.
+            Entry at $175&ndash;$185 on any pull; the Q4 FY26 earnings in July is the real
+            swing catalyst window. Low urgency for the weekly format this week.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r4">6</span></td>
+          <td><span class="tk">MSFT</span><div class="co">Microsoft</div></td>
+          <td style="font-size:11px">Steady Momentum</td>
+          <td><span class="sma-a">Above (strong uptrend)</span></td>
+          <td style="font-size:11px">&ge;28M shares/day<div class="co">Avg ~22M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">2:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$395</td>
+          <td><span class="fit-lo">LOW</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            MSFT moves 1&ndash;2%/week in normal conditions — wrong timeframe for aggressive
+            weekly swing with 1% bankroll. Best held for the monthly+ thesis. Next hard catalyst
+            is July Q4 FY26 earnings. <strong style="color:var(--accent)">Hold, don't swing.</strong>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r4">7</span></td>
+          <td><span class="tk">TAP</span><div class="co">Molson Coors</div></td>
+          <td style="font-size:11px">Income / Ex-Div Only</td>
+          <td><span class="sma-b">Below SMA50 &mdash; downtrend &#9888;</span></td>
+          <td style="font-size:11px">N/A &mdash; income hold only</td>
+          <td class="r" style="font-size:12px;color:var(--muted)">—</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$38</td>
+          <td><span class="fit-lo">SKIP</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            Below SMA50 = <strong style="color:var(--red)">Rule 5 violation</strong> for new long
+            swing entries. Ex-div May 29 is an income event, not a swing catalyst. TAP is Josh's
+            long-term income hold only. Do not swing trade this name under the current framework.
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </main>
@@ -621,7 +955,44 @@ async function loadAll() {
   startCountdown();
 }
 
+// ── Swing Desk — auto-populate week label + short-week flag ───────────────────
+function initSwingDesk() {
+  const now = new Date();
+  const dow = now.getDay(); // 0=Sun, 1=Mon … 6=Sat
+  // Resolve Monday of the current (or upcoming) trading week
+  const mon = new Date(now);
+  if      (dow === 0) mon.setDate(now.getDate() + 1);      // Sun → next Mon
+  else if (dow === 6) mon.setDate(now.getDate() + 2);      // Sat → next Mon
+  else                mon.setDate(now.getDate() - (dow-1)); // Mon-Fri → this Mon
+  mon.setHours(0,0,0,0);
+  const fri = new Date(mon); fri.setDate(mon.getDate() + 4);
+
+  const fmt = d => d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const wkEl = document.getElementById('swing-wk');
+  if (wkEl) wkEl.textContent = `Week: ${fmt(mon)} – ${fmt(fri)}, ${fri.getFullYear()}`;
+
+  // Known US market holidays — mark short weeks
+  const holidays = [
+    new Date(2026,4,25), new Date(2026,4,26), // Memorial Day observed May 26
+    new Date(2026,6,3),  new Date(2026,6,4),  // Independence Day
+    new Date(2026,8,7),                        // Labor Day
+    new Date(2026,10,26),                      // Thanksgiving
+    new Date(2026,11,24),new Date(2026,11,25), // Christmas Eve/Day
+  ];
+  let tradingDays = 0;
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(mon); d.setDate(mon.getDate() + i);
+    if (!holidays.some(h => h.toDateString() === d.toDateString())) tradingDays++;
+  }
+  const sf = document.getElementById('sw-short-flag');
+  if (sf && tradingDays < 5) {
+    sf.textContent = `⚡ Short Week — ${tradingDays} Trading Days`;
+    sf.style.display = 'inline-flex';
+  }
+}
+
 buildDOM();
+initSwingDesk();
 loadAll();
 </script>
 </body>
