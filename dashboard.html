@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JoshAnswers — Watchlist Dashboard</title>
+  <title>Bwoodshares — Watchlist Dashboard</title>
   <style>
     :root {
       --bg:       #0a0c10;
@@ -374,6 +374,21 @@
     .hs-revised  {background:rgba(240,165,0,.1);color:var(--accent)}
 
     /* ── S&P 500 Losers Tab ── */
+    /* ── Play of the Week ── */
+    .potw-wrap{background:linear-gradient(135deg,rgba(240,165,0,.12),rgba(240,165,0,.04));border:2px solid var(--accent);border-radius:12px;padding:20px 24px;margin-bottom:24px;position:relative;overflow:hidden}
+    .potw-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+    .potw-badge{display:inline-block;font-size:9px;font-weight:800;background:var(--accent);color:#000;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+    .potw-ticker{font-size:30px;font-weight:900;letter-spacing:1px;color:var(--accent)}
+    .potw-company{font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px}
+    .potw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+    .potw-stat{background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:8px 12px}
+    .potw-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+    .potw-stat-val{font-size:14px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+    .potw-thesis{font-size:12px;color:var(--dim);line-height:1.65;border-top:1px solid var(--border);padding-top:12px;margin-top:4px}
+    .potw-thesis strong{color:var(--text)}
+    .potw-row td{background:rgba(240,165,0,.05)!important;border-bottom:1px solid rgba(240,165,0,.2)!important}
+
+    /* ── S&P 500 Losers Tab ── */
     .sp500-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
     .sp500-stats{display:flex;gap:12px;flex-wrap:wrap}
     .sp500-stat{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 18px;text-align:center;min-width:110px}
@@ -465,7 +480,7 @@
   <div class="logo">
     <div class="logo-icon">J</div>
     <div class="logo-text">
-      <h1>JoshAnswers</h1>
+      <h1>Bwoodshares</h1>
       <p>Trading Fraternity Watchlist</p>
     </div>
   </div>
@@ -494,6 +509,7 @@
 <!-- ── Tab Bar ─────────────────────────────────────────── -->
 <div class="tab-bar">
   <button class="tab-btn active" data-tab="watchlist" onclick="switchTab('watchlist')">Live Watchlist</button>
+  <button class="tab-btn" data-tab="swing" onclick="switchTab('swing')">&#9733; Weekly Swing Desk</button>
   <button class="tab-btn" data-tab="monitor" onclick="switchTab('monitor')">History &amp; Monitor</button>
   <button class="tab-btn" data-tab="sp500" onclick="switchTab('sp500')">S&amp;P 500 Losers</button>
 </div>
@@ -518,27 +534,91 @@
     </table>
   </div>
 
-  <!-- ── Weekly Swing Desk ─────────────────────────────── -->
-  <div class="sec-label" style="margin-top:36px">Weekly Swing Desk &mdash; 1% Bankroll</div>
+</div><!-- end tab-watchlist -->
+
+<!-- ── Weekly Swing Desk Tab ─────────────────────────── -->
+<div id="tab-swing" class="tab-panel">
+
+  <div class="sec-label">Weekly Swing Desk &mdash; 1% Bankroll</div>
+
+  <!-- ══ PLAY OF THE WEEK ══════════════════════════════════ -->
+  <div class="potw-wrap">
+    <div class="potw-badge">&#9733; Play of the Week &mdash; May 26&ndash;29, 2026 (Short Week)</div>
+    <div class="potw-ticker">MRVL</div>
+    <div class="potw-company">Marvell Technology Inc &mdash; AI Custom Silicon Pre-Earnings Breakout</div>
+    <div class="potw-grid">
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">Entry Zone</div>
+        <div class="potw-stat-val" style="color:var(--green)">$75&ndash;$78</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">Target</div>
+        <div class="potw-stat-val" style="color:var(--green)">$92</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">Stop</div>
+        <div class="potw-stat-val" style="color:var(--red)">$70</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">R/R</div>
+        <div class="potw-stat-val" style="color:var(--accent)">2.3:1 &#10003;</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">Catalyst</div>
+        <div class="potw-stat-val" style="font-size:11px;color:var(--text)">Q1 FY27 Earnings</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">SMA50</div>
+        <div class="potw-stat-val" style="font-size:11px;color:var(--green)">Above &#10003;</div>
+      </div>
+      <div class="potw-stat">
+        <div class="potw-stat-lbl">Bankroll Fit</div>
+        <div class="potw-stat-val" style="font-size:11px;color:var(--green)">BEST</div>
+      </div>
+    </div>
+    <div class="potw-thesis">
+      <strong>Thesis (why MRVL this week):</strong>
+      Marvell Technology is the invisible backbone of the AI silicon arms race. While NVIDIA gets the headlines,
+      Marvell designs the custom ASIC chips powering Amazon&rsquo;s Trainium3, Google&rsquo;s custom AI accelerators,
+      and Microsoft&rsquo;s Maia 2 &mdash; the proprietary silicon hyperscalers are building to reduce NVDA dependency
+      over the next 3&ndash;5 years. This is not speculation: multi-year, multi-billion-dollar custom silicon
+      contracts are locked in. Revenue recognition is now accelerating.
+      <br><br>
+      <strong>Catalyst (specific, named):</strong> Marvell reports Q1 FY2027 earnings in late May / early June.
+      With Microsoft ($185B capex), Google ($185B), and Amazon ($105B) all accelerating AI infrastructure spend,
+      Marvell&rsquo;s custom silicon design-win revenue is the direct read-through. A beat-and-raise here
+      is the swing catalyst. Watch for volume surge pre-announcement (institutional front-running) as the
+      technical confirmation signal. Entry only on volume &ge;1.5&times; 20-day ADV.
+      <br><br>
+      <strong>Pricing power context (PP 7/10):</strong> Custom ASIC IP is not commoditized.
+      Once a hyperscaler embeds Marvell IP in their chip architecture, they cannot swap suppliers
+      mid-generation &mdash; 18&ndash;24 month design cycles create lock-in equivalent to enterprise software.
+      This is Josh&rsquo;s &ldquo;catastrophic switching cost&rdquo; framework applied to semiconductor IP.
+      <br><br>
+      <strong>Short-week execution (4 trading days, Mon closed for Memorial Day):</strong>
+      Enter Tuesday or Wednesday on catalyst + volume confirmation. Target exit by Thursday close.
+      If earnings land this week: consider exiting before the print and re-entering post-reaction.
+      If earnings land next week: ride the pre-earnings momentum into Thursday, reset stop each day.
+    </div>
+  </div>
 
   <!-- Strategy banner: week label + thesis -->
   <div class="swing-banner">
     <div class="swing-meta">
-      <span class="swing-wk" id="swing-wk">Week of —</span>
+      <span class="swing-wk" id="swing-wk">Week of &mdash;</span>
       <span class="swing-strat-badge">Catalyst-Confirmed Technical</span>
       <span class="swing-bk-badge">Allocation: 1% of Bankroll</span>
       <span class="swing-short-flag" id="sw-short-flag">&#9889; Short Week</span>
     </div>
     <div class="swing-thesis">
       <strong>Strategy thesis (refreshes each session):</strong> Hybrid technical + catalyst
-      swing — every entry requires <em>two concurrent signals</em>: a specific, identifiable
-      catalyst (Josh Rule 7) confirmed by technical alignment — price above SMA50 and entry
-      candle volume &ge;1.5&times; the 20-day average. With only 1% of bankroll deployed,
-      focus shifts to <em>highest-beta, lowest-priced candidates</em> where full-share
-      positions are achievable and a 10&ndash;15% weekly move delivers meaningful return.
-      <strong>SG</strong> and <strong>LMND</strong> are the primary candidates for a
-      short-week setup; <strong>AMD</strong> is the anchor if the $390&ndash;$400 zone
-      re-tests. No entries on low-volume sessions. No averaging down. Exit by Thursday
+      swing &mdash; every entry requires <em>two concurrent signals</em>: a specific, identifiable
+      catalyst (Josh Rule 7) confirmed by technical alignment &mdash; price above SMA50 and entry
+      candle volume &ge;1.5&times; the 20-day average.
+      <strong>MRVL</strong> is this week&rsquo;s primary target &mdash; pre-earnings AI custom silicon setup with
+      the best R/R and bankroll fit of any name on the board.
+      <strong>SG</strong> and <strong>LMND</strong> remain secondary candidates for a short-week setup.
+      No entries on low-volume sessions. No averaging down. Exit by Thursday
       close if the target is not reached &mdash; never carry a swing thesis into the weekend
       without a hard, named catalyst still live.
     </div>
@@ -556,7 +636,7 @@
           <strong style="color:var(--accent)">Catalyst-Confirmed Technical Swing.</strong>
           Hybrid approach: a news catalyst (earnings, upgrade, launch, macro event) triggers
           the search for a trade; a technical setup confirms the entry. Neither signal alone
-          is sufficient — both must align before the order is placed.
+          is sufficient &mdash; both must align before the order is placed.
         </div>
       </div>
       <div class="sw-strat-item">
@@ -565,7 +645,7 @@
           <span class="fil-on">YES &mdash; REQUIRED</span><br>
           Volume &ge;1.5&times; the 20-day ADV on the entry candle. Volume is the institutional
           participation signal. High volume + catalyst = real money moving = tradeable setup.
-          Low volume + catalyst = retail noise — the move will likely fade. Skip thin entries.
+          Low volume + catalyst = retail noise &mdash; the move will likely fade. Skip thin entries.
         </div>
       </div>
       <div class="sw-strat-item">
@@ -573,7 +653,7 @@
         <div class="sw-strat-val">
           <span class="fil-on">YES &mdash; TREND FILTER</span><br>
           Long entries only when price is <em>above</em> the 50-day SMA. If price is below
-          the 50-day, the trend is against you — do not fight it on a weekly swing.
+          the 50-day, the trend is against you &mdash; do not fight it on a weekly swing.
           Exception: price <em>testing</em> SMA50 with a live catalyst and volume surge is
           valid with a tighter stop. A declining SMA50 negates even that exception.
         </div>
@@ -599,7 +679,7 @@
         <div class="fil-lbl">2. Volume confirmation (entry gate)</div>
         <div class="fil-val">Entry candle must show <span class="hi">&ge;1.5&times; 20-day ADV</span>.
           Green candle on 2&times; average volume = institutional accumulation. That is the wave
-          you want to ride — not lead.
+          you want to ride &mdash; not lead.
         </div>
       </div>
       <div class="fil-item">
@@ -626,12 +706,12 @@
         position is at risk from entry.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">2</span><span>
-        <strong>Stop set at entry — non-negotiable.</strong> Place it at the recent swing low
+        <strong>Stop set at entry &mdash; non-negotiable.</strong> Place it at the recent swing low
         or 2&times; the daily ATR below entry. It does not move after placement.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">3</span><span>
         <strong>Minimum 2:1 R/R before the order is placed.</strong> Preferred 3:1. Calculate
-        it before touching the button — not after.
+        it before touching the button &mdash; not after.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">4</span><span>
         <strong>Volume &ge;1.5&times; the 20-day ADV on entry candle.</strong> If volume is
@@ -639,7 +719,7 @@
       </span></div>
       <div class="sw-rule"><span class="sw-rn">5</span><span>
         <strong>SMA50 trend filter applies to every new long.</strong> Price must be above the
-        50-day moving average. TAP is the current example of a Rule 5 violation — below SMA50,
+        50-day moving average. TAP is the current example of a Rule 5 violation &mdash; below SMA50,
         no new swing longs.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">6</span><span>
@@ -674,22 +754,41 @@
         </tr>
       </thead>
       <tbody>
+        <tr class="potw-row">
+          <td><span class="rank-dot r1">&#9733;1</span></td>
+          <td>
+            <span class="tk">MRVL</span>
+            <div class="co">Marvell Technology</div>
+            <div style="margin-top:4px"><span style="font-size:9px;font-weight:800;background:var(--accent);color:#000;padding:2px 7px;border-radius:2px;letter-spacing:.6px">PLAY OF THE WEEK</span></div>
+          </td>
+          <td style="font-size:11px">Pre-Earnings AI Custom Silicon</td>
+          <td><span class="sma-a">Above (uptrend intact)</span></td>
+          <td style="font-size:11px">&ge;12M shares/day<div class="co">Avg ~8M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">2.3:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$70</td>
+          <td><span class="fit-hi">BEST</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            AI custom ASIC story for Amazon/Google/Microsoft. Q1 FY27 earnings imminent.
+            Entry $75&ndash;$78 on vol surge. Target $92. Exit by Thursday or on earnings day.
+            This is the cleanest catalyst + technical setup on the board this week.
+          </td>
+        </tr>
         <tr>
-          <td><span class="rank-dot r1">1</span></td>
+          <td><span class="rank-dot r1">2</span></td>
           <td><span class="tk">SG</span><div class="co">Sweetgreen</div></td>
           <td style="font-size:11px">Momentum + Wrap Catalyst</td>
           <td><span class="sma-t">Testing (~$8.50&ndash;$9.00)</span></td>
           <td style="font-size:11px">&ge;4M shares/day<div class="co">Avg ~2.5M</div></td>
           <td class="r" style="font-size:12px;color:var(--green)">3.5:1</td>
           <td class="r" style="font-size:12px;color:var(--red)">$7.50</td>
-          <td><span class="fit-hi">BEST</span></td>
+          <td><span class="fit-hi">GOOD</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             Small price ($9.60) = most shares per 1% bankroll dollar. Wrap catalyst still live.
-            High beta = 10&ndash;15% weekly moves possible. Watch SMA50 — if lost, Rule 5 voids the entry.
+            High beta = 10&ndash;15% weekly moves possible. Watch SMA50 &mdash; if lost, Rule 5 voids the entry.
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r2">2</span></td>
+          <td><span class="rank-dot r2">3</span></td>
           <td><span class="tk">LMND</span><div class="co">Lemonade</div></td>
           <td style="font-size:11px">Catalyst Recovery + Momentum</td>
           <td><span class="sma-t">Testing (~$62&ndash;$64)</span></td>
@@ -699,11 +798,11 @@
           <td><span class="fit-hi">GOOD</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             Tesla partnership + Q4 EBITDA path = live, multi-leg catalyst. Recovery momentum from $67.
-            $65 is the near-term support trigger — dip-and-hold there with volume is the entry signal.
+            $65 is the near-term support trigger &mdash; dip-and-hold there with volume is the entry signal.
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r3">3</span></td>
+          <td><span class="rank-dot r3">4</span></td>
           <td><span class="tk">AMD</span><div class="co">Advanced Micro Devices</div></td>
           <td style="font-size:11px">Dip-to-Support + MI400 Catalyst</td>
           <td><span class="sma-a">Above (strong uptrend)</span></td>
@@ -713,12 +812,27 @@
           <td><span class="fit-md">MEDIUM</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             Best fundamentals in the watchlist. Entry only on dip to $390&ndash;$400 support.
-            At $421 today — <strong style="color:var(--red)">do not chase.</strong>
+            Above entry zone currently &mdash; <strong style="color:var(--red)">do not chase.</strong>
             Large share price limits count on 1% bankroll; consider ITM calls (Ghetto Spread setup).
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r4">4</span></td>
+          <td><span class="rank-dot r3">5</span></td>
+          <td><span class="tk">PANW</span><div class="co">Palo Alto Networks</div></td>
+          <td style="font-size:11px">Platform Consolidation + Q4 Earnings Setup</td>
+          <td><span class="sma-a">Above (trend intact)</span></td>
+          <td style="font-size:11px">&ge;8M shares/day<div class="co">Avg ~6M</div></td>
+          <td class="r" style="font-size:12px;color:var(--green)">2.5:1</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$330</td>
+          <td><span class="fit-md">MEDIUM</span></td>
+          <td style="font-size:11px;color:var(--dim);max-width:190px">
+            New watchlist addition this session. Q4 FY2026 earnings upcoming is the binary catalyst.
+            Entry $355&ndash;$375 on a volume-confirmed technical breakout. Best used as a
+            multi-week swing into the earnings date rather than a 4-day setup.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="rank-dot r3">6</span></td>
           <td><span class="tk">NVDA</span><div class="co">NVIDIA</div></td>
           <td style="font-size:11px">News Catalyst + Volatility Play</td>
           <td><span class="sma-a">Above (bullish)</span></td>
@@ -728,12 +842,11 @@
           <td><span class="fit-md">MEDIUM</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             Blackwell + China reopening catalysts are live but need a news <em>trigger</em>
-            to move within a single week. Unusual call premium (CNBC May 20) is the institutional tell.
-            Best executed via ITM calls on a named catalyst event, not a market order.
+            to move within a single week. Best executed via ITM calls on a named catalyst event.
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r4">5</span></td>
+          <td><span class="rank-dot r3">7</span></td>
           <td><span class="tk">ORCL</span><div class="co">Oracle</div></td>
           <td style="font-size:11px">Pullback to Support</td>
           <td><span class="sma-a">Above (recovering)</span></td>
@@ -742,13 +855,13 @@
           <td class="r" style="font-size:12px;color:var(--red)">$165</td>
           <td><span class="fit-md">MEDIUM</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            Slower mover — structurally better for multi-week holds than 4-day swings.
+            Slower mover &mdash; structurally better for multi-week holds than 4-day swings.
             Entry at $175&ndash;$185 on any pull; the Q4 FY26 earnings in July is the real
             swing catalyst window. Low urgency for the weekly format this week.
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r4">6</span></td>
+          <td><span class="rank-dot r4">8</span></td>
           <td><span class="tk">MSFT</span><div class="co">Microsoft</div></td>
           <td style="font-size:11px">Steady Momentum</td>
           <td><span class="sma-a">Above (strong uptrend)</span></td>
@@ -757,30 +870,30 @@
           <td class="r" style="font-size:12px;color:var(--red)">$395</td>
           <td><span class="fit-lo">LOW</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            MSFT moves 1&ndash;2%/week in normal conditions — wrong timeframe for aggressive
-            weekly swing with 1% bankroll. Best held for the monthly+ thesis. Next hard catalyst
-            is July Q4 FY26 earnings. <strong style="color:var(--accent)">Hold, don't swing.</strong>
+            MSFT moves 1&ndash;2%/week in normal conditions &mdash; wrong timeframe for aggressive
+            weekly swing with 1% bankroll. Best held for the monthly+ thesis.
+            <strong style="color:var(--accent)">Hold, don&rsquo;t swing.</strong>
           </td>
         </tr>
         <tr>
-          <td><span class="rank-dot r4">7</span></td>
+          <td><span class="rank-dot r4">9</span></td>
           <td><span class="tk">TAP</span><div class="co">Molson Coors</div></td>
           <td style="font-size:11px">Income / Ex-Div Only</td>
           <td><span class="sma-b">Below SMA50 &mdash; downtrend &#9888;</span></td>
           <td style="font-size:11px">N/A &mdash; income hold only</td>
-          <td class="r" style="font-size:12px;color:var(--muted)">—</td>
+          <td class="r" style="font-size:12px;color:var(--muted)">&mdash;</td>
           <td class="r" style="font-size:12px;color:var(--red)">$38</td>
           <td><span class="fit-lo">SKIP</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             Below SMA50 = <strong style="color:var(--red)">Rule 5 violation</strong> for new long
-            swing entries. Ex-div May 29 is an income event, not a swing catalyst. TAP is Josh's
+            swing entries. Ex-div May 29 is an income event, not a swing catalyst. TAP is Josh&rsquo;s
             long-term income hold only. Do not swing trade this name under the current framework.
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-</div><!-- end tab-watchlist -->
+</div><!-- end tab-swing -->
 
 <!-- ── History & Monitor Tab ────────────────────────────── -->
 <div id="tab-monitor" class="tab-panel">
@@ -868,7 +981,7 @@
     Slickcharts.com blocks server-side fetches — visit
     <a href="https://slickcharts.com/sp500/performance" target="_blank">slickcharts.com/sp500/performance</a>
     in your browser for the authoritative, real-time ranked list.
-    PP (Pricing Power) scores are JoshAnswers framework assessments — not official ratings.
+    PP (Pricing Power) scores are Bwoodshares framework assessments — not official ratings.
     A high PP score on a beaten-down name = candidate for Josh's contrarian buy screen.
     This data is for research purposes only — not financial advice.
   </div>
@@ -878,7 +991,7 @@
 </main>
 
 <footer>
-  <p>JoshAnswers Watchlist &mdash; The Trading Fraternity framework &mdash;
+  <p>Bwoodshares Watchlist &mdash; The Trading Fraternity framework &mdash;
      data via <span id="foot-src">Finnhub / yfinance</span></p>
   <p style="margin-top:5px">
     Educational only &mdash; not financial advice &mdash;
@@ -899,6 +1012,7 @@ const WL = [
   {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption 🆕',   tc:'t2', entry:'$60–$65',   target:'$75',  stop:'$52',   catalyst:'Q4 2026 EBITDA profitability; Tesla auto insurance; +71% Q1 revenue', note:"Kevin's explicit buy. AI-native insurance = 6% LAE vs industry 8-10%. 90% first-time insurance buyers = blue ocean."},
   {ticker:'TAP',  company:'Molson Coors Beverage',   tier:'Dividend (Josh only)',tc:'t1', entry:'$40–$44',   target:'$49',  stop:'$38',   catalyst:'4.58% yield; ex-div May 29 🔔 — fails Kevin pricing power test',    note:'Josh-only hold from Dec 2025. No innovation story. Kevin would not hold. Small income position only.'},
   {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
+  {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$355–$375',   target:'$490', stop:'$330',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category', note:'Cybersecurity is non-discretionary — platformization lock-in is catastrophic to reverse. Every new AI workload increases attack surface = more PANW spend. Added May 25, 2026.'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1239,6 +1353,13 @@ const MONITOR_DATA = {
     cat: {score:7,  note:'Wrap launch catalyst alive. Q2 same-store sales data (July) is the binary make-or-break event. JPMorgan Overweight PT $13.'},
     thesis:'REVISED — SWING ONLY', verdict:'SWING / SHORT HORIZON', verdictCls:'vd-caution',
     alert:'Call Up finding (May 25, 2026): SG surged ~45% off May 8–13 base. COO and CFO bought shares near $8 on May 18 — insider buying at the lows is a strong signal. JPMorgan Overweight PT $13 confirmed. Oppenheimer raised PT to $10. AI moat still sold; thesis is still swing-only on wrap performance. Q2 same-store sales (July) is the exit decision point. The insider buys add conviction to hold through Q2 data. Exit if $7.50 breaks.',
+  },
+  PANW: {
+    pp:  {score:9,  note:'Platformization = catastrophic switching cost. Once PANW deploys Cortex + XSIAM across an enterprise, 8-12 security tools are consolidated on a single platform. Unwinding it requires a 12-18 month project. Cybersecurity spend is non-discretionary — it grows in recessions.'},
+    mac: {score:8,  note:'AI is expanding the attack surface: every new AI workload, cloud deployment, and agentic system is a new security perimeter. More AI = more PANW budget. Macro headwinds do not cut security budgets — they cut headcount and SaaS tools, not security.'},
+    cat: {score:7,  note:'Q4 FY2026 earnings upcoming. XSIAM (AI-powered SOC) winning large enterprise + federal consolidations. AI Firewall (blocks adversarial AI model attacks) is a brand-new revenue category with no competition. NGS ARR growing 30%+ YoY.'},
+    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $355–$375', verdictCls:'vd-strong',
+    alert:'New addition May 25, 2026: PANW is the best expression of Josh\'s evolved framework in cybersecurity — pricing power 9/10 (non-discretionary spend + platformization), macro alignment 8/10 (AI attack surface expansion), catalyst 7/10 (upcoming Q4 FY26 earnings + XSIAM expansion). Entry $355–$375 below SMA50 support; target $490 on earnings beat + NGS ARR acceleration. Stop $330. This is the highest-confidence new watchlist add since MSFT.',
   },
 };
 

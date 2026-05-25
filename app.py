@@ -14,6 +14,7 @@ WATCHLIST = [
     {"ticker": "LMND", "company": "Lemonade Inc.",             "tier": "AI Disruption",    "tier_class": "t2", "entry": "$60–$65",   "target": "$75",  "stop": "$52",   "catalyst": "Q4 2026 EBITDA profitability; Tesla auto insurance",       "note": "Kevin's explicit buy — AI-native insurance, 6% LAE vs industry 8-10%"},
     {"ticker": "TAP",  "company": "Molson Coors Beverage",    "tier": "Dividend Hold",    "tier_class": "t1", "entry": "$40–$44",   "target": "$49",  "stop": "$38",   "catalyst": "4.58% yield; ex-div May 29 🔔",                           "note": "Long-term buy Dec 2025 — boring stock, real dividend"},
     {"ticker": "SG",   "company": "Sweetgreen Inc.",           "tier": "Short Swing",      "tier_class": "t2", "entry": "$9.00–$9.50","target": "$13", "stop": "$7.50", "catalyst": "Q2 wrap sales data — AI moat sold to Wonder Nov 2025",    "note": "Oct 2025 rate-cut buy — menu pivot; shorter horizon, tighter stop"},
+    {"ticker": "PANW", "company": "Palo Alto Networks",        "tier": "AI Security",      "tier_class": "t1", "entry": "$355–$375",  "target": "$490", "stop": "$330",  "catalyst": "Q4 FY2026 earnings; XSIAM SOC expansion; AI Firewall revenue category",         "note": "Platformization = catastrophic switching cost. Non-discretionary spend + AI attack surface expansion."},
 ]
 
 
