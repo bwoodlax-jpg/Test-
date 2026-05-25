@@ -1,0 +1,8 @@
+{
+  "buildCommand": null,
+  "outputDirectory": "templates",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
