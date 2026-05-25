@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Document Sorter Agent
 Scans Documents folder, identifies tax-related files, proposes moves, and
@@ -13,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-# ── Constants ────────────────────────────────────────────────────────────────
+# -- Constants -----------------------------------------------------------------
 
 PEOPLE = ["Ben", "Quynh", "Hugh", "Sara"]
 
@@ -48,14 +49,13 @@ PROTECTED_PATHS = [
 CURRENT_YEAR = datetime.now().year
 
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
+# -- Helpers -------------------------------------------------------------------
 
 def get_documents_path() -> Path:
     """Return the user's Documents folder path."""
     if sys.platform == "win32":
         docs = Path(os.environ.get("USERPROFILE", "C:\\Users\\User")) / "Documents"
     else:
-        # Fallback for dev/testing on non-Windows
         docs = Path.home() / "Documents"
     return docs
 
@@ -70,12 +70,10 @@ def is_protected(path: Path) -> bool:
 
 def is_tax_related(filename: str) -> bool:
     name = filename.lower()
-    stem = Path(filename).suffix.lower()
+    ext = Path(filename).suffix.lower()
 
-    if stem in TAX_EXTENSIONS:
-        # Extension alone is enough for .tax / .taxreturn; .pdf needs a keyword
-        if stem in {".tax", ".taxreturn"}:
-            return True
+    if ext in {".tax", ".taxreturn"}:
+        return True
 
     for pattern in TAX_KEYWORDS:
         if re.search(pattern, name, re.IGNORECASE):
@@ -101,7 +99,7 @@ def attribute_file(filepath: Path) -> str:
     return "_Unassigned"
 
 
-def setup_logger(log_dir: Path) -> logging.Logger:
+def setup_logger(log_dir: Path):
     log_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
     log_path = log_dir / f"run_{timestamp}.log"
@@ -117,9 +115,9 @@ def setup_logger(log_dir: Path) -> logging.Logger:
     return logger, log_path
 
 
-# ── Phase 1: Scan ─────────────────────────────────────────────────────────────
+# -- Phase 1: Scan -------------------------------------------------------------
 
-def scan(docs_path: Path) -> list[dict]:
+def scan(docs_path: Path) -> list:
     """Recursively scan docs_path and return tax-file records."""
     records = []
     for filepath in docs_path.rglob("*"):
@@ -139,9 +137,9 @@ def scan(docs_path: Path) -> list[dict]:
     return records
 
 
-# ── Phase 2: Build move plan ──────────────────────────────────────────────────
+# -- Phase 2: Build move plan --------------------------------------------------
 
-def build_plan(records: list[dict], tax_root: Path) -> tuple[list[dict], list[dict]]:
+def build_plan(records: list, tax_root: Path) -> tuple:
     """Return (moves, conflicts)."""
     moves = []
     conflicts = []
@@ -156,60 +154,60 @@ def build_plan(records: list[dict], tax_root: Path) -> tuple[list[dict], list[di
     return moves, conflicts
 
 
-# ── Phase 3: Preview report ───────────────────────────────────────────────────
+# -- Phase 3: Preview report ---------------------------------------------------
 
-def print_preview(records: list[dict], moves: list[dict], conflicts: list[dict]):
+def print_preview(records: list, moves: list, conflicts: list):
     total = len(records)
     tax_count = len(moves) + len(conflicts)
     per_person = {p: sum(1 for m in moves if m["person"] == p) for p in PEOPLE}
     unassigned = sum(1 for m in moves if m["person"] == "_Unassigned")
 
+    w = 66
+    sep = "+" + "=" * (w - 2) + "+"
     print()
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║              DOCUMENT SORTER — DRY RUN PREVIEW                  ║")
-    print("╠══════════════════════════════════════════════════════════════════╣")
-    print(f"║  Files scanned:   {total:<47}║")
-    print(f"║  Tax-related:     {tax_count:<47}║")
+    print(sep)
+    print("|" + " DOCUMENT SORTER - DRY RUN PREVIEW".center(w - 2) + "|")
+    print(sep)
+    print(f"|  Files scanned:   {total:<{w - 21}}|")
+    print(f"|  Tax-related:     {tax_count:<{w - 21}}|")
     assigned_str = " | ".join(f"{p}: {per_person[p]}" for p in PEOPLE)
-    print(f"║  Assigned:        {len(moves) - unassigned:<47}║")
-    print(f"║    ({assigned_str})")
-    print(f"║  Unassigned:      {unassigned:<47}║")
-    print(f"║  Conflicts:       {len(conflicts):<47}║")
-    print("╚══════════════════════════════════════════════════════════════════╝")
+    print(f"|  Assigned:        {len(moves) - unassigned:<{w - 21}}|")
+    print(f"|    ({assigned_str})")
+    print(f"|  Unassigned:      {unassigned:<{w - 21}}|")
+    print(f"|  Conflicts:       {len(conflicts):<{w - 21}}|")
+    print(sep)
 
     if not moves and not conflicts:
         print("\nNo tax-related documents found.")
         return
 
     print("\nPROPOSED MOVES:")
-    print("─" * 66)
+    print("-" * w)
     for i, m in enumerate(moves, 1):
-        src_rel = m["src"].name
-        dest_rel = str(m["dest"]).replace(str(m["dest"].parent.parent.parent), "")
         attribution = (
             f'Name match ("{m["person"]}" in filename)'
             if m["person"] != "_Unassigned"
-            else "UNASSIGNED — no name match found, needs manual review"
+            else "UNASSIGNED - no name match found, needs manual review"
         )
         print(f"\n[{i}] {m['src']}")
-        print(f"    → {m['dest']}")
+        print(f"    -> {m['dest']}")
         print(f"    Attribution: {attribution}")
 
     if conflicts:
-        print("\n" + "─" * 66)
-        print("SKIPPED (conflicts — would overwrite existing file):")
+        print("\n" + "-" * w)
+        print("SKIPPED (conflicts - would overwrite existing file):")
         for c in conflicts:
             print(f"[!] {c['src']} already exists at destination. Skipping.")
 
-    print("\n" + "─" * 66)
+    print("\n" + "-" * w)
     print("NO FILES HAVE BEEN MOVED YET.")
     print("Type CONFIRM to execute all proposed moves, or CANCEL to abort.")
     print()
 
 
-# ── Phase 4: Execute ──────────────────────────────────────────────────────────
+# -- Phase 4: Execute ----------------------------------------------------------
 
-def execute(moves: list[dict], logger: logging.Logger) -> tuple[int, int]:
+def execute(moves: list, logger: logging.Logger) -> tuple:
     succeeded = 0
     errors = 0
 
@@ -219,36 +217,38 @@ def execute(moves: list[dict], logger: logging.Logger) -> tuple[int, int]:
         try:
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(src), str(dest))
-            logger.info(f"MOVED  {src}  →  {dest}")
+            logger.info(f"MOVED  {src}  ->  {dest}")
             succeeded += 1
         except PermissionError:
-            logger.error(f"LOCKED {src}  — file in use, skipped")
+            logger.error(f"LOCKED {src}  - file in use, skipped")
             print(f"  [!] Skipped (locked): {src.name}")
             errors += 1
         except OSError as exc:
-            logger.error(f"ERROR  {src}  —  {exc}")
+            logger.error(f"ERROR  {src}  -  {exc}")
             print(f"  [!] Error moving {src.name}: {exc}")
             errors += 1
 
     return succeeded, errors
 
 
-# ── Phase 5: Summary ──────────────────────────────────────────────────────────
+# -- Phase 5: Summary ----------------------------------------------------------
 
 def print_summary(succeeded: int, skipped: int, errors: int, log_path: Path):
+    w = 66
+    sep = "+" + "=" * (w - 2) + "+"
     print()
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║              DOCUMENT SORTER — EXECUTION COMPLETE               ║")
-    print("╠══════════════════════════════════════════════════════════════════╣")
-    print(f"║  Moved successfully:   {succeeded:<43}║")
-    print(f"║  Skipped (conflict):   {skipped:<43}║")
-    print(f"║  Errors:               {errors:<43}║")
-    print(f"║  Log saved to:         {str(log_path):<43}║")
-    print("╚══════════════════════════════════════════════════════════════════╝")
+    print(sep)
+    print("|" + " DOCUMENT SORTER - EXECUTION COMPLETE".center(w - 2) + "|")
+    print(sep)
+    print(f"|  Moved successfully:   {succeeded:<{w - 27}}|")
+    print(f"|  Skipped (conflict):   {skipped:<{w - 27}}|")
+    print(f"|  Errors:               {errors:<{w - 27}}|")
+    print(f"|  Log saved to:         {str(log_path):<{w - 27}}|")
+    print(sep)
     print()
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# -- Main ----------------------------------------------------------------------
 
 def main():
     docs_path = get_documents_path()
@@ -273,14 +273,12 @@ def main():
         sys.exit(0)
 
     moves, conflicts = build_plan(records, tax_root)
-
     print_preview(records, moves, conflicts)
 
     if not moves:
         print("No moves to perform (all files either conflict or none found).")
         sys.exit(0)
 
-    # Wait for confirmation
     while True:
         response = input("Your choice: ").strip().upper()
         if response in ("CONFIRM", "YES, PROCEED", "YES"):
@@ -298,7 +296,6 @@ def main():
     succeeded, errors = execute(moves, logger)
 
     logger.info(f"Session complete. Moved: {succeeded}  Errors: {errors}  Conflicts skipped: {len(conflicts)}")
-
     print_summary(succeeded, len(conflicts), errors, log_path)
 
 
