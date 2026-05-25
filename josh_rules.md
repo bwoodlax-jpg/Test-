@@ -761,6 +761,63 @@ Josh called Intel daily and the thesis was right — CHIPS Act, Apple foundry ta
 
 ## SELF-IMPROVEMENT LOG (JoshAnswers Agent)
 
+### Call Up Research — May 25, 2026
+
+**Research sweep triggered by user "call up" command. Sources: YouTube public index, Yahoo Finance, TheStreet, CNBC, Motley Fool, StockTwits, StocksToTrade, public analyst reports.**
+
+#### Most Recent Trading Fraternity / StockMarketLive Content
+- Most recent publicly indexed video: *"I Bought ORCL Stock Down 50% (Benjamin Graham's Secret Model)"* — March 7, 2026. Josh's confirmed March 2026 ORCL entry.
+- *"TRUMP State of the Union: Market Reaction LIVE"* — Feb 25, 2026 (macro macro event coverage)
+- *"How I Made 30,000% In 90 Seconds"* — March 5, 2026 (options play highlight)
+- May 2026 content is behind the $75/month paid membership. Josh posts daily Bullseye Trade alerts on Mondays. Public YouTube uploads for May 2026 are not indexed at time of research.
+
+#### AMD — Updated Thesis Assessment (May 25, 2026)
+- AMD consensus PT: **~$405** (34 analysts, majority Buy). Stock may be trading **~$462** — above average consensus.
+- Bull case: Evercore ISI $579. Bear case: Morgan Stanley $255.
+- DA Davidson upgraded to Buy (citing Intel's structural CPU shift benefiting AMD). Bernstein raised PT (EPYC server CPU sales +50%, Meta AI deal confirmed).
+- MI400 platform confirmed: MI455X/Helios (AI superclusters), MI430X (HPC/sovereign AI), MI440X (enterprise) — H2 2026 ramp on track.
+- **Assessment: Thesis stronger than expected. Entry timing remains the issue — stock is above entry zone AND above average analyst consensus. No new entries above $420. If in from $390–$400, hold.**
+
+#### Critical NVDA Finding — China Gap
+- Q1 FY2027 earnings: Revenue $81.6B (+85% YoY). DC revenue $75.2B (+92%).
+- **ZERO China Data Center shipments this quarter vs $4.6B prior year.** Beijing signaled firms to wait on H20 purchases. This is material — China was listed as a key unlocking catalyst.
+- Blackwell ramp is fully intact and driving results. China gap does NOT negate the thesis but does delay the China catalyst specifically.
+- **Watch signal: Jensen Huang public statements on China deal progress = re-entry signal for China-accelerated position.**
+
+#### LMND — Beat-and-Drop Pattern
+- Q1 2026: EPS −$0.47 (beat −$0.57 est.), revenue $258M (+71% YoY). Stock dropped ~15% on earnings day.
+- Market is pricing in skepticism of Q4 2026 EBITDA profitability — not questioning the top-line story.
+- Morgan Stanley cut PT: $80 → $75. Still Buy.
+- **Watch signal: $60–$65 re-test is a better entry zone than current ~$67. Stop at $52 still valid. Q2 August earnings is the credibility test.**
+
+#### SG — Insider Buying Signal
+- Stock surged ~45% off May 8–13 base; closed $9.71 on May 22.
+- **COO and CFO bought shares near $8 on May 18** — insider buying at the lows. This is a strong thesis-confirmation signal.
+- JPMorgan: Overweight, PT $13. Oppenheimer: Outperform, raised PT to $10.
+- **Assessment: Insider buying adds conviction to hold through Q2 same-store sales data (July). Thesis unchanged — pure swing on wrap performance.**
+
+#### ORCL — Additional Catalyst Found
+- Stock near $192–$193. Wedbush PT $275; Oppenheimer PT $235.
+- **New May 2026 catalysts:** US Dept. of War classified AI deployment contract + SoftBank Japan sovereign cloud deal on OCI. Two significant new revenue sources not previously tracked.
+- **Assessment: Thesis stronger. These government/sovereign cloud deals are the RPO machine keeping the $523B backlog growing.**
+
+#### MSFT — Thesis Fully Confirmed
+- Azure grew 40% in Q3 FY2026 (beat expectations). Copilot paid seats: 20M (up from 15M in January, +250% YoY).
+- New: Agent 365 bundle + Azure Foundry Copilot for Factories (Industrial AI, May 13 2026).
+- **Assessment: STRONG HOLD. Every data point strengthens the thesis.**
+
+#### New Potential Watch Candidates (Not Yet on List)
+| Ticker | Company | Why It Appeared | Status |
+|---|---|---|---|
+| MU | Micron Technology | +37% YTD; AI infrastructure DRAM/NAND; HBM memory for AI training — limited alternatives; pricing power via supply constraints | **Watch — potential addition** |
+| EATON | Eaton Corporation | AI buildout power infrastructure; UBS-backed; CNBC flagged May 13, 2026 | Watch |
+| INTC | Intel | +197% YTD; "changing of the guard" CNBC May 8 — but RSI extended | Archived; re-entry at $95–$105 only |
+| SanDisk | SanDisk | +464% YTD — extreme momentum; high risk | Do not chase |
+
+**MU (Micron) is the strongest new candidate.** Passes pricing power filter (HBM memory for AI training has limited supply alternatives). Catalyst: AI data center demand for both DRAM and NAND. Macro: AI infrastructure supercycle tailwind. Will run through full framework on next "call up" and evaluate for watchlist v4 addition.
+
+---
+
 ### Session Notes — Watchlist v3 + Live Stream Notes — May 25, 2026
 - **Watchlist grown to 7:** Added MSFT (AI Backbone, Tier 1) and NVDA (AI Infrastructure, Tier 2)
 - **MSFT thesis:** Azure +40% YoY, 20M Copilot seats at $30/seat/mo — pricing power maximum. Both Kevin and Josh frameworks score max conviction. July Q4 FY2026 earnings is the next hard catalyst date. Wedbush PT $625, Morgan Stanley PT $650.

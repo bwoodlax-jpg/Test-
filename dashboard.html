@@ -295,6 +295,83 @@
     .fit-hi{color:var(--green);font-weight:700;font-size:11px}
     .fit-md{color:var(--accent);font-weight:700;font-size:11px}
     .fit-lo{color:var(--muted);font-size:11px}
+
+    /* ── Tab Navigation ── */
+    .tab-bar{
+      display:flex;background:var(--surf);border-bottom:2px solid var(--border);
+      padding:0 28px;gap:2px;
+    }
+    .tab-btn{
+      background:transparent;border:none;color:var(--muted);
+      font-size:12px;font-weight:600;padding:13px 20px;cursor:pointer;
+      border-bottom:3px solid transparent;margin-bottom:-2px;
+      transition:all .2s;letter-spacing:.3px;
+    }
+    .tab-btn:hover{color:var(--text)}
+    .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    /* ── Monitor Cards ── */
+    .monitor-sub{font-size:11px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+    .monitor-grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+      gap:14px;margin-bottom:36px;
+    }
+    .mon-card{
+      background:var(--surf);border:1px solid var(--border);border-radius:10px;
+      padding:18px;position:relative;overflow:hidden;
+    }
+    .mon-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+    .vd-strong::before {background:var(--green)}
+    .vd-hold::before   {background:var(--blue)}
+    .vd-caution::before{background:var(--accent)}
+    .vd-exit::before   {background:var(--red)}
+    .mon-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+    .mon-ticker{font-size:22px;font-weight:800;letter-spacing:.5px}
+    .mon-company{font-size:11px;color:var(--dim);margin-top:2px}
+    .mon-verdict{
+      font-size:10px;font-weight:700;padding:4px 9px;border-radius:4px;
+      text-transform:uppercase;letter-spacing:.4px;text-align:right;white-space:nowrap;
+    }
+    .vd-strong  .mon-verdict{background:rgba(0,200,122,.12);color:var(--green);border:1px solid rgba(0,200,122,.3)}
+    .vd-hold    .mon-verdict{background:rgba(79,156,249,.12);color:var(--blue);border:1px solid rgba(79,156,249,.3)}
+    .vd-caution .mon-verdict{background:rgba(240,165,0,.12);color:var(--accent);border:1px solid rgba(240,165,0,.3)}
+    .vd-exit    .mon-verdict{background:rgba(224,62,62,.12);color:var(--red);border:1px solid rgba(224,62,62,.3)}
+    .mon-thesis{font-size:11px;color:var(--muted);margin-bottom:12px}
+    .ts-intact {color:var(--green);font-weight:700}
+    .ts-weak   {color:var(--red);font-weight:700}
+    .ts-revised{color:var(--accent);font-weight:700}
+    .mon-scores{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+    .mon-score-row{display:grid;grid-template-columns:115px 38px 1fr;gap:8px;align-items:center}
+    .score-lbl{font-size:10px;color:var(--dim)}
+    .score-num{font-size:11px;font-weight:700;color:var(--text);text-align:right;font-variant-numeric:tabular-nums}
+    .score-track{height:5px;background:var(--surf2);border-radius:3px;overflow:hidden}
+    .score-fill{height:100%;border-radius:3px;transition:width .6s ease}
+    .sb-green{background:var(--green)} .sb-amber{background:var(--accent)} .sb-red{background:var(--red)}
+    .mon-pa{background:var(--surf2);border-radius:6px;padding:8px 12px;font-size:11px;margin-bottom:10px}
+    .pa-lbl   {color:var(--muted);margin-right:6px}
+    .pa-entry {color:var(--green);font-weight:700}
+    .pa-above {color:var(--accent);font-weight:700}
+    .pa-below {color:var(--blue);font-weight:700}
+    .pa-target{color:var(--green);font-weight:800}
+    .pa-exit  {color:var(--red);font-weight:800}
+    .mon-alert{
+      background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);
+      border-radius:6px;padding:10px 12px;font-size:11px;color:var(--dim);
+      line-height:1.55;margin-bottom:10px;
+    }
+    .mon-notes{border-top:1px solid var(--border);padding-top:10px}
+    .mn-row{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:4px}
+    .mn-lbl{color:var(--dim);font-weight:600;margin-right:4px}
+    .hs-badge{
+      font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;
+      text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;
+    }
+    .hs-win      {background:rgba(0,200,122,.12);color:var(--green)}
+    .hs-archived {background:rgba(224,62,62,.1);color:var(--red)}
+    .hs-untracked{background:var(--surf2);color:var(--muted)}
+    .hs-revised  {background:rgba(240,165,0,.1);color:var(--accent)}
   </style>
 </head>
 <body>
@@ -370,7 +447,14 @@
 <div class="status" id="status">Initializing…</div>
 <div class="strip" id="strip"></div>
 
+<!-- ── Tab Bar ─────────────────────────────────────────── -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="watchlist" onclick="switchTab('watchlist')">Live Watchlist</button>
+  <button class="tab-btn" data-tab="monitor" onclick="switchTab('monitor')">History &amp; Monitor</button>
+</div>
+
 <main>
+<div id="tab-watchlist" class="tab-panel active">
   <div class="sec-label">Live Positions</div>
   <div class="cards" id="cards"></div>
   <div class="sec-label">Quick Reference</div>
@@ -651,6 +735,26 @@
       </tbody>
     </table>
   </div>
+</div><!-- end tab-watchlist -->
+
+<!-- ── History & Monitor Tab ────────────────────────────── -->
+<div id="tab-monitor" class="tab-panel">
+
+  <div class="sec-label">Position Monitor &mdash; Framework Assessment</div>
+  <p class="monitor-sub">
+    Each active pick assessed against the evolved framework:
+    <strong style="color:var(--accent)">Pricing Power &rarr; Macro Alignment &rarr; Catalyst Status &rarr; Price Action.</strong>
+    Scores are research-based. Price Action updates live when market data loads.
+    Flags picks where the thesis or entry conditions have changed.
+  </p>
+  <div id="monitor-cards" class="monitor-grid"></div>
+
+  <div class="sec-label" style="margin-top:8px">Historical Picks Log</div>
+  <p class="monitor-sub">Archived positions, thesis revisions, and lessons. Updated each session.</p>
+  <div class="tbl-wrap" id="history-wrap"></div>
+
+</div><!-- end tab-monitor -->
+
 </main>
 
 <footer>
@@ -856,6 +960,9 @@ function applyQuotes(data) {
 
   // Timestamp
   set('ts', data.ts);
+
+  // Update monitor tab price action
+  updateMonitorPrices(data);
 }
 
 // ── Build static DOM once ────────────────────────────────────────────────────
@@ -955,6 +1062,220 @@ async function loadAll() {
   startCountdown();
 }
 
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+// ── Monitor data — framework scores (research-based) ──────────────────────────
+const MONITOR_DATA = {
+  MSFT: {
+    pp:  {score:10, note:'Enterprise lock-in is maximum — Office 365, Azure, Teams, Copilot. Switching costs are catastrophic. Customers cannot leave.'},
+    mac: {score:9,  note:'Azure growth rate accelerating (+40% YoY). AI capex supercycle is a secular trend. Enterprise spending is rate-neutral.'},
+    cat: {score:8,  note:'Q4 FY2026 earnings July 2026 (next hard date). 20M Copilot seats at $30/seat/mo = $600M+ monthly incremental.'},
+    thesis:'INTACT', verdict:'STRONG HOLD', verdictCls:'vd-strong', alert:null,
+  },
+  NVDA: {
+    pp:  {score:9,  note:'Dominant AI chip — 70-80% training market share. Blackwell 4× Hopper performance. No viable substitute at scale.'},
+    mac: {score:7,  note:'AI infrastructure spend accelerating globally. China gap is material: ZERO China DC shipments Q1 FY27 vs $4.6B prior year. Beijing signaling firms to hold off on H200. A risk to watch.'},
+    cat: {score:7,  note:'Blackwell GB300 ramp is confirmed and on track (Q1 FY27 DC rev $75.2B, +92% YoY). China H200 catalyst delayed — firms waiting on Beijing green light. One catalyst live; one stalled.'},
+    thesis:'INTACT — CHINA DELAY FLAGGED', verdict:'HOLD — MONITOR CHINA', verdictCls:'vd-caution',
+    alert:'Call Up finding (May 25, 2026): China Data Center shipments were ZERO this quarter vs $4.6B a year ago. Beijing signaled firms to wait on H200 purchases. The China re-opening was cited as a key catalyst — that timeline is slipping. Blackwell ramp remains strong and fully intact. Do not exit, but do not add until China clarity emerges. Watch Jensen\'s next public statements on China for the re-entry signal.',
+  },
+  ORCL: {
+    pp:  {score:9,  note:'Enterprise database lock-in — migration off Oracle is catastrophically expensive. Pricing power is structural.'},
+    mac: {score:8,  note:'AI cloud RPO $523B provides forward revenue visibility regardless of rate environment. Secular AI capex tailwind.'},
+    cat: {score:7,  note:'Q4 FY26 earnings next. Wedbush PT $275. AI cloud contract announcements are a rolling catalyst.'},
+    thesis:'INTACT', verdict:'HOLD', verdictCls:'vd-hold', alert:null,
+  },
+  AMD: {
+    pp:  {score:8,  note:'Hyperscalers pay AMD premium for MI series. No direct substitute at MI400 compute density and price tier.'},
+    mac: {score:8,  note:'AI data center capex accelerating. AMD direct beneficiary — record $5.8B Q1 DC revenue confirms genuine demand.'},
+    cat: {score:6,  note:'MI400 ships Q3 2026 — catalyst is confirmed but 2+ months away. No near-term binary event before Q2 earnings.'},
+    thesis:'INTACT — PRICE ACTION CONCERN', verdict:'HOLD (NO NEW ENTRIES)', verdictCls:'vd-caution',
+    alert:'Call Up finding (May 25, 2026): AMD consensus PT is ~$405 (34 analysts), with stock potentially trading ~$462 — now ABOVE analyst consensus and well above our entry zone. Evercore ISI bull case is $579; Morgan Stanley bear case is $255. DA Davidson upgraded to Buy; Bernstein raised PT citing 50% jump in EPYC server sales + Meta AI deal. Thesis is fully intact and strengthening. Entry timing is the issue: if already in from $390–$400, hold with original stop at $370. New money: do not add above $420. Wait for a pullback to re-test $390–$400 entry zone.',
+  },
+  LMND: {
+    pp:  {score:7,  note:'6% LAE ratio vs 8–10% industry average — structural cost advantage. 90% first-time buyers = blue ocean TAM. AI leverage compounding.'},
+    mac: {score:7,  note:'Rate cuts benefit growth stocks. Insurance premium revenue relatively rate-neutral. EBITDA path Q4 2026 — but market skeptical of timeline.'},
+    cat: {score:6,  note:'Q1 2026 beat (−$0.47 vs −$0.57 est., rev +71% YoY) but stock dropped ~15% on earnings day. Market is pricing skepticism of Q4 EBITDA profitability. Morgan Stanley cut PT $80→$75. August Q2 earnings is the next credibility test.'},
+    thesis:'INTACT — MARKET SKEPTICISM FLAGGED', verdict:'HOLD — WATCH $60–65', verdictCls:'vd-caution',
+    alert:'Call Up finding (May 25, 2026): LMND dropped ~15% on Q1 2026 earnings despite beating estimates. The beat-and-drop pattern signals the market is skeptical of the Q4 EBITDA profitability timeline — not the revenue story. Thesis is intact; the credibility gap is the risk. If stock re-tests $60–65, that is a stronger entry with better R/R and a natural stop at $52. Q2 August earnings is the moment of truth. Morgan Stanley cut PT to $75 (from $80).',
+  },
+  TAP: {
+    pp:  {score:3,  note:'FAILS pricing power test. Consumers are shifting to craft/premium/alternative. TAP is a price-taker in a declining category.'},
+    mac: {score:4,  note:'Consumer discretionary headwinds. Premiumization trend working directly against TAP core brand. No growth catalyst visible.'},
+    cat: {score:4,  note:'Ex-div May 29 was the near-term event. No growth catalyst on the horizon. Dividend sustainability is the only remaining thesis.'},
+    thesis:'WEAK — JOSH INCOME HOLD ONLY', verdict:'REDUCE / INCOME ONLY', verdictCls:'vd-caution',
+    alert:'TAP fails the evolved framework on pricing power and catalyst. Hold ONLY as a small income position per Josh\'s December 2025 entry thesis — this was never a conviction growth play. No new buys under current framework. Kevin would not hold this name. If dividend is cut or reduced, exit immediately.',
+  },
+  SG: {
+    pp:  {score:4,  note:'PARTIAL FAIL — sold Infinite Kitchen tech to Wonder (Nov 2025, $100M cash + $86.4M stock). The owned technology moat is gone.'},
+    mac: {score:5,  note:'Rate cuts help growth restaurants but fast-casual is highly competitive. Limited pricing power at the sub-$15 wrap price point.'},
+    cat: {score:7,  note:'Wrap launch catalyst alive. Q2 same-store sales data (July) is the binary make-or-break event. JPMorgan Overweight PT $13.'},
+    thesis:'REVISED — SWING ONLY', verdict:'SWING / SHORT HORIZON', verdictCls:'vd-caution',
+    alert:'Call Up finding (May 25, 2026): SG surged ~45% off May 8–13 base. COO and CFO bought shares near $8 on May 18 — insider buying at the lows is a strong signal. JPMorgan Overweight PT $13 confirmed. Oppenheimer raised PT to $10. AI moat still sold; thesis is still swing-only on wrap performance. Q2 same-store sales (July) is the exit decision point. The insider buys add conviction to hold through Q2 data. Exit if $7.50 breaks.',
+  },
+};
+
+// ── Historical picks log ───────────────────────────────────────────────────────
+const HISTORY = [
+  {
+    ticker:'INTC', company:'Intel Corporation',
+    added:'Jan–May 2026', addedPrice:'$19–$24 (5× move start)',
+    exitDate:'May 24, 2026', exitPrice:'~$119',
+    pnl:'+400%+', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh only — CHIPS Act, Terafab, Apple foundry talks, US govt 10% stake',
+    reason:'RSI 80+ (overbought). Up 5× from lows in under 5 months. Both frameworks agree: easy money is gone at these levels.',
+    lesson:'The thesis played out completely. Lesson: know when the trade is done. Re-entry only at $95–$105 on RSI cooldown.',
+  },
+  {
+    ticker:'CMG', company:'Chipotle Mexican Grill',
+    added:'Oct 5, 2025', addedPrice:'~$57 (post 50:1 split)',
+    exitDate:'—', exitPrice:'—',
+    pnl:'Untracked', status:'UNTRACKED', statusCls:'hs-untracked',
+    fw:'Josh only — rate-cut play; premium fast-casual restaurant thesis',
+    reason:'Josh bought alongside SG on Oct 5, 2025 video. Never added to active dashboard monitoring. Confirm status on next call up.',
+    lesson:'Need to pull Q1 2026 CMG performance and decide whether to add to monitor or formally close out.',
+  },
+  {
+    ticker:'SG (v1 thesis)', company:'Sweetgreen — AI Infinite Kitchen moat',
+    added:'Oct 5, 2025', addedPrice:'~$8.50',
+    exitDate:'Nov 2025 (revised, not exited)', exitPrice:'N/A',
+    pnl:'Position held, thesis changed', status:'REVISED', statusCls:'hs-revised',
+    fw:'Josh + Kevin — AI Infinite Kitchen moat + rate-cut restaurant thesis',
+    reason:'Sweetgreen sold Infinite Kitchen tech to Wonder (Nov 2025, $100M + $86.4M stock). The Kevin pricing-power differentiator was the owned AI technology. When sold, thesis downgraded to shorter-horizon wrap menu swing.',
+    lesson:'Pricing power thesis can be invalidated mid-hold by corporate asset sales. Monitor for divestitures that strip the moat — they are instant thesis killers.',
+  },
+  {
+    ticker:'Watchlist v1→v2', company:'Framework Evolution — Josh + Meet Kevin',
+    added:'Dashboard launch', addedPrice:'—',
+    exitDate:'May 24, 2026', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh-only framework (original)',
+    reason:'Integrated Meet Kevin\'s Pricing Power filter. Archived INTC (RSI 80+). Added LMND (Kevin explicit buy). Elevated ORCL + AMD to higher conviction. Downgraded TAP + SG.',
+    lesson:'Single-source research creates blind spots. Adding a pricing power pre-screen eliminated two weak thesis positions and surfaced LMND as a stronger alternative.',
+  },
+  {
+    ticker:'Watchlist v2→v3', company:'Expansion — MSFT + NVDA Added',
+    added:'May 24, 2026', addedPrice:'—',
+    exitDate:'May 25, 2026', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin + Institutional (Wedbush, Morgan Stanley)',
+    reason:'Added MSFT (AI Backbone, Tier 1 — Azure +40% YoY, Copilot monetization, Wedbush PT $625) and NVDA (AI Infrastructure — Blackwell ramp + China H200 cleared). Watchlist grew 5 → 7 active picks.',
+    lesson:'Both frameworks score MSFT and NVDA at maximum on pricing power. The YTD underperformance of NVDA (+15%) vs AMD (+66%) was the entry signal — China reopening was the unlocked catalyst.',
+  },
+];
+
+// ── Build monitor tab ─────────────────────────────────────────────────────────
+function buildMonitor() {
+  // Monitor cards
+  const grid = document.getElementById('monitor-cards');
+  if (grid) {
+    const bar = (score) => {
+      const w = Math.round(score / 10 * 100);
+      const cls = score >= 8 ? 'sb-green' : score >= 5 ? 'sb-amber' : 'sb-red';
+      return `<div class="score-track"><div class="score-fill ${cls}" style="width:${w}%"></div></div>`;
+    };
+    grid.innerHTML = WL.map(s => {
+      const m = MONITOR_DATA[s.ticker]; if (!m) return '';
+      const total = m.pp.score + m.mac.score + m.cat.score;
+      const tsCls = m.thesis.includes('INTACT') ? 'ts-intact' : m.thesis.includes('WEAK') ? 'ts-weak' : 'ts-revised';
+      return `
+      <div class="mon-card ${m.verdictCls}">
+        <div class="mon-top">
+          <div><div class="mon-ticker">${s.ticker}</div><div class="mon-company">${s.company}</div></div>
+          <div class="mon-verdict">${m.verdict}</div>
+        </div>
+        <div class="mon-thesis">Thesis: <span class="${tsCls}">${m.thesis}</span></div>
+        <div class="mon-scores">
+          <div class="mon-score-row"><span class="score-lbl">Pricing Power</span><span class="score-num">${m.pp.score}/10</span>${bar(m.pp.score)}</div>
+          <div class="mon-score-row"><span class="score-lbl">Macro Alignment</span><span class="score-num">${m.mac.score}/10</span>${bar(m.mac.score)}</div>
+          <div class="mon-score-row"><span class="score-lbl">Catalyst Status</span><span class="score-num">${m.cat.score}/10</span>${bar(m.cat.score)}</div>
+          <div class="mon-score-row" style="border-top:1px solid var(--border);padding-top:6px;margin-top:2px">
+            <span class="score-lbl" style="color:var(--text);font-weight:600">Total Score</span>
+            <span class="score-num" style="color:var(--accent)">${total}/30</span>
+            ${bar(total/3)}
+          </div>
+        </div>
+        <div class="mon-pa" id="mpa-${s.ticker}">
+          <span class="pa-lbl">Price Action:</span><span class="pa-above">— loading data —</span>
+        </div>
+        ${m.alert ? `<div class="mon-alert"><strong style="color:var(--accent)">Monitor Flag:</strong> ${m.alert}</div>` : ''}
+        <div class="mon-notes">
+          <div class="mn-row"><span class="mn-lbl">Pricing Power:</span>${m.pp.note}</div>
+          <div class="mn-row"><span class="mn-lbl">Macro:</span>${m.mac.note}</div>
+          <div class="mn-row"><span class="mn-lbl">Catalyst:</span>${m.cat.note}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // History table
+  const hw = document.getElementById('history-wrap');
+  if (hw) {
+    hw.innerHTML = `<table>
+      <thead><tr>
+        <th>Pick</th><th>Added</th><th>Entry Price</th>
+        <th>Exit Date</th><th>Exit Price</th><th class="r">P&L</th>
+        <th>Status</th><th>Framework</th><th>Exit Reason &amp; Lesson</th>
+      </tr></thead>
+      <tbody>${HISTORY.map(h => `<tr>
+        <td><span class="tk">${h.ticker}</span><div class="co">${h.company}</div></td>
+        <td style="font-size:11px">${h.added}</td>
+        <td style="font-size:11px">${h.addedPrice}</td>
+        <td style="font-size:11px">${h.exitDate}</td>
+        <td style="font-size:11px">${h.exitPrice}</td>
+        <td class="r" style="font-size:12px;font-weight:700;color:${h.pnl.includes('+')&&!h.pnl.includes('held')?'var(--green)':'var(--muted)'}">${h.pnl}</td>
+        <td><span class="hs-badge ${h.statusCls}">${h.status}</span></td>
+        <td style="font-size:11px;max-width:140px;color:var(--dim)">${h.fw}</td>
+        <td style="font-size:11px;max-width:220px;color:var(--dim)">${h.reason}<em style="color:var(--accent);display:block;margin-top:4px;font-style:normal">&#9660; ${h.lesson}</em></td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  }
+}
+
+// ── Update monitor price action when quotes load ───────────────────────────────
+function updateMonitorPrices(data) {
+  for (const s of WL) {
+    const q = data.quotes[s.ticker];
+    const el = document.getElementById('mpa-' + s.ticker);
+    if (!el) continue;
+
+    if (!q || q.c == null) {
+      el.innerHTML = `<span class="pa-lbl">Price Action:</span><span style="color:var(--muted)">— no data —</span>`;
+      continue;
+    }
+
+    // Parse entry range, target, stop
+    const eNums = s.entry.replace(/[$,]/g,'').split(/[–—\-]/).map(n=>parseFloat(n.trim())).filter(Boolean);
+    const eLow = eNums[0], eHigh = eNums[eNums.length-1] || eNums[0];
+    const tNum = parseFloat(s.target.replace(/[$,+]/g,'').split(/[–—\-]/)[0]);
+    const stNum = s.stop && s.stop!=='N/A' ? parseFloat(s.stop.replace(/[$,]/g,'')) : null;
+    const cur = q.c;
+
+    let txt, cls;
+    if (stNum && cur <= stNum) {
+      txt = `STOP HIT — $${cur.toFixed(2)} at or below stop $${stNum.toFixed(2)}`;  cls='pa-exit';
+    } else if (cur >= tNum) {
+      txt = `AT TARGET — $${cur.toFixed(2)} reached target $${tNum.toFixed(2)}`;      cls='pa-target';
+    } else if (cur >= eLow && cur <= eHigh) {
+      txt = `IN ENTRY ZONE — $${cur.toFixed(2)} (zone $${eLow}–$${eHigh})`;          cls='pa-entry';
+    } else if (cur > eHigh) {
+      const abv = ((cur-eHigh)/eHigh*100).toFixed(1);
+      txt = `ABOVE ENTRY — $${cur.toFixed(2)} (+${abv}% above zone $${eHigh})`;      cls='pa-above';
+    } else {
+      const blw = ((eLow-cur)/eLow*100).toFixed(1);
+      txt = `BELOW ENTRY — $${cur.toFixed(2)} (${blw}% below zone $${eLow})`;        cls='pa-below';
+    }
+    el.innerHTML = `<span class="pa-lbl">Price Action:</span><span class="${cls}">${txt}</span>`;
+  }
+}
+
 // ── Swing Desk — auto-populate week label + short-week flag ───────────────────
 function initSwingDesk() {
   const now = new Date();
@@ -992,6 +1313,7 @@ function initSwingDesk() {
 }
 
 buildDOM();
+buildMonitor();
 initSwingDesk();
 loadAll();
 </script>
