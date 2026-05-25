@@ -1,7 +1,152 @@
 # JoshAnswers — Core Rules, Phrases & Market Intelligence
-> Compiled from The Trading Fraternity (YouTube / StockMarketLive) research sweep.  
+> Compiled from The Trading Fraternity (YouTube / StockMarketLive) + Meet Kevin (YouTube / mketf.com) research sweep.  
+> Additional reference: Warren Buffett / Berkshire Hathaway letters, Morgan Stanley 2026 outlook, Wedbush equity research.  
 > All content is educational. Nothing here is personalized financial advice.  
-> Phrases marked *[direct]* are verified sourced quotes. Others are in the spirit of his documented teaching.
+> Phrases marked *[direct]* are verified sourced quotes. Others are in the spirit of documented teaching.
+
+---
+
+## KNOWLEDGE EVOLUTION LOG — May 24, 2026
+*"A good trader doesn't just follow one voice. He studies them all, decides what's real, and builds his own edge."*
+
+### The Research Sweep
+After deep research into **Meet Kevin** (Kevin Paffrath — @MeetKevin on YouTube, meetkevin.com),
+cross-referenced against Josh's Trading Fraternity framework and reputable institutional sources
+(Wedbush, Morgan Stanley, J.P. Morgan 2026 outlook), here is the full synthesis of how my
+philosophy evolved — what I kept, what I cut, and what I built from the collision of the two.
+
+---
+
+### WHO IS MEET KEVIN
+
+- **Real name:** Kevin Paffrath — licensed real estate broker and financial advisor
+- **Platform:** YouTube (@MeetKevin, ~5M+ subs), podcast (The Meet Kevin Show), paid courses (joinmeetkevin.com)
+- **Background:** Real estate investor turned stock market educator; built ~$30M net worth across YouTube revenue, real estate, stocks, and courses
+- **ETF:** Launched The Meet Kevin Pricing Power ETF (NYSE: PP) in November 2022 — **closed and liquidated February 28, 2025** (underperformed, delisted)
+- **Track record:** 33% pick accuracy tracked by TrueAlpha — good ideas, inconsistent execution
+- **Style:** Fast-paced, macro-aware, growth/tech-heavy, high-conviction concentrated bets, fundamental analysis, willing to go speculative
+- **Known picks:** Tesla (large position in ETF), NVDA, Enphase, Lemonade (LMND), HUT Mining, Shift Technologies
+
+---
+
+### MEET KEVIN'S CORE FRAMEWORK
+
+#### The Pricing Power Filter
+> *A company has pricing power when it can raise prices without losing customers.*
+
+This is the Buffett moat concept applied to growth stocks:
+- **What qualifies:** Enterprise software lock-in (ORCL), AI chips with no real alternative (AMD, NVDA), AI-native disruption (LMND)
+- **What fails the test:** Commodity businesses, price-takers, declining brands with no differentiation
+
+#### Kevin's Rules (synthesized from ETF prospectus, YouTube content, course material)
+1. **Innovation is the entry point** — only invest in companies creating something new or disrupting an existing market
+2. **Pricing power is the filter** — innovation without pricing power is just hype; you need both
+3. **Macro context matters** — "Don't fight the Fed"; rate cycles dictate what kind of stocks work
+4. **Fundamentals over narratives** — FCF positive or credible path to it; EPS growth; moat widening
+5. **Concentration in conviction** — Kevin runs 50%+ in his top 3 names when he believes in them
+6. **Macro-hedging** — his ETF could allocate up to 30% to targeted ETFs to hedge rate/geopolitical risk
+7. **Long-term capital appreciation** — not a day-trader; buys and holds through volatility if thesis holds
+
+#### Kevin's Blind Spots (what research revealed)
+- **Over-concentration risk** — 50% in 3 stocks (TSLA, ENPH, NVDA) contributed to ETF failure
+- **33% pick accuracy** — good at identifying themes, inconsistent on timing and entry
+- **Ignores trading mechanics** — no stop-loss discipline, no position-sizing rules, no Ghetto Spread equivalent
+- **Chases narratives** — HUT Mining, Shift Tech (speculative without rigorous catalyst framework)
+- **ETF closure** — the PP ETF ultimately failed to sustain; execution gap exists between philosophy and results
+
+---
+
+### COLLISION ANALYSIS — JOSH vs. KEVIN
+
+| Dimension | Josh Answers | Meet Kevin | My Decision |
+|---|---|---|---|
+| **Primary lens** | Catalyst-driven trading | Pricing power + fundamentals | **KEEP BOTH** — apply in sequence |
+| **Time horizon** | Short-term momentum + long-term holds | Long-term capital appreciation | **KEEP BOTH** — depends on position tier |
+| **Options strategy** | ITM calls/puts, Ghetto Spread | Sells puts occasionally, buys calls | **Josh wins** — Ghetto Spread is more defined |
+| **OTC / Penny stocks** | Core content, rules-based | Doesn't touch | **Remove from this watchlist** — not monitored well remotely |
+| **Stop losses** | Explicit; core rule | Rarely mentioned | **Josh wins** — no stop = no discipline |
+| **Macro awareness** | Moderate — catalyst-focused | Strong — Fed/rate/inflation aware | **Kevin wins** — add macro overlay |
+| **Community ethos** | Brotherhood / shared learning | Individual brand / course-driven | **Josh wins** — accountability matters |
+| **Speculative names** | OTC with catalyst rules | Crypto mining, early-stage tech | **Both risky** — apply catalyst filter before touching either |
+| **Real estate pillar** | Yes — major wealth pillar | Yes — Kevin's foundation | **Both agree** — real estate is real |
+| **Concentration** | Budget discipline, sizing rules | High concentration, 50%+ in 3 stocks | **Josh wins** — Kevin's concentration hurt him |
+| **Track record (picks)** | Documented buys: ORCL, INTC, SG, TAP | 33% accuracy tracked | **Mixed** — use frameworks not blind picks |
+| **Pricing power lens** | Not formally used | Core filter | **Kevin wins** — run all picks through this filter |
+
+---
+
+### WHAT I'M THROWING OUT
+
+| Item | Source | Why Discarded |
+|---|---|---|
+| Kevin's concentrated single-stock bets | Kevin | PP ETF failed partly from 50% in 3 names |
+| Kevin's speculative micro-caps (HUT, Shift) | Kevin | No catalyst framework; pure narrative plays |
+| Kevin's blind pick-following | Kevin | 33% accuracy; use his *framework*, not his *calls* |
+| OTC/penny stock plays | Josh | Valid in live stream format; not monitorable in this dashboard |
+| SG's AI/Infinite Kitchen moat | Both | Sweetgreen sold the Infinite Kitchen tech to Wonder (Nov 2025, $100M) — the tech moat is gone |
+| Chasing INTC at current levels | Both | RSI 80+, up 5× from lows; the easy money is gone; Kevin prefers AMD/NVDA for AI infrastructure |
+
+---
+
+### WHAT I'M KEEPING AND COMBINING
+
+| Insight | Origin | How It Changes the System |
+|---|---|---|
+| Catalyst before entry | Josh | Non-negotiable; still the trigger mechanism |
+| Pricing power as screening filter | Kevin | Added BEFORE watchlist entry — no catalyst play without a pricing power story |
+| Macro overlay | Kevin | Added rate/Fed awareness to long-term holds; rate-cut beneficiaries get higher conviction |
+| Ghetto Spread on strong moves | Josh | Retained as the primary risk-management options tool |
+| Stop levels on every position | Josh | Non-negotiable; Kevin has no equivalent |
+| Long-term portfolio foundation | Both | Both agree — active trading sits on top of quality long holds |
+| AI disruption as a theme | Kevin | Applied pricing power filter to AI names (LMND, AMD, ORCL all pass; INTC barely passes at current RSI) |
+| Budget/position sizing | Josh | Non-negotiable; Kevin's failure was partly position sizing |
+| Community accountability | Josh | The fraternity mindset: learn from collective mistakes |
+
+---
+
+### THE EVOLVED PHILOSOPHY
+
+**Old (Josh-only):**
+> Catalyst → Entry → Ghetto Spread → Net P&L
+
+**Evolved (Josh + Kevin):**
+> Pricing Power Screen → Macro Context Check → Catalyst Trigger → Entry with Stop → Ghetto Spread for risk management → Net P&L
+
+**In plain English:**
+Before touching any stock, ask three questions in order:
+1. **(Kevin) Does this company have pricing power — can it raise prices without losing customers?** If no, it's not a long-term hold.
+2. **(Kevin) Is the macro environment working with or against this thesis?** Rate-sensitive growth needs rate cuts; value needs patience; momentum needs volume.
+3. **(Josh) What is the specific catalyst that triggers the entry?** News, earnings beat, product launch, institutional upgrade, government contract. No catalyst = no trade.
+
+If all three pass → Enter with defined stop (Josh) → Use Ghetto Spread on big moves (Josh).
+
+---
+
+### ADDITIONAL REPUTABLE REFERENCE SOURCES ADDED
+
+| Source | What It Adds |
+|---|---|
+| **Wedbush Equity Research** | Institutional price targets (ORCL $275, etc.) |
+| **Morgan Stanley 2026 Outlook** | Macro risk assessment, recession probability framework |
+| **J.P. Morgan Global Research** | Fed/rate cycle tracking |
+| **Motley Fool / Seeking Alpha** | Secondary fundamental research, earnings call transcripts |
+| **CNBC Markets** | Real-time catalyst news, analyst upgrades/downgrades |
+| **TrueAlpha Data** | Creator pick accuracy tracking (used to calibrate Kevin's 33% rate) |
+
+---
+
+### WATCHLIST EVOLUTION — Before & After
+
+| Ticker | Before (Josh-only) | After (Josh + Kevin) | Decision |
+|---|---|---|---|
+| ORCL | Long-Term Hold | **ELEVATED** — passes both frameworks | ✅ Keep, higher conviction |
+| AMD | Momentum/Swing | **PRIMARY PICK** — best convergence of both | ✅ Keep, elevated to top pick |
+| TAP | Dividend Hold | **REDUCED CONVICTION** — fails Kevin's pricing power filter | ⚠️ Keep, smaller size, Josh-only hold |
+| SG | Swing/Growth | **THESIS WEAKENED** — sold Infinite Kitchen tech to Wonder Nov 2025 | ⚠️ Keep with shorter horizon, tighter stop |
+| INTC | Watch Only | **ARCHIVED** — RSI 80+; Kevin prefers AMD/NVDA; Josh says don't chase | ❌ Remove from active, move to archive |
+| LMND | Not on list | **NEW ADD** — Kevin's explicit buy; AI-native pricing power; profitability catalyst Q4 2026 | ✅ Add as AI Disruption play |
+
+---
 
 ---
 
@@ -242,9 +387,10 @@ Different asset classes have completely different playbooks. You don't trade an 
 
 ---
 
-## JOSHANSWERS WATCHLIST — May 24, 2026
-> *Built through Josh's framework: long-term portfolio layer + momentum layer + catalyst layer.  
-> Small = disciplined. 5 names. Each earns its spot. Not financial advice — educational analysis only.*
+## JOSHANSWERS WATCHLIST v2 — May 24, 2026
+> *Built through the evolved framework: Pricing Power Screen → Macro Check → Catalyst Trigger → Entry with Stop.*  
+> *Josh Answers (catalyst, discipline, stops, options) + Meet Kevin (pricing power, fundamentals, AI disruption, macro) + Institutional research.*  
+> *5 active names. 1 archived. Each earns its spot. Not financial advice — educational analysis only.*
 
 ---
 
@@ -256,7 +402,10 @@ Different asset classes have completely different playbooks. You don't trade an 
 ---
 
 ### 1. ORCL — Oracle Corporation
-**Tier: 1 (Long-Term Hold) | Josh confirmed buyer**
+**Tier: 1 (Long-Term Hold) | ELEVATED — Both frameworks converge ✅**
+*Pricing Power Screen: PASS — enterprise database lock-in; customers don't leave Oracle*
+*Macro Check: PASS — AI capex supercycle is a secular trend; rate-neutral*
+*Catalyst: PASS — $523B RPO, AI cloud contracts, Wedbush PT $275, Q3 beat*
 
 | Metric | Data |
 |---|---|
@@ -279,7 +428,10 @@ This is Josh's framework in textbook form: **identify the catalyst for the sell-
 ---
 
 ### 2. AMD — Advanced Micro Devices
-**Tier: 2 (Momentum/Swing) | Catalyst-driven**
+**Tier: 2 (Primary Momentum Pick) | ELEVATED — Best convergence of both frameworks ✅**
+*Pricing Power Screen: PASS — hyperscalers pay AMD premium; no commodity pricing; MI400 has no direct substitute*
+*Macro Check: PASS — AI infrastructure spending is accelerating regardless of rate environment*
+*Catalyst: PASS — MI400/Helios racks shipping Q3 2026; $60B hyperscaler commitments locked*
 
 | Metric | Data |
 |---|---|
@@ -303,7 +455,12 @@ Under Josh's framework: **this has a real catalyst (MI400 launch), fundamental b
 ---
 
 ### 3. TAP — Molson Coors Beverage Company
-**Tier: 1 (Long-Term Hold / Dividend) | Josh confirmed buyer**
+**Tier: 1 (Dividend Hold — REDUCED CONVICTION) | Josh-only hold ⚠️**
+*Pricing Power Screen: FAIL — declining brand relevance; consumers shifting to craft/premium/alternative beverages; TAP is a price-taker, not a price-setter*
+*Macro Check: NEUTRAL — benefits from consumer spending stability; hurt by premiumization trend*
+*Catalyst: WEAK — dividend + buybacks, but no growth catalyst. The ex-dividend May 29 is a near-term income event, not a growth story.*
+*Kevin verdict: Would not hold. No innovation. No moat. Josh verdict: Bought Dec 2025 for income.*
+*My decision: Keep as small, Josh-only income position. NOT a conviction buy for new money.*
 
 | Metric | Data |
 |---|---|
@@ -327,7 +484,11 @@ The 4.58% dividend yield is real money while you wait. The company is executing 
 ---
 
 ### 4. SG — Sweetgreen, Inc.
-**Tier: 2 (Swing / Speculative Growth) | Josh confirmed buyer**
+**Tier: 2 (Swing — THESIS REVISED, SHORTER HORIZON) | Josh catalyst play, AI moat removed ⚠️**
+*Pricing Power Screen: PARTIAL FAIL — Sweetgreen sold its Infinite Kitchen robotics tech (Spyce) to Wonder in November 2025 for $100M cash + $86.4M stock. The operational AI edge remains (they buy it back at cost+5%), but they no longer OWN the technology moat. Kevin would exit on this news.*
+*Macro Check: NEUTRAL — consumer discretionary; rate cuts help, but fast-casual is highly competitive*
+*Catalyst: ALIVE BUT NARROWER — wrap menu launch under $15 is a real short-term catalyst; JPMorgan Overweight upgrade, PT $13; Q2 2026 same-store sales data is the binary event*
+*My decision: Shorten the time horizon. This is now a pure Josh catalyst swing — wrap sales data in Q2. Tighter stop. Exit if Q2 same-store sales disappoint. Not a long-term hold.*
 
 | Metric | Data |
 |---|---|
@@ -353,40 +514,72 @@ At $9.60, it's still 41% below the July 2025 high of $16.26. The JPMorgan $13 ta
 
 ---
 
-### 5. INTC — Intel Corporation
-**Tier: 3 (Watch Only — DO NOT CHASE) | Josh's highest-conviction 2026 call**
+### 5. LMND — Lemonade, Inc. *(NEW — replacing INTC as active pick)*
+**Tier: 2 (AI Disruption / Swing) | Kevin's explicit buy; passes evolved framework ✅**
+*Pricing Power Screen: STRONG PASS — AI-native insurance with 6% LAE ratio vs. industry 8-10%; lower costs than incumbents = structural pricing advantage; 90% of customers are first-time buyers (blue ocean TAM)*
+*Macro Check: PASS — rate cuts help growth stocks; insurance is relatively rate-neutral for premiums*
+*Catalyst: PASS — Q1 2026 revenue +71% YoY; Tesla partnership (autonomous car insurance at 50% discount); path to EBITDA profitability Q4 2026; CEO says company is "on a tear"; 4 straight weeks of stock gains*
 
 | Metric | Data |
 |---|---|
-| Current Price | ~$119 (May 22, 2026) |
-| 52-Week Low | ~$19.98 (May 2025) |
-| 52-Week High | $132.75 |
-| YTD Performance | +400%+ (quintupled from lows) |
-| RSI (14) | ~80.5 — **OVERBOUGHT** |
-| Market Cap | ~$503B |
+| Current Price | ~$67 (May 2026) |
+| 52-Week Range | $25.85 – $99.90 |
+| 2025 Performance | +94% |
+| 2026 YTD | −24% (from high; recently recovering) |
+| Q1 2026 Revenue Growth | +71% YoY |
+| In-Force Premium | $1.33B (+32% YoY, 10th consecutive quarter of acceleration) |
+| LAE Ratio | 6% (vs industry 8–10% — structural cost advantage) |
+| Customers | ~2.9M (growing; headcount shrinking = AI leverage) |
+| EBITDA Profitability | Guided Q4 2026 |
+| Analyst Consensus PT | $68–70 avg; Morgan Stanley Buy PT $75; range $33–$103 |
+| Tesla Partnership | Launched autonomous car insurance; ~50% discount for FSD miles |
+| Kevin's position | Publicly stated buyer |
 
-**Why it's on the watchlist — but NOT a buy right now:**
-Josh called Intel daily. The thesis was right: CHIPS Act funding, U.S. government 10% stake, Apple foundry talks, SpaceX/xAI/Tesla Terafab initiative, six consecutive earnings beats. The stock went from ~$20 to ~$120 — a 5x move. Josh's fraternity members who caught this early won.
+**Why LMND earns the spot over INTC:**
+- INTC is up 5× already — the pricing power thesis there is real but the entry is RSI-overextended
+- LMND is down 24% YTD from its high, recovering with strong fundamentals — better risk/reward at current levels
+- LMND passes the Kevin pricing power filter AND the Josh catalyst trigger
+- The profitability milestone (Q4 2026 EBITDA positive) is the kind of binary catalyst Josh looks for
 
-**But here's the Josh rule in play:** *"Don't chase it."* RSI of 80.5 is deep overbought territory. The stock is 11.6% below its recent high of $132.75 and showing momentum divergence. The easy money is gone at these levels.
-
-This is a **watch-for-pullback entry**. The long-term thesis (government-backed U.S. semiconductor manufacturing renaissance) is a multi-year story. A pullback to the $90–$100 zone would represent a healthier risk/reward for new entries.  
-**Trigger to buy:** Pullback to $95–$105 with volume stabilization, RSI cooling to 50–55.  
-**Catalyst to watch:** Apple foundry contract official announcement, Terafab production milestones, CHIPS Act manufacturing timeline updates.
+**Entry:** $60–$65 on any pullback (current ~$67 is acceptable on dips)
+**Stop zone:** Below $52 — breaks the 2026 recovery structure
+**Target:** $75 (Morgan Stanley) → $90+ if EBITDA profitability hits on time
+**Catalyst to watch:** Q2 2026 earnings (August), EBITDA guidance update, Tesla partnership expansion
 
 ---
 
-### WATCHLIST SUMMARY TABLE
+### 6. INTC — Intel Corporation *(ARCHIVED — removed from active picks)*
+**Tier: ARCHIVED | Was: Watch Only**
 
-| Ticker | Company | Tier | Current Price | Entry Zone | Target | Stop | Catalyst |
-|---|---|---|---|---|---|---|---|
-| ORCL | Oracle | 1 — Long-Term | $190.88 | $175–$185 pullback | $275 (Wedbush PT) | $165 | Q4 earnings, AI contracts |
-| AMD | Advanced Micro Devices | 2 — Momentum | $421 | $390–$400 | $469 (52w high) | $370 | MI400 Q3 launch |
-| TAP | Molson Coors | 1 — Dividend | $44.04 | $40–$44 | $49 (analyst PT) | $38 | Ex-div May 29 🔔 |
-| SG | Sweetgreen | 2 — Swing/Growth | $9.60 | $9.00–$9.50 | $13 (JPM PT) | $7.50 | Wrap rollout Q2 |
-| INTC | Intel | 3 — Watch Only | $119 | $95–$105 on pullback | $132+ | N/A yet | Apple deal, Terafab |
+| Metric | Data |
+|---|---|
+| Price at Archive | ~$119 (May 24, 2026) |
+| 52-Week Low | ~$19.98 (May 2025) |
+| 52-Week High | $132.75 |
+| YTD Performance | +400%+ |
+| RSI (14) | ~80.5 — OVERBOUGHT |
+| Market Cap | ~$503B |
 
-> **"Call up"** — say this phrase any time and JoshAnswers will pull the latest Trading Fraternity videos, live stream recaps, and social activity to refresh the watchlist with new intelligence.
+**Why it's archived:**
+Josh called Intel daily and the thesis was right — CHIPS Act, Apple foundry talks, Terafab. The 5× move happened. But RSI 80.5 is deep overbought. Kevin prefers AMD and NVDA for AI infrastructure. Both frameworks say the same thing: **the easy money is gone at these levels.** This is now a "watch on re-entry" candidate — not an active position.
+
+**Re-entry trigger:** Pullback to $95–$105, RSI cooling to 50–55, volume stabilization.
+**Archive date:** May 24, 2026. Will revisit if fundamentals shift (Apple contract signed, Terafab volume announced).
+
+---
+
+### WATCHLIST SUMMARY TABLE — v2 (Post-Kevin Evolution)
+
+| Ticker | Company | Tier | Price (May 24) | Entry Zone | Target | Stop | Framework | Catalyst |
+|---|---|---|---|---|---|---|---|---|
+| ORCL | Oracle | 1 — Long-Term 🔼 | $190.88 | $175–$185 | $275 | $165 | **Both** | AI cloud RPO, Wedbush PT |
+| AMD | Advanced Micro Devices | 2 — Primary Pick 🔼 | $421 | $390–$400 | $469 | $370 | **Both** | MI400 Q3 launch |
+| LMND | Lemonade | 2 — AI Disruption 🆕 | ~$67 | $60–$65 | $75–$90 | $52 | **Kevin-led** | Q4 EBITDA, Tesla partnership |
+| TAP | Molson Coors | 1 — Dividend ⚠️ | $44.04 | $40–$44 | $49 | $38 | **Josh only** | Ex-div May 29 🔔 |
+| SG | Sweetgreen | 2 — Short Swing ⚠️ | $9.60 | $9.00–$9.50 | $13 | $7.50 | **Josh only** | Q2 wrap sales data |
+| INTC | Intel | ARCHIVED ❌ | $119 | $95–$105 re-entry | $132+ | — | Was: Both | Wait for RSI cooldown |
+
+> **"Call up"** — say this phrase any time and JoshAnswers will pull the latest Trading Fraternity and Meet Kevin videos, live stream recaps, and social activity to refresh the watchlist with new intelligence.
 
 ---
 
@@ -475,17 +668,19 @@ This is a **watch-for-pullback entry**. The long-term thesis (government-backed 
 
 ## SELF-IMPROVEMENT LOG (JoshAnswers Agent)
 
-### Session Notes — Updated May 24, 2026
-- Strong coverage: Community ethos, Three Pillars, Ghetto Spread mechanics, OTC rules, ITM/OTM framework, daily workflow
-- Confirmed Josh's 2025–2026 YouTube plays: SG/CMG (Oct 2025), TAP (Dec 2025), ORCL (Mar 2026), INTC (ongoing)
-- Watchlist built (5 names): ORCL, AMD, TAP, SG, INTC — each with Josh-framework reasoning, entries, stops, catalysts
-- **"Call up" trigger active** — when user says "call up," research most recent Trading Fraternity videos and live streams for watchlist update
-- Gap: Cannot access Josh's paid stream alerts ($75/mo) — specific member-only watchlists not available publicly
-- Gap: YouTube view counts not directly accessible; video list is based on search surface visibility, not verified rank order
-- Gap: No direct access to Twitter/X, Instagram, or Threads (all 403 blocked) — social media plays limited to search-indexed references
-- Gap: "3 Stocks for 2026" from Feb 2, 2026 video — specific tickers not yet confirmed; video URL known (watch?v=FSFLgln8cxQ) but content blocked
-- Gap: CMG (Chipotle) current price and 2026 performance not yet pulled
-- Queue: On next "call up" — pull May/June 2026 Trading Fraternity uploads, confirm CMG performance, check for any new INTC/ORCL/AMD commentary
+### Session Notes — Evolution Update May 24, 2026 (Post-Kevin Research)
+- **v2 Evolution complete**: Integrated Meet Kevin's framework alongside Josh's. Pricing Power filter now applied before any new watchlist entry.
+- **Philosophy shift**: Single-source → Dual-source synthesis. Josh = discipline engine. Kevin = idea filter.
+- **Watchlist v2**: ORCL (elevated), AMD (elevated to primary), LMND (added), TAP (reduced conviction), SG (revised thesis), INTC (archived)
+- **Critical find**: Sweetgreen sold Infinite Kitchen tech to Wonder (Nov 2025) — AI moat removed from SG thesis. This changed the conviction level and time horizon.
+- **Kevin blind spot confirmed**: 33% tracked pick accuracy; his ETF (PP) closed Feb 2025. Use his *framework*, ignore his *specific blind calls* (HUT, Shift).
+- **Institutional sources added**: Wedbush, Morgan Stanley, J.P. Morgan, TrueAlpha Data
+- **"Call up" trigger updated** — now sweeps both Trading Fraternity AND Meet Kevin channels for recent content
+- Gap: Cannot access Josh's paid stream alerts ($75/mo) — member-only watchlists not public
+- Gap: Cannot access Kevin's paid course content — framework extracted from public ETF filings + YouTube research
+- Gap: "3 Stocks for 2026" from Josh's Feb 2, 2026 video — tickers still unconfirmed (URL known: watch?v=FSFLgln8cxQ)
+- Gap: CMG (Chipotle) current 2026 performance not yet pulled
+- Queue on next "call up": Pull May/June uploads from both channels; confirm LMND Q2 guidance; check AMD MI400 shipping status; re-evaluate INTC RSI for re-entry
 
 ---
 
