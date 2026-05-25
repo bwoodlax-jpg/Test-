@@ -372,6 +372,50 @@
     .hs-archived {background:rgba(224,62,62,.1);color:var(--red)}
     .hs-untracked{background:var(--surf2);color:var(--muted)}
     .hs-revised  {background:rgba(240,165,0,.1);color:var(--accent)}
+
+    /* ── S&P 500 Losers Tab ── */
+    .sp500-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .sp500-stats{display:flex;gap:12px;flex-wrap:wrap}
+    .sp500-stat{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 18px;text-align:center;min-width:110px}
+    .sp500-stat-num{font-size:20px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+    .sp500-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+    .sp500-controls{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+    .sp500-search{background:var(--surf);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:6px;font-size:12px;outline:none;width:200px;transition:border-color .2s}
+    .sp500-search:focus{border-color:var(--accent)}
+    .sector-btn{background:var(--surf2);border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:600;padding:5px 12px;border-radius:4px;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .sector-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .sector-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+    .sp500-table{width:100%;border-collapse:collapse;font-size:12px}
+    .sp500-table th{background:var(--surf);color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+    .sp500-table th:hover{color:var(--text)}
+    .sp500-table td{padding:10px 14px;border-bottom:1px solid rgba(34,40,48,.6);vertical-align:middle}
+    .sp500-table tr:hover td{background:var(--surf2)}
+    .sp-rank{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+    .sp-ticker{font-weight:800;font-size:13px;letter-spacing:.5px}
+    .sp-company{font-size:11px;color:var(--dim)}
+    .sp-note{font-size:10px;color:var(--muted);margin-top:2px}
+    .sp-ytd{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+    .ytd-critical{color:#ff4444}
+    .ytd-severe{color:#ff6b35}
+    .ytd-bad{color:var(--red)}
+    .ytd-down{color:var(--accent)}
+    .sp-sector-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+    .sec-tech{background:rgba(79,156,249,.15);color:var(--blue)}
+    .sec-fin{background:rgba(240,165,0,.12);color:var(--accent)}
+    .sec-health{background:rgba(0,200,122,.12);color:var(--green)}
+    .sec-re{background:rgba(180,120,255,.12);color:#b478ff}
+    .sec-energy{background:rgba(255,107,53,.12);color:#ff6b35}
+    .sec-consumer{background:rgba(100,220,200,.12);color:#64dcc8}
+    .sec-other{background:var(--surf2);color:var(--muted)}
+    .pp-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;text-align:center;white-space:nowrap}
+    .pp-high{background:rgba(0,200,122,.12);color:var(--green)}
+    .pp-mid{background:rgba(240,165,0,.12);color:var(--accent)}
+    .pp-low{background:rgba(224,62,62,.12);color:var(--red)}
+    .sp500-source-note{margin-top:18px;padding:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.6}
+    .sp500-source-note a{color:var(--accent);text-decoration:none}
+    .sp500-source-note a:hover{text-decoration:underline}
+    .sp-empty{text-align:center;padding:40px;color:var(--muted);font-size:12px}
+    .sp-pp-flag{font-size:10px;color:var(--green);font-weight:700;margin-left:6px}
   </style>
 </head>
 <body>
@@ -451,6 +495,7 @@
 <div class="tab-bar">
   <button class="tab-btn active" data-tab="watchlist" onclick="switchTab('watchlist')">Live Watchlist</button>
   <button class="tab-btn" data-tab="monitor" onclick="switchTab('monitor')">History &amp; Monitor</button>
+  <button class="tab-btn" data-tab="sp500" onclick="switchTab('sp500')">S&amp;P 500 Losers</button>
 </div>
 
 <main>
@@ -754,6 +799,81 @@
   <div class="tbl-wrap" id="history-wrap"></div>
 
 </div><!-- end tab-monitor -->
+
+<!-- ── S&P 500 Losers Tab ─────────────────────────────── -->
+<div id="tab-sp500" class="tab-panel">
+
+  <div class="sec-label">S&amp;P 500 — YTD Losers (Down 10%+)</div>
+  <p class="monitor-sub">
+    S&amp;P 500 components confirmed down 10%+ year-to-date as of <strong style="color:var(--text)">May 22, 2026</strong>.
+    Source: Financial news aggregation &amp; market research.
+    <a href="https://slickcharts.com/sp500/performance" target="_blank" style="color:var(--accent)">Slickcharts live data ↗</a> &nbsp;|&nbsp;
+    <a href="https://slickcharts.com/sp500/losers" target="_blank" style="color:var(--accent)">Losers page ↗</a>.
+    <br>
+    <strong style="color:var(--accent)">PP</strong> = Josh's Pricing Power screen score (1–10). High PP in a beaten-down name = potential contrarian setup.
+  </p>
+
+  <div class="sp500-header">
+    <div class="sp500-stats">
+      <div class="sp500-stat">
+        <div class="sp500-stat-num" id="sp-count">—</div>
+        <div class="sp500-stat-lbl">Stocks Down 10%+</div>
+      </div>
+      <div class="sp500-stat">
+        <div class="sp500-stat-num" id="sp-avg">—</div>
+        <div class="sp500-stat-lbl">Avg YTD Loss</div>
+      </div>
+      <div class="sp500-stat">
+        <div class="sp500-stat-num" id="sp-worst-lbl">—</div>
+        <div class="sp500-stat-lbl">Worst Performer</div>
+      </div>
+      <div class="sp500-stat">
+        <div class="sp500-stat-num" id="sp-pp-watch" style="color:var(--green)">—</div>
+        <div class="sp500-stat-lbl">High PP Candidates</div>
+      </div>
+    </div>
+    <a href="https://slickcharts.com/sp500/performance" target="_blank" class="btn" style="font-size:11px;text-decoration:none;padding:10px 18px">
+      Full Live List ↗
+    </a>
+  </div>
+
+  <div class="sp500-controls">
+    <input type="text" class="sp500-search" id="sp-search" placeholder="Search ticker or company…" oninput="renderSP500()">
+    <button class="sector-btn active" onclick="setSPSector(this,'all')">All</button>
+    <button class="sector-btn" onclick="setSPSector(this,'Technology')">Technology</button>
+    <button class="sector-btn" onclick="setSPSector(this,'Financials')">Financials</button>
+    <button class="sector-btn" onclick="setSPSector(this,'Healthcare')">Healthcare</button>
+    <button class="sector-btn" onclick="setSPSector(this,'Consumer Discretionary')">Consumer</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="sp500-table" id="sp500-table">
+      <thead>
+        <tr>
+          <th onclick="sortSP500('rank')"># ▴</th>
+          <th onclick="sortSP500('ticker')">Ticker</th>
+          <th onclick="sortSP500('company')">Company</th>
+          <th onclick="sortSP500('sector')">Sector</th>
+          <th onclick="sortSP500('ytd')" style="text-align:right">YTD Return</th>
+          <th onclick="sortSP500('pp')" style="text-align:center">PP Score</th>
+        </tr>
+      </thead>
+      <tbody id="sp500-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="sp500-source-note">
+    <strong style="color:var(--text)">Data Note:</strong>
+    Figures compiled from financial news sources (@WOLF_Financial, Sherwood News, 247WallSt, IndexBox, StockTwits) and market research — all as of approximately May 22, 2026.
+    Slickcharts.com blocks server-side fetches — visit
+    <a href="https://slickcharts.com/sp500/performance" target="_blank">slickcharts.com/sp500/performance</a>
+    in your browser for the authoritative, real-time ranked list.
+    PP (Pricing Power) scores are JoshAnswers framework assessments — not official ratings.
+    A high PP score on a beaten-down name = candidate for Josh's contrarian buy screen.
+    This data is for research purposes only — not financial advice.
+  </div>
+
+</div><!-- end tab-sp500 -->
 
 </main>
 
@@ -1312,9 +1432,133 @@ function initSwingDesk() {
   }
 }
 
+// ── S&P 500 Losers — sourced from news/research ~May 22, 2026 ─────────────────
+// Slickcharts.com returns 403 to server-side fetches; data assembled from
+// financial journalism + @WOLF_Financial tweet + analyst reports.
+const SP500_LOSERS = [
+  {rank:1,  ticker:'EPAM', company:'EPAM Systems Inc',         ytd:-51.6, sector:'Technology',             pp:3, note:'Ukraine war exposure; enterprise client attrition accelerating'},
+  {rank:2,  ticker:'PODD', company:'Insulet Corporation',      ytd:-47.0, sector:'Healthcare',             pp:6, note:'OmniPod diabetes device; high-multiple compression + tariff costs'},
+  {rank:3,  ticker:'DECK', company:'Deckers Outdoor Corp',     ytd:-47.0, sector:'Consumer Discretionary', pp:6, note:'UGG + Hoka brands; consumer pullback + tariff headwinds'},
+  {rank:4,  ticker:'IT',   company:'Gartner Inc',              ytd:-42.7, sector:'Technology',             pp:6, note:'IT advisory subscription; enterprise spending caution'},
+  {rank:5,  ticker:'FICO', company:'Fair Isaac Corp',          ytd:-42.6, sector:'Technology',             pp:8, note:'Credit score monopoly — pricing power remains intact'},
+  {rank:6,  ticker:'CRL',  company:'Charles River Labs',       ytd:-42.0, sector:'Healthcare',             pp:5, note:'Contract drug research; biopharma client slowdown'},
+  {rank:7,  ticker:'APP',  company:'AppLovin Corp',            ytd:-41.0, sector:'Technology',             pp:4, note:'Ad-tech; Q1 worst performer — AI ad model under scrutiny'},
+  {rank:8,  ticker:'NOW',  company:'ServiceNow Inc',           ytd:-40.0, sector:'Technology',             pp:7, note:'IT service management SaaS; "Saaspocalypse" + Agentic AI fears'},
+  {rank:9,  ticker:'ARES', company:'Ares Management Corp',     ytd:-39.5, sector:'Financials',             pp:5, note:'Alt-asset manager; AUM fee revenue rate-sensitive'},
+  {rank:10, ticker:'TTD',  company:'The Trade Desk Inc',       ytd:-38.0, sector:'Technology',             pp:5, note:'Programmatic DSP; CTV ad spend normalization'},
+  {rank:11, ticker:'INTU', company:'Intuit Inc',               ytd:-38.3, sector:'Technology',             pp:7, note:'TurboTax + QuickBooks franchise; AI substitution fear narrative'},
+  {rank:12, ticker:'WDAY', company:'Workday Inc',              ytd:-38.0, sector:'Technology',             pp:6, note:'HR/Finance SaaS — "Saaspocalypse"; high renewal rates intact'},
+  {rank:13, ticker:'TSCO', company:'Tractor Supply Co',        ytd:-37.0, sector:'Consumer Discretionary', pp:5, note:'Rural lifestyle retail; tariff cost pass-through difficult'},
+  {rank:14, ticker:'HUM',  company:'Humana Inc',               ytd:-35.7, sector:'Healthcare',             pp:4, note:'MCR deterioration; Medicare Advantage headwinds'},
+  {rank:15, ticker:'NKE',  company:'Nike Inc',                 ytd:-34.0, sector:'Consumer Discretionary', pp:7, note:'Global sports brand; China exposure + direct-to-consumer shift'},
+  {rank:16, ticker:'KKR',  company:'KKR & Co Inc',             ytd:-34.0, sector:'Financials',             pp:5, note:'Alt-asset manager; private equity deployment slowed by rates'},
+  {rank:17, ticker:'CSGP', company:'CoStar Group Inc',         ytd:-33.8, sector:'Real Estate',            pp:4, note:'Commercial RE data platform; high multiple compression'},
+  {rank:18, ticker:'EL',   company:'Estee Lauder Companies',   ytd:-32.0, sector:'Consumer Staples',       pp:7, note:'Luxury beauty brand; China recovery slower than expected'},
+  {rank:19, ticker:'HOOD', company:'Robinhood Markets Inc',    ytd:-32.9, sector:'Financials',             pp:3, note:'Retail brokerage; crypto/tech selloff; thin revenue moat'},
+  {rank:20, ticker:'GDDY', company:'GoDaddy Inc',              ytd:-33.0, sector:'Technology',             pp:5, note:'SMB web hosting; AI website builders disrupting demand'},
+  {rank:21, ticker:'ADBE', company:'Adobe Inc',                ytd:-31.0, sector:'Technology',             pp:7, note:'Creative software leader; AI generation substitution fears'},
+  {rank:22, ticker:'CRM',  company:'Salesforce Inc',           ytd:-30.0, sector:'Technology',             pp:6, note:'CRM SaaS market leader; Agentforce AI adoption unproven'},
+  {rank:23, ticker:'DG',   company:'Dollar General Corp',      ytd:-25.0, sector:'Consumer Discretionary', pp:4, note:'Value retail; lower-income consumer stress; inventory issues'},
+  {rank:24, ticker:'WYNN', company:'Wynn Resorts Ltd',         ytd:-18.0, sector:'Consumer Discretionary', pp:5, note:'Luxury casino; Macau recovery choppy; US slowdown fears'},
+  {rank:25, ticker:'LVS',  company:'Las Vegas Sands Corp',     ytd:-18.0, sector:'Consumer Discretionary', pp:5, note:'Casino resort; Singapore + Macau; high-end consumer resilient'},
+  {rank:26, ticker:'UNH',  company:'UnitedHealth Group',       ytd:-13.0, sector:'Healthcare',             pp:7, note:'Managed care + Optum; Medicaid uncertainty; CEO transition'},
+];
+
+let spSortCol = 'rank', spSortDir = 1, spSectorFilter = 'all';
+
+function ytdColorClass(ytd) {
+  if (ytd <= -40) return 'ytd-critical';
+  if (ytd <= -30) return 'ytd-severe';
+  if (ytd <= -20) return 'ytd-bad';
+  return 'ytd-down';
+}
+
+function spSectorClass(sector) {
+  const m = {
+    'Technology':'sec-tech', 'Financials':'sec-fin', 'Healthcare':'sec-health',
+    'Real Estate':'sec-re', 'Energy':'sec-energy',
+    'Consumer Discretionary':'sec-consumer', 'Consumer Staples':'sec-consumer',
+    'Communication Services':'sec-tech'
+  };
+  return m[sector] || 'sec-other';
+}
+
+function ppBadgeClass(pp) {
+  if (pp >= 7) return 'pp-high';
+  if (pp >= 4) return 'pp-mid';
+  return 'pp-low';
+}
+
+function setSPSector(el, sector) {
+  document.querySelectorAll('.sector-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  spSectorFilter = sector;
+  renderSP500();
+}
+
+function sortSP500(col) {
+  if (spSortCol === col) spSortDir *= -1;
+  else { spSortCol = col; spSortDir = 1; }
+  renderSP500();
+}
+
+function renderSP500() {
+  const search = (document.getElementById('sp-search')?.value || '').toLowerCase();
+  let data = SP500_LOSERS.filter(s => {
+    const okSector = spSectorFilter === 'all' || s.sector === spSectorFilter;
+    const okSearch = !search || s.ticker.toLowerCase().includes(search) || s.company.toLowerCase().includes(search);
+    return okSector && okSearch;
+  });
+
+  data.sort((a, b) => {
+    let av = a[spSortCol], bv = b[spSortCol];
+    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+    return (av < bv ? -1 : av > bv ? 1 : 0) * spSortDir;
+  });
+
+  const tbody = document.getElementById('sp500-tbody');
+  if (!tbody) return;
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="sp-empty">No matching stocks found.</td></tr>';
+  } else {
+    tbody.innerHTML = data.map(s => {
+      const ppLbl = s.pp >= 7 ? `HIGH ${s.pp}/10` : s.pp >= 4 ? `MID ${s.pp}/10` : `LOW ${s.pp}/10`;
+      const ppFlag = s.pp >= 7 ? '<span class="sp-pp-flag">★ Watch</span>' : '';
+      return `<tr>
+        <td class="sp-rank">${s.rank}</td>
+        <td><div class="sp-ticker">${s.ticker}${ppFlag}</div></td>
+        <td>
+          <div class="sp-company">${s.company}</div>
+          <div class="sp-note">${s.note}</div>
+        </td>
+        <td><span class="sp-sector-badge ${spSectorClass(s.sector)}">${s.sector}</span></td>
+        <td class="sp-ytd ${ytdColorClass(s.ytd)}" style="text-align:right">${s.ytd.toFixed(1)}%</td>
+        <td style="text-align:center"><span class="pp-badge ${ppBadgeClass(s.pp)}">${ppLbl}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Update stat cards (always use full dataset)
+  const count = document.getElementById('sp-count');
+  const avg   = document.getElementById('sp-avg');
+  const worst = document.getElementById('sp-worst-lbl');
+  const ppw   = document.getElementById('sp-pp-watch');
+  if (count) count.textContent = SP500_LOSERS.length;
+  if (avg) {
+    const a = SP500_LOSERS.reduce((s,x) => s + x.ytd, 0) / SP500_LOSERS.length;
+    avg.textContent = a.toFixed(1) + '%';
+  }
+  if (worst) {
+    const w = SP500_LOSERS.reduce((a,b) => a.ytd < b.ytd ? a : b);
+    worst.textContent = `${w.ticker} ${w.ytd.toFixed(1)}%`;
+  }
+  if (ppw) ppw.textContent = SP500_LOSERS.filter(s => s.pp >= 7).length;
+}
+
 buildDOM();
 buildMonitor();
 initSwingDesk();
+renderSP500();
 loadAll();
 </script>
 </body>
