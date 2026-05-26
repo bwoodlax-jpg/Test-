@@ -541,64 +541,85 @@
 
   <div class="sec-label">Weekly Swing Desk &mdash; 1% Bankroll</div>
 
+  <!-- ══ DATA PROTOCOL ══════════════════════════════════════ -->
+  <div style="background:rgba(224,62,62,.07);border:1px solid rgba(224,62,62,.3);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:11px;line-height:1.7">
+    <strong style="color:var(--red)">&#9888; PRICE DATA PROTOCOL — READ BEFORE ACTING</strong><br>
+    <strong style="color:var(--text)">AI training cutoff: ~Aug 2025.</strong> All price-based recommendations require live verification before entry.
+    This dashboard's <strong style="color:var(--accent)">Finnhub feed</strong> (Live Watchlist tab) is the authoritative real-time price source — use it.
+    For swing picks, verify current price via Finnhub before placing any order.
+    <strong style="color:var(--accent)">Yahoo Finance blocks all server-side fetches (403).</strong>
+    Finnhub REST API is CORS-enabled and browser-callable: <code style="color:var(--accent)">finnhub.io/api/v1/quote?symbol=TICKER&amp;token=YOUR_KEY</code>
+    &mdash; the same key already stored in this dashboard works. WebSearch is used as a secondary verification tool in research sessions.
+    <br><strong style="color:var(--text)">Process:</strong> WebSearch price → confirm on Finnhub live tab → then build entry/stop/target from that real price.
+  </div>
+
   <!-- ══ PLAY OF THE WEEK ══════════════════════════════════ -->
   <div class="potw-wrap">
-    <div class="potw-badge">&#9733; Play of the Week &mdash; May 26&ndash;29, 2026 (Short Week)</div>
+    <div class="potw-badge">&#9733; Play of the Week &mdash; May 27&ndash;29, 2026 (Short Week &mdash; Mon holiday)</div>
     <div class="potw-ticker">MRVL</div>
-    <div class="potw-company">Marvell Technology Inc &mdash; AI Custom Silicon Pre-Earnings Breakout</div>
+    <div class="potw-company">Marvell Technology Inc &mdash; AI Custom Silicon Earnings Catalyst &mdash; <span style="color:var(--red);font-size:13px">EARNINGS TUE MAY 27 AFTER CLOSE</span></div>
+
+    <!-- Price correction notice -->
+    <div style="background:rgba(224,62,62,.1);border:1px solid rgba(224,62,62,.3);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.6">
+      <strong style="color:var(--red)">&#9888; PRICE CORRECTION:</strong>
+      Initial recommendation cited entry $75&ndash;$78 — this was stale training-data pricing (~Aug 2025).
+      <strong style="color:var(--text)">Verified price May 22, 2026: $196.33</strong> (52-week high $198.40, low $58.62, up +131% YTD).
+      All figures below reflect the corrected real price. Lesson: AI must run WebSearch price check before any recommendation.
+    </div>
+
     <div class="potw-grid">
       <div class="potw-stat">
+        <div class="potw-stat-lbl">Verified Price</div>
+        <div class="potw-stat-val" style="color:var(--text)">~$196</div>
+      </div>
+      <div class="potw-stat">
         <div class="potw-stat-lbl">Entry Zone</div>
-        <div class="potw-stat-val" style="color:var(--green)">$75&ndash;$78</div>
+        <div class="potw-stat-val" style="color:var(--green)">$190&ndash;$196</div>
       </div>
       <div class="potw-stat">
         <div class="potw-stat-lbl">Target</div>
-        <div class="potw-stat-val" style="color:var(--green)">$92</div>
+        <div class="potw-stat-val" style="color:var(--green)">$218</div>
       </div>
       <div class="potw-stat">
         <div class="potw-stat-lbl">Stop</div>
-        <div class="potw-stat-val" style="color:var(--red)">$70</div>
+        <div class="potw-stat-val" style="color:var(--red)">$182</div>
       </div>
       <div class="potw-stat">
         <div class="potw-stat-lbl">R/R</div>
-        <div class="potw-stat-val" style="color:var(--accent)">2.3:1 &#10003;</div>
+        <div class="potw-stat-val" style="color:var(--accent)">2.2:1 &#10003;</div>
       </div>
       <div class="potw-stat">
-        <div class="potw-stat-lbl">Catalyst</div>
-        <div class="potw-stat-val" style="font-size:11px;color:var(--text)">Q1 FY27 Earnings</div>
+        <div class="potw-stat-lbl">Earnings</div>
+        <div class="potw-stat-val" style="font-size:11px;color:var(--red)">Tue May 27 AH</div>
       </div>
       <div class="potw-stat">
         <div class="potw-stat-lbl">SMA50</div>
         <div class="potw-stat-val" style="font-size:11px;color:var(--green)">Above &#10003;</div>
       </div>
       <div class="potw-stat">
-        <div class="potw-stat-lbl">Bankroll Fit</div>
-        <div class="potw-stat-val" style="font-size:11px;color:var(--green)">BEST</div>
+        <div class="potw-stat-lbl">Analyst PTs</div>
+        <div class="potw-stat-val" style="font-size:10px;color:var(--text)">Citi $215 &bull; BofA $200</div>
       </div>
     </div>
     <div class="potw-thesis">
-      <strong>Thesis (why MRVL this week):</strong>
-      Marvell Technology is the invisible backbone of the AI silicon arms race. While NVIDIA gets the headlines,
-      Marvell designs the custom ASIC chips powering Amazon&rsquo;s Trainium3, Google&rsquo;s custom AI accelerators,
-      and Microsoft&rsquo;s Maia 2 &mdash; the proprietary silicon hyperscalers are building to reduce NVDA dependency
-      over the next 3&ndash;5 years. This is not speculation: multi-year, multi-billion-dollar custom silicon
-      contracts are locked in. Revenue recognition is now accelerating.
+      <strong>Thesis (why MRVL this week — price-verified $196):</strong>
+      Marvell Technology is the invisible backbone of the hyperscaler AI silicon arms race. While NVIDIA gets the headlines,
+      Marvell designs the custom ASIC chips inside Amazon&rsquo;s Trainium3, Google&rsquo;s custom AI accelerators,
+      and Microsoft&rsquo;s Maia 2 &mdash; proprietary silicon built to reduce NVDA dependency over the next 3&ndash;5 years.
+      The market knows it: MRVL is up <strong>+131% YTD</strong> and analysts are still playing catch-up
+      (Citi raised PT 82% to $215; BofA $200; Wells Fargo $195; Stifel $210).
       <br><br>
-      <strong>Catalyst (specific, named):</strong> Marvell reports Q1 FY2027 earnings in late May / early June.
-      With Microsoft ($185B capex), Google ($185B), and Amazon ($105B) all accelerating AI infrastructure spend,
-      Marvell&rsquo;s custom silicon design-win revenue is the direct read-through. A beat-and-raise here
-      is the swing catalyst. Watch for volume surge pre-announcement (institutional front-running) as the
-      technical confirmation signal. Entry only on volume &ge;1.5&times; 20-day ADV.
+      <strong>Catalyst &mdash; CRITICAL TIMING:</strong> MRVL reports Q1 FY2027 earnings
+      <strong style="color:var(--red)">Tuesday May 27 after close</strong> &mdash; the first trading day of this short week.
+      This creates two distinct play structures:
+      <br>&bull; <strong>Pre-earnings momentum (Tue morning):</strong> Enter at open on any intraday dip to $190&ndash;$193 on volume surge.
+      Sell before Tuesday close to capture pre-earnings run. Do not hold into the print.
+      <br>&bull; <strong>Post-earnings reaction (Wed&ndash;Thu):</strong> If MRVL beats + raises and holds above $200 Wednesday open — that is the higher-conviction entry.
+      Buy the first green candle with volume &ge;1.5&times; ADV. Target Citi&rsquo;s PT $215.
       <br><br>
-      <strong>Pricing power context (PP 7/10):</strong> Custom ASIC IP is not commoditized.
-      Once a hyperscaler embeds Marvell IP in their chip architecture, they cannot swap suppliers
-      mid-generation &mdash; 18&ndash;24 month design cycles create lock-in equivalent to enterprise software.
-      This is Josh&rsquo;s &ldquo;catastrophic switching cost&rdquo; framework applied to semiconductor IP.
-      <br><br>
-      <strong>Short-week execution (4 trading days, Mon closed for Memorial Day):</strong>
-      Enter Tuesday or Wednesday on catalyst + volume confirmation. Target exit by Thursday close.
-      If earnings land this week: consider exiting before the print and re-entering post-reaction.
-      If earnings land next week: ride the pre-earnings momentum into Thursday, reset stop each day.
+      <strong>Pricing power (PP 7/10):</strong> Custom ASIC IP creates 18&ndash;24 month design-cycle lock-in —
+      once a hyperscaler embeds Marvell IP in their chip architecture, switching suppliers mid-generation is operationally impossible.
+      This is Josh&rsquo;s catastrophic switching cost criterion applied to semiconductor IP.
     </div>
   </div>
 
@@ -769,8 +790,9 @@
           <td><span class="fit-hi">BEST</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
             AI custom ASIC story for Amazon/Google/Microsoft. Q1 FY27 earnings imminent.
-            Entry $75&ndash;$78 on vol surge. Target $92. Exit by Thursday or on earnings day.
-            This is the cleanest catalyst + technical setup on the board this week.
+            &#9888; CORRECTED: Verified price ~$196 (was erroneously stated $75&ndash;$78 — stale training data).
+            Entry $190&ndash;$196 on vol surge. Target $218 (Citi PT $215). Stop $182.
+            Earnings Tue May 27 AH — exit pre-earnings OR play the post-earnings reaction Wed morning.
           </td>
         </tr>
         <tr>
@@ -826,9 +848,9 @@
           <td class="r" style="font-size:12px;color:var(--red)">$330</td>
           <td><span class="fit-md">MEDIUM</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            New watchlist addition this session. Q4 FY2026 earnings upcoming is the binary catalyst.
-            Entry $355&ndash;$375 on a volume-confirmed technical breakout. Best used as a
-            multi-week swing into the earnings date rather than a 4-day setup.
+            New watchlist addition. &#9888; CORRECTED price $260 (initial entry zone $355&ndash;375 was wrong &mdash; above ATH).
+            Revised entry $250&ndash;$265 near current ATH of $261.41. Best used as a
+            multi-week swing into Q4 FY26 earnings date rather than a 4-day setup.
           </td>
         </tr>
         <tr>
@@ -1001,18 +1023,19 @@
 
 <script>
 // ── Watchlist data ─────────────────────────────────────────────────────────────
-// v3 Watchlist — Josh Answers + Meet Kevin + Institutional Research
+// v3 Watchlist — Bwoodshares + Meet Kevin + Institutional Research
 // Pricing Power Screen + Macro Check + Catalyst Trigger on every name
-// Added: MSFT (AI backbone, pricing power max), NVDA (AI infrastructure, Blackwell ramp)
+// PRICE VERIFICATION: All entry/target/stop zones verified via WebSearch May 24, 2026
+// My training data is ~Aug 2025 — prices MUST be re-checked each session via Finnhub live feed
 const WL = [
-  {ticker:'MSFT', company:'Microsoft Corporation',   tier:'AI Backbone ↑',      tc:'t1', entry:'$420–$435', target:'$625', stop:'$395',  catalyst:'Azure +40% YoY; 20M Copilot enterprise seats; Wedbush PT $625; Morgan Stanley PT $650', note:'Pricing power maximum — enterprise owns you from Office to Azure. Copilot monetization just beginning. Passes both frameworks at the highest conviction level.'},
-  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure ↑', tc:'t2', entry:'$130–$140', target:'$185', stop:'$112',  catalyst:'Blackwell GB300 ramp; China H200 export cleared; $500B revenue visibility; Q2 FY2027 earnings catalyst', note:'Dominant AI chip supplier — hyperscalers have no substitute at this performance level. Jensen in Beijing: China sales reopening is a major unlocked catalyst.'},
-  {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold ↑',   tc:'t1', entry:'$175–$185', target:'$275', stop:'$165',  catalyst:'AI cloud RPO $523B; Wedbush PT $275 — Both frameworks',          note:"Benjamin Graham value buy (Josh, Mar 2026). Oracle = Pricing Power (Kevin) — enterprise lock-in, no real alternative."},
-  {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick ↑',     tc:'t2', entry:'$390–$400', target:'$469', stop:'$370',  catalyst:'MI400 Q3 launch; $60B hyperscaler commits; record $5.8B DC revenue', note:'Best convergence of both frameworks. Pricing power: hyperscalers pay AMD premium. Catalyst: MI400 shipping Q3 2026.'},
-  {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption 🆕',   tc:'t2', entry:'$60–$65',   target:'$75',  stop:'$52',   catalyst:'Q4 2026 EBITDA profitability; Tesla auto insurance; +71% Q1 revenue', note:"Kevin's explicit buy. AI-native insurance = 6% LAE vs industry 8-10%. 90% first-time insurance buyers = blue ocean."},
+  {ticker:'MSFT', company:'Microsoft Corporation',   tier:'AI Backbone ↑',      tc:'t1', entry:'$415–$430', target:'$625', stop:'$390',  catalyst:'Azure +40% YoY; 20M Copilot enterprise seats; Wedbush PT $625; Morgan Stanley PT $650', note:'Pricing power maximum — enterprise owns you from Office to Azure. Copilot monetization just beginning. Passes both frameworks at the highest conviction level. ✓ Price verified $418 May 22'},
+  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure ↑', tc:'t2', entry:'$200–$215', target:'$300', stop:'$175',  catalyst:'Blackwell GB300 ramp; China H200 reopening watch; Q2 FY2027 earnings catalyst; $500B revenue visibility', note:'Dominant AI chip supplier — hyperscalers have no substitute at this performance level. China watch: ZERO DC shipments Q1. ✓ Price verified $214 May 24'},
+  {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold ↑',   tc:'t1', entry:'$185–$200', target:'$275', stop:'$165',  catalyst:'AI cloud RPO $523B; Wedbush PT $275',          note:"Benjamin Graham value buy (Josh, Mar 2026). Enterprise DB lock-in = structural pricing power. ✓ Price verified ~$193 May 25"},
+  {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick ↑',     tc:'t2', entry:'$390–$400', target:'$550', stop:'$370',  catalyst:'MI400 Q3 launch; $60B hyperscaler commits; record $5.8B DC revenue; stock at $467 — above zone, no new entries', note:'Best convergence of both frameworks. ABOVE entry zone at $467 — hold existing, no new buys above $420. Wait for $390–400 re-test. ✓ Price verified $467 May 24'},
+  {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption 🆕',   tc:'t2', entry:'$52–$60',   target:'$75',  stop:'$45',   catalyst:'Q4 2026 EBITDA profitability; Tesla auto insurance; +71% Q1 revenue — currently IN entry zone', note:"Kevin's explicit buy. AI-native 6% LAE vs 8-10% industry. At $56.50 — CURRENTLY IN ENTRY ZONE. ✓ Price verified $56.50 May 25"},
   {ticker:'TAP',  company:'Molson Coors Beverage',   tier:'Dividend (Josh only)',tc:'t1', entry:'$40–$44',   target:'$49',  stop:'$38',   catalyst:'4.58% yield; ex-div May 29 🔔 — fails Kevin pricing power test',    note:'Josh-only hold from Dec 2025. No innovation story. Kevin would not hold. Small income position only.'},
   {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
-  {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$355–$375',   target:'$490', stop:'$330',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category', note:'Cybersecurity is non-discretionary — platformization lock-in is catastrophic to reverse. Every new AI workload increases attack surface = more PANW spend. Added May 25, 2026.'},
+  {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$250–$265',  target:'$360', stop:'$232',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category; near ATH $261', note:'Cybersecurity platformization = catastrophic switching cost. Near ATH at $260 — entry on any 3–5% dip or confirmed breakout above $262. ✓ Price verified $260 May 24'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1359,7 +1382,7 @@ const MONITOR_DATA = {
     mac: {score:8,  note:'AI is expanding the attack surface: every new AI workload, cloud deployment, and agentic system is a new security perimeter. More AI = more PANW budget. Macro headwinds do not cut security budgets — they cut headcount and SaaS tools, not security.'},
     cat: {score:7,  note:'Q4 FY2026 earnings upcoming. XSIAM (AI-powered SOC) winning large enterprise + federal consolidations. AI Firewall (blocks adversarial AI model attacks) is a brand-new revenue category with no competition. NGS ARR growing 30%+ YoY.'},
     thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $355–$375', verdictCls:'vd-strong',
-    alert:'New addition May 25, 2026: PANW is the best expression of Josh\'s evolved framework in cybersecurity — pricing power 9/10 (non-discretionary spend + platformization), macro alignment 8/10 (AI attack surface expansion), catalyst 7/10 (upcoming Q4 FY26 earnings + XSIAM expansion). Entry $355–$375 below SMA50 support; target $490 on earnings beat + NGS ARR acceleration. Stop $330. This is the highest-confidence new watchlist add since MSFT.',
+    alert:'New addition May 24, 2026 — PRICE VERIFIED via WebSearch: PANW trading $260.58, near ATH $261.41 (May 22). Initial entry zone of $355–$375 was WRONG (stale training data — that was above the all-time high). Corrected entry: $250–$265. Target $360 (12-month hold). Stop $232. PP 9/10, Macro 8/10, Catalyst 7/10 (Q4 FY26 earnings upcoming). Cybersecurity spend is non-discretionary; platformization switching cost is catastrophic. Highest-confidence new add since MSFT.',
   },
 };
 
