@@ -1118,6 +1118,7 @@ const WL = [
   {ticker:'TAP',  company:'Molson Coors Beverage',   tier:'Dividend (Josh only)',tc:'t1', entry:'$40–$44',   target:'$49',  stop:'$38',   catalyst:'4.58% yield; ex-div May 29 🔔 — fails Kevin pricing power test',    note:'Josh-only hold from Dec 2025. No innovation story. Kevin would not hold. Small income position only.'},
   {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
   {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$250–$265',  target:'$360', stop:'$232',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category; near ATH $261', note:'Cybersecurity platformization = catastrophic switching cost. Near ATH at $260 — entry on any 3–5% dip or confirmed breakout above $262. ✓ Price verified $260 May 24'},
+  {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; government ATO lock-in; commercial AIP tripling; top-20 customer spend +55% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR proves customers cannot leave — they expand. ✓ Price verified ~$130 May 26'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1469,8 +1470,15 @@ const MONITOR_DATA = {
     pp:  {score:9,  note:'Platformization = catastrophic switching cost. Once PANW deploys Cortex + XSIAM across an enterprise, 8-12 security tools are consolidated on a single platform. Unwinding it requires a 12-18 month project. Cybersecurity spend is non-discretionary — it grows in recessions.'},
     mac: {score:8,  note:'AI is expanding the attack surface: every new AI workload, cloud deployment, and agentic system is a new security perimeter. More AI = more PANW budget. Macro headwinds do not cut security budgets — they cut headcount and SaaS tools, not security.'},
     cat: {score:7,  note:'Q4 FY2026 earnings upcoming. XSIAM (AI-powered SOC) winning large enterprise + federal consolidations. AI Firewall (blocks adversarial AI model attacks) is a brand-new revenue category with no competition. NGS ARR growing 30%+ YoY.'},
-    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $355–$375', verdictCls:'vd-strong',
+    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $250–$265', verdictCls:'vd-strong',
     alert:'New addition May 24, 2026 — PRICE VERIFIED via WebSearch: PANW trading $260.58, near ATH $261.41 (May 22). Initial entry zone of $355–$375 was WRONG (stale training data — that was above the all-time high). Corrected entry: $250–$265. Target $360 (12-month hold). Stop $232. PP 9/10, Macro 8/10, Catalyst 7/10 (Q4 FY26 earnings upcoming). Cybersecurity spend is non-discretionary; platformization switching cost is catastrophic. Highest-confidence new add since MSFT.',
+  },
+  PLTR: {
+    pp:  {score:8,  note:'Government ATO (Authority to Operate) process takes 12-18 months — once classified data and workflows live inside Foundry, switching is a multi-year rebuild. Net dollar retention 139%: existing customers expand 39% per year without being upsold. That does not happen unless the product is structurally embedded.'},
+    mac: {score:8,  note:'Defense AI (WARP battlefield platform) is geopolitically driven — spending grows regardless of rates or domestic macro. Enterprise AIP adoption is in early innings: companies are moving from AI pilots to scaled deployment, and Palantir owns the data fabric those deployments run on. Non-discretionary for government, increasingly non-discretionary for enterprise.'},
+    cat: {score:8,  note:'Q1 2026 revenue $1.63B (+85% YoY). Full-year 2026 guidance $7.65B (71% growth). Top-20 customer spend up 55% YoY. Commercial segment growing triple digits — the former weakness is now an accelerant. Next earnings August 2026. Ongoing government contract wins (WARP deployments) are rolling catalysts.'},
+    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $125–$140', verdictCls:'vd-strong',
+    alert:'New addition May 26, 2026 — PRICE VERIFIED via WebSearch: PLTR trading ~$130, down 35% from ATH $207. Entry zone $125–$140 represents a high-conviction dip entry into the steepest-moat AI platform stock on the market. 85% revenue growth + 139% NRR + government ATO lock-in = rare trifecta. Target $183 (analyst consensus, near prior ATH resistance). Stop $108 (below Jan 2026 base). R/R: 2:1 at midpoint entry. Framework scores: PP 8/10, Macro 8/10, Catalyst 8/10.',
   },
 };
 
