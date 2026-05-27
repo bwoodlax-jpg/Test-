@@ -1088,7 +1088,7 @@
 
   <div class="sp500-source-note">
     <strong style="color:var(--text)">Data Note:</strong>
-    Figures compiled from financial news sources (@WOLF_Financial, Sherwood News, 247WallSt, IndexBox, StockTwits) and market research — all as of approximately May 22, 2026.
+    Figures compiled from financial news sources (@WOLF_Financial, Sherwood News, 247WallSt, IndexBox, StockTwits) and market research — all as of approximately May 26, 2026. S&P 500 index +8.74% YTD as of May 26 — making these underperformers stand out further.
     Slickcharts.com blocks server-side fetches — visit
     <a href="https://slickcharts.com/sp500/performance" target="_blank">slickcharts.com/sp500/performance</a>
     in your browser for the authoritative, real-time ranked list.
@@ -1135,6 +1135,7 @@ const WL = [
   {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
   {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$250–$265',  target:'$360', stop:'$232',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category; near ATH $261', note:'Cybersecurity platformization = catastrophic switching cost. Near ATH at $260 — entry on any 3–5% dip or confirmed breakout above $262. ✓ Price verified $260 May 24'},
   {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR. DIA contract win = H2 2026 catalyst. ✓ Price verified $137 May 26'},
+  {ticker:'VRT',  company:'Vertiv Holdings Co',       tier:'AI Infrastructure Hardware 🆕',tc:'t2', entry:'$310–$340',  target:'$420', stop:'$290',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY, EPS +83% YoY; BofA PT $440; RBC PT $435; Americas DC +44%', note:'Power + cooling for every AI GPU rack. 18–24 month equipment lead times lock in revenue. 75% of revenue from data centers. Backlog $15B covers 12+ months forward. ✓ Price verified $327 May 26'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1498,13 +1499,20 @@ const MONITOR_DATA = {
     thesis:'INTACT — IN ENTRY ZONE', verdict:'BUY ZONE — $137 CONFIRMED', verdictCls:'vd-strong',
     alert:'Call Up — May 26, 2026: PLTR confirmed at $137 (52-week range $118.93–$207.52) — inside our entry zone of $125–$140. NEW CATALYST: Palantir is actively pushing the Defense Intelligence Agency (DIA) on a landmark data analytics modernisation contract. A DIA win would be the largest intelligence community expansion in PLTR history and a H2 2026 revenue catalyst. Ukraine AI partnership also expanding — CEO Karp met Zelenskyy in Kyiv. Q1 beat: EPS $0.33 vs $0.28, US gov revenue +84% YoY. Q3 guidance $1.8B revenue. Entry zone intact. DIA contract decision is a near-term binary watch.',
   },
+  VRT: {
+    pp:  {score:7,  note:'Specialized power distribution and thermal management hardware for hyperscale data centers. 18–24 month equipment lead times create forward revenue lock-in — once a facility is designed around Vertiv UPS and cooling architecture, switching requires a full redesign. Order backlog $15B (+109% YoY) = 12+ months of contracted revenue already booked. Competitors (Schneider Electric, Eaton) exist but Vertiv holds ~25–30% global data center power share.'},
+    mac: {score:9,  note:'Every AI GPU rack is a power density and thermal problem — Blackwell and MI400 chips run hotter and draw more power per rack than any prior generation. This is Vertiv's direct engine. 75% of revenue from data centers. Americas segment +44% in Q1 — the US AI data center buildout is their largest market. No macro headwind scenario removes the power management requirement.'},
+    cat: {score:8,  note:'Q1 2026: Revenue $2.65B (+30% YoY), Organic growth +23%, EPS +83% YoY. Raised FY2026 guidance to $13.5–14B revenue, EPS $6.30–6.40. Order backlog $15B (+109% YoY). BofA PT $440, RBC PT $435, TD Cowen PT $387 — 22 of 23 analysts rate Buy or Strong Buy. Q2 earnings upcoming as next catalyst.'},
+    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $310–$340', verdictCls:'vd-strong',
+    alert:'New addition May 26, 2026 — PRICE VERIFIED via WebSearch: VRT trading $327.63 (52-week range $104.71–$379.94). Entry zone $310–$340 (stock currently inside zone). Every AI GPU rack — Blackwell, MI400, custom ASIC — runs hotter and draws more power than prior generations. Vertiv makes the UPS, thermal management, and power distribution that keeps them running. Order backlog $15B (+109% YoY) = 12+ months of locked-in revenue already. Q1: revenue +30% YoY, EPS +83% YoY. BofA PT $440. R/R at $330 entry: target $420, stop $290 = 2.25:1 ✓. Framework: PP 7/10, Macro 9/10, Catalyst 8/10.',
+  },
 };
 
 // ── Historical picks log ───────────────────────────────────────────────────────
 const HISTORY = [
   {
     ticker:'INTC', company:'Intel Corporation',
-    added:'Jan–May 2026', addedPrice:'$19–$24 (5× move start)',
+    added:'Jan–May 2026', addedPrice:'$19–$24',
     exitDate:'May 24, 2026', exitPrice:'~$119',
     pnl:'+400%+', status:'ARCHIVED', statusCls:'hs-archived',
     fw:'Josh only — CHIPS Act, Terafab, Apple foundry talks, US govt 10% stake',
@@ -1514,11 +1522,11 @@ const HISTORY = [
   {
     ticker:'CMG', company:'Chipotle Mexican Grill',
     added:'Oct 5, 2025', addedPrice:'~$57 (post 50:1 split)',
-    exitDate:'—', exitPrice:'—',
-    pnl:'Untracked', status:'UNTRACKED', statusCls:'hs-untracked',
-    fw:'Josh only — rate-cut play; premium fast-casual restaurant thesis',
-    reason:'Josh bought alongside SG on Oct 5, 2025 video. Never added to active dashboard monitoring. Confirm status on next call up.',
-    lesson:'Need to pull Q1 2026 CMG performance and decide whether to add to monitor or formally close out.',
+    exitDate:'May 26, 2026', exitPrice:'~$32',
+    pnl:'~−44% from entry', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh only — rate-cut restaurant play; premium fast-casual thesis',
+    reason:'Q1 2026 confirmed thesis failure: EPS −17% YoY, margin compressed 250bps to 23.7% from labor costs + beef/freight inflation. Revenue growth slowed to +7.4% YoY. Stock fell from ~$57 → ~$32 entry to present. Rate-cut thesis did not translate to earnings recovery. Formally closing and archiving.',
+    lesson:'A macro catalyst (rate cuts) is not a business catalyst. Chipotle's cost structure (labor, protein, freight) negated the rate relief. Thesis required a margin recovery that did not materialize. Do not hold untracked positions — the call up process exists for this reason.',
   },
   {
     ticker:'SG (v1 thesis)', company:'Sweetgreen — AI Infinite Kitchen moat',
@@ -1535,17 +1543,26 @@ const HISTORY = [
     exitDate:'May 24, 2026', exitPrice:'—',
     pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
     fw:'Josh-only framework (original)',
-    reason:'Integrated Meet Kevin\'s Pricing Power filter. Archived INTC (RSI 80+). Added LMND (Kevin explicit buy). Elevated ORCL + AMD to higher conviction. Downgraded TAP + SG.',
+    reason:'Integrated Meet Kevin's Pricing Power filter. Archived INTC (RSI 80+). Added LMND (Kevin explicit buy). Elevated ORCL + AMD to higher conviction. Downgraded TAP + SG.',
     lesson:'Single-source research creates blind spots. Adding a pricing power pre-screen eliminated two weak thesis positions and surfaced LMND as a stronger alternative.',
   },
   {
-    ticker:'Watchlist v2→v3', company:'Expansion — MSFT + NVDA Added',
+    ticker:'Watchlist v2→v3', company:'MSFT + NVDA + PANW Added',
     added:'May 24, 2026', addedPrice:'—',
-    exitDate:'May 25, 2026', exitPrice:'—',
+    exitDate:'May 26, 2026', exitPrice:'—',
     pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
     fw:'Josh + Kevin + Institutional (Wedbush, Morgan Stanley)',
-    reason:'Added MSFT (AI Backbone, Tier 1 — Azure +40% YoY, Copilot monetization, Wedbush PT $625) and NVDA (AI Infrastructure — Blackwell ramp + China H200 cleared). Watchlist grew 5 → 7 active picks.',
-    lesson:'Both frameworks score MSFT and NVDA at maximum on pricing power. The YTD underperformance of NVDA (+15%) vs AMD (+66%) was the entry signal — China reopening was the unlocked catalyst.',
+    reason:'Added MSFT (AI Backbone — Azure +40%, Copilot 20M seats, Wedbush PT $625). Added NVDA (AI Infrastructure — Blackwell ramp). Added PANW (AI Security — platformization moat, entry $250–265 corrected from stale data $355–375). Watchlist 5 → 8 picks.',
+    lesson:'Always verify price against live data before setting entry zones. PANW initial zone was $355–375 — above the all-time high at time of writing. WebSearch verification is mandatory.',
+  },
+  {
+    ticker:'Watchlist v3→v4', company:'PLTR + VRT Added; CMG Archived',
+    added:'May 26, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin + Institutional + Call Up research',
+    reason:'Added PLTR (AI Operating System — ATO government lock-in, 139% NRR, $137 verified, DIA contract pending). Added VRT (AI Infrastructure Hardware — data center power/cooling, $15B backlog, $327 verified). Formally archived CMG (−44% from entry, thesis failure confirmed Q1 2026). NVDA China catalyst permanently removed from bull case (Beijing chose domestic chips). Watchlist 8 → 10 active picks.',
+    lesson:'Call Up cadence is essential. CMG was untracked for months — the process of running a call up surfaced the loss and allowed a clean close. China geopolitical risk can close a catalyst permanently overnight.',
   },
 ];
 
