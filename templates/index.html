@@ -1136,6 +1136,7 @@ const WL = [
   {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security 🆕',    tc:'t1', entry:'$250–$265',  target:'$360', stop:'$232',  catalyst:'Q4 FY2026 earnings; XSIAM enterprise SOC expansion; AI Firewall new revenue category; near ATH $261', note:'Cybersecurity platformization = catastrophic switching cost. Near ATH at $260 — entry on any 3–5% dip or confirmed breakout above $262. ✓ Price verified $260 May 24'},
   {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR. DIA contract win = H2 2026 catalyst. ✓ Price verified $137 May 26'},
   {ticker:'VRT',  company:'Vertiv Holdings Co',       tier:'AI Infrastructure Hardware 🆕',tc:'t2', entry:'$310–$340',  target:'$420', stop:'$290',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY, EPS +83% YoY; BofA PT $440; RBC PT $435; Americas DC +44%', note:'Power + cooling for every AI GPU rack. 18–24 month equipment lead times lock in revenue. 75% of revenue from data centers. Backlog $15B covers 12+ months forward. ✓ Price verified $327 May 26'},
+  {ticker:'ANET', company:'Arista Networks Inc',      tier:'AI Networking 🆕',      tc:'t1', entry:'$148–$168',  target:'$220', stop:'$128',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; 29 analysts Strong Buy; PT avg $188', note:'The networking layer every AI GPU cluster runs on. EOS switching cost = 1-2yr migration + full team retrain. Ultra Ethernet Consortium only viable InfiniBand alternative at hyperscaler scale. ✓ Price verified $158 May 26'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1506,6 +1507,13 @@ const MONITOR_DATA = {
     thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE $310–$340', verdictCls:'vd-strong',
     alert:'New addition May 26, 2026 — PRICE VERIFIED via WebSearch: VRT trading $327.63 (52-week range $104.71–$379.94). Entry zone $310–$340 (stock currently inside zone). Every AI GPU rack — Blackwell, MI400, custom ASIC — runs hotter and draws more power than prior generations. Vertiv makes the UPS, thermal management, and power distribution that keeps them running. Order backlog $15B (+109% YoY) = 12+ months of locked-in revenue already. Q1: revenue +30% YoY, EPS +83% YoY. BofA PT $440. R/R at $330 entry: target $420, stop $290 = 2.25:1 ✓. Framework: PP 7/10, Macro 9/10, Catalyst 8/10.',
   },
+  ANET: {
+    pp:  {score:8,  note:'Arista EOS (Extensible Operating System) is the networking OS running inside Meta, Microsoft, Google, and Apple hyperscale clusters. Switching requires a 1–2 year migration project, full team retraining, and rebuilding all network automation scripts. No other vendor ships a comparable OS at this scale. Ultra Ethernet Consortium — founded by Arista, Microsoft, Meta, and others — is the only viable alternative to NVIDIA InfiniBand for lossless AI cluster networking, and Arista leads the specification.'},
+    mac: {score:9,  note:'Every AI GPU training cluster requires lossless, ultra-low-latency networking — a 1% packet loss slows AI training jobs 10–30%. More AI compute spend = more Arista hardware. Not China-exposed. AI fabric revenue forecast $3.5B in 2026 (new segment, essentially zero two years ago). Hyperscaler capex cycle is the direct tailwind.'},
+    cat: {score:8,  note:'Q1 2026: Revenue $2.709B (+35.1% YoY, beat estimates). FY2026 guide raised to $11.5B (+27.7%). $3.5B AI fabric revenue guided for 2026 — the new growth engine. 29 analysts Strong Buy, average PT $188 vs $158 current. Q2 2026 earnings upcoming as next catalyst.'},
+    thesis:'INTACT — NEW ENTRY', verdict:'BUY ZONE — $158 IN ZONE', verdictCls:'vd-strong',
+    alert:'New addition May 26, 2026 — PRICE VERIFIED: ANET trading $158.68 (+3.19% on the day, 52-week range $88.87–$175.96). Entry zone $148–$168 (stock currently inside zone). The networking layer every AI GPU cluster runs on. EOS switching cost = 1–2yr migration + full team retrain + rebuild all automation. Ultra Ethernet Consortium is the only viable InfiniBand alternative at hyperscale scale — Arista is leading it. Q1 beat: revenue $2.709B (+35.1% YoY). $3.5B AI fabric revenue 2026. FY2026 guide $11.5B (+27.7%). 29 analysts Strong Buy, avg PT $188. R/R at $158 entry: target $220, stop $128 = 2.07:1 ✓. Framework: PP 8/10, Macro 9/10, Catalyst 8/10.',
+  },
 };
 
 // ── Historical picks log ───────────────────────────────────────────────────────
@@ -1563,6 +1571,15 @@ const HISTORY = [
     fw:'Josh + Kevin + Institutional + Call Up research',
     reason:'Added PLTR (AI Operating System — ATO government lock-in, 139% NRR, $137 verified, DIA contract pending). Added VRT (AI Infrastructure Hardware — data center power/cooling, $15B backlog, $327 verified). Formally archived CMG (−44% from entry, thesis failure confirmed Q1 2026). NVDA China catalyst permanently removed from bull case (Beijing chose domestic chips). Watchlist 8 → 10 active picks.',
     lesson:'Call Up cadence is essential. CMG was untracked for months — the process of running a call up surfaced the loss and allowed a clean close. China geopolitical risk can close a catalyst permanently overnight.',
+  },
+  {
+    ticker:'Watchlist v4→v5', company:'ANET Added — AI Networking Layer',
+    added:'May 27, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin + Institutional research',
+    reason:'Added ANET (AI Networking — Arista EOS switching cost moat, Ultra Ethernet Consortium leadership, Q1 rev +35% YoY, $158 verified). Every AI GPU cluster requires lossless networking — ANET owns that layer. R/R 2.07:1 at entry midpoint. PP 8/10, Macro 9/10, Catalyst 8/10. Watchlist 10 → 11 active picks.',
+    lesson:'Infrastructure layers below the GPU — networking, power, cooling — are often underfollowed relative to chip names despite equal lock-in. ANET completes the AI infrastructure stack: NVDA (compute), VRT (power/cooling), ANET (networking).',
   },
 ];
 
