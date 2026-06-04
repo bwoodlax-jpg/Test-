@@ -435,6 +435,38 @@
     .sp-pp-flag{font-size:10px;color:var(--green);font-weight:700;margin-left:6px}
   /* ── Alpine.js cloaking ── */
   [x-cloak] { display: none !important; }
+  /* ── Market Pulse tab ── */
+  .mkt-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  .mkt-date{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+  .mkt-headline{font-size:17px;font-weight:800;color:var(--text);line-height:1.3;max-width:700px}
+  .mkt-badge{font-size:10px;font-weight:800;padding:5px 14px;border-radius:4px;text-transform:uppercase;letter-spacing:1.2px;white-space:nowrap;align-self:flex-start;margin-top:4px}
+  .mkt-risk-off{background:rgba(255,80,80,.18);color:var(--red);border:1px solid rgba(255,80,80,.4)}
+  .mkt-caution{background:rgba(240,165,0,.18);color:var(--accent);border:1px solid rgba(240,165,0,.4)}
+  .mkt-risk-on{background:rgba(0,200,122,.14);color:var(--green);border:1px solid rgba(0,200,122,.3)}
+  .mkt-section-hd{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .mkt-indices{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;margin-bottom:24px}
+  .mkt-idx{background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+  .mkt-idx-name{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .mkt-idx-val{font-size:15px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+  .mkt-idx-chg{font-size:11px;font-weight:700;margin-top:1px}
+  .mkt-events{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+  .mkt-event{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start}
+  .mkt-evt-tag{font-size:8px;font-weight:800;padding:3px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+  .evt-geo{background:rgba(255,80,80,.14);color:var(--red)}
+  .evt-macro{background:rgba(240,165,0,.14);color:var(--accent)}
+  .evt-earn{background:rgba(0,200,122,.12);color:var(--green)}
+  .evt-watch{background:rgba(100,149,237,.14);color:#6ca0e8}
+  .mkt-evt-headline{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+  .mkt-evt-text{font-size:11px;color:var(--dim);line-height:1.6}
+  .mkt-pi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:24px}
+  .mkt-pi-card{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+  .mkt-pi-ticker{font-size:15px;font-weight:900;margin-bottom:1px}
+  .mkt-pi-impact{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+  .mkt-pi-note{font-size:11px;color:var(--dim);line-height:1.5}
+  .pi-green{color:var(--green)} .pi-yellow{color:var(--accent)} .pi-red{color:var(--red)} .pi-gray{color:var(--muted)}
+  .mkt-watch-list{list-style:none;padding:0;margin:0}
+  .mkt-watch-list li{font-size:12px;color:var(--dim);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;line-height:1.55;align-items:flex-start}
+  .mkt-watch-list li::before{content:'⚠';font-size:10px;flex-shrink:0;margin-top:2px;color:var(--accent)}
   </style>
   <!-- Tailwind CSS CDN (zero-build) -->
   <script>
@@ -553,6 +585,7 @@
   <button class="tab-btn" :class="{'active': tab === 'swing'}" @click="tab = 'swing'" data-tab="swing">&#9733; Weekly Swing Desk</button>
   <button class="tab-btn" :class="{'active': tab === 'monitor'}" @click="tab = 'monitor'" data-tab="monitor">History &amp; Monitor</button>
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
+  <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
 </div>
 
 <main>
@@ -1187,6 +1220,11 @@
 
 </div><!-- end tab-sp500 -->
 
+<!-- ── Market Pulse Tab ───────────────────────────────── -->
+<div id="tab-pulse" class="tab-panel" x-show="tab === 'pulse'" x-cloak>
+  <div id="market-pulse-content" style="padding:4px 0"></div>
+</div><!-- end tab-pulse -->
+
 </main>
 
 <footer>
@@ -1215,7 +1253,7 @@ function bwoodApp() {
 
 const WL = [
   {ticker:'MSFT', company:'Microsoft Corporation',   tier:'AI Backbone ↑',      tc:'t1', entry:'$415–$430', target:'$625', stop:'$390',  catalyst:'Azure +40% YoY; 20M Copilot enterprise seats; Wedbush PT $625; Morgan Stanley PT $650', note:'Pricing power maximum — enterprise owns you from Office to Azure. Copilot monetization just beginning. Passes both frameworks at the highest conviction level. ✓ Price verified $418 May 22'},
-  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure ↑', tc:'t2', entry:'$200–$215', target:'$300', stop:'$175',  catalyst:'Blackwell GB300 ramp; China H200 reopening watch; Q2 FY2027 earnings catalyst; $500B revenue visibility', note:'Dominant AI chip supplier — hyperscalers have no substitute at this performance level. China watch: ZERO DC shipments Q1. ✓ Price verified $214 May 24'},
+  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure ↑', tc:'t2', entry:'$200–$215', target:'$300', stop:'$175',  catalyst:'Blackwell GB300 ramp; new PC AI chip announced Jun 3; China H200 watch; $500B revenue visibility', note:'ABOVE zone at $222. New Nvidia PC AI chip confirmed catalyst. Trail stop to $205. No new entries above zone. ✓ Price verified $222 Jun 3'},
   {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold ↑',   tc:'t1', entry:'$185–$200', target:'$275', stop:'$165',  catalyst:'AI cloud RPO $523B; Wedbush PT $275',          note:"Benjamin Graham value buy (Josh, Mar 2026). Enterprise DB lock-in = structural pricing power. ✓ Price verified ~$193 May 25"},
   {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick ↑',     tc:'t2', entry:'$390–$400', target:'$550', stop:'$370',  catalyst:'MI400 Q3 launch; $60B hyperscaler commits; record $5.8B DC revenue; stock at $515 May 31 — HOLD ONLY, above zone', note:'ABOVE entry zone at $515 — hold existing, no new buys. Dell blowout validated AI server demand. Wait for $440–$460 support retest before adding. Stop $370. ✓ Price verified $515 May 31'},
   {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption ↑',    tc:'t2', entry:'$52–$60',   target:'$75',  stop:'$45',   catalyst:'Tesla FSD insurance LIVE; Baird + Piper conferences Jun 2-3; Q1 rev +71% YoY; stock at $66 May 31 — above zone, trail stop', note:'ABOVE entry zone at $66 — up +13% from zone top. If in from $56–58: trail stop to $58. Not in: wait for pullback below $60 before adding. Target $75 intact. ✓ Price verified ~$66 Jun 2'},
@@ -1224,7 +1262,7 @@ const WL = [
   {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security ↑ — Earnings Beat ✓', tc:'t1', entry:'$250–$265',  target:'$360', stop:'$275',  catalyst:'Q3 FY2026 BEAT: EPS $0.85 (beat $0.06), Rev $3.002B (beat 1.96%); Q4+FY raise; NGS ARR +60% YoY; AH $301.70', note:'BEAT + RAISE confirmed Jun 2. $302 AH — FAR above entry zone. Stop trailed from $232 → $275. No new entries. POTW pass (1.52% AH gap too small). Target $360 intact. ✓ Price verified $301.70 AH Jun 2'},
   {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR. DIA contract win = H2 2026 catalyst. ✓ Price verified $137 May 26'},
   {ticker:'VRT',  company:'Vertiv Holdings Co',       tier:'AI Infrastructure Hardware 🆕',tc:'t2', entry:'$310–$340',  target:'$420', stop:'$290',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY, EPS +83% YoY; BofA PT $440; RBC PT $435; Americas DC +44%', note:'Power + cooling for every AI GPU rack. 18–24 month equipment lead times lock in revenue. 75% of revenue from data centers. Backlog $15B covers 12+ months forward. ✓ Price verified $327 May 26'},
-  {ticker:'ANET', company:'Arista Networks Inc',      tier:'AI Networking 🆕',      tc:'t1', entry:'$148–$168',  target:'$220', stop:'$128',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; 29 analysts Strong Buy; PT avg $188', note:'The networking layer every AI GPU cluster runs on. EOS switching cost = 1-2yr migration + full team retrain. Ultra Ethernet Consortium only viable InfiniBand alternative at hyperscaler scale. ✓ Price verified $158 May 26'},
+  {ticker:'ANET', company:'Arista Networks Inc',      tier:'AI Networking ↑',         tc:'t1', entry:'$148–$168',  target:'$220', stop:'$128',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; 29 analysts Strong Buy; PT avg $188', note:'ABOVE zone at $168–$177. Supply chain thesis resolving. Trail stop to $155. No new entries above zone ceiling $168. ✓ Price verified $172 Jun 3'},
   {ticker:'AVGO', company:'Broadcom Inc',              tier:'AI Custom Silicon ↑',   tc:'t2', entry:'$415–$445',  target:'$550', stop:'$385',  catalyst:'Q1 AI rev $8.4B (+106% YoY); Q2 AI guide $10.7B; CEO $100B AI rev by 2027; $73B backlog; stock $457 Jun 2 — above zone', note:'ABOVE entry zone at $457. Entry window closed — hold existing. Scale-in only on pullback to $415–$430. Stop $385. ✓ Price verified $457 Jun 2'},
   {ticker:'NOW',  company:'ServiceNow Inc',            tier:'AI Enterprise Control Plane 🆕',tc:'t1', entry:'$118–$132',  target:'$175', stop:'$103',  catalyst:'Knowledge 2026: AI Control Tower + Otto AI agent launched; Experian multi-year agentic partnership; BofA Buy $130; consensus PT $142; 19/22 analysts Buy', note:'Enterprise workflow lock-in = catastrophic switching cost. Once ServiceNow runs IT, HR, legal, and security workflows, migration = 18–36 month project. AI Control Plane for enterprise agentic AI. ✓ Price verified $129 May 29'},
 ];
@@ -1978,8 +2016,83 @@ function renderSP500() {
   if (ppw) ppw.textContent = SP500_LOSERS.filter(s => s.pp >= 7).length;
 }
 
+// ── Market Pulse data (update each session) ───────────────────────────────
+const MARKET_PULSE = {
+  date: 'June 3, 2026',
+  updated: 'Post-market',
+  headline: 'US-Iran Strikes Resume &mdash; Oil Spikes to $96, S&amp;P Snaps 9-Day Win Streak',
+  sentiment: 'RISK-OFF',
+  sentimentCls: 'mkt-risk-off',
+  indices: [
+    {name:'S&P 500',   val:'7,554',  chg:'-0.74%', dir:'down'},
+    {name:'Nasdaq',    val:'26,854', chg:'-0.89%', dir:'down'},
+    {name:'Dow Jones', val:'50,687', chg:'-1.21%', dir:'down'},
+    {name:'WTI Crude', val:'$96.02', chg:'+2.41%', dir:'up'},
+    {name:'10Y Yield', val:'4.71%',  chg:'+0.07',  dir:'up'},
+    {name:'VIX',       val:'17.8',   chg:'+1.4',   dir:'up'},
+  ],
+  events: [
+    {tag:'GEO',      tagCls:'evt-geo',   headline:'US-Iran Conflict Escalates', body:'New US-Israel strikes on Iran overnight sent WTI crude +2.4% to $96.02/bbl, Brent $97.81. The Iran war (began Feb 2026) disrupted Strait of Hormuz traffic &mdash; IEA called it "the largest supply disruption in history." Oil near $100 creates an inflation floor that prevents Fed rate cuts and weighs on growth stocks.'},
+    {tag:'MACRO',    tagCls:'evt-macro', headline:'ADP + ISM Services: Sticky Inflation Signal', body:'ADP jobs +220K (beat expectations). ISM Services PMI price gauge hit near 4-year high. Both signal labor and services still running hot. Fed June cut odds fell to near zero after the data. Higher-for-longer rate narrative re-asserting &mdash; headwind for growth-multiple names.'},
+    {tag:'EARNINGS', tagCls:'evt-earn',  headline:'PANW Gap Completely Faded &mdash; PASS Validated', body:'PANW beat + raised (EPS $0.85, Q4+FY guide both above consensus) but gapped to $338 (+13%) then reversed to $283 close &mdash; below the pre-earnings $297 level. The 7.5% pre-print intraday run had priced in the result. Our secondary POTW PASS was correct. Anyone who entered the gap got stopped out hard.'},
+    {tag:'EARNINGS', tagCls:'evt-earn',  headline:'AVGO Q2 Beat &mdash; -8% AH on Narrative Miss', body:'AVGO Q2: EPS $2.44 (beat $2.32), AI revenue $10.8B (+143% YoY), AI bookings &gt;$30B, net income +88% YoY. Stock fell 8% AH because CEO Hock Tan did not raise the $100B FY2027 AI target. Classic "buy the rumor, sell the news." AH price ~$420 puts stock back inside our entry zone $415&ndash;$445.'},
+    {tag:'WATCH',    tagCls:'evt-watch', headline:'NFP Friday June 5 &mdash; Next Major Macro Binary', body:'Nonfarm Payrolls due Friday June 5. After ADP beat and hot ISM Services, a strong print kills any June Fed cut probability and could trigger a broad selloff. A miss = relief rally. This is the largest macro catalyst before ORCL earnings June 9 &mdash; plan ORCL exit around it.'},
+  ],
+  portfolio: [
+    {ticker:'ORCL', cls:'pi-green',  impact:'POTW WORKING',    note:'Drifted to $236&ndash;$249 Jun 3 (+6&ndash;11% from entry $220&ndash;228). Pre-earnings momentum intact. Trail stop. Hard exit Fri Jun 6 EOD regardless of P&L.'},
+    {ticker:'AVGO', cls:'pi-green',  impact:'BACK IN ZONE AH', note:'Q2 beat but -8% AH on no guide raise &rarr; ~$420. Inside zone $415&ndash;445. Verify Thu open. If confirmed: scale-in opportunity. AI rev +143% = thesis intact.'},
+    {ticker:'NVDA', cls:'pi-yellow', impact:'ABOVE ZONE',       note:'$222 Jun 3 &mdash; above zone $200&ndash;215. New Nvidia PC AI chip confirmed catalyst. Trail stop to $205. No new entries above zone.'},
+    {ticker:'ANET', cls:'pi-yellow', impact:'ABOVE ZONE',       note:'$168&ndash;$177 Jun 3 &mdash; above zone ceiling $168. Supply chain thesis resolving. Trail stop to $155.'},
+    {ticker:'VRT',  cls:'pi-yellow', impact:'AT ZONE CEILING',  note:'$326&ndash;$343 Jun 3 &mdash; at/above zone ceiling $340. Existing holders trail stop to $310.'},
+    {ticker:'PANW', cls:'pi-red',    impact:'GAP FULLY FADED',  note:'Gapped to $338, reversed to close $283. PASS confirmed. Trail stop from $232 &rarr; $275. Target $360 intact long-term.'},
+    {ticker:'NOW',  cls:'pi-green',  impact:'IN ZONE',          note:'$127.65 &mdash; in zone $118&ndash;132. &#10003;'},
+    {ticker:'LMND', cls:'pi-yellow', impact:'ABOVE ZONE',       note:'~$66, above zone $52&ndash;60. Trail stop to $58. Conference catalyst ongoing Jun 2&ndash;10.'},
+  ],
+  macro_watch: [
+    'Iran conflict: any Strait of Hormuz escalation sends oil above $100 &mdash; immediate risk-off rotation across all AI names',
+    'NFP Fri Jun 5: hot print = no cuts, market sells; weak print = relief rally ahead of ORCL earnings',
+    'Fed rate path: zero June cut probability after ADP+ISM. First cut now pricing Sep/Oct 2026',
+    'AVGO AH $420: verify Thursday open &mdash; if thesis intact at open, entry zone re-opens for scale-in',
+    'ORCL POTW: mandatory hard exit Fri Jun 6 close before Jun 9 earnings binary &mdash; no flexibility',
+  ],
+};
+
+function buildMarketPulse() {
+  const mp = MARKET_PULSE;
+  const el = document.getElementById('market-pulse-content');
+  if (!el) return;
+  const dc = d => d === 'up' ? 'up' : 'down';
+  el.innerHTML =
+    '<div class="mkt-header"><div><div class="mkt-date">' + mp.date + ' &mdash; ' + mp.updated + '</div>' +
+    '<div class="mkt-headline">' + mp.headline + '</div></div>' +
+    '<div class="mkt-badge ' + mp.sentimentCls + '">' + mp.sentiment + '</div></div>' +
+    '<div class="mkt-section-hd">Market Indices</div>' +
+    '<div class="mkt-indices">' +
+    mp.indices.map(i => '<div class="mkt-idx"><div class="mkt-idx-name">' + i.name + '</div>' +
+      '<div class="mkt-idx-val ' + dc(i.dir) + '">' + i.val + '</div>' +
+      '<div class="mkt-idx-chg ' + dc(i.dir) + '">' + i.chg + '</div></div>').join('') +
+    '</div>' +
+    '<div class="mkt-section-hd">Today\'s Key Events</div>' +
+    '<div class="mkt-events">' +
+    mp.events.map(e => '<div class="mkt-event"><span class="mkt-evt-tag ' + e.tagCls + '">' + e.tag + '</span>' +
+      '<div><div class="mkt-evt-headline">' + e.headline + '</div>' +
+      '<div class="mkt-evt-text">' + e.body + '</div></div></div>').join('') +
+    '</div>' +
+    '<div class="mkt-section-hd">Portfolio Impact Today</div>' +
+    '<div class="mkt-pi-grid">' +
+    mp.portfolio.map(p => '<div class="mkt-pi-card"><div class="mkt-pi-ticker ' + p.cls + '">' + p.ticker + '</div>' +
+      '<div class="mkt-pi-impact ' + p.cls + '">' + p.impact + '</div>' +
+      '<div class="mkt-pi-note">' + p.note + '</div></div>').join('') +
+    '</div>' +
+    '<div class="mkt-section-hd">Macro Watch</div>' +
+    '<ul class="mkt-watch-list">' +
+    mp.macro_watch.map(w => '<li><span>' + w + '</span></li>').join('') +
+    '</ul>';
+}
+
 buildDOM();
 buildMonitor();
+buildMarketPulse();
 initSwingDesk();
 renderSP500();
 loadAll();
