@@ -2374,7 +2374,7 @@ function buildMOS() {
 buildDOM();
 buildMonitor();
 buildMarketPulse();
-buildMOS();
+try { buildMOS(); } catch(e) { console.error('buildMOS error:', e); }
 initSwingDesk();
 renderSP500();
 loadAll();
