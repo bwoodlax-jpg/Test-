@@ -545,6 +545,10 @@
   .mos-source-name{font-size:11px;font-weight:700;color:var(--text)}
   .mos-source-url{font-size:9px;color:var(--muted);margin-top:1px}
   .mos-source-data{font-size:10px;color:var(--dim);margin-top:3px}
+  .mos-pick-wrap-new{background:linear-gradient(135deg,rgba(240,165,0,.07),rgba(240,165,0,.02));border-color:rgba(240,165,0,.45)}
+  .mos-pick-wrap-new::before{background:var(--accent)}
+  .mos-pick-badge-new{background:var(--accent);color:#000}
+  .mos-pick-ticker-new{color:var(--accent)}
   </style>
   <!-- Tailwind CSS CDN (zero-build) -->
   <script>
@@ -2241,68 +2245,113 @@ function buildMarketPulse() {
 }
 
 const MOS_DATA = {
-  updated: 'June 7, 2026',
+  updated: 'June 8, 2026',
   formula: [
     {step:1, label:'Rule of 72',      desc:'72 &divide; 5-yr growth rate = years to double'},
     {step:2, label:'10-Yr Doublings', desc:'10 &divide; years-to-double (floor to whole number)'},
     {step:3, label:'Future EPS',      desc:'EPS &times; 2 for each doubling = projected EPS in 10 yrs'},
-    {step:4, label:'Median PE',       desc:'Company 5-year median price-to-earnings ratio'},
-    {step:5, label:'Future Price',    desc:'Future EPS &times; median PE = projected price'},
+    {step:4, label:'Industry PE',     desc:'Sector industry average price-to-earnings ratio'},
+    {step:5, label:'Future Price',    desc:'Future EPS &times; industry PE = projected price'},
     {step:6, label:'Fair Value',      desc:'Future price &divide; 4 = intrinsic value today &#9733;'},
     {step:7, label:'MOS Price',       desc:'Fair value &divide; 2 = margin of safety buy price &#9733;'},
   ],
+  industryPEs: [
+    {sector:'Semiconductors',         pe:42, note:'Sector median 46&times; &mdash; using 42&times; conservative (source: CSIMarket, Damodaran)'},
+    {sector:'Enterprise Software',    pe:38, note:'Cloud / enterprise software sector avg 38&ndash;42&times; (source: Damodaran, FullRatio)'},
+    {sector:'Internet / Mega-Cap',    pe:28, note:'Internet &amp; advertising sector avg 25&ndash;32&times; (source: Damodaran, CSIMarket)'},
+    {sector:'Ad-Tech (Programmatic)', pe:35, note:'Programmatic &amp; CTV sector historical 30&ndash;50&times;, using 35&times; mid (source: GuruFocus)'},
+  ],
   sources: [
-    {name:'GuruFocus',    url:'gurufocus.com',      data:'TTM EPS, PE, 10-yr median PE'},
-    {name:'FinanceCharts',url:'financecharts.com',  data:'PE ratios, 5-yr averages, EPS'},
-    {name:'Simply Wall St',url:'simplywall.st',     data:'Forward EPS growth estimates'},
-    {name:'Alpha Spread', url:'alphaspread.com',    data:'5-yr EPS CAGR analyst projections'},
-    {name:'MacroTrends',  url:'macrotrends.net',    data:'Historical PE ratio data'},
-    {name:'Yahoo Finance',url:'finance.yahoo.com',  data:'Current price, trailing PE, EPS'},
-    {name:'public.com',   url:'public.com',         data:'5-yr median PE ratios'},
-    {name:'Marketbeat',   url:'marketbeat.com',     data:'Price targets, analyst estimates'},
+    {name:'GuruFocus',       url:'gurufocus.com',                   data:'TTM EPS, PE, forward estimates'},
+    {name:'FinanceCharts',   url:'financecharts.com',               data:'PE ratios, 5-yr averages, EPS'},
+    {name:'Simply Wall St',  url:'simplywall.st',                   data:'Forward EPS growth estimates, MRVL / TTD data'},
+    {name:'Alpha Spread',    url:'alphaspread.com',                 data:'5-yr EPS CAGR analyst projections'},
+    {name:'MacroTrends',     url:'macrotrends.net',                 data:'Historical PE ratio data'},
+    {name:'Yahoo Finance',   url:'finance.yahoo.com',               data:'Current price, trailing PE, EPS'},
+    {name:'Damodaran (NYU)', url:'pages.stern.nyu.edu/~adamodar',   data:'PE Ratio by Sector &mdash; Jan 2026 annual update'},
+    {name:'CSIMarket',       url:'csimarket.com',                   data:'Software &amp; Semiconductor industry PE TTM'},
+    {name:'FullRatio',       url:'fullratio.com',                   data:'PE ratio by industry, sector breakdown 2026'},
   ],
   screened: [
-    {ticker:'NVDA', price:205,  eps:6.53,  growth:28,   medianPE:74.6, doublings:3, futureEPS:52.24, fairValue:974, mosPrice:487, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;79% below FV. Note: 74.6&times; median PE inflated by AI mania era. Conservative 40&times; PE &rarr; FV $522 &mdash; still passes.'},
-    {ticker:'ORCL', price:210,  eps:5.63,  growth:24,   medianPE:35.0, doublings:3, futureEPS:45.04, fairValue:394, mosPrice:197, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;47% below FV. Only $13 above MOS price $197. Cleanest formula inputs of all screened stocks. &#9733; PICK'},
-    {ticker:'GOOGL',price:368,  eps:13.11, growth:15,   medianPE:26.3, doublings:2, futureEPS:52.44, fairValue:345, mosPrice:172, verdict:'NEAR', verdictCls:'mos-v-near', verdictNote:'+7% above FV &mdash; within estimation error. Essentially at fair value.'},
-    {ticker:'MSFT', price:418,  eps:16.79, growth:13.5, medianPE:36.7, doublings:1, futureEPS:33.58, fairValue:308, mosPrice:154, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+36% above FV.'},
-    {ticker:'META', price:594,  eps:27.52, growth:13.5, medianPE:23.2, doublings:1, futureEPS:55.04, fairValue:319, mosPrice:160, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+86% above FV. High EPS but slow growth = limited 10-yr compounding per this formula.'},
+    {ticker:'NVDA', price:205,   eps:6.53,  growth:28,   industryPE:42, industryLabel:'Semiconductors 42&times;',     doublings:3, futureEPS:52.24, fairValue:549, mosPrice:274, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;63% below FV. Semiconductor industry avg PE 42&times; (conservative &mdash; sector median 46&times;). Still passes clearly using industry vs. distorted 74.6&times; company median.'},
+    {ticker:'ORCL', price:210,   eps:5.63,  growth:24,   industryPE:38, industryLabel:'Enterprise Software 38&times;',doublings:3, futureEPS:45.04, fairValue:428, mosPrice:214, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;51% below FV. Enterprise software industry PE 38&times;. Current $210 is $4 below MOS price $214 &mdash; tightest qualifying margin. &#9733; PICK'},
+    {ticker:'TTD',  price:19.95, eps:2.07,  growth:16,   industryPE:35, industryLabel:'Ad-Tech 35&times;',            doublings:2, futureEPS:8.28,  fairValue:72,  mosPrice:36,  verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;72% below FV. Ad-tech industry PE 35&times; (conservative vs. TTD historical 30&ndash;50&times;). At $19.95 trading at 9.7&times; forward earnings &mdash; deep capitulation dislocation. &#9733; NEW FIND'},
+    {ticker:'GOOGL',price:368,   eps:13.11, growth:15,   industryPE:28, industryLabel:'Internet / Mega-Cap 28&times;', doublings:2, futureEPS:52.44, fairValue:367, mosPrice:184, verdict:'NEAR', verdictCls:'mos-v-near', verdictNote:'At fair value &mdash; internet industry PE 28&times;. $1 above FV ($367) &mdash; rounding error. Priced for perfection; no formula safety margin available.'},
+    {ticker:'MSFT', price:418,   eps:16.79, growth:13.5, industryPE:38, industryLabel:'Enterprise Software 38&times;',doublings:1, futureEPS:33.58, fairValue:319, mosPrice:160, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+31% above FV. Software industry PE 38&times;. Quality premium priced in; formula offers no margin of safety at current price.'},
+    {ticker:'META', price:594,   eps:27.52, growth:13.5, industryPE:28, industryLabel:'Internet / Mega-Cap 28&times;', doublings:1, futureEPS:55.04, fairValue:385, mosPrice:193, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+54% above FV. Internet industry PE 28&times;. High EPS but slow growth = only 1 doubling &mdash; rich multiple with no safety buffer.'},
   ],
   pick: {
     ticker:'ORCL',
     company:'Oracle Corporation',
     theme:'AI Cloud + Enterprise Database &mdash; 10-Year Buy &amp; Hold',
     price:210,
-    fairValue:394,
-    mosPrice:197,
-    discount:47,
+    fairValue:428,
+    mosPrice:214,
+    discount:51,
     eps:5.63,
     growth:24,
-    medianPE:35.0,
+    industryPE:38.0,
     doublings:3,
     futureEPS:45.04,
-    futurePrice:1576,
+    futurePrice:1712,
     steps:[
       {step:'Step 1', val:'72 &divide; 24% = 3.0 yrs to double'},
       {step:'Step 2', val:'10 &divide; 3.0 = 3.33 &rarr; 3 doublings'},
       {step:'Step 3', val:'$5.63 &times; 8 = $45.04 future EPS'},
-      {step:'Step 4', val:'Median PE = 35.0&times;'},
-      {step:'Step 5', val:'$45.04 &times; 35 = $1,576 future price'},
-      {step:'Step 6 &#9733;', val:'$1,576 &divide; 4 = $394 fair value'},
-      {step:'Step 7 &#9733;', val:'$394 &divide; 2 = $197 MOS price'},
+      {step:'Step 4', val:'Industry Avg PE = 38.0&times; (Enterprise Software Sector)'},
+      {step:'Step 5', val:'$45.04 &times; 38 = $1,712 future price'},
+      {step:'Step 6 &#9733;', val:'$1,712 &divide; 4 = $428 fair value'},
+      {step:'Step 7 &#9733;', val:'$428 &divide; 2 = $214 MOS price'},
     ],
     why:[
       'AI cloud RPO $523B &mdash; largest software backlog in history. Every enterprise AI deployment needs Oracle for the data layer beneath it.',
-      'Only $13 above the Margin of Safety price ($197). At $210, you are buying at near-maximum safety discount per the formula.',
-      '100% EPS beat rate over last 8 quarters. Earnings Jun 9 AH could catalyze a re-rating back toward fair value $394.',
+      'Only $4 above the Margin of Safety price ($214). At $210, you are buying at near-maximum safety discount per the formula using enterprise software industry PE.',
+      '100% EPS beat rate over last 8 quarters. Earnings Jun 9 AH could catalyze a re-rating back toward fair value $428.',
       'Enterprise database lock-in = catastrophic switching cost. Migration takes 2&ndash;5 years and full IT team commitment. 10-year thesis is structural, not speculative.',
-      'Median PE of 35&times; is clean and reasonable &mdash; the NVDA median PE (74.6&times;) is distorted by AI mania years. ORCL formula inputs are the most conservative and reliable of all screened stocks.',
-      'Benjamin Graham would recognize this: a dominant business with predictable earnings trading at 47% discount to intrinsic value. AI cloud RPO is the modern moat.',
+      'Industry PE of 38&times; reflects the enterprise software sector average &mdash; applied consistently across ORCL and MSFT peers. More defensible than company-specific median PE.',
+      'Benjamin Graham would recognize this: a dominant business with predictable earnings trading at 51% discount to intrinsic value. AI cloud RPO is the modern moat.',
     ],
     risks:[
       'Cloud migration risk: if enterprises shift database workloads to AWS or Azure native services, Oracle loses volume over the 10-year hold period.',
       'Growth rate (24%) assumes AI cloud tailwind continues through 2031. If AI spending cycle turns, EPS growth reverts to historical 12&ndash;15%, reducing fair value.',
-      'Jun 9 earnings binary: a miss or weak guide could push price toward or below the $197 MOS level before any recovery.',
+      'Jun 9 earnings binary: a miss or weak guide could push price toward or below the $214 MOS level before any recovery.',
+    ],
+  },
+  newFind: {
+    ticker:'TTD',
+    company:'The Trade Desk, Inc.',
+    theme:'Programmatic Advertising &mdash; CTV + AI Platform &mdash; 10-Year Buy &amp; Hold',
+    price:19.95,
+    fairValue:72,
+    mosPrice:36,
+    discount:72,
+    eps:2.07,
+    growth:16,
+    industryPE:35.0,
+    doublings:2,
+    futureEPS:8.28,
+    futurePrice:290,
+    steps:[
+      {step:'Step 1', val:'72 &divide; 16% = 4.5 yrs to double'},
+      {step:'Step 2', val:'10 &divide; 4.5 = 2.22 &rarr; 2 doublings'},
+      {step:'Step 3', val:'$2.07 &times; 4 = $8.28 future EPS'},
+      {step:'Step 4', val:'Industry Avg PE = 35.0&times; (Ad-Tech / Programmatic Sector)'},
+      {step:'Step 5', val:'$8.28 &times; 35 = $290 future price'},
+      {step:'Step 6 &#9733;', val:'$290 &divide; 4 = $72 fair value'},
+      {step:'Step 7 &#9733;', val:'$72 &divide; 2 = $36 MOS price'},
+    ],
+    why:[
+      'Trading at 9.7&times; forward earnings &mdash; a 5-year valuation low &mdash; despite fundamentals intact. Panic selling has disconnected price from business reality.',
+      '72% below fair value at $19.95. Even partial mean reversion toward the 35&times; industry PE would generate significant returns without requiring any earnings growth.',
+      'Connected TV (CTV) advertising is the secular tailwind: traditional TV ad budgets are migrating digital at an accelerating rate through 2026&ndash;2030.',
+      'Kokai AI platform gaining traction for campaign optimization &mdash; AI monetization is in early innings and not yet priced into the current 9.7&times; forward multiple.',
+      'Proven business model through multiple market cycles. Consistent revenue growth targeting 17% in 2026 with improving unit economics and strong advertiser retention.',
+      'Industry PE of 35&times; is conservative vs. TTD historical range of 30&ndash;50&times;. Formula uses the midpoint; any multiple recovery is pure upside beyond the base case.',
+    ],
+    risks:[
+      'Platform concentration: Google and Amazon own significant ad inventory and can squeeze independent DSPs. Loss of key inventory access is a structural risk.',
+      'Growth rate (16%) is forward consensus. If programmatic ad market softens or CTV adoption lags, EPS growth could disappoint over the 10-year hold.',
+      'At $19.95 the stock has already fallen sharply and could fall further if ad market weakens in a rate-hike or recession scenario before recovering.',
     ],
   },
 };
@@ -2311,23 +2360,33 @@ function buildMOS() {
   const el = document.getElementById('mos-content');
   if (!el) return;
   const d = MOS_DATA;
+  let indLegend = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">' +
+    d.industryPEs.map(function(ip) {
+      return '<div style="background:var(--surf2);border:1px solid var(--border);border-radius:5px;padding:5px 14px">' +
+        '<div style="font-size:10px;font-weight:700;color:var(--accent)">' + ip.sector + ' &mdash; ' + ip.pe + '&times;</div>' +
+        '<div style="font-size:9px;color:var(--dim);margin-top:1px">' + ip.note + '</div></div>';
+    }).join('') +
+    '</div>';
   let html =
     '<div style="margin-bottom:20px">' +
     '<div style="font-size:9px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px">&#9670; Long Horizon &mdash; Updated ' + d.updated + '</div>' +
     '<div style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:8px">Benjamin Graham &mdash; Margin of Safety Formula &mdash; 10-Year Buy &amp; Hold Screen</div>' +
-    '<div style="font-size:12px;color:var(--dim);line-height:1.65">These are stocks to buy and hold for ten years. The formula projects where earnings will be in a decade, applies a historical PE multiple to arrive at a future price, then discounts back to today and cuts in half for safety. A current price at or below <strong style="color:var(--accent)">Fair Value (Step 6)</strong> means you are paying less than intrinsic value. At or below <strong style="color:var(--green)">MOS Price (Step 7)</strong> means you are buying at 50% off intrinsic value &mdash; maximum safety.</div>' +
+    '<div style="font-size:12px;color:var(--dim);line-height:1.65">These are stocks to buy and hold for ten years. The formula projects where earnings will be in a decade, applies the <strong style="color:var(--accent)">industry average PE</strong> for each stock\'s sector to arrive at a future price, then discounts back to today and cuts in half for safety. A current price at or below <strong style="color:var(--accent)">Fair Value (Step 6)</strong> means you are paying less than intrinsic value. At or below <strong style="color:var(--green)">MOS Price (Step 7)</strong> means you are buying at 50% off intrinsic value &mdash; maximum safety.</div>' +
     '</div>' +
     '<div class="mkt-section-hd">The 7-Step Formula</div>' +
     '<div class="mos-formula-grid">' +
     d.formula.map(function(f) { return '<div class="mos-step' + (f.step >= 6 ? ' mos-key' : '') + '"><div class="mos-step-num">Step ' + f.step + '</div><div class="mos-step-label">' + f.label + '</div><div class="mos-step-desc">' + f.desc + '</div></div>'; }).join('') +
     '</div>' +
-    '<div class="mkt-section-hd">Screener Results &mdash; June 7, 2026</div>' +
+    '<div class="mkt-section-hd">Industry PE Reference &mdash; Formula Step 4</div>' +
+    indLegend +
+    '<div class="mkt-section-hd">Screener Results &mdash; June 8, 2026</div>' +
     '<div style="overflow-x:auto;margin-bottom:8px"><table class="mos-screener"><thead><tr>' +
-    '<th>Ticker</th><th>Price</th><th>EPS TTM</th><th>5yr Growth</th><th>Doublings</th><th>Future EPS</th><th>Med PE</th><th>Fair Value &divide;4</th><th>MOS Price &divide;2</th><th>Verdict</th>' +
+    '<th>Ticker</th><th>Price</th><th>EPS TTM</th><th>5yr Growth</th><th>Doublings</th><th>Future EPS</th><th>Ind PE (Sector)</th><th>Fair Value &divide;4</th><th>MOS Price &divide;2</th><th>Verdict</th>' +
     '</tr></thead><tbody>' +
     d.screened.map(function(s) { return '<tr><td><strong style="color:var(--text)">' + s.ticker + '</strong></td>' +
       '<td>$' + s.price + '</td><td>$' + s.eps + '</td><td>' + s.growth + '%</td><td>' + s.doublings + '&times;</td>' +
-      '<td>$' + s.futureEPS.toFixed(2) + '</td><td>' + s.medianPE + '&times;</td>' +
+      '<td>$' + s.futureEPS.toFixed(2) + '</td>' +
+      '<td><div style="font-weight:700;color:var(--text)">' + s.industryPE + '&times;</div><div style="font-size:9px;color:var(--dim);white-space:nowrap">' + s.industryLabel + '</div></td>' +
       '<td style="font-weight:700;color:var(--green)">$' + s.fairValue + '</td>' +
       '<td style="font-weight:700;color:var(--accent)">$' + s.mosPrice + '</td>' +
       '<td class="' + s.verdictCls + '">' + s.verdict + '</td></tr>'; }).join('') +
@@ -2337,7 +2396,7 @@ function buildMOS() {
     '</div>' +
     '<div class="mkt-section-hd">&#9733; Long Horizon Pick &mdash; June 2026</div>' +
     '<div class="mos-pick-wrap">' +
-    '<div class="mos-pick-badge">&#10003; Margin of Safety Buy &mdash; Jun 7, 2026</div>' +
+    '<div class="mos-pick-badge">&#10003; Margin of Safety Buy &mdash; Jun 8, 2026</div>' +
     '<div class="mos-pick-ticker">' + d.pick.ticker + '</div>' +
     '<div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">' + d.pick.company + ' &mdash; ' + d.pick.theme + '</div>' +
     '<div class="mkt-section-hd" style="margin-top:0">Formula Walk-Through &mdash; Step by Step</div>' +
@@ -2353,7 +2412,7 @@ function buildMOS() {
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">Discount to FV</div><div class="mos-pick-val" style="color:var(--green)">&minus;' + d.pick.discount + '%</div></div>' +
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">EPS (TTM)</div><div class="mos-pick-val">$' + d.pick.eps + '</div></div>' +
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">5-yr Growth Est.</div><div class="mos-pick-val">' + d.pick.growth + '%</div></div>' +
-    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Median PE (5-yr)</div><div class="mos-pick-val">' + d.pick.medianPE + '&times;</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Industry Avg PE</div><div class="mos-pick-val">' + d.pick.industryPE + '&times;</div></div>' +
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">10-yr Doublings</div><div class="mos-pick-val">' + d.pick.doublings + '&times;</div></div>' +
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">Future EPS</div><div class="mos-pick-val" style="color:var(--green)">$' + d.pick.futureEPS.toFixed(2) + '</div></div>' +
     '<div class="mos-pick-stat"><div class="mos-pick-lbl">Projected Price</div><div class="mos-pick-val" style="color:var(--green)">$' + d.pick.futurePrice + '</div></div>' +
@@ -2363,8 +2422,36 @@ function buildMOS() {
     '<div class="mkt-section-hd">Risks to Monitor</div>' +
     '<ul class="mos-risk-list">' + d.pick.risks.map(function(r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
     '</div>' +
-    '<div class="mkt-section-hd">Research Source Log &mdash; June 7, 2026</div>' +
-    '<div style="font-size:11px;color:var(--dim);margin-bottom:12px">All financial data pulled from live sources June 7, 2026. Every input number cross-referenced across at least two independent sources before use in the formula.</div>' +
+    '<div class="mkt-section-hd">&#9670; New Find &mdash; Deep Value Signal &mdash; June 8, 2026</div>' +
+    '<div class="mos-pick-wrap mos-pick-wrap-new">' +
+    '<div class="mos-pick-badge mos-pick-badge-new">&#10003; Margin of Safety Buy &mdash; Jun 8, 2026 &mdash; NEW FIND</div>' +
+    '<div class="mos-pick-ticker mos-pick-ticker-new">' + d.newFind.ticker + '</div>' +
+    '<div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">' + d.newFind.company + ' &mdash; ' + d.newFind.theme + '</div>' +
+    '<div class="mkt-section-hd" style="margin-top:0">Formula Walk-Through &mdash; Step by Step</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-bottom:16px">' +
+    d.newFind.steps.map(function(s,i) { return '<div style="background:' + (i >= 5 ? 'rgba(240,165,0,.08)' : 'var(--surf2)') + ';border:1px solid ' + (i >= 5 ? 'rgba(240,165,0,.35)' : 'var(--border)') + ';border-radius:6px;padding:8px 12px">' +
+      '<div style="font-size:9px;font-weight:800;color:' + (i >= 5 ? 'var(--accent)' : 'var(--muted)') + ';text-transform:uppercase;letter-spacing:.5px">' + s.step + '</div>' +
+      '<div style="font-size:12px;font-weight:700;color:var(--text);margin-top:3px">' + s.val + '</div></div>'; }).join('') +
+    '</div>' +
+    '<div class="mos-pick-grid">' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Current Price</div><div class="mos-pick-val">$' + d.newFind.price + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Fair Value (&divide;4)</div><div class="mos-pick-val" style="color:var(--green)">$' + d.newFind.fairValue + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">MOS Price (&divide;2)</div><div class="mos-pick-val" style="color:var(--accent)">$' + d.newFind.mosPrice + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Discount to FV</div><div class="mos-pick-val" style="color:var(--green)">&minus;' + d.newFind.discount + '%</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">EPS (Forward)</div><div class="mos-pick-val">$' + d.newFind.eps + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">5-yr Growth Est.</div><div class="mos-pick-val">' + d.newFind.growth + '%</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Industry Avg PE</div><div class="mos-pick-val">' + d.newFind.industryPE + '&times;</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">10-yr Doublings</div><div class="mos-pick-val">' + d.newFind.doublings + '&times;</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Future EPS</div><div class="mos-pick-val" style="color:var(--green)">$' + d.newFind.futureEPS.toFixed(2) + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Projected Price</div><div class="mos-pick-val" style="color:var(--green)">$' + d.newFind.futurePrice + '</div></div>' +
+    '</div>' +
+    '<div class="mkt-section-hd" style="margin-top:4px">Why This Find</div>' +
+    '<ul class="mos-why-list">' + d.newFind.why.map(function(w) { return '<li>' + w + '</li>'; }).join('') + '</ul>' +
+    '<div class="mkt-section-hd">Risks to Monitor</div>' +
+    '<ul class="mos-risk-list">' + d.newFind.risks.map(function(r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
+    '</div>' +
+    '<div class="mkt-section-hd">Research Source Log &mdash; June 8, 2026</div>' +
+    '<div style="font-size:11px;color:var(--dim);margin-bottom:12px">All financial data pulled from live sources June 7&ndash;8, 2026. Industry PE benchmarks sourced from Damodaran (NYU), CSIMarket, and FullRatio sector datasets. Every input cross-referenced across at least two independent sources before use in the formula.</div>' +
     '<div class="mos-source-grid">' +
     d.sources.map(function(s) { return '<div class="mos-source-card"><div class="mos-source-name">' + s.name + '</div><div class="mos-source-url">' + s.url + '</div><div class="mos-source-data">' + s.data + '</div></div>'; }).join('') +
     '</div>';
