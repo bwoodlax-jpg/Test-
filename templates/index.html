@@ -512,6 +512,39 @@
   .wr-eow-status{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;margin:3px 0}
   .wr-eow-note{font-size:10px;color:var(--muted);line-height:1.4}
   .eow-green{color:var(--green)} .eow-red{color:var(--red)} .eow-yellow{color:var(--accent)} .eow-gray{color:var(--muted)}
+  /* ── Long Horizon / Margin of Safety Tab ── */
+  .mos-formula-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+  @media(max-width:900px){.mos-formula-grid{grid-template-columns:repeat(4,1fr)}}
+  .mos-step{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center}
+  .mos-step-num{font-size:9px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+  .mos-step-label{font-size:11px;font-weight:700;color:var(--text);margin:4px 0 2px}
+  .mos-step-desc{font-size:9px;color:var(--muted);line-height:1.4}
+  .mos-step.mos-key{border-color:var(--green);background:rgba(0,200,122,.06)}
+  .mos-screener{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:11px}
+  .mos-screener th{text-align:left;padding:8px 10px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border)}
+  .mos-screener td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--dim)}
+  .mos-screener tr:hover td{background:var(--surf2)}
+  .mos-v-yes{color:var(--green);font-weight:700}
+  .mos-v-near{color:var(--accent);font-weight:700}
+  .mos-v-no{color:var(--red);font-weight:700}
+  .mos-pick-wrap{background:linear-gradient(135deg,rgba(0,200,122,.08),rgba(0,200,122,.02));border:2px solid rgba(0,200,122,.4);border-radius:12px;padding:22px 26px;margin-bottom:20px;position:relative;overflow:hidden}
+  .mos-pick-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
+  .mos-pick-badge{display:inline-block;font-size:9px;font-weight:800;background:var(--green);color:#000;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+  .mos-pick-ticker{font-size:36px;font-weight:900;color:var(--green);letter-spacing:1px}
+  .mos-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:14px 0}
+  .mos-pick-stat{background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:8px 12px}
+  .mos-pick-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .mos-pick-val{font-size:15px;font-weight:800;margin-top:2px}
+  .mos-why-list,.mos-risk-list{list-style:none;padding:0;margin:0 0 16px}
+  .mos-why-list li,.mos-risk-list li{font-size:12px;color:var(--dim);padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;line-height:1.55}
+  .mos-why-list li:last-child,.mos-risk-list li:last-child{border-bottom:none}
+  .mos-why-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+  .mos-risk-list li::before{content:'⚠';font-size:10px;flex-shrink:0;margin-top:2px;color:var(--accent)}
+  .mos-source-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+  .mos-source-card{background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:9px 12px}
+  .mos-source-name{font-size:11px;font-weight:700;color:var(--text)}
+  .mos-source-url{font-size:9px;color:var(--muted);margin-top:1px}
+  .mos-source-data{font-size:10px;color:var(--dim);margin-top:3px}
   </style>
   <!-- Tailwind CSS CDN (zero-build) -->
   <script>
@@ -631,6 +664,7 @@
   <button class="tab-btn" :class="{'active': tab === 'monitor'}" @click="tab = 'monitor'" data-tab="monitor">History &amp; Monitor</button>
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
+  <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
 </div>
 
 <main>
@@ -1239,6 +1273,10 @@
 <div id="tab-pulse" class="tab-panel" x-show="tab === 'pulse'" x-cloak>
   <div id="market-pulse-content" style="padding:4px 0"></div>
 </div><!-- end tab-pulse -->
+
+<div id="tab-mos" class="tab-panel" x-show="tab === 'mos'" x-cloak>
+  <div id="mos-content" style="padding:4px 0"></div>
+</div><!-- end tab-mos -->
 
 </main>
 
@@ -2202,9 +2240,141 @@ function buildMarketPulse() {
   el.innerHTML = html;
 }
 
+const MOS_DATA = {
+  updated: 'June 7, 2026',
+  formula: [
+    {step:1, label:'Rule of 72',      desc:'72 &divide; 5-yr growth rate = years to double'},
+    {step:2, label:'10-Yr Doublings', desc:'10 &divide; years-to-double (floor to whole number)'},
+    {step:3, label:'Future EPS',      desc:'EPS &times; 2 for each doubling = projected EPS in 10 yrs'},
+    {step:4, label:'Median PE',       desc:'Company 5-year median price-to-earnings ratio'},
+    {step:5, label:'Future Price',    desc:'Future EPS &times; median PE = projected price'},
+    {step:6, label:'Fair Value',      desc:'Future price &divide; 4 = intrinsic value today &#9733;'},
+    {step:7, label:'MOS Price',       desc:'Fair value &divide; 2 = margin of safety buy price &#9733;'},
+  ],
+  sources: [
+    {name:'GuruFocus',    url:'gurufocus.com',      data:'TTM EPS, PE, 10-yr median PE'},
+    {name:'FinanceCharts',url:'financecharts.com',  data:'PE ratios, 5-yr averages, EPS'},
+    {name:'Simply Wall St',url:'simplywall.st',     data:'Forward EPS growth estimates'},
+    {name:'Alpha Spread', url:'alphaspread.com',    data:'5-yr EPS CAGR analyst projections'},
+    {name:'MacroTrends',  url:'macrotrends.net',    data:'Historical PE ratio data'},
+    {name:'Yahoo Finance',url:'finance.yahoo.com',  data:'Current price, trailing PE, EPS'},
+    {name:'public.com',   url:'public.com',         data:'5-yr median PE ratios'},
+    {name:'Marketbeat',   url:'marketbeat.com',     data:'Price targets, analyst estimates'},
+  ],
+  screened: [
+    {ticker:'NVDA', price:205,  eps:6.53,  growth:28,   medianPE:74.6, doublings:3, futureEPS:52.24, fairValue:974, mosPrice:487, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;79% below FV. Note: 74.6&times; median PE inflated by AI mania era. Conservative 40&times; PE &rarr; FV $522 &mdash; still passes.'},
+    {ticker:'ORCL', price:210,  eps:5.63,  growth:24,   medianPE:35.0, doublings:3, futureEPS:45.04, fairValue:394, mosPrice:197, verdict:'YES',  verdictCls:'mos-v-yes',  verdictNote:'&minus;47% below FV. Only $13 above MOS price $197. Cleanest formula inputs of all screened stocks. &#9733; PICK'},
+    {ticker:'GOOGL',price:368,  eps:13.11, growth:15,   medianPE:26.3, doublings:2, futureEPS:52.44, fairValue:345, mosPrice:172, verdict:'NEAR', verdictCls:'mos-v-near', verdictNote:'+7% above FV &mdash; within estimation error. Essentially at fair value.'},
+    {ticker:'MSFT', price:418,  eps:16.79, growth:13.5, medianPE:36.7, doublings:1, futureEPS:33.58, fairValue:308, mosPrice:154, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+36% above FV.'},
+    {ticker:'META', price:594,  eps:27.52, growth:13.5, medianPE:23.2, doublings:1, futureEPS:55.04, fairValue:319, mosPrice:160, verdict:'NO',   verdictCls:'mos-v-no',   verdictNote:'+86% above FV. High EPS but slow growth = limited 10-yr compounding per this formula.'},
+  ],
+  pick: {
+    ticker:'ORCL',
+    company:'Oracle Corporation',
+    theme:'AI Cloud + Enterprise Database &mdash; 10-Year Buy &amp; Hold',
+    price:210,
+    fairValue:394,
+    mosPrice:197,
+    discount:47,
+    eps:5.63,
+    growth:24,
+    medianPE:35.0,
+    doublings:3,
+    futureEPS:45.04,
+    futurePrice:1576,
+    steps:[
+      {step:'Step 1', val:'72 &divide; 24% = 3.0 yrs to double'},
+      {step:'Step 2', val:'10 &divide; 3.0 = 3.33 &rarr; 3 doublings'},
+      {step:'Step 3', val:'$5.63 &times; 8 = $45.04 future EPS'},
+      {step:'Step 4', val:'Median PE = 35.0&times;'},
+      {step:'Step 5', val:'$45.04 &times; 35 = $1,576 future price'},
+      {step:'Step 6 &#9733;', val:'$1,576 &divide; 4 = $394 fair value'},
+      {step:'Step 7 &#9733;', val:'$394 &divide; 2 = $197 MOS price'},
+    ],
+    why:[
+      'AI cloud RPO $523B &mdash; largest software backlog in history. Every enterprise AI deployment needs Oracle for the data layer beneath it.',
+      'Only $13 above the Margin of Safety price ($197). At $210, you are buying at near-maximum safety discount per the formula.',
+      '100% EPS beat rate over last 8 quarters. Earnings Jun 9 AH could catalyze a re-rating back toward fair value $394.',
+      'Enterprise database lock-in = catastrophic switching cost. Migration takes 2&ndash;5 years and full IT team commitment. 10-year thesis is structural, not speculative.',
+      'Median PE of 35&times; is clean and reasonable &mdash; the NVDA median PE (74.6&times;) is distorted by AI mania years. ORCL formula inputs are the most conservative and reliable of all screened stocks.',
+      'Benjamin Graham would recognize this: a dominant business with predictable earnings trading at 47% discount to intrinsic value. AI cloud RPO is the modern moat.',
+    ],
+    risks:[
+      'Cloud migration risk: if enterprises shift database workloads to AWS or Azure native services, Oracle loses volume over the 10-year hold period.',
+      'Growth rate (24%) assumes AI cloud tailwind continues through 2031. If AI spending cycle turns, EPS growth reverts to historical 12&ndash;15%, reducing fair value.',
+      'Jun 9 earnings binary: a miss or weak guide could push price toward or below the $197 MOS level before any recovery.',
+    ],
+  },
+};
+
+function buildMOS() {
+  const el = document.getElementById('mos-content');
+  if (!el) return;
+  const d = MOS_DATA;
+  let html =
+    '<div style="margin-bottom:20px">' +
+    '<div style="font-size:9px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px">&#9670; Long Horizon &mdash; Updated ' + d.updated + '</div>' +
+    '<div style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:8px">Benjamin Graham &mdash; Margin of Safety Formula &mdash; 10-Year Buy &amp; Hold Screen</div>' +
+    '<div style="font-size:12px;color:var(--dim);line-height:1.65">These are stocks to buy and hold for ten years. The formula projects where earnings will be in a decade, applies a historical PE multiple to arrive at a future price, then discounts back to today and cuts in half for safety. A current price at or below <strong style="color:var(--accent)">Fair Value (Step 6)</strong> means you are paying less than intrinsic value. At or below <strong style="color:var(--green)">MOS Price (Step 7)</strong> means you are buying at 50% off intrinsic value &mdash; maximum safety.</div>' +
+    '</div>' +
+    '<div class="mkt-section-hd">The 7-Step Formula</div>' +
+    '<div class="mos-formula-grid">' +
+    d.formula.map(function(f) { return '<div class="mos-step' + (f.step >= 6 ? ' mos-key' : '') + '"><div class="mos-step-num">Step ' + f.step + '</div><div class="mos-step-label">' + f.label + '</div><div class="mos-step-desc">' + f.desc + '</div></div>'; }).join('') +
+    '</div>' +
+    '<div class="mkt-section-hd">Screener Results &mdash; June 7, 2026</div>' +
+    '<div style="overflow-x:auto;margin-bottom:8px"><table class="mos-screener"><thead><tr>' +
+    '<th>Ticker</th><th>Price</th><th>EPS TTM</th><th>5yr Growth</th><th>Doublings</th><th>Future EPS</th><th>Med PE</th><th>Fair Value &divide;4</th><th>MOS Price &divide;2</th><th>Verdict</th>' +
+    '</tr></thead><tbody>' +
+    d.screened.map(function(s) { return '<tr><td><strong style="color:var(--text)">' + s.ticker + '</strong></td>' +
+      '<td>$' + s.price + '</td><td>$' + s.eps + '</td><td>' + s.growth + '%</td><td>' + s.doublings + '&times;</td>' +
+      '<td>$' + s.futureEPS.toFixed(2) + '</td><td>' + s.medianPE + '&times;</td>' +
+      '<td style="font-weight:700;color:var(--green)">$' + s.fairValue + '</td>' +
+      '<td style="font-weight:700;color:var(--accent)">$' + s.mosPrice + '</td>' +
+      '<td class="' + s.verdictCls + '">' + s.verdict + '</td></tr>'; }).join('') +
+    '</tbody></table></div>' +
+    '<div style="margin-bottom:20px">' +
+    d.screened.map(function(s) { return '<div style="font-size:10px;color:var(--dim);padding:3px 0"><strong style="color:var(--text)">' + s.ticker + ':</strong> ' + s.verdictNote + '</div>'; }).join('') +
+    '</div>' +
+    '<div class="mkt-section-hd">&#9733; Long Horizon Pick &mdash; June 2026</div>' +
+    '<div class="mos-pick-wrap">' +
+    '<div class="mos-pick-badge">&#10003; Margin of Safety Buy &mdash; Jun 7, 2026</div>' +
+    '<div class="mos-pick-ticker">' + d.pick.ticker + '</div>' +
+    '<div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">' + d.pick.company + ' &mdash; ' + d.pick.theme + '</div>' +
+    '<div class="mkt-section-hd" style="margin-top:0">Formula Walk-Through &mdash; Step by Step</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-bottom:16px">' +
+    d.pick.steps.map(function(s,i) { return '<div style="background:' + (i >= 5 ? 'rgba(0,200,122,.07)' : 'var(--surf2)') + ';border:1px solid ' + (i >= 5 ? 'rgba(0,200,122,.3)' : 'var(--border)') + ';border-radius:6px;padding:8px 12px">' +
+      '<div style="font-size:9px;font-weight:800;color:' + (i >= 5 ? 'var(--green)' : 'var(--muted)') + ';text-transform:uppercase;letter-spacing:.5px">' + s.step + '</div>' +
+      '<div style="font-size:12px;font-weight:700;color:var(--text);margin-top:3px">' + s.val + '</div></div>'; }).join('') +
+    '</div>' +
+    '<div class="mos-pick-grid">' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Current Price</div><div class="mos-pick-val">$' + d.pick.price + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Fair Value (&divide;4)</div><div class="mos-pick-val" style="color:var(--green)">$' + d.pick.fairValue + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">MOS Price (&divide;2)</div><div class="mos-pick-val" style="color:var(--accent)">$' + d.pick.mosPrice + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Discount to FV</div><div class="mos-pick-val" style="color:var(--green)">&minus;' + d.pick.discount + '%</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">EPS (TTM)</div><div class="mos-pick-val">$' + d.pick.eps + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">5-yr Growth Est.</div><div class="mos-pick-val">' + d.pick.growth + '%</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Median PE (5-yr)</div><div class="mos-pick-val">' + d.pick.medianPE + '&times;</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">10-yr Doublings</div><div class="mos-pick-val">' + d.pick.doublings + '&times;</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Future EPS</div><div class="mos-pick-val" style="color:var(--green)">$' + d.pick.futureEPS.toFixed(2) + '</div></div>' +
+    '<div class="mos-pick-stat"><div class="mos-pick-lbl">Projected Price</div><div class="mos-pick-val" style="color:var(--green)">$' + d.pick.futurePrice + '</div></div>' +
+    '</div>' +
+    '<div class="mkt-section-hd" style="margin-top:4px">Why This Pick</div>' +
+    '<ul class="mos-why-list">' + d.pick.why.map(function(w) { return '<li>' + w + '</li>'; }).join('') + '</ul>' +
+    '<div class="mkt-section-hd">Risks to Monitor</div>' +
+    '<ul class="mos-risk-list">' + d.pick.risks.map(function(r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
+    '</div>' +
+    '<div class="mkt-section-hd">Research Source Log &mdash; June 7, 2026</div>' +
+    '<div style="font-size:11px;color:var(--dim);margin-bottom:12px">All financial data pulled from live sources June 7, 2026. Every input number cross-referenced across at least two independent sources before use in the formula.</div>' +
+    '<div class="mos-source-grid">' +
+    d.sources.map(function(s) { return '<div class="mos-source-card"><div class="mos-source-name">' + s.name + '</div><div class="mos-source-url">' + s.url + '</div><div class="mos-source-data">' + s.data + '</div></div>'; }).join('') +
+    '</div>';
+  el.innerHTML = html;
+}
+
 buildDOM();
 buildMonitor();
 buildMarketPulse();
+buildMOS();
 initSwingDesk();
 renderSP500();
 loadAll();
