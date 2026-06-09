@@ -301,12 +301,15 @@
     .tab-bar{
       display:flex;background:var(--surf);border-bottom:2px solid var(--border);
       padding:0 28px;gap:2px;
+      overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
     }
+    .tab-bar::-webkit-scrollbar{display:none}
     .tab-btn{
       background:transparent;border:none;color:var(--muted);
       font-size:12px;font-weight:600;padding:13px 20px;cursor:pointer;
       border-bottom:3px solid transparent;margin-bottom:-2px;
       transition:all .2s;letter-spacing:.3px;
+      white-space:nowrap;flex-shrink:0;
     }
     .tab-btn:hover{color:var(--text)}
     .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
@@ -549,6 +552,35 @@
   .mos-pick-wrap-new::before{background:var(--accent)}
   .mos-pick-badge-new{background:var(--accent);color:#000}
   .mos-pick-ticker-new{color:var(--accent)}
+
+  /* ── Mobile — phones ≤ 640px ── */
+  @media(max-width:640px){
+    /* Tab bar: tighter, smaller font */
+    .tab-bar{padding:0 6px}
+    .tab-btn{padding:11px 12px;font-size:11px}
+    /* Main content: less outer padding */
+    main{padding:12px}
+    header{padding:10px 12px}
+    /* Market Pulse: tighter wrap box, force 3-col perf grid */
+    .wr-wrap{padding:14px 14px}
+    .wr-perf-grid{grid-template-columns:repeat(3,1fr)}
+    .mkt-indices{grid-template-columns:repeat(3,1fr)}
+    .mkt-pi-grid{grid-template-columns:1fr}
+    /* Long Horizon: 2-col formula grid, tighter pick card */
+    .mos-formula-grid{grid-template-columns:repeat(2,1fr) !important}
+    .mos-screener{font-size:10px}
+    .mos-screener th,.mos-screener td{padding:5px 6px}
+    .mos-pick-wrap,.mos-pick-wrap-new{padding:14px 14px}
+    .mos-pick-ticker{font-size:28px}
+    .mos-pick-ticker-new{font-size:28px}
+    .mos-source-grid{grid-template-columns:1fr 1fr}
+    /* Swing desk POTW stats: 2 cols */
+    .potw-grid{grid-template-columns:repeat(2,1fr)}
+    /* Monitor: 1 col */
+    .monitor-grid{grid-template-columns:1fr}
+    /* Price strip: narrower items */
+    .strip-item{min-width:95px;padding:8px 12px}
+  }
   </style>
   <!-- Tailwind CSS CDN (zero-build) -->
   <script>
@@ -1324,6 +1356,7 @@ const WL = [
   {ticker:'ANET', company:'Arista Networks Inc',      tier:'AI Networking ↑',         tc:'t1', entry:'$148–$168',  target:'$220', stop:'$128',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; 29 analysts Strong Buy; PT avg $188', note:'BACK IN ZONE at $154. Zone $148–$168 ✓. Trail stop to $148 (zone floor). Re-entry valid for new positions in zone. ✓ Price verified $154 Jun 5'},
   {ticker:'AVGO', company:'Broadcom Inc',              tier:'AI Custom Silicon ↑',   tc:'t2', entry:'$415–$445',  target:'$550', stop:'$385',  catalyst:'Q1 AI rev $8.4B (+106% YoY); Q2 AI guide $10.7B; CEO $100B AI rev by 2027; $73B backlog; stock $457 Jun 2 — above zone', note:'ABOVE entry zone at $457. Entry window closed — hold existing. Scale-in only on pullback to $415–$430. Stop $385. ✓ Price verified $457 Jun 2'},
   {ticker:'NOW',  company:'ServiceNow Inc',            tier:'AI Enterprise Control Plane ⚠',tc:'t1', entry:'$118–$132',  target:'$175', stop:'$103',  catalyst:'Knowledge 2026: AI Control Tower + Otto AI agent launched; Experian multi-year agentic partnership; BofA Buy $130; consensus PT $142; 19/22 analysts Buy', note:'BELOW ZONE at $111. Entry zone $118–$132. Stop $103 critical — if breaks $103 with volume, reassess thesis. Rate fear week sold SaaS broadly. Enterprise lock-in thesis intact. ✓ Price verified $111 Jun 5'},
+  {ticker:'MRVL', company:'Marvell Technology Inc',    tier:'AI Custom Silicon &#128640; NEW', tc:'t2', entry:'$245–$265',  target:'$350', stop:'$220',  catalyst:'AWS Trainium3 + Google TPU custom chip contracts; AI networking ASIC revenue +87% YoY; S&P 500 inclusion Jun 22 (structural buyer); POTW WIN May 28; EPS growth 37% YoY', note:'POST-NFP DIP at $263 — down -16.74% Jun 5 from ATH $316 (Jun 4). Custom AI silicon for hyperscalers: AWS, Google, Microsoft. S&P 500 inclusion Jun 22 = index fund forced buying. Zone $245–265. Swing desk WIN May 28 validated the setup. ✓ Price verified $263 Jun 5'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
