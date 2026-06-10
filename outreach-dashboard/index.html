@@ -30,7 +30,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background:#1a3a5c;">
   <div class="container-fluid px-4">
     <span class="navbar-brand fw-bold"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>Outreach Management</span>
@@ -45,7 +44,6 @@
 
 <div class="container-fluid px-4 pt-3">
 
-<!-- Tabs -->
 <ul class="nav nav-tabs mb-3" id="mainTabs">
   <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview"><i class="bi bi-speedometer2 me-1"></i>Overview</button></li>
   <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#buckets"><i class="bi bi-collection me-1"></i>Buckets</button></li>
@@ -57,7 +55,6 @@
 
 <div class="tab-content">
 
-<!-- OVERVIEW -->
 <div class="tab-pane fade show active" id="overview">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0">Program Overview</h5>
@@ -92,7 +89,6 @@
   </div>
 </div>
 
-<!-- BUCKETS -->
 <div class="tab-pane fade" id="buckets">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0"><i class="bi bi-collection me-2 text-success"></i>Outreach Buckets</h5>
@@ -114,7 +110,6 @@
   </div>
 </div>
 
-<!-- MILESTONES -->
 <div class="tab-pane fade" id="milestones">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0"><i class="bi bi-flag me-2 text-warning"></i>Milestones &amp; Timeline</h5>
@@ -136,7 +131,6 @@
   </div>
 </div>
 
-<!-- INITIATIVES -->
 <div class="tab-pane fade" id="initiatives">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0"><i class="bi bi-lightbulb me-2 text-primary"></i>Initiatives</h5>
@@ -145,7 +139,6 @@
   <div class="row g-3" id="initiativesGrid"></div>
 </div>
 
-<!-- MEETINGS -->
 <div class="tab-pane fade" id="meetings">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0"><i class="bi bi-chat-square-text me-2 text-info"></i>Meeting Notes</h5>
@@ -154,7 +147,6 @@
   <div class="accordion" id="meetingsContainer"></div>
 </div>
 
-<!-- BENCHMARKS -->
 <div class="tab-pane fade" id="benchmarks">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-bold mb-0"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Industry Benchmarks</h5>
@@ -163,8 +155,8 @@
   <div id="benchmarksContainer"></div>
 </div>
 
-</div><!-- end tab-content -->
-</div><!-- end container -->
+</div>
+</div>
 
 <!-- BUCKET MODAL -->
 <div class="modal fade" id="bucketModal" tabindex="-1">
@@ -312,6 +304,18 @@ const DEFAULT_BUCKETS = [
   {id:'b30',name:'Statin Therapy — Cardiovascular',           category:'Chronic Disease',      patient_count:0,target_count:0,week_target:0,status:'active',priority:'medium',description:'',notes:''},
 ];
 
+const DEFAULT_MILESTONES = [
+  {id:'m1', title:'Achieve 50%+ Live Contact Rate — Q3 2026', description:'Hit industry benchmark of 50%+ live contact rate across all active HEDIS buckets.', due_date:'2026-09-30', completion_date:'', owner:'Outreach Program Manager', status:'on-track', notes:'Industry standard: 40–60%; top performers exceed 60%.'},
+];
+
+const DEFAULT_INITIATIVES = [
+  {id:'i1', title:'Standardize 3-Attempt Call Protocol', description:'Ensure all agents follow Day 1 / Day 3–5 / Day 7–10 call cadence before marking a patient unreachable. After 3 failed attempts, trigger mailed outreach letter.', priority:'high', status:'in-progress', due_date:'2026-07-15', assigned_to:'Team Leads', notes:'AHRQ-backed protocol. Non-compliance is the #1 reason contact rates underperform.', created_at:'2026-06-10T00:00:00.000Z'},
+];
+
+const DEFAULT_MEETINGS = [
+  {id:'mt1', title:'Outreach Program Kickoff', meeting_date:'2026-06-10', next_meeting:'2026-06-24', attendees:'Program Manager, Team Leads', notes:'Reviewed HEDIS bucket priorities for Q3. Confirmed 50% contact rate as primary target. Discussed agent productivity benchmarks (40–60 calls/day sweet spot). Aligned on 3-attempt protocol enforcement.', action_items:'Finalize weekly patient targets per bucket\nSchedule bi-weekly check-in cadence\nDistribute 3-attempt protocol guide to all agents\nIdentify top 5 priority buckets for Q3 focus'},
+];
+
 const BENCHMARKS = [
   {category:'Agent Productivity', metric:'Calls per day — healthcare outreach',              range:'40–60',    unit:'calls/day/agent',   target:'50–60',         source:'CloudTalk, CallCentreHelper', notes:'Sweet spot; higher volume yields diminishing returns in healthcare'},
   {category:'Agent Productivity', metric:'Calls per week',                                    range:'200–300',  unit:'calls/week/agent',  target:'250–300',       source:'Derived from daily benchmarks', notes:'5-day work week at 40–60 calls/day'},
@@ -336,7 +340,12 @@ const BENCHMARKS = [
 function getData() {
   const s = localStorage.getItem(STORAGE_KEY);
   if (s) return JSON.parse(s);
-  const d = { buckets: DEFAULT_BUCKETS.map(b=>({...b})), milestones:[], initiatives:[], meetings:[] };
+  const d = {
+    buckets: DEFAULT_BUCKETS.map(b=>({...b})),
+    milestones: DEFAULT_MILESTONES.map(m=>({...m})),
+    initiatives: DEFAULT_INITIATIVES.map(i=>({...i})),
+    meetings: DEFAULT_MEETINGS.map(m=>({...m}))
+  };
   saveData(d); return d;
 }
 function saveData(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
