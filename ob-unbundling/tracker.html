@@ -19,22 +19,61 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: var(--dark); }
-  .page-header { background: var(--navy); color: white; padding: 20px 32px 16px; display: flex; align-items: center; justify-content: space-between; }
+
+  /* ── Header ── */
+  .page-header {
+    background: var(--navy);
+    color: white;
+    padding: 20px 32px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
   .page-header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; }
   .page-header p  { font-size: 0.82rem; color: #9ECDD6; margin-top: 3px; }
-  .go-live-badge { background: #8B0000; color: white; padding: 8px 18px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; text-align: center; line-height: 1.4; }
-  .summary-bar { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.1); padding: 12px 32px; display: flex; gap: 28px; flex-wrap: wrap; }
+  .go-live-badge {
+    background: #8B0000; color: white;
+    padding: 8px 18px; border-radius: 6px;
+    font-size: 0.85rem; font-weight: 700; text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── Summary bar ── */
+  .summary-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 32px;
+    display: flex; gap: 28px; flex-wrap: wrap;
+  }
   .summary-stat { text-align: center; }
   .summary-stat .num { font-size: 1.7rem; font-weight: 700; color: var(--gold); }
   .summary-stat .lbl { font-size: 0.72rem; color: #9ECDD6; text-transform: uppercase; letter-spacing: 0.5px; }
-  .overall-progress { background: var(--white); margin: 20px 24px 0; border-radius: 10px; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex; align-items: center; gap: 20px; }
+
+  /* ── Overall progress ── */
+  .overall-progress {
+    background: var(--white); margin: 20px 24px 0;
+    border-radius: 10px; padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex; align-items: center; gap: 20px;
+  }
   .overall-progress .label { font-weight: 700; font-size: 1rem; color: var(--navy); min-width: 180px; }
-  .overall-progress .bar-wrap { flex: 1; background: #e0e0e0; border-radius: 8px; height: 22px; overflow: hidden; }
+  .overall-progress .bar-wrap { flex: 1; background: #e0e0e0; border-radius: 8px; height: 22px; overflow: hidden; position: relative; }
   .overall-progress .bar-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--sage)); border-radius: 8px; transition: width 0.4s ease; }
   .overall-progress .pct { font-weight: 700; font-size: 1rem; color: var(--teal); min-width: 46px; text-align: right; }
+
+  /* ── Main layout ── */
   .main { padding: 16px 24px 32px; display: grid; grid-template-columns: 1fr; gap: 18px; }
-  .phase-card { background: var(--white); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; }
-  .phase-header { padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+
+  /* ── Phase card ── */
+  .phase-card {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 13px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+  }
   .phase-header:hover { filter: brightness(0.93); }
   .phase-title { color: white; font-weight: 700; font-size: 1rem; letter-spacing: 0.3px; }
   .phase-meta  { color: rgba(255,255,255,0.85); font-size: 0.78rem; margin-top: 2px; }
@@ -44,25 +83,59 @@
   .mini-fill { height: 100%; background: white; border-radius: 4px; transition: width 0.4s; }
   .chevron   { color: white; font-size: 1.1rem; margin-left: 12px; transition: transform 0.2s; }
   .collapsed .chevron { transform: rotate(-90deg); }
+
+  /* ── Task table ── */
   .task-table { width: 100%; border-collapse: collapse; }
-  .task-table th { background: #f0f2f5; text-align: left; padding: 8px 14px; font-size: 0.77rem; color: #555; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 2px solid #e0e0e0; }
+  .task-table th {
+    background: #f0f2f5; text-align: left;
+    padding: 8px 14px; font-size: 0.77rem;
+    color: #555; text-transform: uppercase; letter-spacing: 0.4px;
+    border-bottom: 2px solid #e0e0e0;
+  }
   .task-row { border-bottom: 1px solid #eeeeee; transition: background 0.15s; }
   .task-row:hover { background: var(--light); }
   .task-row td { padding: 9px 14px; vertical-align: middle; font-size: 0.875rem; }
   .task-row.done { opacity: 0.65; }
   .task-row.done .task-name { text-decoration: line-through; color: #777; }
-  .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+
+  /* ── Status badge ── */
+  .status-badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 12px; font-size: 0.72rem; font-weight: 700;
+    white-space: nowrap;
+  }
   .st-not-started { background: #f0f0f0; color: #777; }
   .st-in-progress  { background: #FFF3CD; color: #856404; }
   .st-complete    { background: #D4EDDA; color: #155724; }
   .st-overdue     { background: #F8D7DA; color: #721C24; }
-  .owner-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+
+  /* ── Owner tag ── */
+  .owner-tag {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── Checkbox ── */
   .task-check { width: 18px; height: 18px; cursor: pointer; accent-color: var(--teal); }
+
+  /* ── Priority dot ── */
   .priority-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 4px; }
-  .notes-input { border: 1px solid #ddd; border-radius: 4px; padding: 3px 7px; font-size: 0.8rem; width: 100%; color: var(--dark); background: transparent; }
+
+  /* ── Notes cell ── */
+  .notes-input {
+    border: 1px solid #ddd; border-radius: 4px; padding: 3px 7px;
+    font-size: 0.8rem; width: 100%; color: var(--dark);
+    background: transparent;
+  }
   .notes-input:focus { outline: none; border-color: var(--teal); background: white; }
+
+  /* ── Actions toolbar ── */
   .toolbar { padding: 12px 24px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-  .btn { padding: 7px 16px; border-radius: 6px; border: none; font-size: 0.83rem; font-weight: 600; cursor: pointer; }
+  .btn {
+    padding: 7px 16px; border-radius: 6px; border: none;
+    font-size: 0.83rem; font-weight: 600; cursor: pointer;
+  }
   .btn-primary { background: var(--teal); color: white; }
   .btn-primary:hover { background: #006070; }
   .btn-outline { background: white; color: var(--navy); border: 1.5px solid var(--navy); }
@@ -70,17 +143,30 @@
   .btn-danger { background: #dc3545; color: white; }
   .btn-danger:hover { background: #b02a37; }
   .saved-msg { font-size: 0.8rem; color: var(--sage); font-weight: 600; display: none; }
+
+  /* ── Due date coloring ── */
   .due-past { color: #721C24; font-weight: 600; }
   .due-soon { color: #856404; font-weight: 600; }
   .due-ok   { color: #555; }
+
+  /* ── Filter bar ── */
   .filter-bar { padding: 0 24px 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .filter-bar label { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
   .filter-bar select { padding: 5px 10px; border-radius: 6px; border: 1.5px solid #ccc; font-size: 0.82rem; }
-  @media print { .toolbar, .filter-bar { display: none; } .phase-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; } body { background: white; } }
+
+  /* ── Print ── */
+  @media print {
+    .toolbar, .filter-bar { display: none; }
+    .phase-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    body { background: white; }
+  }
+
+  /* ── Collapsed body ── */
   .phase-body.collapsed { display: none; }
 </style>
 </head>
 <body>
+
 <div class="page-header">
   <div>
     <h1>OB UNBUNDLING 2027 — PROJECT TRACKER</h1>
@@ -88,6 +174,7 @@
   </div>
   <div class="go-live-badge">GO-LIVE<br/>JAN 1, 2027</div>
 </div>
+
 <div class="summary-bar">
   <div class="summary-stat"><div class="num" id="total-tasks">0</div><div class="lbl">Total Tasks</div></div>
   <div class="summary-stat"><div class="num" id="completed-tasks" style="color:#4A7C59">0</div><div class="lbl">Completed</div></div>
@@ -95,20 +182,26 @@
   <div class="summary-stat"><div class="num" id="notstarted-tasks" style="color:#9ECDD6">0</div><div class="lbl">Not Started</div></div>
   <div class="summary-stat"><div class="num" id="overdue-tasks" style="color:#ff6b6b">0</div><div class="lbl">Overdue</div></div>
 </div>
+
 <div class="overall-progress">
   <div class="label">Overall Project Progress</div>
   <div class="bar-wrap"><div class="bar-fill" id="overall-bar" style="width:0%"></div></div>
   <div class="pct" id="overall-pct">0%</div>
 </div>
+
 <div class="toolbar">
-  <button class="btn btn-primary" onclick="saveAll()">&#128190; Save Progress</button>
-  <button class="btn btn-outline" onclick="exportCSV()">&#128229; Export CSV</button>
-  <button class="btn btn-outline" onclick="window.print()">&#128424; Print</button>
+  <button class="btn btn-primary" onclick="saveAll()">💾 Save Progress</button>
+  <button class="btn btn-outline" onclick="exportCSV()">📥 Export CSV</button>
+  <button class="btn btn-outline" onclick="shareLink()">🔗 Share Link</button>
+  <button class="btn btn-outline" onclick="exportJSON()">⬇ Export JSON</button>
+  <label class="btn btn-outline" style="cursor:pointer">⬆ Import JSON<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
+  <button class="btn btn-outline" onclick="window.print()">🖨️ Print</button>
   <button class="btn btn-outline" onclick="toggleAll(true)">Expand All</button>
   <button class="btn btn-outline" onclick="toggleAll(false)">Collapse All</button>
   <button class="btn btn-danger" onclick="confirmReset()">Reset All</button>
-  <span class="saved-msg" id="saved-msg">&#10003; Saved!</span>
+  <span class="saved-msg" id="saved-msg">✓ Saved!</span>
 </div>
+
 <div class="filter-bar">
   <label>Filter by Owner:</label>
   <select id="filter-owner" onchange="applyFilter()">
@@ -129,33 +222,440 @@
     <option value="Overdue">Overdue</option>
   </select>
 </div>
-<div class="main" id="phase-container"></div>
+
+<div class="main" id="phase-container">
+<!-- Phases injected by JS -->
+</div>
+
 <script>
-const PHASES=[{id:"launch",label:"PROJECT LAUNCH",color:"#1B2E4B",due:"June 2026",tasks:[{id:"L1",name:"Project Kickoff — Core Team Assembled & Roles Assigned",due:"2026-06-15",owner:"Dept. Lead",priority:"High"},{id:"L2",name:"AMA June 2, 2026 Webinar Recording Distributed to Team",due:"2026-06-15",owner:"Dept. Lead",priority:"High"},{id:"L3",name:"HP Needs Assessment — Code Audit & Payer List",due:"2026-06-30",owner:"HP",priority:"High"},{id:"L4",name:"Super Users Identified & Enrolled in Advanced Training",due:"2026-06-30",owner:"Dept. Lead",priority:"High"},{id:"L5",name:"SharePoint Hub Structure Designed",due:"2026-06-30",owner:"IT / EHR Team",priority:"Medium"},{id:"L6",name:"Microsoft Forms Intake Form Built & Routing Configured",due:"2026-07-10",owner:"IT / EHR Team",priority:"Medium"},{id:"L7",name:"SharePoint Hub Build Started",due:"2026-07-15",owner:"IT / EHR Team",priority:"Medium"}]},{id:"mod1",label:"MODULE 1 — OFFICE VISITS",color:"#007B8A",due:"July–August 2026",tasks:[{id:"M1A",name:"Module 1 Video Script & Slides Drafted",due:"2026-06-25",owner:"Education Team",priority:"High"},{id:"M1B",name:"Module 1 Video First Draft Completed",due:"2026-07-01",owner:"Education Team",priority:"High"},{id:"M1C",name:"Super Users: Review Module 1 Draft for Clinical Accuracy",due:"2026-07-10",owner:"Super Users",priority:"High"},{id:"M1D",name:"EHR Template Updated — Antepartum/Postpartum Office Visits",due:"2026-07-31",owner:"IT / EHR Team",priority:"High"},{id:"M1E",name:"Super Users: Pilot Coding on 10 Real Antepartum Encounters",due:"2026-07-20",owner:"Super Users",priority:"High"},{id:"M1F",name:"Module 1 Quick-Reference Card Designed",due:"2026-07-25",owner:"Education Team",priority:"Medium"},{id:"M1G",name:"Module 1 Finalized & Published to SharePoint",due:"2026-08-01",owner:"Education Team",priority:"High"},{id:"M1H",name:"Module 1 Completion Tracking Active in SharePoint",due:"2026-08-05",owner:"IT / EHR Team",priority:"Low"}]},{id:"mod2",label:"MODULE 2 — INPATIENT",color:"#5B4A8A",due:"July–August 2026",tasks:[{id:"M2A",name:"Module 2 Video Script — Inpatient/Delivery Drafted",due:"2026-07-15",owner:"Education Team",priority:"High"},{id:"M2B",name:"Module 2 Video First Draft Completed",due:"2026-08-01",owner:"Education Team",priority:"High"},{id:"M2C",name:"EHR Template Updated — Labor Management & Delivery Notes",due:"2026-08-15",owner:"IT / EHR Team",priority:"High"},{id:"M2D",name:"EHR Template Updated — Subsequent Hospital Care & Discharge",due:"2026-08-15",owner:"IT / EHR Team",priority:"High"},{id:"M2E",name:"Super Users: Review Module 2 & Run Tabletop Coding Scenarios",due:"2026-08-20",owner:"Super Users",priority:"High"},{id:"M2F",name:"Inpatient Coding Scenario Workbook Published",due:"2026-08-22",owner:"Education Team",priority:"Medium"},{id:"M2G",name:"Module 2 Published to SharePoint",due:"2026-08-25",owner:"Education Team",priority:"High"}]},{id:"mod3",label:"MODULE 3 — OB COMPREHENSIVE",color:"#C8973A",due:"August 2026",tasks:[{id:"M3A",name:"Module 3 Video Script — Full Episode + Edge Cases Drafted",due:"2026-08-05",owner:"Education Team",priority:"High"},{id:"M3B",name:"Module 3 Video First Draft Completed",due:"2026-08-20",owner:"Education Team",priority:"High"},{id:"M3C",name:"Super Users: Review Module 3 & Build FAQ Bank (Top 20 Q&A)",due:"2026-08-25",owner:"Super Users",priority:"High"},{id:"M3D",name:"Attestation Quiz Built & Tested for All 3 Modules",due:"2026-08-25",owner:"IT / EHR Team",priority:"High"},{id:"M3E",name:"All 3 Modules Live in SharePoint Module Library",due:"2026-08-31",owner:"Education Team",priority:"High"},{id:"M3F",name:"FAQ Document Published to SharePoint Knowledge Base",due:"2026-08-31",owner:"Super Users",priority:"Medium"}]},{id:"training",label:"PROVIDER TRAINING",color:"#4A7C59",due:"September 1, 2026",tasks:[{id:"T1",name:"All OB/GYN Physicians Scheduled for Training Sessions",due:"2026-08-20",owner:"Dept. Lead",priority:"High"},{id:"T2",name:"All OB/GYN Physicians Complete All 3 Modules",due:"2026-09-01",owner:"Dept. Lead",priority:"Critical"},{id:"T3",name:"All Attestation Records Captured in SharePoint",due:"2026-09-01",owner:"IT / EHR Team",priority:"High"},{id:"T4",name:"HP: Billing Staff Training Completed",due:"2026-09-15",owner:"HP",priority:"High"},{id:"T5",name:"Front Desk Patient Communication Scripts Distributed",due:"2026-09-10",owner:"Dept. Lead",priority:"Medium"},{id:"T6",name:"Live Q&A Sessions Held (Super User Led)",due:"2026-09-20",owner:"Super Users",priority:"High"},{id:"T7",name:"SharePoint Intake Form Live & Tested",due:"2026-09-01",owner:"IT / EHR Team",priority:"High"}]},{id:"payer",label:"HP — PAYER CONTRACTING",color:"#8B0000",due:"September–October 2026",tasks:[{id:"P1",name:"HP: Full Payer List Generated — All Global OB Payers",due:"2026-09-01",owner:"HP",priority:"High"},{id:"P2",name:"HP: Coordinate with HP Leadership on Negotiation Strategy",due:"2026-09-10",owner:"HP",priority:"High"},{id:"P3",name:"HP: Payer Outreach Initiated — Provider Relations Contacts",due:"2026-09-15",owner:"HP",priority:"High"},{id:"P4",name:"HP: Modifier TH Authorization Confirmed (No Prior Auth Required)",due:"2026-09-30",owner:"HP",priority:"High"},{id:"P5",name:"HP: Commercial Payer Rates Negotiated — Per-Code Rates Confirmed",due:"2026-10-31",owner:"HP",priority:"Critical"},{id:"P6",name:"HP: Written Fee Schedule Confirmations Received",due:"2026-10-31",owner:"HP",priority:"Critical"},{id:"P7",name:"HP: Medicaid MCO Outreach Completed",due:"2026-11-01",owner:"HP",priority:"High"},{id:"P8",name:"HP: All Contracts Updated in Credentialing System",due:"2026-11-15",owner:"HP",priority:"High"},{id:"P9",name:"HP: Payer Status Tracker Updated in SharePoint",due:"2026-11-15",owner:"HP",priority:"Medium"}]},{id:"ehr",label:"EHR GO-LIVE READINESS",color:"#5B4A8A",due:"October–December 2026",tasks:[{id:"E1",name:"Old Global Codes Removed from Charge Capture (Sandbox)",due:"2026-10-15",owner:"IT / EHR Team",priority:"High"},{id:"E2",name:"New Labor Management Codes Added to Charge Master",due:"2026-10-15",owner:"IT / EHR Team",priority:"High"},{id:"E3",name:"New Delivery Codes Added to Charge Master",due:"2026-10-15",owner:"IT / EHR Team",priority:"High"},{id:"E4",name:"EHR Sandbox Testing — All New Codes Validated",due:"2026-11-30",owner:"IT / EHR Team",priority:"Critical"},{id:"E5",name:"Utilization Monitoring Report Built & Tested",due:"2026-11-30",owner:"IT / EHR Team",priority:"High"},{id:"E6",name:"Old Global Codes Removed from LIVE Charge Capture",due:"2026-12-01",owner:"IT / EHR Team",priority:"Critical"},{id:"E7",name:"Go-Live Readiness Sign-Off — Department Medical Director",due:"2026-12-15",owner:"Dept. Lead",priority:"Critical"},{id:"E8",name:"HP: Final Pre-Go-Live Claims Workflow Test with Payer",due:"2026-12-20",owner:"HP",priority:"High"}]},{id:"golive",label:"GO-LIVE — JANUARY 1, 2027",color:"#8B0000",due:"January 2027",tasks:[{id:"G1",name:"JANUARY 1, 2027 — All New CPT Codes Active",due:"2027-01-01",owner:"All Teams",priority:"Critical"},{id:"G2",name:"First-Week Claims Review — Zero Deleted Code Tolerance",due:"2027-01-07",owner:"HP",priority:"Critical"},{id:"G3",name:"Super Users: First-Week Live Support Active",due:"2027-01-07",owner:"Super Users",priority:"High"},{id:"G4",name:"SharePoint Intake Queue Monitored Daily by HP",due:"2027-01-14",owner:"HP",priority:"High"},{id:"G5",name:"Patient Communication Plan Active for Multiple EOB Questions",due:"2027-01-14",owner:"Dept. Lead",priority:"Medium"}]},{id:"postlive",label:"POST GO-LIVE MONITORING",color:"#1B2E4B",due:"February–April 2027",tasks:[{id:"PL1",name:"HP: 30-Day Claim Acceptance & Denial Rate Review",due:"2027-02-01",owner:"HP",priority:"High"},{id:"PL2",name:"HP: Documentation Quality Audit (E/M Level Accuracy)",due:"2027-02-15",owner:"HP",priority:"High"},{id:"PL3",name:"HP: 60-Day Revenue per Pregnancy vs. Baseline Comparison",due:"2027-03-01",owner:"HP",priority:"High"},{id:"PL4",name:"Provider Reinforcement Training (if undercoding identified)",due:"2027-03-15",owner:"Dept. Lead",priority:"Medium"},{id:"PL5",name:"HP: 90-Day Revenue Reconciliation Report",due:"2027-04-01",owner:"HP",priority:"High"},{id:"PL6",name:"Playbook Updated with Lessons Learned",due:"2027-04-30",owner:"Dept. Lead",priority:"Low"}]}];
-const OWNER_COLORS={"HP":"#8B0000","Super Users":"#007B8A","Education Team":"#C8973A","IT / EHR Team":"#5B4A8A","Dept. Lead":"#1B2E4B","All Teams":"#4A7C59"};
-const PRIORITY_COLORS={"Critical":"#CC0000","High":"#C8973A","Medium":"#007B8A","Low":"#888888"};
-let state={};
-function loadState(){try{const r=localStorage.getItem("ob_unbundling_tracker_v2");if(r)state=JSON.parse(r);}catch(e){state={};}}
-function saveState(){localStorage.setItem("ob_unbundling_tracker_v2",JSON.stringify(state));}
-function getTask(id){return state[id]||{status:"Not Started",notes:"",completed:false};}
-function render(){const container=document.getElementById("phase-container");const ownerFilter=document.getElementById("filter-owner").value;const statusFilter=document.getElementById("filter-status").value;container.innerHTML="";PHASES.forEach(phase=>{const filteredTasks=phase.tasks.filter(t=>{const ts=getTask(t.id);const matchOwner=!ownerFilter||t.owner===ownerFilter;const matchStatus=!statusFilter||ts.status===statusFilter;return matchOwner&&matchStatus;});if(!ownerFilter&&!statusFilter){renderPhase(container,phase,phase.tasks);}else if(filteredTasks.length>0){renderPhase(container,phase,filteredTasks);}});updateSummary();}
-function renderPhase(container,phase,tasks){const done=tasks.filter(t=>getTask(t.id).status==="Complete").length;const pct=tasks.length?Math.round((done/tasks.length)*100):0;const isCol=state["__collapsed_"+phase.id]||false;const card=document.createElement("div");card.className="phase-card";card.innerHTML=`<div class="phase-header ${isCol?'collapsed':''}" style="background:${phase.color}" onclick="togglePhase('${phase.id}', this)"><div><div class="phase-title">${phase.label}</div><div class="phase-meta">Due: ${phase.due} &nbsp;&bull;&nbsp; ${done}/${tasks.length} tasks complete</div></div><div class="phase-progress-ring"><div class="ring-pct">${pct}%</div><div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div><span class="chevron">&#9660;</span></div></div><div class="phase-body${isCol?' collapsed':''}"><table class="task-table"><thead><tr><th style="width:32px">&#10003;</th><th>Task</th><th style="width:90px">Due Date</th><th style="width:105px">Owner</th><th style="width:90px">Priority</th><th style="width:110px">Status</th><th>Notes</th></tr></thead><tbody>${tasks.map(t=>renderTaskRow(t)).join("")}</tbody></table></div>`;container.appendChild(card);}
-function renderTaskRow(t){const ts=getTask(t.id);const isDone=ts.status==="Complete";const dueStr=formatDue(t.due,ts.status);const ownerClr=OWNER_COLORS[t.owner]||"#333";const priClr=PRIORITY_COLORS[t.priority]||"#888";const stClass=statusClass(ts.status);return `<tr class="task-row ${isDone?'done':''}" id="row_${t.id}"><td><input type="checkbox" class="task-check" ${isDone?'checked':''} onchange="toggleComplete('${t.id}', this)"/></td><td class="task-name"><span class="priority-dot" style="background:${priClr}" title="${t.priority} Priority"></span>${t.name}</td><td class="${dueStr.cls}">${dueStr.label}</td><td><span class="owner-tag" style="background:${ownerClr}22;color:${ownerClr}">${t.owner}</span></td><td><span style="color:${priClr};font-weight:600;font-size:0.78rem">${t.priority}</span></td><td><select class="status-badge ${stClass}" onchange="updateStatus('${t.id}', this.value)"><option ${ts.status==="Not Started"?"selected":""}>Not Started</option><option ${ts.status==="In Progress"?"selected":""}>In Progress</option><option ${ts.status==="Complete"?"selected":""}>Complete</option><option ${ts.status==="Overdue"?"selected":""}>Overdue</option></select></td><td><input class="notes-input" type="text" placeholder="Add notes..." value="${(ts.notes||'').replace(/"/g,'&quot;')}" onchange="updateNotes('${t.id}', this.value)"/></td></tr>`;}
-function statusClass(s){if(s==="Complete")return "st-complete";if(s==="In Progress")return "st-in-progress";if(s==="Overdue")return "st-overdue";return "st-not-started";}
-function formatDue(dateStr,status){const today=new Date();today.setHours(0,0,0,0);const due=new Date(dateStr+"T00:00:00");const diff=Math.ceil((due-today)/86400000);const label=due.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"2-digit"});if(status==="Complete")return{label,cls:"due-ok"};if(diff<0)return{label:"&#9888; "+label,cls:"due-past"};if(diff<=14)return{label:"&#9200; "+label,cls:"due-soon"};return{label,cls:"due-ok"};}
-function toggleComplete(id,el){const ts=getTask(id);ts.status=el.checked?"Complete":"Not Started";ts.completed=el.checked;state[id]=ts;saveState();render();}
-function updateStatus(id,val){const ts=getTask(id);ts.status=val;ts.completed=(val==="Complete");state[id]=ts;saveState();render();}
-function updateNotes(id,val){const ts=getTask(id);ts.notes=val;state[id]=ts;saveState();flashSaved();}
-function togglePhase(phaseId,header){const body=header.nextElementSibling;const isNowCollapsed=!body.classList.contains("collapsed");body.classList.toggle("collapsed");header.classList.toggle("collapsed");state["__collapsed_"+phaseId]=isNowCollapsed;saveState();}
-function toggleAll(expand){PHASES.forEach(p=>{state["__collapsed_"+p.id]=!expand;});saveState();render();}
-function applyFilter(){render();}
-function updateSummary(){let total=0,done=0,inprog=0,notstart=0,overdue=0;PHASES.forEach(p=>p.tasks.forEach(t=>{const ts=getTask(t.id);total++;if(ts.status==="Complete")done++;else if(ts.status==="In Progress")inprog++;else if(ts.status==="Overdue")overdue++;else notstart++;}));const pct=total?Math.round((done/total)*100):0;document.getElementById("total-tasks").textContent=total;document.getElementById("completed-tasks").textContent=done;document.getElementById("inprogress-tasks").textContent=inprog;document.getElementById("notstarted-tasks").textContent=notstart;document.getElementById("overdue-tasks").textContent=overdue;document.getElementById("overall-bar").style.width=pct+"%";document.getElementById("overall-pct").textContent=pct+"%";}
-function flashSaved(){const msg=document.getElementById("saved-msg");msg.style.display="inline";clearTimeout(msg._t);msg._t=setTimeout(()=>{msg.style.display="none";},2000);}
-function saveAll(){saveState();flashSaved();}
-function confirmReset(){if(confirm("Reset ALL task statuses and notes? This cannot be undone.")){localStorage.removeItem("ob_unbundling_tracker_v2");state={};render();}}
-function exportCSV(){const rows=[["Phase","Task","Due Date","Owner","Priority","Status","Notes"]];PHASES.forEach(p=>p.tasks.forEach(t=>{const ts=getTask(t.id);rows.push([p.label,t.name,t.due,t.owner,t.priority,ts.status,ts.notes||""]);} ));const csv=rows.map(r=>r.map(c=>`"${c.replace(/"/g,'""')}"`).join(",")).join("\n");const blob=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="OB_Unbundling_Tracker_"+new Date().toISOString().slice(0,10)+".csv";a.click();}
-document.addEventListener("input",e=>{if(e.target.classList.contains("notes-input")){updateNotes(e.target.closest("tr").id.replace("row_",""),e.target.value);}},true);
-loadState();render();
+// ── Data ────────────────────────────────────────────────────────────────────
+const PHASES = [
+  {
+    id: "launch", label: "PROJECT LAUNCH", color: "#1B2E4B",
+    due: "June 2026",
+    tasks: [
+      { id:"L1", name:"Project Kickoff — Core Team Assembled & Roles Assigned", due:"2026-06-15", owner:"Dept. Lead", priority:"High" },
+      { id:"L2", name:"AMA June 2, 2026 Webinar Recording Distributed to Team", due:"2026-06-15", owner:"Dept. Lead", priority:"High" },
+      { id:"L3", name:"HP Needs Assessment — Code Audit & Payer List", due:"2026-06-30", owner:"HP", priority:"High" },
+      { id:"L4", name:"Super Users Identified & Enrolled in Advanced Training", due:"2026-06-30", owner:"Dept. Lead", priority:"High" },
+      { id:"L5", name:"SharePoint Hub Structure Designed", due:"2026-06-30", owner:"IT / EHR Team", priority:"Medium" },
+      { id:"L6", name:"Microsoft Forms Intake Form Built & Routing Configured", due:"2026-07-10", owner:"IT / EHR Team", priority:"Medium" },
+      { id:"L7", name:"SharePoint Hub Build Started", due:"2026-07-15", owner:"IT / EHR Team", priority:"Medium" },
+    ]
+  },
+  {
+    id: "mod1", label: "MODULE 1 — OFFICE VISITS", color: "#007B8A",
+    due: "July–August 2026",
+    tasks: [
+      { id:"M1A", name:"Module 1 Video Script & Slides Drafted", due:"2026-06-25", owner:"Education Team", priority:"High" },
+      { id:"M1B", name:"Module 1 Video First Draft Completed", due:"2026-07-01", owner:"Education Team", priority:"High" },
+      { id:"M1C", name:"Super Users: Review Module 1 Draft for Clinical Accuracy", due:"2026-07-10", owner:"Super Users", priority:"High" },
+      { id:"M1D", name:"EHR Template Updated — Antepartum/Postpartum Office Visits", due:"2026-07-31", owner:"IT / EHR Team", priority:"High" },
+      { id:"M1E", name:"Super Users: Pilot Coding on 10 Real Antepartum Encounters", due:"2026-07-20", owner:"Super Users", priority:"High" },
+      { id:"M1F", name:"Module 1 Quick-Reference Card Designed", due:"2026-07-25", owner:"Education Team", priority:"Medium" },
+      { id:"M1G", name:"Module 1 Finalized & Published to SharePoint", due:"2026-08-01", owner:"Education Team", priority:"High" },
+      { id:"M1H", name:"Module 1 Completion Tracking Active in SharePoint", due:"2026-08-05", owner:"IT / EHR Team", priority:"Low" },
+    ]
+  },
+  {
+    id: "mod2", label: "MODULE 2 — INPATIENT", color: "#5B4A8A",
+    due: "July–August 2026",
+    tasks: [
+      { id:"M2A", name:"Module 2 Video Script — Inpatient/Delivery Drafted", due:"2026-07-15", owner:"Education Team", priority:"High" },
+      { id:"M2B", name:"Module 2 Video First Draft Completed", due:"2026-08-01", owner:"Education Team", priority:"High" },
+      { id:"M2C", name:"EHR Template Updated — Labor Management & Delivery Notes", due:"2026-08-15", owner:"IT / EHR Team", priority:"High" },
+      { id:"M2D", name:"EHR Template Updated — Subsequent Hospital Care & Discharge", due:"2026-08-15", owner:"IT / EHR Team", priority:"High" },
+      { id:"M2E", name:"Super Users: Review Module 2 & Run Tabletop Coding Scenarios", due:"2026-08-20", owner:"Super Users", priority:"High" },
+      { id:"M2F", name:"Inpatient Coding Scenario Workbook Published", due:"2026-08-22", owner:"Education Team", priority:"Medium" },
+      { id:"M2G", name:"Module 2 Published to SharePoint", due:"2026-08-25", owner:"Education Team", priority:"High" },
+    ]
+  },
+  {
+    id: "mod3", label: "MODULE 3 — OB COMPREHENSIVE", color: "#C8973A",
+    due: "August 2026",
+    tasks: [
+      { id:"M3A", name:"Module 3 Video Script — Full Episode + Edge Cases Drafted", due:"2026-08-05", owner:"Education Team", priority:"High" },
+      { id:"M3B", name:"Module 3 Video First Draft Completed", due:"2026-08-20", owner:"Education Team", priority:"High" },
+      { id:"M3C", name:"Super Users: Review Module 3 & Build FAQ Bank (Top 20 Q&A)", due:"2026-08-25", owner:"Super Users", priority:"High" },
+      { id:"M3D", name:"Attestation Quiz Built & Tested for All 3 Modules", due:"2026-08-25", owner:"IT / EHR Team", priority:"High" },
+      { id:"M3E", name:"All 3 Modules Live in SharePoint Module Library", due:"2026-08-31", owner:"Education Team", priority:"High" },
+      { id:"M3F", name:"FAQ Document Published to SharePoint Knowledge Base", due:"2026-08-31", owner:"Super Users", priority:"Medium" },
+    ]
+  },
+  {
+    id: "training", label: "PROVIDER TRAINING", color: "#4A7C59",
+    due: "September 1, 2026",
+    tasks: [
+      { id:"T1", name:"All OB/GYN Physicians Scheduled for Training Sessions", due:"2026-08-20", owner:"Dept. Lead", priority:"High" },
+      { id:"T2", name:"All OB/GYN Physicians Complete All 3 Modules", due:"2026-09-01", owner:"Dept. Lead", priority:"Critical" },
+      { id:"T3", name:"All Attestation Records Captured in SharePoint", due:"2026-09-01", owner:"IT / EHR Team", priority:"High" },
+      { id:"T4", name:"HP: Billing Staff Training Completed", due:"2026-09-15", owner:"HP", priority:"High" },
+      { id:"T5", name:"Front Desk Patient Communication Scripts Distributed", due:"2026-09-10", owner:"Dept. Lead", priority:"Medium" },
+      { id:"T6", name:"Live Q&A Sessions Held (Super User Led)", due:"2026-09-20", owner:"Super Users", priority:"High" },
+      { id:"T7", name:"SharePoint Intake Form Live & Tested", due:"2026-09-01", owner:"IT / EHR Team", priority:"High" },
+    ]
+  },
+  {
+    id: "payer", label: "HP — PAYER CONTRACTING", color: "#8B0000",
+    due: "September–October 2026",
+    tasks: [
+      { id:"P1", name:"HP: Full Payer List Generated — All Global OB Payers", due:"2026-09-01", owner:"HP", priority:"High" },
+      { id:"P2", name:"HP: Coordinate with HP Leadership on Negotiation Strategy", due:"2026-09-10", owner:"HP", priority:"High" },
+      { id:"P3", name:"HP: Payer Outreach Initiated — Provider Relations Contacts", due:"2026-09-15", owner:"HP", priority:"High" },
+      { id:"P4", name:"HP: Modifier TH Authorization Confirmed (No Prior Auth Required)", due:"2026-09-30", owner:"HP", priority:"High" },
+      { id:"P5", name:"HP: Commercial Payer Rates Negotiated — Per-Code Rates Confirmed", due:"2026-10-31", owner:"HP", priority:"Critical" },
+      { id:"P6", name:"HP: Written Fee Schedule Confirmations Received", due:"2026-10-31", owner:"HP", priority:"Critical" },
+      { id:"P7", name:"HP: Medicaid MCO Outreach Completed", due:"2026-11-01", owner:"HP", priority:"High" },
+      { id:"P8", name:"HP: All Contracts Updated in Credentialing System", due:"2026-11-15", owner:"HP", priority:"High" },
+      { id:"P9", name:"HP: Payer Status Tracker Updated in SharePoint", due:"2026-11-15", owner:"HP", priority:"Medium" },
+    ]
+  },
+  {
+    id: "ehr", label: "EHR GO-LIVE READINESS", color: "#5B4A8A",
+    due: "October–December 2026",
+    tasks: [
+      { id:"E1", name:"Old Global Codes Removed from Charge Capture (Sandbox)", due:"2026-10-15", owner:"IT / EHR Team", priority:"High" },
+      { id:"E2", name:"New Labor Management Codes Added to Charge Master", due:"2026-10-15", owner:"IT / EHR Team", priority:"High" },
+      { id:"E3", name:"New Delivery Codes Added to Charge Master", due:"2026-10-15", owner:"IT / EHR Team", priority:"High" },
+      { id:"E4", name:"EHR Sandbox Testing — All New Codes Validated", due:"2026-11-30", owner:"IT / EHR Team", priority:"Critical" },
+      { id:"E5", name:"Utilization Monitoring Report Built & Tested", due:"2026-11-30", owner:"IT / EHR Team", priority:"High" },
+      { id:"E6", name:"Old Global Codes Removed from LIVE Charge Capture", due:"2026-12-01", owner:"IT / EHR Team", priority:"Critical" },
+      { id:"E7", name:"Go-Live Readiness Sign-Off — Department Medical Director", due:"2026-12-15", owner:"Dept. Lead", priority:"Critical" },
+      { id:"E8", name:"HP: Final Pre-Go-Live Claims Workflow Test with Payer", due:"2026-12-20", owner:"HP", priority:"High" },
+    ]
+  },
+  {
+    id: "golive", label: "GO-LIVE — JANUARY 1, 2027", color: "#8B0000",
+    due: "January 2027",
+    tasks: [
+      { id:"G1", name:"★ JANUARY 1, 2027 — All New CPT Codes Active", due:"2027-01-01", owner:"All Teams", priority:"Critical" },
+      { id:"G2", name:"First-Week Claims Review — Zero Deleted Code Tolerance", due:"2027-01-07", owner:"HP", priority:"Critical" },
+      { id:"G3", name:"Super Users: First-Week Live Support Active", due:"2027-01-07", owner:"Super Users", priority:"High" },
+      { id:"G4", name:"SharePoint Intake Queue Monitored Daily by HP", due:"2027-01-14", owner:"HP", priority:"High" },
+      { id:"G5", name:"Patient Communication Plan Active for Multiple EOB Questions", due:"2027-01-14", owner:"Dept. Lead", priority:"Medium" },
+    ]
+  },
+  {
+    id: "postlive", label: "POST GO-LIVE MONITORING", color: "#1B2E4B",
+    due: "February–April 2027",
+    tasks: [
+      { id:"PL1", name:"HP: 30-Day Claim Acceptance & Denial Rate Review", due:"2027-02-01", owner:"HP", priority:"High" },
+      { id:"PL2", name:"HP: Documentation Quality Audit (E/M Level Accuracy)", due:"2027-02-15", owner:"HP", priority:"High" },
+      { id:"PL3", name:"HP: 60-Day Revenue per Pregnancy vs. Baseline Comparison", due:"2027-03-01", owner:"HP", priority:"High" },
+      { id:"PL4", name:"Provider Reinforcement Training (if undercoding identified)", due:"2027-03-15", owner:"Dept. Lead", priority:"Medium" },
+      { id:"PL5", name:"HP: 90-Day Revenue Reconciliation Report", due:"2027-04-01", owner:"HP", priority:"High" },
+      { id:"PL6", name:"Playbook Updated with Lessons Learned", due:"2027-04-30", owner:"Dept. Lead", priority:"Low" },
+    ]
+  },
+];
+
+const OWNER_COLORS = {
+  "HP":             "#8B0000",
+  "Super Users":    "#007B8A",
+  "Education Team": "#C8973A",
+  "IT / EHR Team":  "#5B4A8A",
+  "Dept. Lead":     "#1B2E4B",
+  "All Teams":      "#4A7C59",
+};
+
+const PRIORITY_COLORS = {
+  "Critical": "#CC0000",
+  "High":     "#C8973A",
+  "Medium":   "#007B8A",
+  "Low":      "#888888",
+};
+
+// ── State ──────────────────────────────────────────────────────────────────
+let state = {};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem("ob_unbundling_tracker_v2");
+    if (raw) state = JSON.parse(raw);
+  } catch(e) { state = {}; }
+}
+
+function saveState() {
+  localStorage.setItem("ob_unbundling_tracker_v2", JSON.stringify(state));
+}
+
+function getTask(id) {
+  return state[id] || { status: "Not Started", notes: "", completed: false };
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render() {
+  const container = document.getElementById("phase-container");
+  const ownerFilter  = document.getElementById("filter-owner").value;
+  const statusFilter = document.getElementById("filter-status").value;
+
+  container.innerHTML = "";
+  PHASES.forEach(phase => {
+    const filteredTasks = phase.tasks.filter(t => {
+      const ts = getTask(t.id);
+      const matchOwner  = !ownerFilter  || t.owner === ownerFilter;
+      const matchStatus = !statusFilter || ts.status === statusFilter;
+      return matchOwner && matchStatus;
+    });
+    if (!ownerFilter && !statusFilter) {
+      renderPhase(container, phase, phase.tasks);
+    } else if (filteredTasks.length > 0) {
+      renderPhase(container, phase, filteredTasks);
+    }
+  });
+  updateSummary();
+}
+
+function renderPhase(container, phase, tasks) {
+  const done  = tasks.filter(t => getTask(t.id).status === "Complete").length;
+  const pct   = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
+  const isCol = state[`__collapsed_${phase.id}`] || false;
+
+  const card = document.createElement("div");
+  card.className = "phase-card";
+  card.innerHTML = `
+    <div class="phase-header ${isCol ? 'collapsed' : ''}"
+         style="background:${phase.color}"
+         onclick="togglePhase('${phase.id}', this)">
+      <div>
+        <div class="phase-title">${phase.label}</div>
+        <div class="phase-meta">Due: ${phase.due} &nbsp;•&nbsp; ${done}/${tasks.length} tasks complete</div>
+      </div>
+      <div class="phase-progress-ring">
+        <div class="ring-pct">${pct}%</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:${pct}%"></div></div>
+        <span class="chevron">▼</span>
+      </div>
+    </div>
+    <div class="phase-body${isCol ? ' collapsed' : ''}">
+      <table class="task-table">
+        <thead><tr>
+          <th style="width:32px">✓</th>
+          <th>Task</th>
+          <th style="width:90px">Due Date</th>
+          <th style="width:105px">Owner</th>
+          <th style="width:90px">Priority</th>
+          <th style="width:110px">Status</th>
+          <th>Notes</th>
+        </tr></thead>
+        <tbody>
+          ${tasks.map(t => renderTaskRow(t)).join("")}
+        </tbody>
+      </table>
+    </div>`;
+  container.appendChild(card);
+}
+
+function renderTaskRow(t) {
+  const ts      = getTask(t.id);
+  const isDone  = ts.status === "Complete";
+  const dueStr  = formatDue(t.due, ts.status);
+  const ownerClr = OWNER_COLORS[t.owner] || "#333";
+  const priClr   = PRIORITY_COLORS[t.priority] || "#888";
+  const stClass  = statusClass(ts.status);
+  return `
+    <tr class="task-row ${isDone ? 'done' : ''}" id="row_${t.id}">
+      <td><input type="checkbox" class="task-check" ${isDone ? 'checked' : ''}
+           onchange="toggleComplete('${t.id}', this)"/></td>
+      <td class="task-name">
+        <span class="priority-dot" style="background:${priClr}" title="${t.priority} Priority"></span>
+        ${t.name}
+      </td>
+      <td class="${dueStr.cls}">${dueStr.label}</td>
+      <td><span class="owner-tag" style="background:${ownerClr}22;color:${ownerClr}">${t.owner}</span></td>
+      <td><span style="color:${priClr};font-weight:600;font-size:0.78rem">${t.priority}</span></td>
+      <td>
+        <select class="status-badge ${stClass}" onchange="updateStatus('${t.id}', this.value)">
+          <option ${ts.status==="Not Started"  ? "selected" : ""}>Not Started</option>
+          <option ${ts.status==="In Progress"  ? "selected" : ""}>In Progress</option>
+          <option ${ts.status==="Complete"     ? "selected" : ""}>Complete</option>
+          <option ${ts.status==="Overdue"      ? "selected" : ""}>Overdue</option>
+        </select>
+      </td>
+      <td><input class="notes-input" type="text" placeholder="Add notes…"
+           value="${(ts.notes||'').replace(/"/g,'&quot;')}"
+           onchange="updateNotes('${t.id}', this.value)"/></td>
+    </tr>`;
+}
+
+function statusClass(s) {
+  if (s === "Complete")    return "st-complete";
+  if (s === "In Progress") return "st-in-progress";
+  if (s === "Overdue")     return "st-overdue";
+  return "st-not-started";
+}
+
+function formatDue(dateStr, status) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due   = new Date(dateStr + "T00:00:00");
+  const diff  = Math.ceil((due - today) / 86400000);
+  const label = due.toLocaleDateString("en-US", {month:"short", day:"numeric", year:"2-digit"});
+  if (status === "Complete") return { label, cls: "due-ok" };
+  if (diff < 0)  return { label: "⚠ " + label, cls: "due-past" };
+  if (diff <= 14) return { label: "⏰ " + label, cls: "due-soon" };
+  return { label, cls: "due-ok" };
+}
+
+// ── Interactions ───────────────────────────────────────────────────────────
+function toggleComplete(id, el) {
+  const ts = getTask(id);
+  ts.status    = el.checked ? "Complete" : "Not Started";
+  ts.completed = el.checked;
+  state[id] = ts;
+  saveState();
+  render();
+}
+
+function updateStatus(id, val) {
+  const ts = getTask(id);
+  ts.status    = val;
+  ts.completed = (val === "Complete");
+  state[id] = ts;
+  saveState();
+  render();
+}
+
+function updateNotes(id, val) {
+  const ts = getTask(id);
+  ts.notes = val;
+  state[id] = ts;
+  saveState();
+  flashSaved();
+}
+
+function togglePhase(phaseId, header) {
+  const body = header.nextElementSibling;
+  const isNowCollapsed = !body.classList.contains("collapsed");
+  body.classList.toggle("collapsed");
+  header.classList.toggle("collapsed");
+  state[`__collapsed_${phaseId}`] = isNowCollapsed;
+  saveState();
+}
+
+function toggleAll(expand) {
+  PHASES.forEach(p => { state[`__collapsed_${p.id}`] = !expand; });
+  saveState();
+  render();
+}
+
+function applyFilter() { render(); }
+
+// ── Summary ────────────────────────────────────────────────────────────────
+function updateSummary() {
+  let total = 0, done = 0, inprog = 0, notstart = 0, overdue = 0;
+  PHASES.forEach(p => p.tasks.forEach(t => {
+    const ts = getTask(t.id);
+    total++;
+    if (ts.status === "Complete")    done++;
+    else if (ts.status === "In Progress") inprog++;
+    else if (ts.status === "Overdue")     overdue++;
+    else notstart++;
+  }));
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById("total-tasks").textContent     = total;
+  document.getElementById("completed-tasks").textContent = done;
+  document.getElementById("inprogress-tasks").textContent= inprog;
+  document.getElementById("notstarted-tasks").textContent= notstart;
+  document.getElementById("overdue-tasks").textContent   = overdue;
+  document.getElementById("overall-bar").style.width = pct + "%";
+  document.getElementById("overall-pct").textContent = pct + "%";
+}
+
+// ── Save / Export / Reset ──────────────────────────────────────────────────
+function flashSaved() {
+  const msg = document.getElementById("saved-msg");
+  msg.style.display = "inline";
+  clearTimeout(msg._t);
+  msg._t = setTimeout(() => { msg.style.display = "none"; }, 2000);
+}
+
+function saveAll() {
+  saveState();
+  flashSaved();
+}
+
+function confirmReset() {
+  if (confirm("Reset ALL task statuses and notes? This cannot be undone.")) {
+    localStorage.removeItem("ob_unbundling_tracker_v2");
+    state = {};
+    render();
+  }
+}
+
+function exportCSV() {
+  const rows = [["Phase","Task","Due Date","Owner","Priority","Status","Notes"]];
+  PHASES.forEach(p => p.tasks.forEach(t => {
+    const ts = getTask(t.id);
+    rows.push([p.label, t.name, t.due, t.owner, t.priority, ts.status, ts.notes||""]);
+  }));
+  const csv = rows.map(r => r.map(c => `"${c.replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type:"text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "OB_Unbundling_Tracker_" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+}
+
+// ── Auto-save on notes input (every keystroke) ────────────────────────────
+document.addEventListener("input", e => {
+  if (e.target.classList.contains("notes-input")) {
+    updateNotes(e.target.closest("tr").id.replace("row_",""), e.target.value);
+  }
+}, true);
+
+// ── Init ───────────────────────────────────────────────────────────────────
+loadState();
+render();
+
+// ── Cross-browser sharing ─────────────────────────────────────────────────
+function shareLink() {
+  const raw = localStorage.getItem('ob_unbundling_tracker_v2') || '{}';
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(raw)));
+    const url = location.origin + location.pathname + '?s=' + encoded;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Share link copied!\nPaste it in Slack, email, or Teams — teammate opens it and sees your exact state.');
+    }).catch(() => { prompt('Copy this link:', url); });
+  } catch(e) { alert('State too large for URL — use Export JSON instead.'); }
+}
+
+function exportJSON() {
+  const raw = localStorage.getItem('ob_unbundling_tracker_v2') || '{}';
+  const blob = new Blob([raw], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'state_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      JSON.parse(ev.target.result);
+      localStorage.setItem('ob_unbundling_tracker_v2', ev.target.result);
+      alert('Imported! Reloading...');
+      location.reload();
+    } catch(err) { alert('Invalid file.'); }
+  };
+  reader.readAsText(file);
+}
+
+(function checkURLState() {
+  try {
+    const s = new URLSearchParams(location.search).get('s');
+    if (!s) return;
+    const decoded = decodeURIComponent(escape(atob(s)));
+    JSON.parse(decoded);
+    if (confirm('A shared state was found in this link.\nLoad it? (Replaces your local state)')) {
+      localStorage.setItem('ob_unbundling_tracker_v2', decoded);
+    }
+    history.replaceState({}, '', location.pathname);
+    location.reload();
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
