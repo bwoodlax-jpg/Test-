@@ -266,6 +266,9 @@
     <button class="btn navy" onclick="addFAQ()">+ Add Question</button>
     <button class="btn gold" onclick="window.print()">Print / Export PDF</button>
     <button class="btn sage" onclick="copyAllText()">Copy All Text</button>
+    <button class="btn" onclick="shareLink()" style="background:#007B8A">🔗 Share Link</button>
+    <button class="btn" onclick="exportJSON()" style="background:#4A7C59">⬇ Export</button>
+    <label class="btn" style="background:#4A7C59;cursor:pointer">⬆ Import<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
     <button class="btn" style="background:var(--red)" onclick="resetAll()">Reset</button>
   </div>
 </div>
@@ -739,6 +742,56 @@ function resetAll() {
 
 // ── Init ──────────────────────────────────────────────────────
 loadSaved();
+
+// ── Cross-browser sharing ─────────────────────────────────────────────────
+function shareLink() {
+  const raw = localStorage.getItem('ob_faq_v1') || '{}';
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(raw)));
+    const url = location.origin + location.pathname + '?s=' + encoded;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Share link copied!\nPaste it in Slack, email, or Teams — teammate opens it and sees your exact state.');
+    }).catch(() => { prompt('Copy this link:', url); });
+  } catch(e) { alert('State too large for URL — use Export JSON instead.'); }
+}
+
+function exportJSON() {
+  const raw = localStorage.getItem('ob_faq_v1') || '{}';
+  const blob = new Blob([raw], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'state_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      JSON.parse(ev.target.result);
+      localStorage.setItem('ob_faq_v1', ev.target.result);
+      alert('Imported! Reloading...');
+      location.reload();
+    } catch(err) { alert('Invalid file.'); }
+  };
+  reader.readAsText(file);
+}
+
+(function checkURLState() {
+  try {
+    const s = new URLSearchParams(location.search).get('s');
+    if (!s) return;
+    const decoded = decodeURIComponent(escape(atob(s)));
+    JSON.parse(decoded);
+    if (confirm('A shared state was found in this link.\nLoad it? (Replaces your local state)')) {
+      localStorage.setItem('ob_faq_v1', decoded);
+    }
+    history.replaceState({}, '', location.pathname);
+    location.reload();
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
