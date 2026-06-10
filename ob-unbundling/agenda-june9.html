@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OB Unbundling — Working Session Agenda</title>
+<style>
+  :root {
+    --navy:  #1B2E4B;
+    --teal:  #007B8A;
+    --gold:  #C8973A;
+    --red:   #8B2020;
+    --sage:  #4A7C59;
+    --purp:  #5B4A8A;
+    --ai:    #2D1B69;
+    --light: #EAF4F6;
+    --mid:   #F5F5F5;
+    --dark:  #1A1A1A;
+    --white: #FFFFFF;
+    --border:#E0E0E0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
+
+  /* ── TOP HEADER ── */
+  .top-header {
+    background: var(--navy); color: white;
+    padding: 18px 32px 14px;
+    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .top-header h1 { font-size: 1.45rem; font-weight: 800; letter-spacing: 0.3px; }
+  .top-header .sub { font-size: 0.82rem; color: #9ECDD6; margin-top: 3px; }
+  .header-right { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .date-badge { background: var(--teal); color: white; padding: 7px 16px; border-radius: 8px; font-size: 0.88rem; font-weight: 700; text-align: center; line-height: 1.4; }
+  .meeting-meta { font-size: 0.8rem; color: #9ECDD6; line-height: 1.7; }
+
+  /* ── GOLD STRIP ── */
+  .gold-strip { height: 5px; background: var(--gold); }
+
+  /* ── ATTENDEES BAR ── */
+  .attendees-bar {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 10px 32px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .attendees-label { font-size: 0.8rem; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
+  .attendee-chip {
+    background: var(--light); border: 1px solid #b0d8e0; border-radius: 20px;
+    padding: 3px 12px; font-size: 0.78rem; color: var(--teal); font-weight: 600;
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+  .attendee-chip .rm { color: #aaa; font-size: 0.7rem; }
+  .attendee-chip .rm:hover { color: var(--red); }
+  .add-attendee { background: none; border: 1.5px dashed #aaa; border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; color: #777; cursor: pointer; }
+  .add-attendee:hover { border-color: var(--teal); color: var(--teal); }
+  #new-attendee-input { border: 1.5px solid var(--teal); border-radius: 20px; padding: 3px 10px; font-size: 0.78rem; display: none; outline: none; width: 140px; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section {
+    background: var(--white); padding: 10px 32px;
+    display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border);
+  }
+  .prog-label { font-size: 0.8rem; font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .prog-track  { flex: 1; background: #e0e0e0; border-radius: 8px; height: 14px; overflow: hidden; }
+  .prog-fill   { height: 100%; background: linear-gradient(90deg, var(--teal), var(--sage)); border-radius: 8px; transition: width 0.4s; }
+  .prog-pct    { font-size: 0.85rem; font-weight: 700; color: var(--teal); min-width: 38px; }
+  .item-counts { font-size: 0.78rem; color: #777; }
+
+  /* ── TOOLBAR ── */
+  .toolbar { padding: 10px 32px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: var(--mid); border-bottom: 1px solid var(--border); }
+  .btn { padding: 6px 14px; border-radius: 6px; border: none; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+  .btn-teal   { background: var(--teal);  color: white; }
+  .btn-navy   { background: var(--navy);  color: white; }
+  .btn-outline{ background: white; color: var(--navy); border: 1.5px solid var(--navy); }
+  .btn-gold   { background: var(--gold);  color: white; }
+  .btn:hover  { filter: brightness(0.88); }
+  .saved-flash { font-size: 0.78rem; color: var(--sage); font-weight: 700; display: none; }
+  .clock { margin-left: auto; font-size: 0.85rem; color: var(--navy); font-weight: 700; }
+
+  /* ── MAIN GRID ── */
+  .main { padding: 20px 32px 40px; display: flex; flex-direction: column; gap: 16px; }
+
+  /* ── AGENDA CARD ── */
+  .agenda-card { background: var(--white); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .card-header {
+    display: flex; align-items: stretch; cursor: pointer; user-select: none;
+    border-left: 6px solid transparent;
+  }
+  .card-header:hover { filter: brightness(0.96); }
+  .card-color-tab { width: 6px; flex-shrink: 0; }
+  .card-number {
+    background: var(--mid); display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800; color: var(--navy);
+    padding: 0 16px; min-width: 52px; flex-shrink: 0;
+  }
+  .card-title-block { flex: 1; padding: 14px 16px; }
+  .card-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
+  .card-subtitle { font-size: 0.78rem; color: #777; margin-top: 3px; }
+  .card-right { display: flex; align-items: center; gap: 12px; padding: 0 16px; }
+  .time-badge { background: var(--mid); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; color: #555; white-space: nowrap; }
+  .status-select {
+    border: 1.5px solid var(--border); border-radius: 6px; padding: 4px 8px;
+    font-size: 0.78rem; font-weight: 600; cursor: pointer; outline: none;
+    background: white;
+  }
+  .st-pending    { border-color: #ccc; color: #777; }
+  .st-discussing { border-color: var(--gold); color: var(--gold); background: #FFF8E7; }
+  .st-done       { border-color: var(--sage); color: var(--sage); background: #EAF5EE; }
+  .st-deferred   { border-color: #aaa;  color: #888; background: #f5f5f5; }
+  .chevron-btn { color: #aaa; font-size: 1rem; transition: transform 0.2s; border: none; background: none; cursor: pointer; padding: 0 4px; }
+  .collapsed .chevron-btn { transform: rotate(-90deg); }
+
+  /* ── CARD BODY ── */
+  .card-body { border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .card-body.collapsed { display: none; }
+  .cb-left  { padding: 16px 18px; border-right: 1px solid var(--border); }
+  .cb-right { padding: 16px 18px; }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #999; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .section-label .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── TALKING POINTS ── */
+  .talking-points { list-style: none; }
+  .talking-points li {
+    display: flex; align-items: flex-start; gap: 8px; padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0; font-size: 0.865rem; line-height: 1.45;
+  }
+  .talking-points li:last-child { border-bottom: none; }
+  .tp-check { width: 15px; height: 15px; accent-color: var(--teal); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+  .tp-text { flex: 1; }
+  .tp-text.checked { text-decoration: line-through; color: #aaa; }
+
+  /* ── IDEAS ── */
+  .ideas-list { list-style: none; margin-bottom: 8px; }
+  .ideas-list li { font-size: 0.82rem; color: var(--purp); padding: 3px 0; display: flex; gap: 6px; align-items: flex-start; }
+  .ideas-list li::before { content: "💡"; font-size: 0.8rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── NOTES TEXTAREA ── */
+  .notes-area {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 9px 12px; font-size: 0.85rem; font-family: inherit;
+    resize: vertical; min-height: 90px; color: var(--dark);
+    transition: border-color 0.2s;
+  }
+  .notes-area:focus { outline: none; border-color: var(--teal); }
+  .notes-area::placeholder { color: #bbb; }
+
+  /* ── ACTION ITEMS ── */
+  .action-list { list-style: none; margin-bottom: 8px; }
+  .action-item {
+    display: flex; align-items: flex-start; gap: 8px; padding: 5px 0;
+    border-bottom: 1px solid #f5f5f5; font-size: 0.83rem;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-check { width: 14px; height: 14px; accent-color: var(--sage); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+  .action-text  { flex: 1; }
+  .action-text.checked { text-decoration: line-through; color: #bbb; }
+  .action-owner { font-size: 0.72rem; color: var(--teal); font-weight: 600; white-space: nowrap; }
+  .action-del   { color: #ddd; font-size: 0.75rem; cursor: pointer; }
+  .action-del:hover { color: var(--red); }
+  .add-action-row { display: flex; gap: 6px; margin-top: 6px; }
+  .add-action-input { flex: 1; border: 1px solid var(--border); border-radius: 6px; padding: 5px 9px; font-size: 0.8rem; }
+  .add-action-input:focus { outline: none; border-color: var(--teal); }
+  .add-action-owner { width: 90px; border: 1px solid var(--border); border-radius: 6px; padding: 5px 7px; font-size: 0.78rem; }
+  .add-action-owner:focus { outline: none; border-color: var(--teal); }
+  .btn-add-action { padding: 5px 10px; background: var(--teal); color: white; border: none; border-radius: 6px; font-size: 0.78rem; cursor: pointer; }
+
+  /* ── FULL-WIDTH NOTES (for single-col sections) ── */
+  .card-body-single { border-top: 1px solid var(--border); padding: 16px 18px; }
+  .card-body-single.collapsed { display: none; }
+
+  /* ── PARKING LOT & DECISIONS ── */
+  .side-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .side-panel { background: var(--white); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .side-panel-hdr { padding: 12px 16px; font-size: 0.9rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px; }
+  .side-panel-body { padding: 12px 16px; }
+  .lot-list { list-style: none; min-height: 40px; }
+  .lot-item { font-size: 0.83rem; padding: 5px 0; border-bottom: 1px solid #f0f0f0; display: flex; gap: 6px; align-items: flex-start; }
+  .lot-item:last-child { border-bottom: none; }
+  .lot-item-del { color: #ccc; cursor: pointer; font-size: 0.75rem; }
+  .lot-item-del:hover { color: var(--red); }
+  .add-lot-row { display: flex; gap: 6px; margin-top: 8px; }
+  .add-lot-input { flex: 1; border: 1px solid var(--border); border-radius: 6px; padding: 5px 9px; font-size: 0.8rem; }
+  .add-lot-input:focus { outline: none; border-color: var(--teal); }
+  .btn-add-lot { padding: 5px 10px; background: var(--navy); color: white; border: none; border-radius: 6px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; }
+
+  /* ── AI SECTION ── */
+  .ai-card {
+    background: linear-gradient(135deg, var(--ai) 0%, #1a3a6b 100%);
+    border-radius: 12px; box-shadow: 0 4px 16px rgba(45,27,105,0.25);
+    overflow: hidden;
+  }
+  .ai-header { padding: 16px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
+  .ai-header:hover { filter: brightness(1.1); }
+  .ai-icon  { font-size: 2rem; }
+  .ai-title { font-size: 1.05rem; font-weight: 800; color: white; }
+  .ai-sub   { font-size: 0.8rem; color: #b0a0e0; margin-top: 2px; }
+  .ai-body  { background: rgba(255,255,255,0.05); padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .ai-body.collapsed { display: none; }
+  .ai-idea  { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); align-items: flex-start; }
+  .ai-idea:last-child { border-bottom: none; }
+  .ai-idea-num { font-size: 1.1rem; font-weight: 800; color: var(--gold); min-width: 28px; }
+  .ai-idea-content h4 { font-size: 0.88rem; font-weight: 700; color: white; margin-bottom: 3px; }
+  .ai-idea-content p  { font-size: 0.8rem; color: #c0b8e8; line-height: 1.5; }
+  .ai-notes { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 9px 12px; color: white; font-size: 0.85rem; font-family: inherit; resize: vertical; min-height: 70px; margin-top: 12px; }
+  .ai-notes::placeholder { color: rgba(255,255,255,0.3); }
+  .ai-notes:focus { outline: none; border-color: rgba(255,255,255,0.4); }
+
+  /* ── PRINT ── */
+  @media print {
+    .toolbar, .attendees-bar .add-attendee, .add-action-row, .add-lot-row { display: none !important; }
+    body { background: white; }
+    .agenda-card, .side-panel, .ai-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    .card-body.collapsed, .card-body-single.collapsed, .ai-body.collapsed { display: block !important; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .card-body, .side-panels { grid-template-columns: 1fr; }
+    .cb-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .main, .toolbar, .attendees-bar, .progress-section { padding-left: 14px; padding-right: 14px; }
+    .top-header { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="top-header">
+  <div>
+    <h1>OB UNBUNDLING 2027 — WORKING SESSION</h1>
+    <div class="sub">Interactive Agenda &nbsp;•&nbsp; Click any section to expand &nbsp;•&nbsp; Notes auto-save to this browser</div>
+  </div>
+  <div class="header-right">
+    <div class="meeting-meta">
+      <div><b style="color:white">Date:</b> June 9, 2026</div>
+      <div><b style="color:white">Duration:</b> ~2 hours</div>
+      <div><b style="color:white">Format:</b> Working Session</div>
+    </div>
+    <div class="date-badge">WORKING<br/>SESSION<br/>Jun 9</div>
+  </div>
+</div>
+<div class="gold-strip"></div>
+
+<!-- ── ATTENDEES ── -->
+<div class="attendees-bar">
+  <span class="attendees-label">Attendees:</span>
+  <div id="attendee-chips"></div>
+  <button class="add-attendee" onclick="showAddAttendee()">+ Add Person</button>
+  <input id="new-attendee-input" placeholder="Name, Role…" onkeydown="addAttendeeKey(event)"/>
+</div>
+
+<!-- ── PROGRESS ── -->
+<div class="progress-section">
+  <span class="prog-label">Session Progress</span>
+  <div class="prog-track"><div class="prog-fill" id="main-prog" style="width:0%"></div></div>
+  <span class="prog-pct" id="main-pct">0%</span>
+  <span class="item-counts" id="item-counts">0 of 6 topics discussed</span>
+</div>
+
+<!-- ── TOOLBAR ── -->
+<div class="toolbar">
+  <button class="btn btn-teal"    onclick="saveAll()">💾 Save</button>
+  <button class="btn btn-outline" onclick="expandAll()">Expand All</button>
+  <button class="btn btn-outline" onclick="collapseAll()">Collapse All</button>
+  <button class="btn btn-navy"    onclick="window.print()">🖨️ Print</button>
+  <button class="btn btn-gold"    onclick="exportNotes()">📄 Export Notes</button>
+  <button class="btn btn-outline" onclick="confirmReset()">Reset</button>
+  <span class="saved-flash" id="saved-flash">✓ Saved!</span>
+  <span class="clock" id="clock"></span>
+</div>
+
+<!-- ── AGENDA ITEMS ── -->
+<div class="main">
+
+  <!-- ══ ITEM 1: EDUCATION SCRIPT ══ -->
+  <div class="agenda-card" id="card-1">
+    <div class="card-header" onclick="toggleCard(1)">
+      <div class="card-color-tab" style="background:var(--teal)"></div>
+      <div class="card-number" style="color:var(--teal)">1</div>
+      <div class="card-title-block">
+        <div class="card-title">Building the Education Video Script</div>
+        <div class="card-subtitle">Script structure, content framework, production ideas &amp; approach for all 3 modules</div>
+      </div>
+      <div class="card-right">
+        <span class="time-badge">⏱ ~40 min</span>
+        <select class="status-select st-pending" id="status-1" onchange="updateStatus(1,this)" onclick="event.stopPropagation()">
+          <option value="pending">⬜ Pending</option>
+          <option value="discussing">🔵 Discussing</option>
+          <option value="done">✅ Done</option>
+          <option value="deferred">⏸ Deferred</option>
+        </select>
+        <button class="chevron-btn" id="chev-1">▼</button>
+      </div>
+    </div>
+    <div class="card-body" id="body-1">
+      <div class="cb-left">
+        <div class="section-label"><span class="dot" style="background:var(--teal)"></span>Talking Points</div>
+        <ul class="talking-points" id="tp-1">
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review the 3-module structure: Office Visits → Inpatient → OB Comprehensive</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Confirm all videos must be under 15 minutes — agree on target (10–12 min sweet spot?)</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Decide script format: narrator + slides, talking-head physician, screen recording, or hybrid</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Who writes the first draft — consulting team, education team, or super users?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Super user review process: how many reviewers, how long, what's the feedback mechanism?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Will we include a downloadable quick-reference card with each module?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Knowledge check / attestation quiz: who builds it, how many questions per module?</span></li>
+        </ul>
+
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--purp)"></span>Spawned Ideas</div>
+        <ul class="ideas-list">
+          <li>Open each video with a "Before vs. After" 30-second hook — what happens if you code it wrong</li>
+          <li>Use a real (de-identified) case vignette as the through-line for the whole video</li>
+          <li>"Myth vs. Fact" segment: 3 common misconceptions physicians have about the new codes</li>
+          <li>On-screen split: left side = old global code, right side = new unbundled approach</li>
+          <li>Embed a 2-question knowledge check mid-video to keep engagement</li>
+          <li>Short version (5 min) for returning viewers / refreshers; full version (15 min) for first-timers</li>
+          <li>Closed captions for accessibility + transcript PDF posted on SharePoint</li>
+          <li>End each video with one "action step" — something the physician does before their next shift</li>
+          <li>Consider a "Physician Voices" segment — 60-second reaction from a super user in their own words</li>
+        </ul>
+      </div>
+      <div class="cb-right">
+        <div class="section-label"><span class="dot" style="background:var(--navy)"></span>Meeting Notes</div>
+        <textarea class="notes-area" id="notes-1" placeholder="Type notes here during discussion…" oninput="autoSave()"></textarea>
+
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Action Items</div>
+        <ul class="action-list" id="actions-1"></ul>
+        <div class="add-action-row">
+          <input class="add-action-input" id="ai-input-1" placeholder="Add action item…" onkeydown="addActionKey(event,1)"/>
+          <input class="add-action-owner" id="ai-owner-1" placeholder="Owner"/>
+          <button class="btn-add-action" onclick="addAction(1)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ITEM 2: SHAREPOINT ══ -->
+  <div class="agenda-card" id="card-2">
+    <div class="card-header" onclick="toggleCard(2)">
+      <div class="card-color-tab" style="background:var(--navy)"></div>
+      <div class="card-number" style="color:var(--navy)">2</div>
+      <div class="card-title-block">
+        <div class="card-title">SharePoint Hub — Build Plan</div>
+        <div class="card-subtitle">Site structure, content ownership, launch sequence, and what goes where</div>
+      </div>
+      <div class="card-right">
+        <span class="time-badge">⏱ ~20 min</span>
+        <select class="status-select st-pending" id="status-2" onchange="updateStatus(2,this)" onclick="event.stopPropagation()">
+          <option value="pending">⬜ Pending</option>
+          <option value="discussing">🔵 Discussing</option>
+          <option value="done">✅ Done</option>
+          <option value="deferred">⏸ Deferred</option>
+        </select>
+        <button class="chevron-btn" id="chev-2">▼</button>
+      </div>
+    </div>
+    <div class="card-body" id="body-2">
+      <div class="cb-left">
+        <div class="section-label"><span class="dot" style="background:var(--navy)"></span>Talking Points</div>
+        <ul class="talking-points" id="tp-2">
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Confirm the 6 SharePoint sections are correct: Dashboard, Intake, Modules, Resources, FAQ, Announcements</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Who requests the SharePoint site from IT — and what's the timeline to get it stood up?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Who owns each section and is responsible for keeping it current?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Access permissions: who can view vs. who can edit?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Launch date for the hub — needs to be live before Module 1 is published</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">How do we communicate the SharePoint link to all OB/GYN physicians?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Decide on module completion tracking method — manual list vs. embedded quiz system</span></li>
+        </ul>
+      </div>
+      <div class="cb-right">
+        <div class="section-label"><span class="dot" style="background:var(--navy)"></span>Meeting Notes</div>
+        <textarea class="notes-area" id="notes-2" placeholder="Type notes here during discussion…" oninput="autoSave()"></textarea>
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Action Items</div>
+        <ul class="action-list" id="actions-2"></ul>
+        <div class="add-action-row">
+          <input class="add-action-input" id="ai-input-2" placeholder="Add action item…" onkeydown="addActionKey(event,2)"/>
+          <input class="add-action-owner" id="ai-owner-2" placeholder="Owner"/>
+          <button class="btn-add-action" onclick="addAction(2)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ITEM 3: INTAKE FORM ══ -->
+  <div class="agenda-card" id="card-3">
+    <div class="card-header" onclick="toggleCard(3)">
+      <div class="card-color-tab" style="background:var(--gold)"></div>
+      <div class="card-number" style="color:var(--gold)">3</div>
+      <div class="card-title-block">
+        <div class="card-title">Physician Coding Intake Form</div>
+        <div class="card-subtitle">Review the 14-question form, confirm the routing logic, and finalize the response process</div>
+      </div>
+      <div class="card-right">
+        <span class="time-badge">⏱ ~15 min</span>
+        <select class="status-select st-pending" id="status-3" onchange="updateStatus(3,this)" onclick="event.stopPropagation()">
+          <option value="pending">⬜ Pending</option>
+          <option value="discussing">🔵 Discussing</option>
+          <option value="done">✅ Done</option>
+          <option value="deferred">⏸ Deferred</option>
+        </select>
+        <button class="chevron-btn" id="chev-3">▼</button>
+      </div>
+    </div>
+    <div class="card-body" id="body-3">
+      <div class="cb-left">
+        <div class="section-label"><span class="dot" style="background:var(--gold)"></span>Talking Points</div>
+        <ul class="talking-points" id="tp-3">
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Walk through the 4 sections: About You → Type of Question → Clinical Scenario → Urgency</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Confirm the 3-tier urgency SLA: Routine 5 days / Time-Sensitive 2 days / Urgent 24 hours</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Who on the consulting team receives urgent submissions and what is the escalation path?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">How do answered questions get approved to become a FAQ entry?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Confirm the form is Microsoft Forms — does the team have access to create it?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Should physicians be able to track the status of their own submitted question?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Are there any questions we should add, remove, or reword?</span></li>
+        </ul>
+      </div>
+      <div class="cb-right">
+        <div class="section-label"><span class="dot" style="background:var(--gold)"></span>Meeting Notes</div>
+        <textarea class="notes-area" id="notes-3" placeholder="Type notes here during discussion…" oninput="autoSave()"></textarea>
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Action Items</div>
+        <ul class="action-list" id="actions-3"></ul>
+        <div class="add-action-row">
+          <input class="add-action-input" id="ai-input-3" placeholder="Add action item…" onkeydown="addActionKey(event,3)"/>
+          <input class="add-action-owner" id="ai-owner-3" placeholder="Owner"/>
+          <button class="btn-add-action" onclick="addAction(3)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ITEM 4: CODING EXAMPLES ══ -->
+  <div class="agenda-card" id="card-4">
+    <div class="card-header" onclick="toggleCard(4)">
+      <div class="card-color-tab" style="background:var(--purp)"></div>
+      <div class="card-number" style="color:var(--purp)">4</div>
+      <div class="card-title-block">
+        <div class="card-title">OB Unbundling Coding Examples</div>
+        <div class="card-subtitle">Review the 5 physician coding scenarios — validate, add edge cases, finalize format</div>
+      </div>
+      <div class="card-right">
+        <span class="time-badge">⏱ ~20 min</span>
+        <select class="status-select st-pending" id="status-4" onchange="updateStatus(4,this)" onclick="event.stopPropagation()">
+          <option value="pending">⬜ Pending</option>
+          <option value="discussing">🔵 Discussing</option>
+          <option value="done">✅ Done</option>
+          <option value="deferred">⏸ Deferred</option>
+        </select>
+        <button class="chevron-btn" id="chev-4">▼</button>
+      </div>
+    </div>
+    <div class="card-body" id="body-4">
+      <div class="cb-left">
+        <div class="section-label"><span class="dot" style="background:var(--purp)"></span>Talking Points</div>
+        <ul class="talking-points" id="tp-4">
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review Example 1: Routine antepartum office visit → 99213-TH</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review Example 2: High-risk antepartum (GDM + insulin) → 99214-TH</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review Example 3: Straightforward labor + same-day vaginal delivery</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review Example 4: Multi-day induction → vaginal delivery + post-delivery days</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Review Example 5: Complex labor arrest → primary cesarean</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Are there additional edge cases to add? (twin gestation, postpartum hemorrhage, telehealth?)</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Should examples be formatted as a standalone physician reference card?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Do super users need to validate each scenario before publishing?</span></li>
+        </ul>
+      </div>
+      <div class="cb-right">
+        <div class="section-label"><span class="dot" style="background:var(--purp)"></span>Meeting Notes</div>
+        <textarea class="notes-area" id="notes-4" placeholder="Type notes here during discussion…" oninput="autoSave()"></textarea>
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Action Items</div>
+        <ul class="action-list" id="actions-4"></ul>
+        <div class="add-action-row">
+          <input class="add-action-input" id="ai-input-4" placeholder="Add action item…" onkeydown="addActionKey(event,4)"/>
+          <input class="add-action-owner" id="ai-owner-4" placeholder="Owner"/>
+          <button class="btn-add-action" onclick="addAction(4)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ITEM 5: PROJECT TIMELINE ══ -->
+  <div class="agenda-card" id="card-5">
+    <div class="card-header" onclick="toggleCard(5)">
+      <div class="card-color-tab" style="background:var(--sage)"></div>
+      <div class="card-number" style="color:var(--sage)">5</div>
+      <div class="card-title-block">
+        <div class="card-title">Ongoing Project Timeline Review</div>
+        <div class="card-subtitle">Visual milestone check — confirm owners, flag at-risk items, align on next 30 days</div>
+      </div>
+      <div class="card-right">
+        <span class="time-badge">⏱ ~15 min</span>
+        <select class="status-select st-pending" id="status-5" onchange="updateStatus(5,this)" onclick="event.stopPropagation()">
+          <option value="pending">⬜ Pending</option>
+          <option value="discussing">🔵 Discussing</option>
+          <option value="done">✅ Done</option>
+          <option value="deferred">⏸ Deferred</option>
+        </select>
+        <button class="chevron-btn" id="chev-5">▼</button>
+      </div>
+    </div>
+    <div class="card-body" id="body-5">
+      <div class="cb-left">
+        <div class="section-label"><span class="dot" style="background:var(--sage)"></span>Timeline Snapshot</div>
+        <div style="font-size:0.82rem; line-height:1.8;">
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--teal)">Jul 1, 2026</span>
+            <span>Module 1 video first draft complete</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--teal)">July 2026</span>
+            <span>Super user review + EHR office templates updated</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--navy)">August 2026</span>
+            <span>All 3 modules published + inpatient templates updated</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--red)">Sep 1, 2026</span>
+            <span style="font-weight:600">All OB/GYN physicians trained ← KEY DEADLINE</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--navy)">Sep–Oct 2026</span>
+            <span>HP payer contracting + EHR sandbox testing</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0; border-bottom:1px solid #f0f0f0">
+            <span style="width:90px; font-weight:700; color:var(--navy)">Nov 2026</span>
+            <span>CMS publishes final RVU values</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; padding:4px 0;">
+            <span style="width:90px; font-weight:800; color:var(--red)">Jan 1, 2027</span>
+            <span style="font-weight:800; color:var(--red)">🚀 GO-LIVE — All new codes effective</span>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Talking Points</div>
+        <ul class="talking-points" id="tp-5">
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Is the July 1 Module 1 first-draft deadline still achievable?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Any at-risk milestones to flag today?</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Confirm who owns the September 1 training completion accountability</span></li>
+          <li><input type="checkbox" class="tp-check" onchange="tpCheck(this)"/><span class="tp-text">Next check-in / working session date?</span></li>
+        </ul>
+      </div>
+      <div class="cb-right">
+        <div class="section-label"><span class="dot" style="background:var(--sage)"></span>Meeting Notes</div>
+        <textarea class="notes-area" id="notes-5" placeholder="Type notes here during discussion…" oninput="autoSave()"></textarea>
+        <div class="section-label" style="margin-top:14px"><span class="dot" style="background:var(--sage)"></span>Action Items</div>
+        <ul class="action-list" id="actions-5"></ul>
+        <div class="add-action-row">
+          <input class="add-action-input" id="ai-input-5" placeholder="Add action item…" onkeydown="addActionKey(event,5)"/>
+          <input class="add-action-owner" id="ai-owner-5" placeholder="Owner"/>
+          <button class="btn-add-action" onclick="addAction(5)">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PARKING LOT + DECISIONS ══ -->
+  <div class="side-panels">
+    <div class="side-panel">
+      <div class="side-panel-hdr" style="background:var(--gold)">
+        🅿 Parking Lot <span style="font-size:0.75rem; font-weight:400; margin-left:6px;">— ideas / questions to revisit later</span>
+      </div>
+      <div class="side-panel-body">
+        <ul class="lot-list" id="parking-lot"></ul>
+        <div class="add-lot-row">
+          <input class="add-lot-input" id="pl-input" placeholder="Add item to parking lot…" onkeydown="addLotKey(event,'parking-lot','pl-input')"/>
+          <button class="btn-add-lot" onclick="addLot('parking-lot','pl-input')">+ Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="side-panel-hdr" style="background:var(--sage)">
+        ✅ Decisions Made <span style="font-size:0.75rem; font-weight:400; margin-left:6px;">— agreed upon today</span>
+      </div>
+      <div class="side-panel-body">
+        <ul class="lot-list" id="decisions-log"></ul>
+        <div class="add-lot-row">
+          <input class="add-lot-input" id="dec-input" placeholder="Log a decision…" onkeydown="addLotKey(event,'decisions-log','dec-input')"/>
+          <button class="btn-add-lot" style="background:var(--sage)" onclick="addLot('decisions-log','dec-input')">+ Log</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ AI SECTION ══ -->
+  <div class="ai-card" id="card-ai">
+    <div class="ai-header" onclick="toggleAI()">
+      <div class="ai-icon">🤖</div>
+      <div>
+        <div class="ai-title">BONUS: Leveraging Agentic AI to Accelerate This Project</div>
+        <div class="ai-sub">An afterthought worth exploring — how AI could work alongside the consulting team</div>
+      </div>
+      <button class="chevron-btn" id="chev-ai" style="color:rgba(255,255,255,0.5); margin-left:auto">▼</button>
+    </div>
+    <div class="ai-body" id="body-ai">
+      <div class="ai-idea">
+        <div class="ai-idea-num">1</div>
+        <div class="ai-idea-content">
+          <h4>AI-Assisted FAQ Drafting</h4>
+          <p>When a physician submits an intake question, an AI agent pre-drafts a coding answer using the AMA CPT 2027 guidelines. The consulting team reviews and approves — cutting response time from days to hours. The AI handles the first 80%, the expert handles the final 20%.</p>
+        </div>
+      </div>
+      <div class="ai-idea">
+        <div class="ai-idea-num">2</div>
+        <div class="ai-idea-content">
+          <h4>Education Script Co-Writing</h4>
+          <p>Use AI to generate a first-draft script for each video module based on the AMA guidelines and the playbook content. The consulting team refines tone, accuracy, and clinical nuance. Cuts script-writing time from weeks to days.</p>
+        </div>
+      </div>
+      <div class="ai-idea">
+        <div class="ai-idea-num">3</div>
+        <div class="ai-idea-content">
+          <h4>Physician Documentation Reviewer</h4>
+          <p>An AI agent that a physician pastes their de-identified note into, and it tells them: "Based on your documentation, you qualify for 99214. Here's what you'd need to add to support 99215." Instant, on-demand documentation coaching.</p>
+        </div>
+      </div>
+      <div class="ai-idea">
+        <div class="ai-idea-num">4</div>
+        <div class="ai-idea-content">
+          <h4>Coding Scenario Generator</h4>
+          <p>AI generates unlimited new coding scenarios for the scenario library and attestation quizzes — varying complexity, phase of care, comorbidities. The consulting team validates them. Ensures the FAQ and training library never go stale.</p>
+        </div>
+      </div>
+      <div class="ai-idea">
+        <div class="ai-idea-num">5</div>
+        <div class="ai-idea-content">
+          <h4>AMA / ACOG Change Monitor</h4>
+          <p>An agentic AI that monitors AMA, ACOG, CMS, and SMFM websites for any updates to 2027 coding guidance and sends the consulting team an alert with a plain-language summary. No more manually checking for updates.</p>
+        </div>
+      </div>
+      <div class="ai-idea">
+        <div class="ai-idea-num">6</div>
+        <div class="ai-idea-content">
+          <h4>Post-Go-Live Audit Assistant</h4>
+          <p>After January 1, 2027, AI analyzes claim patterns across the department — flagging physicians who may be undercoding (e.g., always billing 99213 when the documentation supports 99214) and generating a personalized coaching report.</p>
+        </div>
+      </div>
+      <textarea class="ai-notes" id="notes-ai" placeholder="Notes on AI discussion…" oninput="autoSave()"></textarea>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const STORE_KEY = "ob_agenda_v1";
+let S = {};
+
+function load() {
+  try { const r = localStorage.getItem(STORE_KEY); if(r) S = JSON.parse(r); } catch(e){ S={}; }
+  restoreAll();
+}
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(S));
+}
+function autoSave() {
+  collectNotes();
+  save();
+}
+
+// ── Clock ──────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── Attendees ──────────────────────────────────────────────────────────────
+function renderAttendees() {
+  const chips = document.getElementById("attendee-chips");
+  chips.innerHTML = "";
+  (S.attendees||[]).forEach((a,i)=>{
+    const c = document.createElement("span");
+    c.className = "attendee-chip";
+    c.innerHTML = `${a} <span class="rm" onclick="removeAttendee(${i})">✕</span>`;
+    chips.appendChild(c);
+  });
+}
+function showAddAttendee() {
+  const inp = document.getElementById("new-attendee-input");
+  inp.style.display = "inline-block";
+  inp.focus();
+}
+function addAttendeeKey(e) {
+  if(e.key==="Enter"||e.key===",") {
+    const v = e.target.value.trim().replace(/,$/,"");
+    if(v) { S.attendees = S.attendees||[]; S.attendees.push(v); save(); }
+    e.target.value=""; e.target.style.display="none";
+    renderAttendees();
+  }
+  if(e.key==="Escape") { e.target.value=""; e.target.style.display="none"; }
+}
+function removeAttendee(i) {
+  S.attendees.splice(i,1); save(); renderAttendees();
+}
+
+// ── Card toggle ────────────────────────────────────────────────────────────
+function toggleCard(n) {
+  const body = document.getElementById(`body-${n}`);
+  const chev = document.getElementById(`chev-${n}`);
+  const collapsed = body.classList.toggle("collapsed");
+  chev.textContent = collapsed ? "▶" : "▼";
+  S[`collapsed_${n}`] = collapsed; save();
+}
+function toggleAI() {
+  const body = document.getElementById("body-ai");
+  const chev = document.getElementById("chev-ai");
+  const collapsed = body.classList.toggle("collapsed");
+  chev.textContent = collapsed ? "▶" : "▼";
+  S["collapsed_ai"] = collapsed; save();
+}
+function expandAll()   { [1,2,3,4,5].forEach(n=>{ document.getElementById(`body-${n}`).classList.remove("collapsed"); document.getElementById(`chev-${n}`).textContent="▼"; S[`collapsed_${n}`]=false; }); save(); }
+function collapseAll() { [1,2,3,4,5].forEach(n=>{ document.getElementById(`body-${n}`).classList.add("collapsed"); document.getElementById(`chev-${n}`).textContent="▶"; S[`collapsed_${n}`]=true; }); save(); }
+
+// ── Status ─────────────────────────────────────────────────────────────────
+function updateStatus(n, sel) {
+  const classes = { pending:"st-pending", discussing:"st-discussing", done:"st-done", deferred:"st-deferred" };
+  sel.className = "status-select " + (classes[sel.value]||"st-pending");
+  S[`status_${n}`] = sel.value; save();
+  updateProgress();
+}
+function updateProgress() {
+  let done=0;
+  for(let n=1;n<=5;n++) { if((S[`status_${n}`]||"pending")==="done") done++; }
+  const pct = Math.round((done/5)*100);
+  document.getElementById("main-prog").style.width = pct+"%";
+  document.getElementById("main-pct").textContent = pct+"%";
+  document.getElementById("item-counts").textContent = `${done} of 5 topics discussed`;
+}
+
+// ── Talking point checkboxes ────────────────────────────────────────────────
+function tpCheck(cb) {
+  const li = cb.closest("li");
+  const span = li.querySelector(".tp-text");
+  span.classList.toggle("checked", cb.checked);
+  collectTalkingPoints(); save();
+}
+
+function collectTalkingPoints() {
+  for(let n=1;n<=5;n++){
+    const ul = document.getElementById(`tp-${n}`);
+    if(!ul) continue;
+    S[`tp_${n}`] = [...ul.querySelectorAll("li")].map(li=>li.querySelector("input").checked);
+  }
+}
+
+function restoreTalkingPoints() {
+  for(let n=1;n<=5;n++){
+    const ul = document.getElementById(`tp-${n}`);
+    if(!ul) continue;
+    const states = S[`tp_${n}`]||[];
+    ul.querySelectorAll("li").forEach((li,i)=>{
+      if(states[i]) {
+        li.querySelector("input").checked=true;
+        li.querySelector(".tp-text").classList.add("checked");
+      }
+    });
+  }
+}
+
+// ── Notes ──────────────────────────────────────────────────────────────────
+function collectNotes() {
+  [1,2,3,4,5].forEach(n=>{
+    const el = document.getElementById(`notes-${n}`);
+    if(el) S[`notes_${n}`] = el.value;
+  });
+  const ai = document.getElementById("notes-ai");
+  if(ai) S["notes_ai"] = ai.value;
+}
+
+function restoreNotes() {
+  [1,2,3,4,5].forEach(n=>{
+    const el = document.getElementById(`notes-${n}`);
+    if(el && S[`notes_${n}`]) el.value = S[`notes_${n}`];
+  });
+  const ai = document.getElementById("notes-ai");
+  if(ai && S["notes_ai"]) ai.value = S["notes_ai"];
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+function addAction(n) {
+  const inp = document.getElementById(`ai-input-${n}`);
+  const own = document.getElementById(`ai-owner-${n}`);
+  const text = inp.value.trim();
+  if(!text) return;
+  const action = { text, owner: own.value.trim()||"TBD", done:false, id: Date.now() };
+  S[`actions_${n}`] = S[`actions_${n}`]||[];
+  S[`actions_${n}`].push(action);
+  inp.value=""; own.value="";
+  renderActions(n); save();
+}
+function addActionKey(e,n){ if(e.key==="Enter") addAction(n); }
+
+function toggleActionDone(n, id) {
+  const a = (S[`actions_${n}`]||[]).find(x=>x.id===id);
+  if(a) { a.done=!a.done; save(); renderActions(n); }
+}
+function deleteAction(n,id) {
+  S[`actions_${n}`] = (S[`actions_${n}`]||[]).filter(x=>x.id!==id);
+  save(); renderActions(n);
+}
+function renderActions(n) {
+  const ul = document.getElementById(`actions-${n}`);
+  if(!ul) return;
+  ul.innerHTML = "";
+  (S[`actions_${n}`]||[]).forEach(a=>{
+    const li = document.createElement("li");
+    li.className = "action-item";
+    li.innerHTML = `
+      <input type="checkbox" class="action-check" ${a.done?"checked":""} onchange="toggleActionDone(${n},${a.id})"/>
+      <span class="action-text ${a.done?"checked":""}">${a.text}</span>
+      <span class="action-owner">${a.owner}</span>
+      <span class="action-del" onclick="deleteAction(${n},${a.id})">✕</span>`;
+    ul.appendChild(li);
+  });
+}
+
+// ── Parking Lot & Decisions ────────────────────────────────────────────────
+function addLot(listId, inputId) {
+  const inp = document.getElementById(inputId);
+  const text = inp.value.trim();
+  if(!text) return;
+  S[listId] = S[listId]||[];
+  S[listId].push({ text, id:Date.now() });
+  inp.value="";
+  renderLot(listId); save();
+}
+function addLotKey(e,listId,inputId){ if(e.key==="Enter") addLot(listId,inputId); }
+function deleteLotItem(listId,id) {
+  S[listId] = (S[listId]||[]).filter(x=>x.id!==id);
+  save(); renderLot(listId);
+}
+function renderLot(listId) {
+  const ul = document.getElementById(listId);
+  if(!ul) return;
+  ul.innerHTML="";
+  (S[listId]||[]).forEach(item=>{
+    const li = document.createElement("li");
+    li.className="lot-item";
+    li.innerHTML=`<span style="flex:1">${item.text}</span><span class="lot-item-del" onclick="deleteLotItem('${listId}',${item.id})">✕</span>`;
+    ul.appendChild(li);
+  });
+}
+
+// ── Save all ───────────────────────────────────────────────────────────────
+function saveAll() {
+  collectNotes(); collectTalkingPoints(); save();
+  const fl = document.getElementById("saved-flash");
+  fl.style.display="inline"; setTimeout(()=>fl.style.display="none",2500);
+}
+
+// ── Export notes ───────────────────────────────────────────────────────────
+function exportNotes() {
+  collectNotes();
+  const topics = ["Education Script","SharePoint Build","Intake Form","Coding Examples","Timeline Review"];
+  let txt = "OB UNBUNDLING 2027 — WORKING SESSION NOTES\n";
+  txt += "Date: June 9, 2026\n";
+  txt += "Attendees: " + (S.attendees||[]).join(", ") + "\n\n";
+  txt += "=".repeat(60) + "\n\n";
+  for(let n=1;n<=5;n++){
+    txt += `TOPIC ${n}: ${topics[n-1]}\n`;
+    txt += `Status: ${(S[`status_${n}`]||"pending").toUpperCase()}\n`;
+    if(S[`notes_${n}`]) txt += `Notes:\n${S[`notes_${n}`]}\n`;
+    const actions = S[`actions_${n}`]||[];
+    if(actions.length){ txt+=`Action Items:\n`; actions.forEach(a=>txt+=`  [${a.done?"X":" "}] ${a.text} (${a.owner})\n`); }
+    txt += "\n";
+  }
+  if((S["parking-lot"]||[]).length){
+    txt+="PARKING LOT:\n";
+    (S["parking-lot"]||[]).forEach(i=>txt+=`  • ${i.text}\n`);
+    txt+="\n";
+  }
+  if((S["decisions-log"]||[]).length){
+    txt+="DECISIONS MADE:\n";
+    (S["decisions-log"]||[]).forEach(i=>txt+=`  • ${i.text}\n`);
+    txt+="\n";
+  }
+  if(S["notes_ai"]) txt+=`AI DISCUSSION NOTES:\n${S["notes_ai"]}\n`;
+  const blob=new Blob([txt],{type:"text/plain"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="OB_Session_Notes_June9.txt";
+  a.click();
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+function confirmReset() {
+  if(confirm("Clear all notes, action items, and status? This cannot be undone.")) {
+    localStorage.removeItem(STORE_KEY); S={}; location.reload();
+  }
+}
+
+// ── Restore all ────────────────────────────────────────────────────────────
+function restoreAll() {
+  renderAttendees();
+  restoreNotes();
+  restoreTalkingPoints();
+  for(let n=1;n<=5;n++){
+    renderActions(n);
+    const body=document.getElementById(`body-${n}`);
+    const chev=document.getElementById(`chev-${n}`);
+    if(S[`collapsed_${n}`]){ body.classList.add("collapsed"); chev.textContent="▶"; }
+    const sel=document.getElementById(`status-${n}`);
+    if(sel && S[`status_${n}`]){
+      sel.value=S[`status_${n}`];
+      updateStatus(n,sel);
+    }
+  }
+  renderLot("parking-lot"); renderLot("decisions-log");
+  const aib=document.getElementById("body-ai");
+  if(S["collapsed_ai"]){ aib.classList.add("collapsed"); document.getElementById("chev-ai").textContent="▶"; }
+  updateProgress();
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+load();
+</script>
+</body>
+</html>
