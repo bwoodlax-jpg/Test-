@@ -270,6 +270,8 @@
   <button class="btn btn-outline" onclick="shareLink()">🔗 Share Link</button>
   <button class="btn btn-outline" onclick="exportJSON()">⬇ Export</button>
   <label class="btn btn-outline" style="cursor:pointer">⬆ Import<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
+  <button class="btn btn-outline" onclick="cloudRefresh()">☁ Refresh</button>
+  <span id="cloud-status" style="font-size:0.78rem;font-weight:600;color:#4A7C59;white-space:nowrap">☁ Synced</span>
   <button class="btn btn-outline" onclick="confirmReset()">Reset</button>
   <span class="saved-flash" id="saved-flash">✓ Saved!</span>
   <span class="clock" id="clock"></span>
@@ -655,6 +657,7 @@ function load() {
 }
 function save() {
   localStorage.setItem(STORE_KEY, JSON.stringify(S));
+  cloudSave(S);
 }
 function autoSave() {
   collectNotes();
@@ -918,7 +921,7 @@ function restoreAll() {
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
-load();
+cloudLoad().then(cloud => { if (cloud) { localStorage.setItem('ob_agenda_v1', JSON.stringify(cloud)); } load(); });
 
 // ── Cross-browser sharing ─────────────────────────────────────────────────
 function shareLink() {
@@ -969,6 +972,45 @@ function importJSON(e) {
     location.reload();
   } catch(e) {}
 })();
+
+// ── Firebase Cloud Sync ────────────────────────────────────────────────
+const FB_URL = 'https://outreach-dashboard-eef4e-default-rtdb.firebaseio.com/ob-unbundling/agenda.json';
+
+function cloudSave(data) {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Saving...'; el.style.color = '#C8973A'; }
+  fetch(FB_URL, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {'Content-Type': 'application/json'}
+  }).then(r => {
+    if (el) { el.textContent = r.ok ? '☁ Synced' : '⚠ Sync failed'; el.style.color = r.ok ? '#4A7C59' : '#8B0000'; }
+  }).catch(() => {
+    if (el) { el.textContent = '⚠ Offline'; el.style.color = '#8B0000'; }
+  });
+}
+
+async function cloudLoad() {
+  try {
+    const r = await fetch(FB_URL);
+    if (r.ok) { const d = await r.json(); return d || null; }
+  } catch(e) {}
+  return null;
+}
+
+async function cloudRefresh() {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Loading...'; el.style.color = '#007B8A'; }
+  const cloud = await cloudLoad();
+  if (cloud) {
+    localStorage.setItem('ob_agenda_v1', JSON.stringify(cloud));
+    if (el) { el.textContent = '☁ Refreshed — reloading...'; el.style.color = '#4A7C59'; }
+    setTimeout(() => location.reload(), 600);
+  } else {
+    if (el) { el.textContent = '⚠ No cloud data'; el.style.color = '#8B0000'; }
+    setTimeout(() => { if(el) el.textContent = '☁ Synced'; el.style.color='#4A7C59'; }, 2000);
+  }
+}
 </script>
 </body>
 </html>
