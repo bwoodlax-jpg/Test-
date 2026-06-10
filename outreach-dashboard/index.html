@@ -304,18 +304,6 @@ const DEFAULT_BUCKETS = [
   {id:'b30',name:'Statin Therapy — Cardiovascular',           category:'Chronic Disease',      patient_count:0,target_count:0,week_target:0,status:'active',priority:'medium',description:'',notes:''},
 ];
 
-const DEFAULT_MILESTONES = [
-  {id:'m1', title:'Achieve 50%+ Live Contact Rate — Q3 2026', description:'Hit industry benchmark of 50%+ live contact rate across all active HEDIS buckets.', due_date:'2026-09-30', completion_date:'', owner:'Outreach Program Manager', status:'on-track', notes:'Industry standard: 40–60%; top performers exceed 60%.'},
-];
-
-const DEFAULT_INITIATIVES = [
-  {id:'i1', title:'Standardize 3-Attempt Call Protocol', description:'Ensure all agents follow Day 1 / Day 3–5 / Day 7–10 call cadence before marking a patient unreachable. After 3 failed attempts, trigger mailed outreach letter.', priority:'high', status:'in-progress', due_date:'2026-07-15', assigned_to:'Team Leads', notes:'AHRQ-backed protocol. Non-compliance is the #1 reason contact rates underperform.', created_at:'2026-06-10T00:00:00.000Z'},
-];
-
-const DEFAULT_MEETINGS = [
-  {id:'mt1', title:'Outreach Program Kickoff', meeting_date:'2026-06-10', next_meeting:'2026-06-24', attendees:'Program Manager, Team Leads', notes:'Reviewed HEDIS bucket priorities for Q3. Confirmed 50% contact rate as primary target. Discussed agent productivity benchmarks (40–60 calls/day sweet spot). Aligned on 3-attempt protocol enforcement.', action_items:'Finalize weekly patient targets per bucket\nSchedule bi-weekly check-in cadence\nDistribute 3-attempt protocol guide to all agents\nIdentify top 5 priority buckets for Q3 focus'},
-];
-
 const BENCHMARKS = [
   {category:'Agent Productivity', metric:'Calls per day — healthcare outreach',              range:'40–60',    unit:'calls/day/agent',   target:'50–60',         source:'CloudTalk, CallCentreHelper', notes:'Sweet spot; higher volume yields diminishing returns in healthcare'},
   {category:'Agent Productivity', metric:'Calls per week',                                    range:'200–300',  unit:'calls/week/agent',  target:'250–300',       source:'Derived from daily benchmarks', notes:'5-day work week at 40–60 calls/day'},
@@ -340,12 +328,7 @@ const BENCHMARKS = [
 function getData() {
   const s = localStorage.getItem(STORAGE_KEY);
   if (s) return JSON.parse(s);
-  const d = {
-    buckets: DEFAULT_BUCKETS.map(b=>({...b})),
-    milestones: DEFAULT_MILESTONES.map(m=>({...m})),
-    initiatives: DEFAULT_INITIATIVES.map(i=>({...i})),
-    meetings: DEFAULT_MEETINGS.map(m=>({...m}))
-  };
+  const d = { buckets: DEFAULT_BUCKETS.map(b=>({...b})), milestones:[], initiatives:[], meetings:[] };
   saveData(d); return d;
 }
 function saveData(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
