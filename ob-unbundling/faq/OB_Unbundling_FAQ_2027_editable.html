@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPT 2027 OB Unbundling — FAQ (Editable)</title>
+<style>
+  :root {
+    --navy: #1B2E4B;
+    --teal: #007B8A;
+    --gold: #C8973A;
+    --red:  #8B0000;
+    --sage: #4A7C59;
+    --light: #EAF4F6;
+    --lgray: #F5F5F5;
+    --mgray: #E8E8E8;
+    --border: #D0D7DE;
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --dkgray: #555555;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #F0F2F5;
+    color: var(--black);
+    font-size: 15px;
+  }
+
+  /* ── Toolbar ── */
+  #toolbar {
+    background: var(--navy);
+    color: white;
+    padding: 11px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  #toolbar .ttl { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+  #toolbar .sub { font-size: 11px; opacity: 0.65; margin-top: 2px; }
+  .actions { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    background: var(--teal); color: white; border: none; padding: 7px 16px;
+    border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600;
+    transition: background 0.15s; white-space: nowrap;
+  }
+  .btn:hover { background: #005f6b; }
+  .btn.navy { background: var(--navy); border: 1.5px solid rgba(255,255,255,0.35); }
+  .btn.navy:hover { background: #12203A; }
+  .btn.gold { background: var(--gold); }
+  .btn.gold:hover { background: #a87a28; }
+  .btn.sage { background: var(--sage); }
+  #save-badge {
+    font-size: 11px; color: rgba(255,255,255,0.55); font-style: italic; white-space: nowrap;
+  }
+
+  /* ── Page wrapper (looks like a printed doc) ── */
+  #page-wrap {
+    max-width: 820px;
+    margin: 28px auto 60px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 18px rgba(0,0,0,0.12);
+    overflow: hidden;
+  }
+
+  /* ── Document Header ── */
+  .doc-header {
+    background: var(--navy);
+    padding: 30px 44px 24px;
+    color: white;
+  }
+  .doc-header .tag {
+    background: var(--teal);
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .doc-header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .doc-header .meta {
+    font-size: 11.5px;
+    opacity: 0.68;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .doc-header .source {
+    font-size: 10.5px;
+    opacity: 0.5;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── Edit bar ── */
+  .edit-bar {
+    background: #FFF8E7;
+    border-bottom: 1px solid #E8D87A;
+    padding: 8px 44px;
+    font-size: 11.5px;
+    color: #7a6020;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .edit-bar strong { color: #5a4010; }
+
+  /* ── FAQ Body ── */
+  .faq-body { padding: 24px 44px 40px; }
+
+  /* ── FAQ Item ── */
+  .faq-item {
+    margin-bottom: 28px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.15s;
+  }
+  .faq-item:focus-within { box-shadow: 0 0 0 2px var(--teal); border-color: var(--teal); }
+
+  .faq-q {
+    display: flex;
+    align-items: stretch;
+    background: var(--light);
+    border-bottom: 1px solid #C5DFE3;
+  }
+  .faq-num {
+    background: var(--teal);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .faq-q-text {
+    padding: 12px 16px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.5;
+    flex: 1;
+    outline: none;
+  }
+  .faq-q-text:focus { background: #D5ECEF; }
+  .faq-q-text:empty:before { content: attr(data-placeholder); color: #aaa; pointer-events: none; }
+
+  .faq-a {
+    padding: 16px 20px;
+    background: white;
+  }
+  .faq-a-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--black);
+    outline: none;
+    min-height: 40px;
+  }
+  .faq-a-text:focus { background: #FAFCFD; border-radius: 3px; }
+  .faq-a-text:empty:before { content: attr(data-placeholder); color: #bbb; pointer-events: none; }
+
+  /* Rule boxes inside answers */
+  .rule-box {
+    background: var(--light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 5px 5px 0;
+    padding: 10px 16px;
+    margin: 10px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .rule-box .rule-title {
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 5px;
+    font-size: 13px;
+  }
+
+  /* Code table inside answers */
+  .code-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .code-tbl thead th {
+    background: var(--teal);
+    color: white;
+    padding: 7px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .code-tbl tbody tr:nth-child(odd) { background: var(--lgray); }
+  .code-tbl tbody tr:nth-child(even) { background: white; }
+  .code-tbl td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #E0EAEC;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .code-tbl td:first-child { font-family: monospace; font-weight: 700; color: var(--navy); white-space: nowrap; }
+
+  /* Bullet list */
+  .ans-bullets { margin: 6px 0 6px 16px; }
+  .ans-bullets li { margin-bottom: 5px; line-height: 1.65; }
+
+  /* ── Add FAQ button ── */
+  .add-faq-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--lgray);
+    border: 2px dashed var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dkgray);
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+  .add-faq-btn:hover { background: var(--light); border-color: var(--teal); color: var(--teal); }
+
+  /* ── Print Styles ── */
+  @media print {
+    #toolbar, .edit-bar, .add-faq-btn { display: none !important; }
+    body { background: white; }
+    #page-wrap { margin: 0; box-shadow: none; border-radius: 0; }
+    .faq-item { break-inside: avoid; box-shadow: none; }
+    .faq-q-text, .faq-a-text { outline: none; }
+    @page { margin: 0.7in 0.9in; }
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div id="toolbar">
+  <div>
+    <div class="ttl">CPT 2027 OB UNBUNDLING — FAQ EDITOR</div>
+    <div class="sub">Editable · Auto-saves to browser · Print to PDF · 15 Questions</div>
+  </div>
+  <div class="actions">
+    <span id="save-badge">Unsaved</span>
+    <button class="btn navy" onclick="addFAQ()">+ Add Question</button>
+    <button class="btn gold" onclick="window.print()">Print / Export PDF</button>
+    <button class="btn sage" onclick="copyAllText()">Copy All Text</button>
+    <button class="btn" onclick="shareLink()" style="background:#007B8A">🔗 Share Link</button>
+    <button class="btn" onclick="exportJSON()" style="background:#4A7C59">⬇ Export</button>
+    <label class="btn" style="background:#4A7C59;cursor:pointer">⬆ Import<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
+    <button class="btn" onclick="testCloud()" style="background:#1B2E4B">☁ Test</button>
+    <button class="btn" onclick="cloudRefresh()" style="background:#007B8A">☁ Refresh</button>
+    <span id="cloud-status" style="font-size:0.78rem;font-weight:600;color:#4A7C59;white-space:nowrap">☁ Synced</span>
+    <button class="btn" style="background:var(--red)" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<!-- Page -->
+<div id="page-wrap">
+
+  <!-- Doc Header -->
+  <div class="doc-header">
+    <div class="tag">CPT® 2027 — Maternity Care Restructure</div>
+    <h1>Frequently Asked Questions<br>OB Unbundling — Physician Reference</h1>
+    <div class="meta">
+      <span>15 Questions &amp; Answers</span>
+      <span>Effective: January 1, 2027</span>
+      <span>Audience: OB/GYN Physicians &amp; QHPs</span>
+      <span>Draft — For Internal Review</span>
+    </div>
+    <div class="source">Source: AMA CPT® 2027 Maternity Care Coding Guidelines · AMA June 2, 2026 CPT Coding Primer Webinar</div>
+  </div>
+
+  <!-- Edit tip bar -->
+  <div class="edit-bar">
+    <strong>✏️ Editable Document</strong>
+    — Click any question or answer to edit. Changes auto-save. Print or export to PDF using the button above.
+  </div>
+
+  <!-- FAQ Body -->
+  <div class="faq-body" id="faq-container">
+
+    <!-- Q1 -->
+    <div class="faq-item" data-id="1">
+      <div class="faq-q">
+        <div class="faq-num">Q1</div>
+        <div class="faq-q-text" contenteditable="true" data-placeholder="Enter question...">What is the CPT 2027 OB unbundling and why is it happening?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true" data-placeholder="Enter answer...">
+          The AMA is replacing the 30+ year old global maternity care package with a service-based framework. Starting January 1, 2027, the single global code that bundled all prenatal visits, delivery, and postpartum care is eliminated. Each phase of maternity care — antepartum, labor management, delivery, and postpartum — is now reported with separate, individually billed codes.
+          <br><br>
+          The AMA's stated reasons include: patterns of care have become far more complex, team-based and shift-based care models are now the norm, increasing labor complexity and induction rates are not reflected in current coding, and the old model provided no data visibility into individual care phases. This change affects every OB/GYN practice billing under the current global model.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="faq-item" data-id="2">
+      <div class="faq-q">
+        <div class="faq-num">Q2</div>
+        <div class="faq-q-text" contenteditable="true">When does the new coding structure take effect?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <div class="rule-box">
+            <div class="rule-title">Effective Date: January 1, 2027</div>
+            All 17 deleted global and antepartum codes expire on December 31, 2026. Services rendered on or after January 1, 2027 must use the new code set. There is no parallel reporting period. Claims submitted for 2027 dates of service using deleted codes will be rejected.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="faq-item" data-id="3">
+      <div class="faq-q">
+        <div class="faq-num">Q3</div>
+        <div class="faq-q-text" contenteditable="true">Which codes are being deleted on January 1, 2027?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          A total of 17 CPT codes are deleted effective January 1, 2027. The most impactful deletions for office-based OB/GYN practices are:
+          <table class="code-tbl">
+            <thead><tr><th>Code</th><th>Descriptor</th></tr></thead>
+            <tbody>
+              <tr><td>59400</td><td>Routine obstetric care — vaginal delivery global package (DELETED)</td></tr>
+              <tr><td>59409</td><td>Vaginal delivery only, without postpartum care (DELETED)</td></tr>
+              <tr><td>59425</td><td>Antepartum care only; 4–6 visits (DELETED)</td></tr>
+              <tr><td>59426</td><td>Antepartum care only; 7 or more visits (DELETED)</td></tr>
+              <tr><td>59430</td><td>Postpartum care only, separate procedure (DELETED)</td></tr>
+              <tr><td>59510</td><td>Routine obstetric care — cesarean delivery global package (DELETED)</td></tr>
+              <tr><td>59514</td><td>Cesarean delivery only, without postpartum care (DELETED)</td></tr>
+              <tr><td>+59525</td><td>Subtotal or total hysterectomy after cesarean — add-on code (DELETED)</td></tr>
+              <tr><td>59610</td><td>Routine OB care — vaginal delivery after prior cesarean, global (DELETED)</td></tr>
+              <tr><td>59618</td><td>Routine OB care — cesarean after attempted VBAC, global (DELETED)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="faq-item" data-id="4">
+      <div class="faq-q">
+        <div class="faq-num">Q4</div>
+        <div class="faq-q-text" contenteditable="true">How do I bill for antepartum office visits starting January 1, 2027?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          Each antepartum visit is reported individually using standard Evaluation and Management (E/M) codes — the same codes used for regular office visits. The AMA guideline states that antepartum care is reported with the appropriate E/M code based on the location of the patient.
+          <table class="code-tbl" style="margin-top:10px">
+            <thead><tr><th>Code</th><th>Use For</th></tr></thead>
+            <tbody>
+              <tr><td>99202–99205</td><td>New patient office or outpatient visit — patient's first OB visit</td></tr>
+              <tr><td>99211–99215</td><td>Established patient office or outpatient visit — all subsequent prenatal visits</td></tr>
+              <tr><td>99221–99223</td><td>Initial hospital inpatient or observation — antepartum admission</td></tr>
+              <tr><td>99231–99233</td><td>Subsequent hospital care — continued antepartum inpatient management</td></tr>
+              <tr><td>98000–98015</td><td>Telehealth services — antepartum telemedicine encounters</td></tr>
+            </tbody>
+          </table>
+          <br>E/M code selection rules apply — select by Medical Decision Making (MDM) or total time. Append <strong>Modifier TH</strong> to all antepartum E/M claims.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="faq-item" data-id="5">
+      <div class="faq-q">
+        <div class="faq-num">Q5</div>
+        <div class="faq-q-text" contenteditable="true">What is Modifier TH and when do I use it?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <div class="rule-box">
+            <div class="rule-title">Modifier TH — AMA Confirmed</div>
+            Modifier TH = "Obstetrical treatment/services, antepartum or postpartum." Apply Modifier TH to all antepartum and postpartum E/M claims. This identifies the visit as pregnancy-related, ensures correct payer processing, and supports maternity care analytics. Confirmed by AMA in the June 2, 2026 CPT Coding Primer Webinar.
+          </div>
+          Without Modifier TH, some payers may process these E/M visits as standard office visits and deny or underpay. Modifier TH does not apply to labor management codes (59080–59083) or delivery codes — it is specific to antepartum and postpartum E/M services.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="faq-item" data-id="6">
+      <div class="faq-q">
+        <div class="faq-num">Q6</div>
+        <div class="faq-q-text" contenteditable="true">How does Medical Decision Making (MDM) apply to prenatal visits?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          MDM has three elements: Problems Addressed, Amount and Complexity of Data Reviewed, and Risk of Complications. The AMA confirms that pregnancy is evaluated under <strong>"Problems Addressed."</strong> The complexity of the pregnancy drives the MDM level.
+          <br><br>
+          <strong>Quick Reference — Prenatal Visit MDM Levels:</strong>
+          <ul class="ans-bullets">
+            <li><strong>99212–99213 (Straightforward/Low):</strong> Routine uncomplicated pregnancy, normal vitals, labs normal, no new concerns, minimal management.</li>
+            <li><strong>99214 (Moderate):</strong> Managed complication — well-controlled gestational hypertension or diet-controlled GDM. Data reviewed, monitoring plan adjusted.</li>
+            <li><strong>99215 (High):</strong> High-risk visit — poorly controlled GDM, IUGR concern, multiple management decisions, referral to MFM or specialist.</li>
+          </ul>
+          Critical note from AMA: documentation to support E/M code selection is key, particularly on Risk. Every prenatal note must independently support the level billed.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="faq-item" data-id="7">
+      <div class="faq-q">
+        <div class="faq-num">Q7</div>
+        <div class="faq-q-text" contenteditable="true">What are the new labor management codes and what do they include?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          Four new labor management codes replace all labor-during-delivery bundled services. Reported per physician, per patient, per calendar date.
+          <table class="code-tbl" style="margin-top:10px">
+            <thead><tr><th>Code</th><th>Descriptor</th></tr></thead>
+            <tbody>
+              <tr><td>59080</td><td>Initial day labor management; straightforward, per day</td></tr>
+              <tr><td>59081</td><td>Initial day labor management; complex, per day</td></tr>
+              <tr><td>59082</td><td>Subsequent day labor management; straightforward, per day</td></tr>
+              <tr><td>59083</td><td>Subsequent day labor management; complex, per day</td></tr>
+            </tbody>
+          </table>
+          <br><strong>Included in all labor management codes:</strong>
+          <ul class="ans-bullets">
+            <li>Interim physical examinations during labor</li>
+            <li>Collection and interpretation of physiologic data (partograms, tocometric data, vital signs, pulse oximetry)</li>
+            <li>Induction or augmentation of labor (mechanical cervical ripening, prostaglandins, oxytocin, amniotomy)</li>
+          </ul>
+          A delivery code may be reported on the same calendar date as a labor management code, even when the same physician provides both services.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="faq-item" data-id="8">
+      <div class="faq-q">
+        <div class="faq-num">Q8</div>
+        <div class="faq-q-text" contenteditable="true">How do I determine if labor management is "straightforward" or "complex"?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          The AMA added a complexity determination table to the CPT 2027 guidelines. Straightforward labor requires ALL six criteria to be met simultaneously. If even one criterion is not met, the encounter is complex.
+          <table class="code-tbl" style="margin-top:10px">
+            <thead><tr><th>Level</th><th>Criteria</th></tr></thead>
+            <tbody>
+              <tr><td>STRAIGHTFORWARD</td><td>ALL six must be met: (1) Singleton vertex presentation; (2) Routine maternal/fetal monitoring; (3) Fetal monitoring not requiring physician intervention; (4) Normal progression of labor or routine induction/augmentation; (5) Stable medical conditions not requiring additional management; (6) No previous cesarean delivery.</td></tr>
+              <tr><td>COMPLEX</td><td>ANY single deviation from the straightforward criteria. Examples include: multiple gestation, non-vertex presentation, fetal monitoring requiring intervention, abnormal labor progression, deteriorating condition, VBAC attempt (prior cesarean).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="faq-item" data-id="9">
+      <div class="faq-q">
+        <div class="faq-num">Q9</div>
+        <div class="faq-q-text" contenteditable="true">What if labor starts as straightforward but becomes complex during the same calendar day?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <div class="rule-box">
+            <div class="rule-title">AMA Confirmed Rule — Same-Day Complexity Upgrade</div>
+            If labor management begins as straightforward (59080) but transitions to complex on the same calendar date, report ONLY the complex code (59081) for that day. Do not report both straightforward and complex codes on the same date. One labor management code per physician per patient per calendar day.
+          </div>
+          <strong>Exception for care transfers:</strong> If the complexity increase results in a transfer of care from one group to a separate group (e.g., a CNM transfers to a physician of a different specialty group), each provider may report their own labor management code for that calendar date.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="faq-item" data-id="10">
+      <div class="faq-q">
+        <div class="faq-num">Q10</div>
+        <div class="faq-q-text" contenteditable="true">Does a planned or scheduled cesarean require a labor management code?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <div class="rule-box">
+            <div class="rule-title">AMA Confirmed Rule — Planned Cesarean</div>
+            A planned or scheduled cesarean has NO labor management code associated with it. Report only the cesarean delivery code. Labor management codes apply only when labor management services are actually performed.
+          </div>
+          <strong>What CAN be reported with a planned primary cesarean (no labor performed):</strong>
+          <ul class="ans-bullets">
+            <li>59502 — Primary cesarean delivery</li>
+            <li>99221–99223 — Initial hospital inpatient or observation E/M (may be separately reported on the same date when performed)</li>
+          </ul>
+          For a planned <em>repeat</em> cesarean (no labor), the admission/intake E/M is already included in the valuation of 59503 and <strong>cannot</strong> be separately reported on the same calendar date.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="faq-item" data-id="11">
+      <div class="faq-q">
+        <div class="faq-num">Q11</div>
+        <div class="faq-q-text" contenteditable="true">What are the confirmed new delivery codes effective January 1, 2027?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <table class="code-tbl">
+            <thead><tr><th>Code</th><th>Descriptor</th></tr></thead>
+            <tbody>
+              <tr><td>59431</td><td>Vaginal delivery, with or without episiotomy — no prior cesarean</td></tr>
+              <tr><td>59432</td><td>Vaginal delivery, after previous cesarean delivery</td></tr>
+              <tr><td>59502</td><td>Cesarean delivery; primary — first cesarean</td></tr>
+              <tr><td>59503</td><td>Cesarean delivery; repeat — patient with prior cesarean</td></tr>
+              <tr><td>59504</td><td>Subtotal or total hysterectomy after cesarean (new standalone code)</td></tr>
+              <tr><td>59433</td><td>Repair of episiotomy or laceration; third-degree — separately reportable by any physician</td></tr>
+              <tr><td>59434</td><td>Repair of episiotomy or laceration; fourth-degree — separately reportable by any physician</td></tr>
+            </tbody>
+          </table>
+          <br>
+          <strong>Important notes:</strong>
+          <ul class="ans-bullets">
+            <li>1st and 2nd degree laceration repairs are included in the vaginal delivery code — cannot be separately billed by the delivering physician.</li>
+            <li>59504 replaces add-on code +59525 as a standalone code — may be reported by the same or a different physician.</li>
+            <li>Delivery care includes same-day routine postpartum care — do not separately bill a postpartum code on the delivery date.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="faq-item" data-id="12">
+      <div class="faq-q">
+        <div class="faq-num">Q12</div>
+        <div class="faq-q-text" contenteditable="true">What happens to postpartum care coding?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          All current postpartum CPT codes (including 59430 and the postpartum portions of global codes) are deleted January 1, 2027. Postpartum care is now reported using E/M codes:
+          <br><br>
+          <strong>Inpatient postpartum (facility birth):</strong>
+          <ul class="ans-bullets">
+            <li>99231–99233 — Subsequent hospital care, reported each management day until discharge</li>
+            <li>Appropriate discharge day management code on the day of discharge</li>
+          </ul>
+          <strong>Outpatient postpartum after discharge:</strong>
+          <ul class="ans-bullets">
+            <li>99212–99215 — Established patient office/outpatient E/M for each postpartum visit</li>
+          </ul>
+          Apply <strong>Modifier TH</strong> to all postpartum E/M claims. Routine postpartum care on the delivery date is included in the delivery code — do not bill it separately.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="faq-item" data-id="13">
+      <div class="faq-q">
+        <div class="faq-num">Q13</div>
+        <div class="faq-q-text" contenteditable="true">How do I handle patients whose prenatal care starts in 2026 and delivery is in 2027?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          The AMA addressed this transition scenario directly. The rule is based on the <strong>date of service</strong>, not the delivery date:
+          <ul class="ans-bullets" style="margin-top:8px">
+            <li><strong>Antepartum visits in 2026</strong> → report using 2026 CPT rules: 59425 (4–6 visits), 59426 (7 or more visits), or individual E/M codes if fewer than 4 visits in 2026.</li>
+            <li><strong>Antepartum visits in 2027</strong> → report each visit individually with the appropriate E/M code under the new 2027 framework.</li>
+          </ul>
+          <br>
+          AMA planning guidance: pregnancies with first 10-week visits between January and May 2026 will likely deliver under the old global codes. Pregnancies beginning visits in September 2026 or later will have 3 or fewer prenatal visits in 2026 and require E/M reporting for those visits. Update your billing workflow and EHR charge capture before December 31, 2026.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="faq-item" data-id="14">
+      <div class="faq-q">
+        <div class="faq-num">Q14</div>
+        <div class="faq-q-text" contenteditable="true">What about VBAC patients — trial of labor after cesarean (TOLAC)?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          A Trial of Labor After Cesarean (TOLAC) or VBAC attempt DOES involve labor management and labor management codes apply. However, VBAC attempts are <strong>complex by default</strong> because "no prior cesarean" is a required criterion for straightforward labor management.
+          <br><br>
+          <strong>TOLAC/VBAC Coding:</strong>
+          <ul class="ans-bullets">
+            <li>Labor management: 59080/59081 (initial day) or 59082/59083 (subsequent day) — complex (59081 or 59083) by default due to prior cesarean history</li>
+            <li>Successful vaginal delivery: <strong>59432</strong> — vaginal delivery after previous cesarean</li>
+            <li>Failed VBAC requiring cesarean: <strong>59503</strong> — repeat cesarean delivery</li>
+          </ul>
+          The delivery code is determined by the actual delivery outcome. Labor management complexity is determined by the patient's clinical picture during labor — which, for TOLAC patients, will always be complex.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="faq-item" data-id="15">
+      <div class="faq-q">
+        <div class="faq-num">Q15</div>
+        <div class="faq-q-text" contenteditable="true">Can a labor management code and delivery code be billed on the same day?</div>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-text" contenteditable="true">
+          <div class="rule-box">
+            <div class="rule-title">AMA Confirmed — Labor Management + Delivery Same Day</div>
+            Yes. A delivery code may be reported on the same calendar date as an initial or subsequent labor management code, even when the same physician provides both services. This is one of the most common same-day coding scenarios under the new framework.
+          </div>
+          <strong>Example — Labor begins and delivery occurs same calendar day:</strong>
+          <ul class="ans-bullets">
+            <li>59080 — Initial day, straightforward labor management</li>
+            <li>59431 — Vaginal delivery (no prior cesarean)</li>
+            <li>59433 — Third-degree laceration repair (if applicable, separately reportable)</li>
+          </ul>
+          <strong>Important:</strong> Once labor management begins, all other hospital care E/M codes stop. Exception: if the patient was seen in the office earlier that same day and then admitted for labor onset on the same calendar date, the office E/M may also be reported.
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Q button -->
+    <button class="add-faq-btn" onclick="addFAQ()">+ Add New Question</button>
+
+  </div><!-- /faq-body -->
+</div><!-- /page-wrap -->
+
+<script>
+// ── Firebase SDK Init ──────────────────────────────────────────────────────
+firebase.initializeApp({ databaseURL: 'https://ob-project-bc116-default-rtdb.firebaseio.com' });
+const dataRef = firebase.database().ref('ob-unbundling/faq');
+function toArr(v) {
+  if (!v) return [];
+  if (Array.isArray(v)) return v.filter(x => x != null);
+  return Object.values(v);
+}
+
+const STORE = 'ob_faq_v1';
+let saveTimer;
+
+// ── Auto-save ─────────────────────────────────────────────────
+function saveNow() {
+  const items = [];
+  document.querySelectorAll('.faq-item').forEach(item => {
+    items.push({
+      id:  item.dataset.id,
+      q:   item.querySelector('.faq-q-text').innerHTML,
+      a:   item.querySelector('.faq-a-text').innerHTML,
+    });
+  });
+  localStorage.setItem(STORE, JSON.stringify(items));
+  cloudSave(items);
+  document.getElementById('save-badge').textContent = 'Saved ' + new Date().toLocaleTimeString();
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 800);
+}
+
+function loadSaved() {
+  const raw = localStorage.getItem(STORE);
+  if (!raw) return;
+  try {
+    const items = JSON.parse(raw);
+    const container = document.getElementById('faq-container');
+    // Clear existing FAQ items (not the Add button)
+    container.querySelectorAll('.faq-item').forEach(el => el.remove());
+    const addBtn = container.querySelector('.add-faq-btn');
+
+    items.forEach(item => {
+      const el = makeFAQEl(item.id, item.q, item.a);
+      container.insertBefore(el, addBtn);
+    });
+  } catch(e) {}
+}
+
+// ── Add FAQ ───────────────────────────────────────────────────
+let nextId = 16;
+function addFAQ() {
+  const container = document.getElementById('faq-container');
+  const addBtn = container.querySelector('.add-faq-btn');
+  const existing = container.querySelectorAll('.faq-item').length;
+  const el = makeFAQEl(existing + 1, '', '');
+  container.insertBefore(el, addBtn);
+  el.querySelector('.faq-q-text').focus();
+  renumberAll();
+  scheduleSave();
+}
+
+function makeFAQEl(num, qHtml, aHtml) {
+  const div = document.createElement('div');
+  div.className = 'faq-item';
+  div.dataset.id = num;
+  div.innerHTML = `
+    <div class="faq-q">
+      <div class="faq-num">Q${num}</div>
+      <div class="faq-q-text" contenteditable="true" data-placeholder="Enter question...">${qHtml}</div>
+    </div>
+    <div class="faq-a">
+      <div class="faq-a-text" contenteditable="true" data-placeholder="Enter answer...">${aHtml}</div>
+    </div>`;
+  div.querySelector('.faq-q-text').addEventListener('input', () => { renumberAll(); scheduleSave(); });
+  div.querySelector('.faq-a-text').addEventListener('input', scheduleSave);
+  return div;
+}
+
+function renumberAll() {
+  document.querySelectorAll('.faq-item').forEach((item, i) => {
+    item.dataset.id = i + 1;
+    item.querySelector('.faq-num').textContent = 'Q' + (i + 1);
+  });
+}
+
+// ── Attach listeners to existing items ───────────────────────
+document.querySelectorAll('.faq-q-text, .faq-a-text').forEach(el => {
+  el.addEventListener('input', scheduleSave);
+});
+
+// ── Copy all text ─────────────────────────────────────────────
+function copyAllText() {
+  let out = 'CPT 2027 OB UNBUNDLING — FREQUENTLY ASKED QUESTIONS\n';
+  out += 'Effective January 1, 2027\n\n';
+  document.querySelectorAll('.faq-item').forEach((item, i) => {
+    const q = item.querySelector('.faq-q-text').innerText.trim();
+    const a = item.querySelector('.faq-a-text').innerText.trim();
+    out += `Q${i+1}. ${q}\n\n${a}\n\n${'─'.repeat(60)}\n\n`;
+  });
+  navigator.clipboard.writeText(out).then(() => {
+    alert('All text copied to clipboard. Paste into Word, Google Docs, or any editor.');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = out; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('Copied! Paste into Word, Google Docs, or any editor.');
+  });
+}
+
+// ── Reset ─────────────────────────────────────────────────────
+function resetAll() {
+  if (!confirm('Reset all FAQ content to the original? This cannot be undone.')) return;
+  localStorage.removeItem(STORE);
+  location.reload();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+dataRef.once('value').then(snap => {
+  const cloud = snap.val();
+  const arr = toArr(cloud);
+  if (arr.length > 0) {
+    localStorage.setItem('ob_faq_v1', JSON.stringify(arr));
+    const el = document.getElementById('cloud-status');
+    if (el) { el.textContent = '☁ Cloud loaded ✓'; el.style.color = '#007B8A'; }
+  }
+  loadSaved();
+}).catch(() => { loadSaved(); });
+
+// ── Cross-browser sharing ─────────────────────────────────────────────────
+function shareLink() {
+  const raw = localStorage.getItem('ob_faq_v1') || '{}';
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(raw)));
+    const url = location.origin + location.pathname + '?s=' + encoded;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Share link copied!\nPaste it in Slack, email, or Teams — teammate opens it and sees your exact state.');
+    }).catch(() => { prompt('Copy this link:', url); });
+  } catch(e) { alert('State too large for URL — use Export JSON instead.'); }
+}
+
+function exportJSON() {
+  const raw = localStorage.getItem('ob_faq_v1') || '{}';
+  const blob = new Blob([raw], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'state_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      JSON.parse(ev.target.result);
+      localStorage.setItem('ob_faq_v1', ev.target.result);
+      alert('Imported! Reloading...');
+      location.reload();
+    } catch(err) { alert('Invalid file.'); }
+  };
+  reader.readAsText(file);
+}
+
+(function checkURLState() {
+  try {
+    const s = new URLSearchParams(location.search).get('s');
+    if (!s) return;
+    const decoded = decodeURIComponent(escape(atob(s)));
+    JSON.parse(decoded);
+    if (confirm('A shared state was found in this link.\nLoad it? (Replaces your local state)')) {
+      localStorage.setItem('ob_faq_v1', decoded);
+    }
+    history.replaceState({}, '', location.pathname);
+    location.reload();
+  } catch(e) {}
+})();
+
+// ── Firebase Cloud Sync ────────────────────────────────────────────────
+function cloudSave(data) {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Saving...'; el.style.color = '#C8973A'; }
+  dataRef.set(data)
+    .then(() => { if (el) { el.textContent = '☁ Synced ✓'; el.style.color = '#4A7C59'; } })
+    .catch(e => { if (el) { el.textContent = '⚠ Save failed'; el.style.color = '#8B0000'; } console.error('Firebase save:', e); });
+}
+
+async function cloudRefresh() {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Loading...'; el.style.color = '#007B8A'; }
+  try {
+    const snap = await dataRef.once('value');
+    const arr = toArr(snap.val());
+    if (arr.length > 0) {
+      localStorage.setItem('ob_faq_v1', JSON.stringify(arr));
+      if (el) { el.textContent = '☁ Refreshed ✓'; el.style.color = '#4A7C59'; }
+      setTimeout(() => location.reload(), 800);
+    } else {
+      if (el) { el.textContent = '⚠ No cloud data yet'; el.style.color = '#888'; }
+      setTimeout(() => { if (el) { el.textContent = '☁ Ready'; el.style.color = '#4A7C59'; } }, 2500);
+    }
+  } catch(e) {
+    if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
+  }
+}
+
+async function testCloud() {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Testing...'; el.style.color = '#C8973A'; }
+  try {
+    await dataRef.child('_test').set({ _ts: Date.now() });
+    const snap = await dataRef.child('_test').once('value');
+    if (snap.val()) {
+      await dataRef.child('_test').remove();
+      if (el) { el.textContent = '✓ Cloud working!'; el.style.color = '#4A7C59'; }
+    } else {
+      if (el) { el.textContent = '✗ Read failed'; el.style.color = '#8B0000'; }
+    }
+  } catch(e) {
+    if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
+  }
+}
+</script>
+</body>
+</html>
