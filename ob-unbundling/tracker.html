@@ -199,6 +199,7 @@
   <button class="btn btn-outline" onclick="toggleAll(true)">Expand All</button>
   <button class="btn btn-outline" onclick="toggleAll(false)">Collapse All</button>
   <button class="btn btn-danger" onclick="confirmReset()">Reset All</button>
+  <button class="btn btn-outline" onclick="testCloud()">☁ Test</button>
   <button class="btn btn-outline" onclick="cloudRefresh()">☁ Refresh</button>
   <span id="cloud-status" style="font-size:0.78rem;font-weight:600;color:#4A7C59;white-space:nowrap">☁ Synced</span>
   <span class="saved-msg" id="saved-msg">✓ Saved!</span>
@@ -674,16 +675,27 @@ function cloudSave(data) {
     body: JSON.stringify(data),
     headers: {'Content-Type': 'application/json'}
   }).then(r => {
-    if (el) { el.textContent = r.ok ? '☁ Synced' : '⚠ Sync failed'; el.style.color = r.ok ? '#4A7C59' : '#8B0000'; }
-  }).catch(() => {
+    const ok = r.status >= 200 && r.status < 300;
+    if (el) {
+      el.textContent = ok ? '☁ Synced ✓' : '⚠ Save failed (' + r.status + ')';
+      el.style.color = ok ? '#4A7C59' : '#8B0000';
+    }
+  }).catch(err => {
     if (el) { el.textContent = '⚠ Offline'; el.style.color = '#8B0000'; }
   });
 }
 
 async function cloudLoad() {
   try {
-    const r = await fetch(FB_URL);
-    if (r.ok) { const d = await r.json(); return d || null; }
+    const r = await fetch(FB_URL + '?t=' + Date.now());
+    if (r.status >= 200 && r.status < 300) {
+      const d = await r.json();
+      const el = document.getElementById('cloud-status');
+      if (d && Object.keys(d).length > 0) {
+        if (el) { el.textContent = '☁ Cloud loaded ✓'; el.style.color = '#007B8A'; }
+        return d;
+      }
+    }
   } catch(e) {}
   return null;
 }
@@ -694,11 +706,36 @@ async function cloudRefresh() {
   const cloud = await cloudLoad();
   if (cloud) {
     localStorage.setItem('ob_unbundling_tracker_v2', JSON.stringify(cloud));
-    if (el) { el.textContent = '☁ Refreshed — reloading...'; el.style.color = '#4A7C59'; }
-    setTimeout(() => location.reload(), 600);
+    if (el) { el.textContent = '☁ Refreshed ✓'; el.style.color = '#4A7C59'; }
+    setTimeout(() => location.reload(), 800);
   } else {
-    if (el) { el.textContent = '⚠ No cloud data'; el.style.color = '#8B0000'; }
-    setTimeout(() => { if(el) el.textContent = '☁ Synced'; el.style.color='#4A7C59'; }, 2000);
+    if (el) { el.textContent = '⚠ No cloud data yet'; el.style.color = '#888'; }
+    setTimeout(() => { if (el) { el.textContent = '☁ Ready'; el.style.color = '#4A7C59'; } }, 2500);
+  }
+}
+
+async function testCloud() {
+  const el = document.getElementById('cloud-status');
+  if (el) { el.textContent = '☁ Testing...'; el.style.color = '#C8973A'; }
+  try {
+    const writeR = await fetch(FB_URL, {
+      method: 'PUT',
+      body: JSON.stringify({_test: true, _ts: Date.now()}),
+      headers: {'Content-Type': 'application/json'}
+    });
+    if (!writeR.ok) {
+      if (el) { el.textContent = '✗ Write failed ' + writeR.status; el.style.color = '#8B0000'; }
+      return;
+    }
+    const readR = await fetch(FB_URL + '?t=' + Date.now());
+    const data = await readR.json();
+    if (data && data._test) {
+      if (el) { el.textContent = '✓ Cloud working!'; el.style.color = '#4A7C59'; }
+    } else {
+      if (el) { el.textContent = '✗ Read failed'; el.style.color = '#8B0000'; }
+    }
+  } catch(e) {
+    if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
   }
 }
 </script>
