@@ -4,28 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bwoodshares — Watchlist Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:       #0a0c10;
-      --surf:     #111318;
-      --surf2:    #181c24;
-      --border:   #222830;
-      --accent:   #f0a500;
-      --accent2:  #c97f00;
-      --green:    #00c87a;
-      --gdim:     rgba(0,200,122,.12);
-      --red:      #e03e3e;
-      --rdim:     rgba(224,62,62,.12);
-      --blue:     #4f9cf9;
-      --muted:    #5a6275;
-      --text:     #dde1ea;
-      --dim:      #8b929f;
-      --t1:       #f0a500;
-      --t2:       #4f9cf9;
-      --t3:       #e03e3e;
+      --bg:       #07090d;
+      --surf:     #0e1218;
+      --surf2:    #151a23;
+      --border:   #1d242f;
+      --accent:   #f4b04a;
+      --accent2:  #d99a2e;
+      --green:    #2dd896;
+      --gdim:     rgba(45,216,150,.12);
+      --red:      #f25f5c;
+      --rdim:     rgba(242,95,92,.12);
+      --blue:     #5ba8ff;
+      --muted:    #6b7488;
+      --text:     #e8ecf4;
+      --dim:      #98a0b3;
+      --t1:       #f4b04a;
+      --t2:       #5ba8ff;
+      --t3:       #f25f5c;
+      --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.5);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 16px 40px -16px rgba(0,0,0,.6);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+    body{
+      background:var(--bg);
+      background-image:radial-gradient(1200px 500px at 50% -10%, rgba(244,176,74,.045), transparent 60%);
+      color:var(--text);
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
 
     /* ── Setup overlay — off-canvas right drawer (Alpine-controlled) ── */
     #setup-overlay{
@@ -553,6 +566,81 @@
   .mos-pick-badge-new{background:var(--accent);color:#000}
   .mos-pick-ticker-new{color:var(--accent)}
 
+  /* ══ Design polish layer — modern facelift (overrides, no class renames) ══ */
+  /* Header: frosted glass */
+  header{
+    background:rgba(14,18,24,.82);
+    backdrop-filter:blur(14px) saturate(150%);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .logo-icon{
+    background:linear-gradient(135deg,#f6c065,#e09422);
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(244,176,74,.35);
+  }
+  .logo-text h1{letter-spacing:-.2px}
+
+  /* Tab bar: refined active state */
+  .tab-bar{
+    background:rgba(14,18,24,.6);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .tab-btn{font-weight:600;font-size:12.5px;color:var(--muted);transition:color .18s,border-color .18s,background .18s;border-radius:8px 8px 0 0}
+  .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab-btn.active{color:var(--accent);background:linear-gradient(180deg,rgba(244,176,74,.07),transparent)}
+
+  /* Cards: depth + soft radius */
+  .card{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .card:hover{border-color:rgba(244,176,74,.4);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .card::before{height:2px;opacity:.9}
+  .mon-card{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .sw-col,.swing-banner{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .obox,.litem{border-radius:8px}
+  .mkt-idx,.mkt-event,.mkt-pi-card,.wr-potw-box,.wr-missed-box,.wr-perf-card,.wr-eow-card{border-radius:10px;border-color:rgba(255,255,255,.05)}
+  .potw-stat,.mos-pick-stat,.mos-source-card,.fil-item{border-radius:9px}
+  .mos-step{border-radius:10px}
+  .sp500-stat{border-radius:12px}
+
+  /* Hero wraps: bigger radius + glow */
+  .potw-wrap{border-radius:18px;border-width:1px;border-color:rgba(244,176,74,.5);box-shadow:0 0 0 1px rgba(244,176,74,.08), var(--shadow-lg)}
+  .wr-wrap{border-radius:18px;border-width:1px}
+  .mos-pick-wrap{border-radius:18px;border-width:1px}
+  .mos-pick-wrap-new{border-width:1px}
+
+  /* Tables */
+  .tbl-wrap{border-radius:14px;box-shadow:var(--shadow)}
+  th{font-weight:700}
+  tbody tr:hover{background:rgba(255,255,255,.025)}
+  .sp500-table tr:hover td{background:rgba(255,255,255,.025)}
+  .mos-screener tr:hover td{background:rgba(255,255,255,.025)}
+
+  /* Buttons + inputs */
+  .btn{border-radius:9px;background:linear-gradient(135deg,#f6c065,#e09422);box-shadow:0 2px 8px rgba(244,176,74,.25)}
+  .btn:hover{background:linear-gradient(135deg,#f0b44f,#cf8a1e);box-shadow:0 3px 12px rgba(244,176,74,.35)}
+  .btn-ghost,.refresh-btn{border-radius:9px}
+  .sp500-search{border-radius:9px}
+  .sector-btn{border-radius:7px}
+
+  /* Price strip: cleaner separators */
+  .strip{background:rgba(14,18,24,.5)}
+  .strip-item{border-right:1px solid rgba(255,255,255,.045)}
+
+  /* Section labels: slightly brighter rule */
+  .sec-label{letter-spacing:2.4px;font-weight:600}
+  .sec-label::after{background:linear-gradient(90deg,var(--border),transparent)}
+
+  /* Modern thin scrollbars */
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#2a3340;border-radius:6px;border:2px solid var(--bg)}
+  ::-webkit-scrollbar-thumb:hover{background:#39455a}
+
+  /* Footer */
+  footer{border-top:1px solid rgba(255,255,255,.05)}
+
   /* ── Mobile — phones ≤ 640px ── */
   @media(max-width:640px){
     /* Tab bar: tighter, smaller font */
@@ -588,18 +676,18 @@
       theme: {
         extend: {
           colors: {
-            'bw-bg':      '#0a0c10',
-            'bw-surf':    '#111318',
-            'bw-surf2':   '#181c24',
-            'bw-bdr':     '#222830',
-            'bw-accent':  '#f0a500',
-            'bw-accent2': '#c97f00',
-            'bw-green':   '#00c87a',
-            'bw-red':     '#e03e3e',
-            'bw-blue':    '#4f9cf9',
-            'bw-muted':   '#5a6275',
-            'bw-text':    '#dde1ea',
-            'bw-dim':     '#8b929f',
+            'bw-bg':      '#07090d',
+            'bw-surf':    '#0e1218',
+            'bw-surf2':   '#151a23',
+            'bw-bdr':     '#1d242f',
+            'bw-accent':  '#f4b04a',
+            'bw-accent2': '#d99a2e',
+            'bw-green':   '#2dd896',
+            'bw-red':     '#f25f5c',
+            'bw-blue':    '#5ba8ff',
+            'bw-muted':   '#6b7488',
+            'bw-text':    '#e8ecf4',
+            'bw-dim':     '#98a0b3',
           }
         }
       }
@@ -1135,7 +1223,7 @@
       </span></div>
       <div class="sw-rule"><span class="sw-rn">5</span><span>
         <strong>SMA50 trend filter applies to every new long.</strong> Price must be above the
-        50-day moving average. TAP is the current example of a Rule 5 violation &mdash; below SMA50,
+        50-day moving average. TAP (now archived) was the canonical Rule 5 violation &mdash; below SMA50,
         no new swing longs.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">6</span><span>
@@ -1193,15 +1281,16 @@
         <tr>
           <td><span class="rank-dot r1">2</span></td>
           <td><span class="tk">SG</span><div class="co">Sweetgreen</div></td>
-          <td style="font-size:11px">Momentum + Wrap Catalyst</td>
-          <td><span class="sma-t">Testing (~$8.50&ndash;$9.00)</span></td>
+          <td style="font-size:11px">ARCHIVED Jun 10 &mdash; thesis closed</td>
+          <td><span class="sma-b">Below zone (~$8.00) &#9888;</span></td>
           <td style="font-size:11px">&ge;4M shares/day<div class="co">Avg ~2.5M</div></td>
-          <td class="r" style="font-size:12px;color:var(--green)">3.5:1</td>
+          <td class="r" style="font-size:12px;color:var(--muted)">&mdash;</td>
           <td class="r" style="font-size:12px;color:var(--red)">$7.50</td>
-          <td><span class="fit-hi">GOOD</span></td>
+          <td><span class="fit-lo">SKIP</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            Small price ($9.60) = most shares per 1% bankroll dollar. Wrap catalyst still live.
-            High beta = 10&ndash;15% weekly moves possible. Watch SMA50 &mdash; if lost, Rule 5 voids the entry.
+            <strong style="color:var(--red)">Archived June 10, 2026</strong> at ~$8.00 (&minus;6% from Oct 2025 entry).
+            Infinite Kitchen sale killed the moat thesis Nov 2025; the wrap swing never held the zone.
+            See History tab for the full post-mortem. No new entries.
           </td>
         </tr>
         <tr>
@@ -1294,17 +1383,17 @@
         </tr>
         <tr>
           <td><span class="rank-dot r4">9</span></td>
-          <td><span class="tk">TAP</span><div class="co">Molson Coors</div></td>
-          <td style="font-size:11px">Income / Ex-Div Only</td>
-          <td><span class="sma-b">Below SMA50 &mdash; downtrend &#9888;</span></td>
-          <td style="font-size:11px">N/A &mdash; income hold only</td>
-          <td class="r" style="font-size:12px;color:var(--muted)">&mdash;</td>
-          <td class="r" style="font-size:12px;color:var(--red)">$38</td>
-          <td><span class="fit-lo">SKIP</span></td>
+          <td><span class="tk">DELL</span><div class="co">Dell Technologies</div></td>
+          <td style="font-size:11px">AI Server Assembly &mdash; NEW ADD</td>
+          <td><span class="sma-a">Above SMA50 &#10003;</span></td>
+          <td style="font-size:11px">$420&ndash;$450 (pullback only)</td>
+          <td class="r" style="font-size:12px;color:var(--green)">$550</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$395</td>
+          <td><span class="fit-md">WAIT</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            Below SMA50 = <strong style="color:var(--red)">Rule 5 violation</strong> for new long
-            swing entries. Ex-div May 29 is an income event, not a swing catalyst. TAP is Josh&rsquo;s
-            long-term income hold only. Do not swing trade this name under the current framework.
+            +33% single-day post-earnings spike May 29 &mdash; <strong style="color:var(--accent)">do not chase at ~$461</strong>.
+            Record $51.3B AI backlog makes the pullback a buy. Swing entry only on consolidation
+            into $420&ndash;$450 with volume confirmation.
           </td>
         </tr>
       </tbody>
@@ -1446,8 +1535,7 @@ const WL = [
   {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold ↑',   tc:'t1', entry:'$185–$200', target:'$275', stop:'$165',  catalyst:'AI cloud RPO $523B; Wedbush PT $275',          note:"Benjamin Graham value buy (Josh, Mar 2026). Enterprise DB lock-in = structural pricing power. ✓ Price verified ~$193 May 25"},
   {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick ↑',     tc:'t2', entry:'$390–$400', target:'$550', stop:'$370',  catalyst:'MI400 Q3 launch; $60B hyperscaler commits; record $5.8B DC revenue; stock at $515 May 31 — HOLD ONLY, above zone', note:'ABOVE entry zone at $515 — hold existing, no new buys. Dell blowout validated AI server demand. Wait for $440–$460 support retest before adding. Stop $370. ✓ Price verified $515 May 31'},
   {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption ↑',    tc:'t2', entry:'$52–$60',   target:'$75',  stop:'$45',   catalyst:'Tesla FSD insurance LIVE; Baird + Piper conferences Jun 2-3; Q1 rev +71% YoY; stock at $66 May 31 — above zone, trail stop', note:'ABOVE entry zone at $66 — up +13% from zone top. If in from $56–58: trail stop to $58. Not in: wait for pullback below $60 before adding. Target $75 intact. ✓ Price verified ~$66 Jun 2'},
-  {ticker:'TAP',  company:'Molson Coors Beverage',   tier:'Dividend (Josh only)',tc:'t1', entry:'$40–$44',   target:'$49',  stop:'$38',   catalyst:'4.58% yield; ex-div May 29 🔔 — fails Kevin pricing power test',    note:'Josh-only hold from Dec 2025. No innovation story. Kevin would not hold. Small income position only.'},
-  {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
+  {ticker:'DELL', company:'Dell Technologies Inc',    tier:'AI Server Assembly 🚀 NEW', tc:'t2', entry:'$420–$450', target:'$550', stop:'$395', catalyst:'Q1 FY27 blowout May 28: AI server rev $16.1B (+757% YoY); $24.4B new AI orders; record $51.3B backlog; FY guide raised to $165–169B; 7 major PT raises to $460–$550', note:'The AI server assembly layer — completes the stack: NVDA compute, AVGO/MRVL silicon, ANET networking, VRT power/cooling, DELL assembly. +33% single day May 29 (best ever). ABOVE ZONE at ~$461 — do NOT chase. Entry on pullback to $420–$450 consolidation. Median PT $497, Loop Capital $550. ✓ Price verified ~$461 Jun 8'},
   {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security ↑ — Earnings Beat ✓', tc:'t1', entry:'$250–$265',  target:'$360', stop:'$275',  catalyst:'Q3 FY2026 BEAT: EPS $0.85 (beat $0.06), Rev $3.002B (beat 1.96%); Q4+FY raise; NGS ARR +60% YoY; AH $301.70', note:'BEAT + RAISE confirmed Jun 2. $302 AH — FAR above entry zone. Stop trailed from $232 → $275. No new entries. POTW pass (1.52% AH gap too small). Target $360 intact. ✓ Price verified $301.70 AH Jun 2'},
   {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR. DIA contract win = H2 2026 catalyst. ✓ Price verified $137 May 26'},
   {ticker:'VRT',  company:'Vertiv Holdings Co',       tier:'AI Infrastructure Hardware 🆕',tc:'t2', entry:'$310–$340',  target:'$420', stop:'$290',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY, EPS +83% YoY; BofA PT $440; RBC PT $435; Americas DC +44%', note:'Power + cooling for every AI GPU rack. 18–24 month equipment lead times lock in revenue. 75% of revenue from data centers. Backlog $15B covers 12+ months forward. ✓ Price verified $327 May 26'},
@@ -1790,19 +1878,12 @@ const MONITOR_DATA = {
     thesis:'INTACT — ABOVE ENTRY ZONE', verdict:'ABOVE ZONE — $66 TRAIL STOP TO $58', verdictCls:'vd-caution',
     alert:'Call Up — June 2, 2026: LMND ~$66.41 — up +13% from top of entry zone $60. Catalysts: Baird Global Consumer/Tech Conference Jun 2 (CEO Daniel Schreiber presenting), Piper Sandler Fintech Conference Jun 3, Morgan Stanley Financials Conference Jun 10 — three investor conferences in 10 days providing sustained catalyst flow. Q1 2026: revenue $258M (+71% YoY), EPS -$0.47 vs -$0.57 estimate. Tesla FSD insurance LIVE in AZ and OR. ABOVE ENTRY ZONE: If holding from $52–$60 zone: trail stop up to $58 (zone top), targeting $75. If NOT in: do not chase at $66 — wait for pullback below $60 for better R/R. Stock approaching target $75 ($9 upside vs $21 downside from here = poor R/R for new entry). Thesis fully intact.',
   },
-  TAP: {
-    pp:  {score:3,  note:'FAILS pricing power test. Consumers are shifting to craft/premium/alternative. TAP is a price-taker in a declining category.'},
-    mac: {score:4,  note:'Consumer discretionary headwinds. Premiumization trend working directly against TAP core brand. No growth catalyst visible.'},
-    cat: {score:4,  note:'⚠ EX-DIVIDEND TOMORROW MAY 29. $0.48/share dividend, payment date June 12. Annual yield 4.58%. Must hold shares before open May 29 to capture.'},
-    thesis:'WEAK — JOSH INCOME HOLD ONLY', verdict:'⚠ EX-DIV TOMORROW MAY 29', verdictCls:'vd-caution',
-    alert:'Call Up — May 28, 2026: ACTION REQUIRED — TAP ex-dividend date is TOMORROW May 29. $0.48/share, payment June 12. Annual yield 4.58%. If Josh is holding for the dividend, confirm position is open BEFORE market open tomorrow. Stock will drop ~$0.48 on ex-date — do NOT buy specifically for dividend capture. Existing holders: lock in position tonight. TAP fails pricing power framework; no new buys. Income hold only.',
-  },
-  SG: {
-    pp:  {score:4,  note:'PARTIAL FAIL — sold Infinite Kitchen tech to Wonder (Nov 2025, $100M cash + $86.4M stock). The owned technology moat is gone. Now a pure wrap-menu momentum play.'},
-    mac: {score:5,  note:'Rate cuts help growth restaurants but fast-casual is highly competitive. Wraps priced under $15 — accessible price point is a positive for traffic frequency.'},
-    cat: {score:7,  note:'Wrap national rollout LIVE — tested well in NY, Midwest, LA. JPMorgan upgraded to Overweight PT $13. Oppenheimer Outperform PT $10. Q2 same-store sales (July) is the make-or-break event.'},
-    thesis:'REVISED — SWING ONLY', verdict:'ABOVE ZONE — HOLD STOP $7.50', verdictCls:'vd-caution',
-    alert:'Call Up — May 28, 2026: SG $9.26 (May 23), was $9.71 May 22. Wrap national rollout active and tracking well — NY, Midwest, LA reception positive. JPMorgan upgraded to Overweight PT $13; Oppenheimer Outperform PT $10. Stock is ABOVE entry zone $9.00–$9.50. Do not chase. If in from zone: hold with stop $7.50. Target $13. Q2 same-store sales (July) is the exit decision point — if the wrap launch does not show up in Q2 data, exit on that print.',
+  DELL: {
+    pp:  {score:7,  note:'Enterprise AI server assembly at scale — only Dell and SMCI build full-rack AI systems at hyperscale volume, and Dell owns the enterprise channel relationships SMCI lacks. ISG (Infrastructure Solutions Group) attach rates: services, financing, networking bundled per rack. Record $51.3B backlog = 12+ months of contracted revenue visibility.'},
+    mac: {score:8,  note:'Every enterprise AI deployment needs assembled, integrated, serviced rack systems — Dell is the layer between chip vendors and the data center floor. $24.4B new AI orders in a single quarter confirms enterprise AI capex is accelerating, not slowing. Direct beneficiary of the same wave driving NVDA, AVGO, ANET, VRT.'},
+    cat: {score:9,  note:'Q1 FY27 (May 28): AI server revenue $16.1B (+757% YoY). $24.4B new AI orders. Record backlog $51.3B. FY guide raised to $165–169B revenue, ~$60B AI server revenue. Stock +33% May 29 — best single day ever. PT raises: Loop Capital $550, Wells Fargo $505, JPM/Raymond James/Bernstein $500, Citi $475. Median PT $497.'},
+    thesis:'INTACT — NEW ADD', verdict:'ABOVE ZONE — WAIT FOR PULLBACK', verdictCls:'vd-caution',
+    alert:'Call Up — June 10, 2026 (NEW ADD): DELL ~$461 — added to watchlist as the AI server assembly layer, completing the infrastructure stack (NVDA compute, AVGO/MRVL custom silicon, ANET networking, VRT power/cooling, DELL assembly). Q1 FY27 was the biggest AI earnings print of the year: $16.1B AI server revenue (+757% YoY), $24.4B new orders, $51.3B record backlog. Stock ran +33% on the print — do NOT chase at $461. Entry zone $420–$450 on post-spike consolidation. Target $550 (Loop Capital). Stop $395. At zone midpoint $435: R/R = $115 up / $40 down = 2.9:1 ✓. The May 28 Dell print is already cited across this dashboard as AI-stack validation — now we own the name directly.',
   },
   PANW: {
     pp:  {score:9,  note:'Platformization = catastrophic switching cost. Once PANW deploys Cortex + XSIAM across an enterprise, 8-12 security tools are consolidated on a single platform. Unwinding it requires a 12-18 month project. Cybersecurity spend is non-discretionary — it grows in recessions.'},
@@ -1962,10 +2043,37 @@ const HISTORY = [
     ticker:'Watchlist v10→v11', company:'Call Up June 10, 2026 — CPI In-Line; ORCL Prints Tonight; MRVL Capital Play Entry Zone Active; Warsh Warning',
     added:'June 10, 2026', addedPrice:'—',
     exitDate:'—', exitPrice:'—',
-    pnl:'—', status:'ACTIVE', statusCls:'hs-active',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
     fw:'Josh + Kevin',
     reason:'Double Macro Day debrief: (1) CPI IN-LINE — core +0.2% MoM (below +0.3% est). Macro overlay cleared. Full size on ORCL tomorrow if beat tonight. (2) ORCL earnings tonight AH — EPS consensus $1.89–$1.96, rev $19B. Beat prob 70%. Entry Wed Jun 11 ONLY on beat + raise + gap + 1.5x ADV. Miss = PASS + Scenario B puts. (3) MRVL Capital Play ENTRY ZONE ACTIVE — $260.94 Jun 10, inside $255–$268 zone. S&P 500 inclusion Jun 22 confirmed (replaces Pool Corp + Campbell\'s). Entry window Jun 11–13. Target $316. Stop $228. (4) WARSH WARNING: 70% warning signals flashing, Kevin Warsh Fed event Jun 16–17 = macro risk. Hard exit all swings Fri Jun 13 EOD is doubly critical. (5) NVDA $201–$207 still in zone. VIX +10% today — elevated premium, tighter stops. (6) December 25bp rate HIKE now priced in — H2 macro headwind elevated.',
     lesson:'CPI result confirms the value of the macro overlay rule: always wait for the data before sizing. Core came in below estimate, clearing the path for full-size entry. The Warsh June 16–17 event reinforces why the Fri Jun 13 hard exit rule exists — unknown macro events on the horizon mean no weekend holds, ever.',
+  },
+  {
+    ticker:'TAP', company:'Molson Coors Beverage',
+    added:'Dec 2025', addedPrice:'$40–$44 zone',
+    exitDate:'June 12, 2026 (post-dividend)', exitPrice:'—',
+    pnl:'~Flat + 4.6% yield collected', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh only — dividend income hold; failed Kevin pricing power test from day one (PP 3/10)',
+    reason:'Dividend hold thesis completed its purpose: ex-div May 29 captured, $0.48/share payment lands June 12. No remaining catalyst — consumers shifting to craft/premium works directly against the core brand, and the framework scored it PP 3/10, Macro 4/10 months ago. Capital is better deployed in the AI infrastructure stack. Instruction: collect the June 12 dividend payment, then close the position.',
+    lesson:'A position that fails the pricing power test should never have survived two framework revisions. Income holds belong in a separate income account, not on a catalyst-driven watchlist — they occupy attention and capital without a path to the 2:1 R/R minimum.',
+  },
+  {
+    ticker:'SG', company:'Sweetgreen Inc.',
+    added:'Oct 5, 2025', addedPrice:'~$8.50',
+    exitDate:'June 10, 2026', exitPrice:'~$8.00',
+    pnl:'~−6%', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh catalyst swing (downgraded from Josh + Kevin after Infinite Kitchen sale Nov 2025)',
+    reason:'Final close of a twice-revised thesis. Original AI Infinite Kitchen moat thesis died Nov 2025 when the tech was sold to Wonder. The remaining wrap-menu swing went nowhere: $9.26 May 23 → $8.00 June 9 (range $7.41–$8.26), drifting below the $9.00–$9.50 entry zone with stop $7.50 nearly tested. Q2 same-store sales (July) was the decision point, but the stock is not holding the zone long enough to reach it. Exit ~$8.00 for roughly −6% from the Oct 2025 entry.',
+    lesson:'When the core differentiator is sold, close the position — do not downgrade and linger. The Nov 2025 revision kept SG alive for seven months of dead capital. A thesis kill event is an exit signal, not a rewrite signal.',
+  },
+  {
+    ticker:'Watchlist v11→v12', company:'June 10, 2026 — Dashboard Facelift; DELL Added (AI Server Assembly); TAP + SG Archived',
+    added:'June 10, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'ACTIVE', statusCls:'hs-active',
+    fw:'Josh + Kevin',
+    reason:'Three changes: (1) DELL added as 13th ticker — AI server assembly layer completing the infrastructure stack (NVDA compute, AVGO/MRVL silicon, ANET networking, VRT power/cooling, DELL assembly). Q1 FY27: AI server rev $16.1B (+757% YoY), $24.4B new orders, record $51.3B backlog. ABOVE ZONE at ~$461 after +33% best-day-ever — entry on pullback to $420–$450, target $550, stop $395. (2) TAP archived — dividend captured (payment Jun 12), PP 3/10 from day one, no catalyst path. (3) SG archived at ~$8.00 (~−6%) — thesis died with the Infinite Kitchen sale Nov 2025; wrap swing never held the zone. Considered and rejected: MU at $1,040 (+912% in 12 months, avg PT $717 BELOW spot — the INTC RSI-80 lesson applies). Also this session: full visual redesign — Inter typography, refreshed palette, depth/shadows, frosted-glass header — zero functional changes.',
+    lesson:'Watchlist hygiene is part of the framework. Two positions that failed their tests months ago survived on inertia. The call up cadence exists to force these decisions — archive on thesis failure, not on portfolio review guilt. And never add a parabolic name just because the sector is hot: MU up 912% with consensus PT below spot is the same setup that got INTC archived.',
   },
 ];
 
