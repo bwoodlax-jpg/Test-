@@ -139,7 +139,6 @@
   .section-body { padding: 20px 22px; }
   .section-body.hidden { display: none; }
 
-  /* Script directions (stage directions) */
   .direction {
     background: #FFF8E7;
     border-left: 3px solid var(--gold);
@@ -151,7 +150,6 @@
     font-style: italic;
   }
 
-  /* Editable script text */
   .script-text {
     font-size: 15.5px;
     line-height: 1.85;
@@ -169,7 +167,6 @@
     pointer-events: none;
   }
 
-  /* Code call-outs */
   .code-box {
     background: var(--light);
     border: 1px solid #B5D8DC;
@@ -193,7 +190,6 @@
   }
   .code-desc { font-size: 13px; color: #333; flex: 1; }
 
-  /* Scenario blocks */
   .scenario {
     border: 1px solid #D8DDE3;
     border-radius: 6px;
@@ -218,7 +214,6 @@
     font-weight: 700;
   }
 
-  /* ── Questionnaire Section ── */
   .quiz-header {
     background: var(--navy);
     color: white;
@@ -283,7 +278,6 @@
   .quiz-score-bar .score-label { font-size: 14px; font-weight: 700; color: var(--navy); }
   .quiz-score-bar .score-val { font-size: 24px; font-weight: 800; color: var(--teal); }
 
-  /* ── Notes area ── */
   .notes-card {
     background: #FFFDE7;
     border: 1px solid #F0D88A;
@@ -298,7 +292,6 @@
     font-family: inherit; color: #333; background: white;
   }
 
-  /* Print styles */
   @media print {
     #topbar, #statsbar, #time-bar { display: none !important; }
     body { background: white; }
@@ -313,6 +306,12 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
+
+<!-- Outdated Banner -->
+<div style="background:#8B0000;color:white;padding:11px 28px;display:flex;align-items:center;gap:12px;font-size:0.85rem;font-weight:700;letter-spacing:0.3px;z-index:999;position:relative;">
+  ⚠&nbsp; OUTDATED — DO NOT USE
+  <span style="font-weight:400;opacity:0.85;">|&nbsp; This script has been superseded by an updated version from the education team. Do not use for production scripting.</span>
+</div>
 
 <!-- Top Bar -->
 <div id="topbar">
@@ -348,7 +347,6 @@
 <!-- Main -->
 <div id="main">
 
-  <!-- Script Header -->
   <div class="script-header">
     <div class="module-tag">Module 1 of 3 · DRAFT</div>
     <h1>Antepartum Office Visits — CPT 2027</h1>
@@ -360,7 +358,6 @@
     </div>
   </div>
 
-  <!-- SECTION 0: INTRO -->
   <div class="section-card" id="sec-0">
     <div class="section-header" onclick="toggleSection('sec-0')">
       <div class="seg-num" style="background:var(--navy)">0</div>
@@ -378,7 +375,6 @@ This module covers antepartum office visits. We're going to walk through exactly
     </div>
   </div>
 
-  <!-- SECTION 1: THE BIG PICTURE -->
   <div class="section-card" id="sec-1">
     <div class="section-header" onclick="toggleSection('sec-1')">
       <div class="seg-num" style="background:var(--red)">1</div>
@@ -405,7 +401,6 @@ This module is focused entirely on that first phase: antepartum office visits.</
     </div>
   </div>
 
-  <!-- SECTION 2: NEW CODING FRAMEWORK -->
   <div class="section-card" id="sec-2">
     <div class="section-header" onclick="toggleSection('sec-2')">
       <div class="seg-num" style="background:var(--teal)">2</div>
@@ -423,7 +418,7 @@ For your typical prenatal office visit, that means:
 
 The fundamental shift is this: instead of counting prenatal visits and rolling them into 59425 or 59426, you are now billing each visit individually. Every prenatal appointment is a standalone claim.
 
-And the setting matters. For patients who need inpatient management during pregnancy — hospital admissions, observation stays — use 99221 through 99223 for the initial encounter, or 99231 through 99233 for subsequent hospital days. Telehealth visits use the telehealth E/M range, 98000 through 98015. Home visits use the home service codes. If a patient is in critical condition during pregnancy, 99291 and 99292 apply.
+And the setting matters. For patients who need inpatient management during pregnancy, use 99221 through 99223 for the initial encounter, or 99231 through 99233 for subsequent hospital days. Telehealth visits use the telehealth E/M range, 98000 through 98015.
 
 The good news: these are codes you already know. The framework is familiar. The difference is you're now applying them to every prenatal encounter, not rolling them into a bundle.</div>
       <div class="code-box">
@@ -437,7 +432,6 @@ The good news: these are codes you already know. The framework is familiar. The 
     </div>
   </div>
 
-  <!-- SECTION 3: MDM — HOW TO SELECT THE RIGHT LEVEL -->
   <div class="section-card" id="sec-3">
     <div class="section-header" onclick="toggleSection('sec-3')">
       <div class="seg-num" style="background:var(--teal)">3</div>
@@ -446,24 +440,21 @@ The good news: these are codes you already know. The framework is familiar. The 
       <div class="collapse-icon">▼</div>
     </div>
     <div class="section-body">
-      <div class="direction">📊 Slide: MDM 3-element table. Emphasize "Problems Addressed" box. Show 99212–99215 complexity ladder.</div>
+      <div class="direction">📊 Slide: MDM 3-element table. Emphasize "Problems Addressed" box.</div>
       <div class="script-text" contenteditable="true" data-key="s3" data-placeholder="Type script here...">Now let's talk about how you select the right code for each visit. Most physicians will select by Medical Decision Making — MDM. MDM has three elements: the problems addressed, the amount and complexity of data reviewed, and the risk of complications.
 
-Here's the AMA's specific guidance for prenatal visits: pregnancy itself is evaluated under "Problems Addressed." The complexity of that pregnancy is what drives the level. A routine uncomplicated pregnancy at a low-complexity visit looks different from a patient with gestational diabetes, hypertension, and a growth concern.
+Here's the AMA's specific guidance for prenatal visits: pregnancy itself is evaluated under "Problems Addressed." The complexity of that pregnancy is what drives the level.
 
-Let me give you three quick levels as a reference point.
+Straightforward to Low — code 99212 or 99213. This is your routine prenatal visit. A patient at 20 weeks, uncomplicated singleton pregnancy, normal vitals, fetal heart tones present, labs reviewed and normal, no new concerns.
 
-Straightforward to Low — code 99212 or 99213. This is your routine prenatal visit. A patient at 20 weeks, uncomplicated singleton pregnancy, normal vitals, fetal heart tones present, labs reviewed and normal, no new concerns. The problem is stable, minimal data review, minimal risk. That's 99212 or 99213 depending on how you document complexity.
+Moderate complexity — code 99214. This is your patient with a managed complication. Think 28 weeks, well-controlled gestational hypertension. You review blood pressure trends, adjust her monitoring plan.
 
-Moderate complexity — code 99214. This is your patient with a managed complication. Think 28 weeks, well-controlled gestational hypertension. You review blood pressure trends, adjust her monitoring plan, discuss warning signs with her. Multiple data points reviewed, management decision made. That's 99214.
+High complexity — 99215. This is your high-risk prenatal visit. Think 32 weeks with poorly controlled gestational diabetes, new concern for intrauterine growth restriction. You're reviewing imaging data, making multiple management changes, coordinating with MFM.
 
-High complexity — 99215. This is your high-risk prenatal visit. Think 32 weeks with poorly controlled gestational diabetes, new concern for intrauterine growth restriction on today's ultrasound. You're reviewing imaging data, making multiple management changes, coordinating with MFM. That's 99215.
-
-The documentation message: every note needs to stand on its own. Document why you made the decision you made. Under the old global model, a visit note just confirmed the visit happened. Under the new model, the note has to support the specific E/M level billed. The AMA's own language is: documentation to support E/M code selection is key, particularly on Risk.</div>
+The documentation message: every note needs to stand on its own. Document why you made the decision you made.</div>
     </div>
   </div>
 
-  <!-- SECTION 4: MODIFIER TH AND ICD-10 -->
   <div class="section-card" id="sec-4">
     <div class="section-header" onclick="toggleSection('sec-4')">
       <div class="seg-num" style="background:var(--sage)">4</div>
@@ -475,9 +466,9 @@ The documentation message: every note needs to stand on its own. Document why yo
       <div class="direction">📊 Slide: Modifier TH callout box. Then ICD-10 categories Z34 and O-codes.</div>
       <div class="script-text" contenteditable="true" data-key="s4" data-placeholder="Type script here...">Two more elements every antepartum claim needs: Modifier TH and the right ICD-10 code.
 
-Modifier TH stands for "Obstetrical treatment or services, antepartum or postpartum." The AMA confirms you should apply Modifier TH to your prenatal and postpartum E/M claims. This tells the payer: this is a pregnancy-related service. Without it, some payers may process these like a standard office visit and deny or underpay. Apply TH to every antepartum E/M claim.
+Modifier TH stands for "Obstetrical treatment or services, antepartum or postpartum." Apply Modifier TH to your prenatal and postpartum E/M claims. This tells the payer: this is a pregnancy-related service.
 
-For ICD-10, the two main categories are: Z34.XX, which covers encounters for supervision of a normal pregnancy, and the O00 through O9A range for any condition that affects the management of pregnancy. The specific Z34 code is based on trimester and whether it's the patient's first pregnancy — for example Z34.01 for first trimester of a first pregnancy, Z34.22 for second trimester of a subsequent pregnancy.
+For ICD-10, the two main categories are: Z34.XX for supervision of a normal pregnancy, and the O00 through O9A range for any condition that affects the management of pregnancy.
 
 When there's a complication or high-risk condition, use the specific O-code rather than the Z34. Document and code the actual diagnosis.</div>
       <div class="code-box">
@@ -485,34 +476,28 @@ When there's a complication or high-risk condition, use the specific O-code rath
         <div class="code-row"><div class="code-num">Z34.XX</div><div class="code-desc">Encounter for supervision of normal pregnancy (specify trimester and parity)</div></div>
         <div class="code-row"><div class="code-num">O00–O9A</div><div class="code-desc">Conditions affecting pregnancy management — use specific code for complications</div></div>
         <div class="code-row"><div class="code-num">Z33.1</div><div class="code-desc">Pregnant state, incidental — only when pregnancy is NOT affecting the encounter</div></div>
-        <div class="code-row"><div class="code-num">Z3A.XX</div><div class="code-desc">Weeks of gestation — assign to specify gestational age (use completed weeks)</div></div>
+        <div class="code-row"><div class="code-num">Z3A.XX</div><div class="code-desc">Weeks of gestation — assign to specify gestational age</div></div>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 5: TRANSITION YEAR -->
   <div class="section-card" id="sec-5">
     <div class="section-header" onclick="toggleSection('sec-5')">
-      <div class="seg-num" style="background:var(--gold)" style="color:white">5</div>
+      <div class="seg-num" style="background:var(--gold)">5</div>
       <div class="seg-title">TRANSITION YEAR — PATIENTS WHO SPAN 2026 AND 2027</div>
       <div class="seg-meta">~1:30 · ~175 words</div>
       <div class="collapse-icon">▼</div>
     </div>
     <div class="section-body">
-      <div class="direction">📊 Slide: Timeline graphic — 2026 visits vs. 2027 visits. Highlight the December/January split point.</div>
+      <div class="direction">📊 Slide: Timeline graphic — 2026 visits vs. 2027 visits.</div>
       <div class="script-text" contenteditable="true" data-key="s5" data-placeholder="Type script here...">Before we get to the coding examples, there's one scenario your billing team needs to plan for now: patients who have prenatal visits in both 2026 and 2027.
 
-If a patient starts her prenatal care in mid-2026, some visits happen under the old rules — and she delivers in 2027 under the new ones. The AMA's guidance is clear on how to handle the split.
-
 Antepartum visits that occur in 2026 are reported using the old codes — 59425 for 4 to 6 visits, 59426 for 7 or more visits — or individual E/M codes if there are fewer than 4 visits in 2026. Antepartum visits that occur in 2027 are reported per-visit with E/M codes.
-
-The AMA's planning guidance: pregnancies with first visits in January through May of 2026 will likely complete under the current global framework. Pregnancies starting in September 2026 or later will have 3 or fewer prenatal visits in 2026, meaning E/M codes apply.
 
 This is a billing team planning item — make sure the date split is built into your workflow before December 31.</div>
     </div>
   </div>
 
-  <!-- SECTION 6: CODING SCENARIOS -->
   <div class="section-card" id="sec-6">
     <div class="section-header" onclick="toggleSection('sec-6')">
       <div class="seg-num" style="background:var(--navy)">6</div>
@@ -521,38 +506,16 @@ This is a billing team planning item — make sure the date split is built into 
       <div class="collapse-icon">▼</div>
     </div>
     <div class="section-body">
-      <div class="direction">📊 Slide: Show each scenario card one at a time. Walk through codes on screen. Pause between scenarios.</div>
-      <div class="script-text" contenteditable="true" data-key="s6-intro" data-placeholder="Intro text...">Let's put this all together with four real-world scenarios. I'll give you the clinical situation, and then the complete code set you'd report.</div>
-
-      <div class="scenario">
-        <div class="scenario-head">SCENARIO 1 — Routine 28-Week Established Visit</div>
-        <div class="scenario-body">Established OB patient, 28 weeks, uncomplicated singleton pregnancy. Normal vitals, fetal heart tones confirmed. You review labs from the prior week — all within normal limits. Patient has no complaints. Brief discussion on upcoming glucose screening. Straightforward management, minimal data.</div>
-        <div class="scenario-code">→ 99212 or 99213 | ICD-10: Z34.22 (supervision of normal pregnancy, second trimester) | Modifier TH<br>Note: 99212 if straightforward documentation; 99213 if low complexity with data review documented.</div>
-      </div>
-
-      <div class="scenario">
-        <div class="scenario-head">SCENARIO 2 — New Patient, First OB Visit at 9 Weeks</div>
-        <div class="scenario-body">New patient presenting for her first prenatal visit at 9 weeks. You perform a complete history and physical, review prior medical history including a prior miscarriage, order the initial prenatal lab panel, and counsel on diet, activity restrictions, and warning signs.</div>
-        <div class="scenario-code">→ 99204 or 99205 | ICD-10: Z34.01 (first trimester, first pregnancy) | Modifier TH<br>Note: 99205 if history complexity and counseling time support high complexity documentation.</div>
-      </div>
-
-      <div class="scenario">
-        <div class="scenario-head">SCENARIO 3 — High-Risk Visit, 32 Weeks</div>
-        <div class="scenario-body">Established patient at 32 weeks with type 1 diabetes and gestational hypertension. You review glucose logs, adjust insulin regimen, review today's BPP results showing concern for mild growth restriction, discuss additional monitoring plan, and send a referral to maternal-fetal medicine.</div>
-        <div class="scenario-code">→ 99215 | ICD-10: O24.012 (diabetes in pregnancy, type 1) + O10.412 (hypertension in pregnancy) + Z3A.32 | Modifier TH<br>Note: Multiple problems, independent review of imaging, management decisions including referral = high complexity MDM.</div>
-      </div>
-
-      <div class="scenario">
-        <div class="scenario-head">SCENARIO 4 — Telehealth Visit at 36 Weeks</div>
-        <div class="scenario-body">Established patient, 36 weeks, uncomplicated pregnancy. Patient connects via telehealth for routine check-in. You review kick count log, discuss birth plan preferences, confirm next appointment. Brief data review, no acute concerns, no management changes.</div>
-        <div class="scenario-code">→ 98000 or appropriate telehealth E/M code | ICD-10: Z34.33 (supervision of normal pregnancy, third trimester) | Modifier TH<br>Note: Verify your payer's telehealth coverage policy — some require specific platform or consent documentation.</div>
-      </div>
-
-      <div class="script-text" contenteditable="true" data-key="s6-outro" data-placeholder="Outro text..." style="margin-top:14px;">Notice the pattern across all four: each visit has its own E/M code, its own ICD-10 diagnosis, and Modifier TH. That's the new standard for every antepartum encounter.</div>
+      <div class="direction">📊 Slide: Show each scenario card one at a time.</div>
+      <div class="script-text" contenteditable="true" data-key="s6-intro">Let's put this all together with four real-world scenarios.</div>
+      <div class="scenario"><div class="scenario-head">SCENARIO 1 — Routine 28-Week Established Visit</div><div class="scenario-body">Established OB patient, 28 weeks, uncomplicated singleton pregnancy. Normal vitals, fetal heart tones confirmed. Labs reviewed, all within normal limits. No complaints.</div><div class="scenario-code">→ 99212 or 99213 | ICD-10: Z34.22 | Modifier TH</div></div>
+      <div class="scenario"><div class="scenario-head">SCENARIO 2 — New Patient, First OB Visit at 9 Weeks</div><div class="scenario-body">New patient, first prenatal visit at 9 weeks. Complete history and physical, prior miscarriage reviewed, initial prenatal lab panel ordered, counseling on diet and activity.</div><div class="scenario-code">→ 99204 or 99205 | ICD-10: Z34.01 | Modifier TH</div></div>
+      <div class="scenario"><div class="scenario-head">SCENARIO 3 — High-Risk Visit, 32 Weeks</div><div class="scenario-body">Established patient, 32 weeks, type 1 diabetes and gestational hypertension. Glucose logs reviewed, insulin adjusted, BPP reviewed with mild growth restriction concern, MFM referral placed.</div><div class="scenario-code">→ 99215 | ICD-10: O24.012 + O10.412 + Z3A.32 | Modifier TH</div></div>
+      <div class="scenario"><div class="scenario-head">SCENARIO 4 — Telehealth Visit at 36 Weeks</div><div class="scenario-body">Established patient, 36 weeks, uncomplicated. Telehealth check-in. Kick count log reviewed, birth plan discussed, no acute concerns.</div><div class="scenario-code">→ 98000 or appropriate telehealth E/M | ICD-10: Z34.33 | Modifier TH</div></div>
+      <div class="script-text" contenteditable="true" data-key="s6-outro" style="margin-top:14px;">Notice the pattern: each visit has its own E/M code, its own ICD-10 diagnosis, and Modifier TH. That's the new standard for every antepartum encounter.</div>
     </div>
   </div>
 
-  <!-- SECTION 7: CLOSING -->
   <div class="section-card" id="sec-7">
     <div class="section-header" onclick="toggleSection('sec-7')">
       <div class="seg-num" style="background:var(--navy)">7</div>
@@ -561,364 +524,58 @@ This is a billing team planning item — make sure the date split is built into 
       <div class="collapse-icon">▼</div>
     </div>
     <div class="section-body">
-      <div class="direction">📹 On-camera close. Friendly, confident. Show module roadmap graphic.</div>
-      <div class="script-text" contenteditable="true" data-key="s7" data-placeholder="Type script here...">That's Module 1. You now have the full picture for antepartum office visits under CPT 2027 — the specific E/M codes, how to select the right level using MDM, where Modifier TH goes, and how to handle the 2026-to-2027 transition.
+      <div class="direction">📹 On-camera close.</div>
+      <div class="script-text" contenteditable="true" data-key="s7">That's Module 1. You now have the full picture for antepartum office visits under CPT 2027.
 
-Take a moment now to complete the short knowledge check on the next page. It's six questions — should take about two minutes.
-
-When you're ready, Module 2 covers inpatient labor and the new labor management codes: 59080 through 59083. We'll see you there.</div>
+Take a moment to complete the short knowledge check. When you're ready, Module 2 covers inpatient labor and the new labor management codes.</div>
     </div>
   </div>
 
-  <!-- Notes Area -->
   <div class="notes-card">
     <label>📝 SCRIPT NOTES / PRODUCER NOTES (not in video)</label>
-    <textarea id="producer-notes" placeholder="Add production notes, revision requests, timing notes, visual cues..."></textarea>
+    <textarea id="producer-notes" placeholder="Add production notes, revision requests, timing notes..."></textarea>
   </div>
 
-  <!-- ── QUESTIONNAIRE ── -->
-  <div class="quiz-header">
-    <h2>MODULE 1 — KNOWLEDGE CHECK</h2>
-    <p>6 questions · Antepartum Office Visits · CPT 2027</p>
-  </div>
+  <div class="quiz-header"><h2>MODULE 1 — KNOWLEDGE CHECK</h2><p>6 questions · Antepartum Office Visits · CPT 2027</p></div>
   <div class="quiz-body">
-
-    <!-- Q1 -->
-    <div class="q-item">
-      <div class="q-num">Question 1 of 6</div>
-      <div class="q-text">Under CPT 2027, antepartum office visits are reported using which type of code?</div>
-      <div class="q-options" id="q1">
-        <label class="q-option"><input type="radio" name="q1" value="a"> Global OB codes (59400, 59425, 59426)</label>
-        <label class="q-option"><input type="radio" name="q1" value="b"> Evaluation &amp; Management (E/M) codes 99202–99215</label>
-        <label class="q-option"><input type="radio" name="q1" value="c"> Labor management codes 59080–59083</label>
-        <label class="q-option"><input type="radio" name="q1" value="d"> A new bundled antepartum-only code</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q1','b','q1-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q1-reveal">✓ Correct answer: B — Each antepartum visit is reported with the appropriate E/M code based on the location and complexity of the encounter.</div>
-    </div>
-
-    <!-- Q2 -->
-    <div class="q-item">
-      <div class="q-num">Question 2 of 6</div>
-      <div class="q-text">Which modifier should be applied to antepartum and postpartum E/M claims under CPT 2027?</div>
-      <div class="q-options" id="q2">
-        <label class="q-option"><input type="radio" name="q2" value="a"> Modifier 25 (significant, separately identifiable E/M)</label>
-        <label class="q-option"><input type="radio" name="q2" value="b"> Modifier 59 (distinct procedural service)</label>
-        <label class="q-option"><input type="radio" name="q2" value="c"> Modifier TH (obstetrical treatment/services, antepartum or postpartum)</label>
-        <label class="q-option"><input type="radio" name="q2" value="d"> No modifier is needed</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q2','c','q2-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q2-reveal">✓ Correct answer: C — Modifier TH identifies the claim as a pregnancy-related service and is recommended by the AMA for all antepartum and postpartum E/M visits.</div>
-    </div>
-
-    <!-- Q3 -->
-    <div class="q-item">
-      <div class="q-num">Question 3 of 6</div>
-      <div class="q-text">An established patient is seen at 28 weeks with well-controlled gestational hypertension. You review BP trends, adjust her monitoring plan, and counsel her on warning signs. Which E/M level most likely applies?</div>
-      <div class="q-options" id="q3">
-        <label class="q-option"><input type="radio" name="q3" value="a"> 99211 — Minimal</label>
-        <label class="q-option"><input type="radio" name="q3" value="b"> 99212 — Straightforward</label>
-        <label class="q-option"><input type="radio" name="q3" value="c"> 99213 — Low complexity</label>
-        <label class="q-option"><input type="radio" name="q3" value="d"> 99214 — Moderate complexity</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q3','d','q3-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q3-reveal">✓ Correct answer: D — 99214. Gestational hypertension is a chronic condition with exacerbation potential, data is reviewed, and a management plan is modified. That supports moderate MDM complexity.</div>
-    </div>
-
-    <!-- Q4 -->
-    <div class="q-item">
-      <div class="q-num">Question 4 of 6</div>
-      <div class="q-text">For a patient whose prenatal care begins in August 2026 and delivers in February 2027, how should antepartum visits be reported?</div>
-      <div class="q-options" id="q4">
-        <label class="q-option"><input type="radio" name="q4" value="a"> All visits — including 2026 visits — reported with E/M codes starting in 2026</label>
-        <label class="q-option"><input type="radio" name="q4" value="b"> 2026 visits reported with 59425/59426 or E/M per 2026 rules; 2027 visits reported with individual E/M codes</label>
-        <label class="q-option"><input type="radio" name="q4" value="c"> All visits combined and reported as a single claim in 2027 when the patient delivers</label>
-        <label class="q-option"><input type="radio" name="q4" value="d"> 2026 visits are held and reported together with the delivery in 2027</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q4','b','q4-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q4-reveal">✓ Correct answer: B — Per AMA guidance, antepartum visits occurring in 2026 follow 2026 CPT rules (59425/59426 or E/M for fewer than 4 visits); visits in 2027 are reported per-visit with E/M codes.</div>
-    </div>
-
-    <!-- Q5 -->
-    <div class="q-item">
-      <div class="q-num">Question 5 of 6</div>
-      <div class="q-text">Which ICD-10-CM code category covers encounters for supervision of a normal pregnancy?</div>
-      <div class="q-options" id="q5">
-        <label class="q-option"><input type="radio" name="q5" value="a"> O00–O9A — Pregnancy, childbirth and the puerperium</label>
-        <label class="q-option"><input type="radio" name="q5" value="b"> Z33 — Pregnant state</label>
-        <label class="q-option"><input type="radio" name="q5" value="c"> Z34.XX — Encounter for supervision of normal pregnancy</label>
-        <label class="q-option"><input type="radio" name="q5" value="d"> Z3A.XX — Weeks of gestation</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q5','c','q5-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q5-reveal">✓ Correct answer: C — Z34.XX covers supervision of normal pregnancy (specify trimester and parity). O00–O9A is used when there are complications. Z3A is used to report weeks of gestation as an additional code.</div>
-    </div>
-
-    <!-- Q6 -->
-    <div class="q-item">
-      <div class="q-num">Question 6 of 6</div>
-      <div class="q-text">Under CPT 2027 MDM rules, where does pregnancy factor into code level selection?</div>
-      <div class="q-options" id="q6">
-        <label class="q-option"><input type="radio" name="q6" value="a"> It does not factor into MDM — a separate maternity MDM table applies</label>
-        <label class="q-option"><input type="radio" name="q6" value="b"> Under "Amount and Complexity of Data Reviewed" only</label>
-        <label class="q-option"><input type="radio" name="q6" value="c"> Under "Problems Addressed" — the complexity of the pregnancy drives the MDM level</label>
-        <label class="q-option"><input type="radio" name="q6" value="d"> Under "Risk" only — pregnancy is always treated as high risk</label>
-      </div>
-      <button class="answer-btn" onclick="checkAnswer('q6','c','q6-reveal')">Check Answer</button>
-      <div class="answer-reveal" id="q6-reveal">✓ Correct answer: C — Per AMA CPT 2027 guidance, pregnancy as a condition is evaluated under "Problems Addressed" in the MDM framework. The complexity of that pregnancy determines the appropriate level.</div>
-    </div>
-
-    <!-- Score bar -->
-    <div class="quiz-score-bar" id="score-bar">
-      <div>
-        <div class="score-label">Module 1 Score</div>
-        <div style="font-size:12px;color:#666;margin-top:2px;">Complete all questions to see your score</div>
-      </div>
-      <div class="score-val" id="score-val">—/6</div>
-    </div>
-
-    <div style="text-align:center;margin-top:18px;">
-      <button class="btn" style="background:var(--navy);padding:10px 28px;font-size:13px;" onclick="scoreQuiz()">Calculate Score</button>
-    </div>
+    <div class="q-item"><div class="q-num">Question 1 of 6</div><div class="q-text">Under CPT 2027, antepartum office visits are reported using which type of code?</div><div class="q-options" id="q1"><label class="q-option"><input type="radio" name="q1" value="a"> Global OB codes (59400, 59425, 59426)</label><label class="q-option"><input type="radio" name="q1" value="b"> Evaluation &amp; Management (E/M) codes 99202–99215</label><label class="q-option"><input type="radio" name="q1" value="c"> Labor management codes 59080–59083</label><label class="q-option"><input type="radio" name="q1" value="d"> A new bundled antepartum-only code</label></div><button class="answer-btn" onclick="checkAnswer('q1','b','q1-reveal')">Check Answer</button><div class="answer-reveal" id="q1-reveal">✓ Correct: B</div></div>
+    <div class="q-item"><div class="q-num">Question 2 of 6</div><div class="q-text">Which modifier should be applied to antepartum and postpartum E/M claims?</div><div class="q-options" id="q2"><label class="q-option"><input type="radio" name="q2" value="a"> Modifier 25</label><label class="q-option"><input type="radio" name="q2" value="b"> Modifier 59</label><label class="q-option"><input type="radio" name="q2" value="c"> Modifier TH</label><label class="q-option"><input type="radio" name="q2" value="d"> No modifier needed</label></div><button class="answer-btn" onclick="checkAnswer('q2','c','q2-reveal')">Check Answer</button><div class="answer-reveal" id="q2-reveal">✓ Correct: C — Modifier TH identifies the claim as a pregnancy-related service.</div></div>
+    <div class="q-item"><div class="q-num">Question 3 of 6</div><div class="q-text">Established patient, 28 weeks, well-controlled gestational hypertension. BP trends reviewed, monitoring plan adjusted. Which E/M level?</div><div class="q-options" id="q3"><label class="q-option"><input type="radio" name="q3" value="a"> 99211</label><label class="q-option"><input type="radio" name="q3" value="b"> 99212</label><label class="q-option"><input type="radio" name="q3" value="c"> 99213</label><label class="q-option"><input type="radio" name="q3" value="d"> 99214</label></div><button class="answer-btn" onclick="checkAnswer('q3','d','q3-reveal')">Check Answer</button><div class="answer-reveal" id="q3-reveal">✓ Correct: D — 99214, moderate MDM.</div></div>
+    <div class="q-item"><div class="q-num">Question 4 of 6</div><div class="q-text">Patient starts care August 2026, delivers February 2027. How to report antepartum visits?</div><div class="q-options" id="q4"><label class="q-option"><input type="radio" name="q4" value="a"> All visits with E/M codes starting 2026</label><label class="q-option"><input type="radio" name="q4" value="b"> 2026 visits per 2026 rules; 2027 visits with individual E/M</label><label class="q-option"><input type="radio" name="q4" value="c"> All combined and reported at delivery in 2027</label><label class="q-option"><input type="radio" name="q4" value="d"> 2026 visits held and reported with delivery</label></div><button class="answer-btn" onclick="checkAnswer('q4','b','q4-reveal')">Check Answer</button><div class="answer-reveal" id="q4-reveal">✓ Correct: B</div></div>
+    <div class="q-item"><div class="q-num">Question 5 of 6</div><div class="q-text">Which ICD-10-CM category covers supervision of a normal pregnancy?</div><div class="q-options" id="q5"><label class="q-option"><input type="radio" name="q5" value="a"> O00–O9A</label><label class="q-option"><input type="radio" name="q5" value="b"> Z33</label><label class="q-option"><input type="radio" name="q5" value="c"> Z34.XX</label><label class="q-option"><input type="radio" name="q5" value="d"> Z3A.XX</label></div><button class="answer-btn" onclick="checkAnswer('q5','c','q5-reveal')">Check Answer</button><div class="answer-reveal" id="q5-reveal">✓ Correct: C</div></div>
+    <div class="q-item"><div class="q-num">Question 6 of 6</div><div class="q-text">Under CPT 2027 MDM, where does pregnancy factor into code level selection?</div><div class="q-options" id="q6"><label class="q-option"><input type="radio" name="q6" value="a"> It does not factor into MDM</label><label class="q-option"><input type="radio" name="q6" value="b"> Under "Amount and Complexity of Data" only</label><label class="q-option"><input type="radio" name="q6" value="c"> Under "Problems Addressed" — complexity drives MDM level</label><label class="q-option"><input type="radio" name="q6" value="d"> Under "Risk" only</label></div><button class="answer-btn" onclick="checkAnswer('q6','c','q6-reveal')">Check Answer</button><div class="answer-reveal" id="q6-reveal">✓ Correct: C</div></div>
+    <div class="quiz-score-bar" id="score-bar"><div><div class="score-label">Module 1 Score</div></div><div class="score-val" id="score-val">—/6</div></div>
+    <div style="text-align:center;margin-top:18px;"><button class="btn" style="background:var(--navy);padding:10px 28px;font-size:13px;" onclick="scoreQuiz()">Calculate Score</button></div>
   </div>
 
-</div><!-- end #main -->
+</div>
 
 <script>
-// ── Firebase SDK Init ──────────────────────────────────────────────────────
 firebase.initializeApp({ databaseURL: 'https://ob-project-bc116-default-rtdb.firebaseio.com' });
 const dataRef = firebase.database().ref('ob-unbundling/module1');
-function toArr(v) {
-  if (!v) return [];
-  if (Array.isArray(v)) return v.filter(x => x != null);
-  return Object.values(v);
-}
-
+function toArr(v) { if (!v) return []; if (Array.isArray(v)) return v.filter(x => x != null); return Object.values(v); }
 const STORE_KEY = 'ob_module1_script_v1';
 const CORRECT = { q1:'b', q2:'c', q3:'d', q4:'b', q5:'c', q6:'c' };
-
-// ── Save / Load ──────────────────────────────────────────────
-function saveAll() {
-  const data = {};
-  document.querySelectorAll('[data-key]').forEach(el => {
-    data[el.dataset.key] = el.innerHTML;
-  });
-  data['notes'] = document.getElementById('producer-notes').value;
-  localStorage.setItem(STORE_KEY, JSON.stringify(data));
-  cloudSave(data);
-  document.getElementById('save-status-bar').textContent = 'Saved ' + new Date().toLocaleTimeString();
-}
-
-function loadAll() {
-  const raw = localStorage.getItem(STORE_KEY);
-  if (!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    document.querySelectorAll('[data-key]').forEach(el => {
-      if (data[el.dataset.key]) el.innerHTML = data[el.dataset.key];
-    });
-    if (data['notes']) document.getElementById('producer-notes').value = data['notes'];
-  } catch(e) {}
-}
-
-function resetAll() {
-  if (!confirm('Reset all script text to the original draft? This cannot be undone.')) return;
-  localStorage.removeItem(STORE_KEY);
-  location.reload();
-}
-
-// Auto-save on edits
-document.querySelectorAll('[data-key]').forEach(el => {
-  el.addEventListener('input', () => { updateStats(); saveAll(); });
-});
+function saveAll() { const data = {}; document.querySelectorAll('[data-key]').forEach(el => { data[el.dataset.key] = el.innerHTML; }); data['notes'] = document.getElementById('producer-notes').value; localStorage.setItem(STORE_KEY, JSON.stringify(data)); cloudSave(data); document.getElementById('save-status-bar').textContent = 'Saved ' + new Date().toLocaleTimeString(); }
+function loadAll() { const raw = localStorage.getItem(STORE_KEY); if (!raw) return; try { const data = JSON.parse(raw); document.querySelectorAll('[data-key]').forEach(el => { if (data[el.dataset.key]) el.innerHTML = data[el.dataset.key]; }); if (data['notes']) document.getElementById('producer-notes').value = data['notes']; } catch(e) {} }
+function resetAll() { if (!confirm('Reset all script text to the original draft?')) return; localStorage.removeItem(STORE_KEY); location.reload(); }
+document.querySelectorAll('[data-key]').forEach(el => { el.addEventListener('input', () => { updateStats(); saveAll(); }); });
 document.getElementById('producer-notes').addEventListener('input', saveAll);
-
-// ── Word count / time ────────────────────────────────────────
-function countWords() {
-  let total = 0;
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const text = el.innerText.trim();
-    if (text) total += text.split(/\s+/).length;
-  });
-  const notes = document.getElementById('producer-notes').value.trim();
-  // don't count notes in runtime
-  return total;
-}
-
-function updateStats() {
-  const words = countWords();
-  document.getElementById('stat-words').textContent = words.toLocaleString();
-  const minutes = words / 130;
-  const mins = Math.floor(minutes);
-  const secs = Math.round((minutes - mins) * 60);
-  document.getElementById('stat-time').textContent = mins + ':' + String(secs).padStart(2,'0');
-  const pct = Math.min(100, (minutes / 15) * 100);
-  document.getElementById('time-fill').style.width = pct + '%';
-  document.getElementById('time-fill').style.background = pct > 90
-    ? 'linear-gradient(90deg,#C8973A,#8B0000)'
-    : 'linear-gradient(90deg,#007B8A,#C8973A)';
-}
-
-// ── Section collapse ────────────────────────────────────────
-function toggleSection(id) {
-  const card = document.getElementById(id);
-  const hdr = card.querySelector('.section-header');
-  const body = card.querySelector('.section-body');
-  const collapsed = hdr.classList.toggle('collapsed');
-  body.classList.toggle('hidden', collapsed);
-}
-
-function collapseAll() {
-  document.querySelectorAll('.section-card').forEach(card => {
-    card.querySelector('.section-header').classList.add('collapsed');
-    card.querySelector('.section-body').classList.add('hidden');
-  });
-}
-
-function expandAll() {
-  document.querySelectorAll('.section-card').forEach(card => {
-    card.querySelector('.section-header').classList.remove('collapsed');
-    card.querySelector('.section-body').classList.remove('hidden');
-  });
-}
-
-// ── Quiz ─────────────────────────────────────────────────────
-function checkAnswer(qname, correct, revealId) {
-  const selected = document.querySelector(`input[name="${qname}"]:checked`);
-  const reveal = document.getElementById(revealId);
-  if (!selected) { alert('Please select an answer first.'); return; }
-
-  document.querySelectorAll(`input[name="${qname}"]`).forEach(inp => {
-    const opt = inp.parentElement;
-    opt.style.pointerEvents = 'none';
-    if (inp.value === correct) opt.classList.add('reveal-correct');
-    if (inp.checked && inp.value !== correct) opt.classList.add('wrong');
-    if (inp.checked && inp.value === correct) opt.classList.add('correct');
-  });
-
-  reveal.style.display = 'block';
-}
-
-function scoreQuiz() {
-  let score = 0;
-  Object.entries(CORRECT).forEach(([q, ans]) => {
-    const selected = document.querySelector(`input[name="${q}"]:checked`);
-    if (selected && selected.value === ans) score++;
-    // reveal correct if not already shown
-    checkAnswer(q, ans, q + '-reveal');
-  });
-  const bar = document.getElementById('score-bar');
-  bar.style.display = 'flex';
-  const sv = document.getElementById('score-val');
-  sv.textContent = score + '/6';
-  sv.style.color = score >= 5 ? '#4A7C59' : score >= 4 ? '#C8973A' : '#8B0000';
-}
-
-// ── Init ─────────────────────────────────────────────────────
-dataRef.once('value').then(snap => {
-  const cloud = snap.val();
-  if (cloud && Object.keys(cloud).length > 0) {
-    localStorage.setItem('ob_module1_script_v1', JSON.stringify(cloud));
-    const el = document.getElementById('cloud-status');
-    if (el) { el.textContent = '☁ Cloud loaded ✓'; el.style.color = '#007B8A'; }
-  }
-  loadAll();
-  updateStats();
-}).catch(() => { loadAll(); updateStats(); });
-
-// ── Cross-browser sharing ─────────────────────────────────────────────────
-function shareLink() {
-  const raw = localStorage.getItem('ob_module1_script_v1') || '{}';
-  try {
-    const encoded = btoa(unescape(encodeURIComponent(raw)));
-    const url = location.origin + location.pathname + '?s=' + encoded;
-    navigator.clipboard.writeText(url).then(() => {
-      alert('Share link copied!\nPaste it in Slack, email, or Teams — teammate opens it and sees your exact state.');
-    }).catch(() => { prompt('Copy this link:', url); });
-  } catch(e) { alert('State too large for URL — use Export JSON instead.'); }
-}
-
-function exportJSON() {
-  const raw = localStorage.getItem('ob_module1_script_v1') || '{}';
-  const blob = new Blob([raw], {type: 'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'state_' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-}
-
-function importJSON(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      JSON.parse(ev.target.result);
-      localStorage.setItem('ob_module1_script_v1', ev.target.result);
-      alert('Imported! Reloading...');
-      location.reload();
-    } catch(err) { alert('Invalid file.'); }
-  };
-  reader.readAsText(file);
-}
-
-(function checkURLState() {
-  try {
-    const s = new URLSearchParams(location.search).get('s');
-    if (!s) return;
-    const decoded = decodeURIComponent(escape(atob(s)));
-    JSON.parse(decoded);
-    if (confirm('A shared state was found in this link.\nLoad it? (Replaces your local state)')) {
-      localStorage.setItem('ob_module1_script_v1', decoded);
-    }
-    history.replaceState({}, '', location.pathname);
-    location.reload();
-  } catch(e) {}
-})();
-
-// ── Firebase Cloud Sync ────────────────────────────────────────────────
-function cloudSave(data) {
-  const el = document.getElementById('cloud-status');
-  if (el) { el.textContent = '☁ Saving...'; el.style.color = '#C8973A'; }
-  dataRef.set(data)
-    .then(() => { if (el) { el.textContent = '☁ Synced ✓'; el.style.color = '#4A7C59'; } })
-    .catch(e => { if (el) { el.textContent = '⚠ Save failed'; el.style.color = '#8B0000'; } console.error('Firebase save:', e); });
-}
-
-async function cloudRefresh() {
-  const el = document.getElementById('cloud-status');
-  if (el) { el.textContent = '☁ Loading...'; el.style.color = '#007B8A'; }
-  try {
-    const snap = await dataRef.once('value');
-    const cloud = snap.val();
-    if (cloud && Object.keys(cloud).length > 0) {
-      localStorage.setItem('ob_module1_script_v1', JSON.stringify(cloud));
-      if (el) { el.textContent = '☁ Refreshed ✓'; el.style.color = '#4A7C59'; }
-      setTimeout(() => location.reload(), 800);
-    } else {
-      if (el) { el.textContent = '⚠ No cloud data yet'; el.style.color = '#888'; }
-      setTimeout(() => { if (el) { el.textContent = '☁ Ready'; el.style.color = '#4A7C59'; } }, 2500);
-    }
-  } catch(e) {
-    if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
-  }
-}
-
-async function testCloud() {
-  const el = document.getElementById('cloud-status');
-  if (el) { el.textContent = '☁ Testing...'; el.style.color = '#C8973A'; }
-  try {
-    await dataRef.child('_test').set({ _ts: Date.now() });
-    const snap = await dataRef.child('_test').once('value');
-    if (snap.val()) {
-      await dataRef.child('_test').remove();
-      if (el) { el.textContent = '✓ Cloud working!'; el.style.color = '#4A7C59'; }
-    } else {
-      if (el) { el.textContent = '✗ Read failed'; el.style.color = '#8B0000'; }
-    }
-  } catch(e) {
-    if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
-  }
-}
+function countWords() { let total = 0; document.querySelectorAll('[data-key]').forEach(el => { const text = el.innerText.trim(); if (text) total += text.split(/\s+/).length; }); return total; }
+function updateStats() { const words = countWords(); document.getElementById('stat-words').textContent = words.toLocaleString(); const minutes = words / 130; const mins = Math.floor(minutes); const secs = Math.round((minutes - mins) * 60); document.getElementById('stat-time').textContent = mins + ':' + String(secs).padStart(2,'0'); const pct = Math.min(100, (minutes / 15) * 100); document.getElementById('time-fill').style.width = pct + '%'; }
+function toggleSection(id) { const card = document.getElementById(id); const hdr = card.querySelector('.section-header'); const body = card.querySelector('.section-body'); const collapsed = hdr.classList.toggle('collapsed'); body.classList.toggle('hidden', collapsed); }
+function collapseAll() { document.querySelectorAll('.section-card').forEach(card => { card.querySelector('.section-header').classList.add('collapsed'); card.querySelector('.section-body').classList.add('hidden'); }); }
+function expandAll() { document.querySelectorAll('.section-card').forEach(card => { card.querySelector('.section-header').classList.remove('collapsed'); card.querySelector('.section-body').classList.remove('hidden'); }); }
+function checkAnswer(qname, correct, revealId) { const selected = document.querySelector(`input[name="${qname}"]:checked`); const reveal = document.getElementById(revealId); if (!selected) { alert('Please select an answer first.'); return; } document.querySelectorAll(`input[name="${qname}"]`).forEach(inp => { const opt = inp.parentElement; opt.style.pointerEvents = 'none'; if (inp.value === correct) opt.classList.add('reveal-correct'); if (inp.checked && inp.value !== correct) opt.classList.add('wrong'); if (inp.checked && inp.value === correct) opt.classList.add('correct'); }); reveal.style.display = 'block'; }
+function scoreQuiz() { let score = 0; Object.entries(CORRECT).forEach(([q, ans]) => { const selected = document.querySelector(`input[name="${q}"]:checked`); if (selected && selected.value === ans) score++; checkAnswer(q, ans, q + '-reveal'); }); const bar = document.getElementById('score-bar'); bar.style.display = 'flex'; const sv = document.getElementById('score-val'); sv.textContent = score + '/6'; sv.style.color = score >= 5 ? '#4A7C59' : score >= 4 ? '#C8973A' : '#8B0000'; }
+dataRef.once('value').then(snap => { const cloud = snap.val(); if (cloud && Object.keys(cloud).length > 0) { localStorage.setItem('ob_module1_script_v1', JSON.stringify(cloud)); } loadAll(); updateStats(); }).catch(() => { loadAll(); updateStats(); });
+function shareLink() { const raw = localStorage.getItem('ob_module1_script_v1') || '{}'; try { const encoded = btoa(unescape(encodeURIComponent(raw))); const url = location.origin + location.pathname + '?s=' + encoded; navigator.clipboard.writeText(url).then(() => { alert('Share link copied!'); }).catch(() => { prompt('Copy this link:', url); }); } catch(e) { alert('State too large — use Export JSON instead.'); } }
+function exportJSON() { const raw = localStorage.getItem('ob_module1_script_v1') || '{}'; const blob = new Blob([raw], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'state_' + new Date().toISOString().slice(0,10) + '.json'; a.click(); }
+function importJSON(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(ev) { try { JSON.parse(ev.target.result); localStorage.setItem('ob_module1_script_v1', ev.target.result); alert('Imported! Reloading...'); location.reload(); } catch(err) { alert('Invalid file.'); } }; reader.readAsText(file); }
+(function checkURLState() { try { const s = new URLSearchParams(location.search).get('s'); if (!s) return; const decoded = decodeURIComponent(escape(atob(s))); JSON.parse(decoded); if (confirm('Load shared state?')) { localStorage.setItem('ob_module1_script_v1', decoded); } history.replaceState({}, '', location.pathname); location.reload(); } catch(e) {} })();
+function cloudSave(data) { const el = document.getElementById('cloud-status'); if (el) { el.textContent = '☁ Saving...'; el.style.color = '#C8973A'; } dataRef.set(data).then(() => { if (el) { el.textContent = '☁ Synced ✓'; el.style.color = '#4A7C59'; } }).catch(e => { if (el) { el.textContent = '⚠ Save failed'; el.style.color = '#8B0000'; } }); }
+async function cloudRefresh() { const el = document.getElementById('cloud-status'); if (el) { el.textContent = '☁ Loading...'; el.style.color = '#007B8A'; } try { const snap = await dataRef.once('value'); const cloud = snap.val(); if (cloud && Object.keys(cloud).length > 0) { localStorage.setItem('ob_module1_script_v1', JSON.stringify(cloud)); if (el) { el.textContent = '☁ Refreshed ✓'; el.style.color = '#4A7C59'; } setTimeout(() => location.reload(), 800); } else { if (el) { el.textContent = '⚠ No cloud data yet'; el.style.color = '#888'; } } } catch(e) { if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; } } }
+async function testCloud() { const el = document.getElementById('cloud-status'); if (el) { el.textContent = '☁ Testing...'; el.style.color = '#C8973A'; } try { await dataRef.child('_test').set({ _ts: Date.now() }); const snap = await dataRef.child('_test').once('value'); if (snap.val()) { await dataRef.child('_test').remove(); if (el) { el.textContent = '✓ Cloud working!'; el.style.color = '#4A7C59'; } } } catch(e) { if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; } } }
 </script>
 </body>
 </html>
