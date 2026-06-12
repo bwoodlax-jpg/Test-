@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Why OB Unbundling 2027 — Scripter Reference</title>
+<style>
+  :root {
+    --navy: #1B2E4B;
+    --teal: #007B8A;
+    --gold: #C8973A;
+    --red:  #8B0000;
+    --sage: #4A7C59;
+    --purp: #5B4A8A;
+    --light:#EAF4F6;
+    --mid:  #F5F5F5;
+    --dark: #1A1A1A;
+    --white:#FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header { background: var(--navy); padding: 26px 40px 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 1.6rem; font-weight: 800; color: white; letter-spacing: 0.3px; }
+  .header .sub { font-size: 0.83rem; color: #9ECDD6; margin-top: 4px; line-height: 1.5; }
+  .badge { background: var(--gold); color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; line-height: 1.5; white-space: nowrap; }
+  .gold-bar { height: 5px; background: var(--gold); }
+
+  /* ── SCRIPTER CALLOUT ── */
+  .scripter-note { background: #FFF8E7; border-left: 6px solid var(--gold); padding: 14px 24px; margin: 24px 40px 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; line-height: 1.6; }
+  .scripter-note strong { color: var(--navy); }
+
+  /* ── NAV PILLS ── */
+  .nav-wrap { padding: 16px 40px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .nav-pill { background: white; border: 1.5px solid #ddd; border-radius: 20px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; color: var(--navy); cursor: pointer; text-decoration: none; transition: all 0.15s; }
+  .nav-pill:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* ── MAIN CONTENT ── */
+  .main { padding: 24px 40px 60px; display: flex; flex-direction: column; gap: 28px; max-width: 1100px; }
+
+  /* ── SECTION CARDS ── */
+  .sec { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .sec-header { padding: 14px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
+  .sec-header:hover { filter: brightness(0.93); }
+  .sec-num { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; color: white; flex-shrink: 0; }
+  .sec-title { color: white; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.2px; }
+  .sec-sub { color: rgba(255,255,255,0.8); font-size: 0.78rem; margin-top: 2px; }
+  .chevron { margin-left: auto; color: rgba(255,255,255,0.8); font-size: 1rem; transition: transform 0.2s; }
+  .collapsed .chevron { transform: rotate(-90deg); }
+  .sec-body { padding: 24px 28px 28px; border-top: 1px solid #f0f0f0; }
+  .sec-body.hidden { display: none; }
+
+  /* ── TYPOGRAPHY ── */
+  h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin: 20px 0 8px; }
+  h3:first-child { margin-top: 0; }
+  p { font-size: 0.9rem; line-height: 1.7; color: #333; margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 12px; }
+  li { font-size: 0.9rem; line-height: 1.7; color: #333; margin-bottom: 4px; }
+  strong { color: var(--dark); }
+
+  /* ── CALLOUT BOXES ── */
+  .callout { border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 0.88rem; line-height: 1.6; }
+  .callout-gold  { background: #FFF8E7; border-left: 5px solid var(--gold); }
+  .callout-teal  { background: var(--light); border-left: 5px solid var(--teal); }
+  .callout-red   { background: #FFF0F0; border-left: 5px solid var(--red); }
+  .callout-navy  { background: #EEF1F5; border-left: 5px solid var(--navy); }
+  .callout-sage  { background: #EEF4EF; border-left: 5px solid var(--sage); }
+  .callout-asterisk { background: #FFF3CD; border: 2px dashed var(--gold); border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+  .callout-asterisk .ast-head { font-size: 1rem; font-weight: 800; color: var(--red); margin-bottom: 6px; }
+
+  /* ── TABLES ── */
+  .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.86rem; }
+  .data-table th { background: var(--navy); color: white; padding: 9px 12px; text-align: left; font-size: 0.8rem; letter-spacing: 0.3px; }
+  .data-table td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; line-height: 1.5; }
+  .data-table tr:nth-child(even) td { background: var(--mid); }
+  .data-table tr:hover td { background: var(--light); }
+  .del { color: var(--red); font-weight: 700; }
+  .new { color: var(--sage); font-weight: 700; }
+  .teal-hdr th { background: var(--teal); }
+  .gold-hdr th { background: var(--gold); }
+
+  /* ── PHASE BLOCKS ── */
+  .phases { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 14px 0; }
+  .phase-card { border-radius: 8px; padding: 14px 16px; }
+  .phase-card .ph-num { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; opacity: 0.8; }
+  .phase-card .ph-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .phase-card .ph-desc { font-size: 0.82rem; line-height: 1.5; opacity: 0.9; }
+
+  /* ── STAT ROW ── */
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0; }
+  .stat-box { background: var(--mid); border-radius: 10px; padding: 14px 20px; text-align: center; flex: 1; min-width: 100px; border: 1.5px solid #e0e0e0; }
+  .stat-box .sn { font-size: 1.8rem; font-weight: 800; color: var(--teal); }
+  .stat-box .sl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-top: 2px; }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid #eee; margin: 18px 0; }
+
+  /* ── CRITERIA GRID ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .criteria-col { border-radius: 8px; padding: 14px 16px; }
+  .criteria-col h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .criteria-col li { font-size: 0.86rem; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .header, .nav-wrap, .main { padding-left: 18px; padding-right: 18px; }
+    .scripter-note { margin-left: 18px; margin-right: 18px; }
+    .two-col { grid-template-columns: 1fr; }
+    .phases { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Why OB Unbundling 2027 — Scripter Reference</h1>
+    <div class="sub">The complete "why" behind CPT 2027 maternity care restructuring<br>For education team use — module script development reference</div>
+  </div>
+  <div class="badge">SCRIPTER<br>RESOURCE</div>
+</div>
+<div class="gold-bar"></div>
+
+<div class="scripter-note">
+  <strong>Who this page is for:</strong> This is your master reference for understanding the full context, history, and mechanics of the CPT 2027 OB unbundling before you script the education modules. Every "why" a physician will ask is answered here. Work through it top-to-bottom before drafting — the modules will be cleaner for it.
+</div>
+
+<div class="nav-wrap">
+  <a class="nav-pill" href="#sec1">1. The Old System</a>
+  <a class="nav-pill" href="#sec2">2. Why It Failed</a>
+  <a class="nav-pill" href="#sec3">3. Who Drove the Change</a>
+  <a class="nav-pill" href="#sec4">4. Deleted Codes</a>
+  <a class="nav-pill" href="#sec5">5. The New Framework</a>
+  <a class="nav-pill" href="#sec6">6. New Codes In Detail</a>
+  <a class="nav-pill" href="#sec7">7. Labor Management Rules</a>
+  <a class="nav-pill" href="#sec8">8. Documentation Shift</a>
+  <a class="nav-pill" href="#sec9">9. Modifier TH*</a>
+  <a class="nav-pill" href="#sec10">10. Key Dates</a>
+  <a class="nav-pill" href="#sec11">11. Talking Points</a>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 1 -->
+<div class="sec" id="sec1">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">1</div>
+    <div>
+      <div class="sec-title">The Old System — What the Global Package Was</div>
+      <div class="sec-sub">30+ years of bundled OB billing explained</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-gold">
+      <strong>Core concept for your script:</strong> Since the early 1990s, a single code could bill for an entire pregnancy — every prenatal visit, labor, delivery, and postpartum care all rolled into one. That system ends January 1, 2027.
+    </div>
+
+    <h3>What is a Global Package?</h3>
+    <p>A "global package" is a single CPT code that covers all physician services for a defined episode of care — in this case, the full continuum of a pregnancy. From the first prenatal visit through the final postpartum visit, one code triggered one payment.</p>
+    <p>The four most common global OB codes were:</p>
+    <table class="data-table">
+      <thead><tr><th>Code</th><th>Description</th><th>What It Covered</th></tr></thead>
+      <tbody>
+        <tr><td><strong>59400</strong></td><td>Routine obstetric care — vaginal delivery</td><td>All antepartum visits + vaginal delivery + postpartum care</td></tr>
+        <tr><td><strong>59510</strong></td><td>Routine obstetric care — cesarean delivery</td><td>All antepartum visits + cesarean delivery + postpartum care</td></tr>
+        <tr><td><strong>59610</strong></td><td>Routine OB care — VBAC</td><td>Antepartum visits + VBAC attempt + postpartum care</td></tr>
+        <tr><td><strong>59618</strong></td><td>Routine OB care — VBAC attempt, cesarean</td><td>Antepartum visits + failed VBAC → cesarean + postpartum</td></tr>
+      </tbody>
+    </table>
+    <p>Simpler partial-package codes also existed for antepartum-only or delivery-only scenarios:</p>
+    <table class="data-table">
+      <thead><tr><th>Code</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>59425</strong></td><td>Antepartum care only — 4 to 6 visits</td></tr>
+        <tr><td><strong>59426</strong></td><td>Antepartum care only — 7 or more visits</td></tr>
+        <tr><td><strong>59430</strong></td><td>Postpartum care only</td></tr>
+        <tr><td><strong>59409</strong></td><td>Vaginal delivery only (no antepartum or postpartum)</td></tr>
+        <tr><td><strong>59514</strong></td><td>Cesarean delivery only</td></tr>
+      </tbody>
+    </table>
+
+    <h3>How the Payment Model Worked</h3>
+    <p>A payer would contract a single dollar amount for the global package — for example, a flat rate for a "vaginal delivery with prenatal care." The physician received that single payment regardless of how many prenatal visits occurred, how complex the labor was, or what complications arose. One claim, one payment, whole episode.</p>
+
+    <div class="callout callout-teal">
+      <strong>For your script:</strong> A good analogy is an all-inclusive resort price. No matter how much you eat at the restaurant or use the gym, the price doesn't change. Under the new system, every meal is itemized — you pay per service, and what you document determines what you're paid.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 2 -->
+<div class="sec" id="sec2">
+  <div class="sec-header" style="background: var(--teal);" onclick="toggle(this)">
+    <div class="sec-num">2</div>
+    <div>
+      <div class="sec-title">Why the Global Package Failed — The Case for Change</div>
+      <div class="sec-sub">The structural problems that made this change inevitable</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <h3>Five Structural Problems That Built Over 30 Years</h3>
+
+    <h3>Problem 1 — Modern Pregnancy Rarely Involves One Doctor</h3>
+    <p>The global package was designed in an era when one physician followed a patient from first prenatal visit through delivery and postpartum. That model is now the exception, not the rule. Today's OB patients may see:</p>
+    <ul>
+      <li>A community OB/GYN for antepartum visits</li>
+      <li>A Maternal-Fetal Medicine specialist for high-risk consultations</li>
+      <li>An OB hospitalist or laborist who manages labor and delivers the baby</li>
+      <li>A different physician for postpartum hospital care and office follow-up</li>
+    </ul>
+    <p>One global code cannot properly compensate four different physicians for their distinct portions of care. The result was complicated shared-billing arrangements, reduced compensation for providers delivering only part of the episode, and claims that didn't reflect what actually happened clinically.</p>
+
+    <h3>Problem 2 — High-Risk and Complex Care Was Systematically Underpaid</h3>
+    <p>A global code pays the same whether a pregnancy is uncomplicated or involves gestational diabetes, preeclampsia, preterm labor, and three MFM consultations. Complexity was invisible to payers. MFM specialists in particular were chronically underpaid relative to the intensity and volume of services they provided, because their work was either bundled away or captured inadequately by separate consultation codes that payers routinely denied.</p>
+
+    <h3>Problem 3 — Care Across Multiple Settings Was Not Captured</h3>
+    <p>Modern pregnancy care increasingly involves:</p>
+    <ul>
+      <li><strong>Telehealth prenatal visits</strong> — accelerated after 2020</li>
+      <li><strong>Home monitoring</strong> — fetal heart rate, blood pressure, glucose</li>
+      <li><strong>Hospital observation and readmissions</strong> during pregnancy</li>
+      <li><strong>Rural-to-urban transfer</strong> when a complication emerges mid-pregnancy</li>
+    </ul>
+    <p>The global package had no mechanism to account for care delivered across these settings or by multiple facilities. It was built for a single-physician, single-setting model.</p>
+
+    <h3>Problem 4 — Postpartum Care Was Undervalued and Rarely Used</h3>
+    <p>The global package included postpartum care, but this created a perverse incentive: the postpartum visit was "already paid for" and therefore generated no additional revenue, leading to underscheduling of postpartum follow-up at precisely the period when maternal mortality risk is highest. The leading causes of maternal death — hemorrhage, cardiomyopathy, hypertensive disorders, mental health crises — cluster in the first 6–12 weeks postpartum. A payment model that treated postpartum care as a zero-marginal-cost add-on was incompatible with modern maternal health goals.</p>
+
+    <h3>Problem 5 — Billing and Documentation Were Misaligned</h3>
+    <p>Because the global code paid a flat rate, there was no financial incentive to document encounter complexity at an E/M level. Antepartum notes often lacked the Medical Decision-Making documentation that would support higher-level E/M codes — not because the care wasn't complex, but because it didn't matter under the old model. This created a documentation culture that is now, suddenly, directly relevant to revenue. Physicians who never needed to think about MDM levels now do.</p>
+
+    <div class="callout callout-red">
+      <strong>The bottom line for your script:</strong> The global package created a payment system where complexity didn't matter, multiple providers couldn't be fairly compensated, and the incentives were wrong for postpartum care. The AMA and ACOG spent nearly two years redesigning this. The result is CPT 2027.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 3 -->
+<div class="sec" id="sec3">
+  <div class="sec-header" style="background: var(--purp);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">3</div>
+    <div>
+      <div class="sec-title">Who Drove the Change — AMA, ACOG & the Advocacy Timeline</div>
+      <div class="sec-sub">The institutional story behind CPT 2027</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-teal">
+      <strong>Why this matters for your script:</strong> Physicians will ask "Who decided this?" The answer is their own specialty society — ACOG — in partnership with the AMA. This isn't something imposed by CMS or payers. It's a physician-led redesign.
+    </div>
+
+    <h3>ACOG's Advocacy Role</h3>
+    <p>The American College of Obstetricians and Gynecologists (ACOG) has been the primary driver of global package reform. ACOG's position, stated formally in their payment advocacy materials, is that the global OB package has been "inadequate to describe modern obstetric care" for years and that unbundling was necessary to achieve fair payment for the full scope of OB services.</p>
+    <p>ACOG celebrated the April 2026 announcement explicitly, stating: <em>"After years of ACOG advocacy, the AMA has released new obstetric codes."</em> This was a goal the specialty had pursued through multiple CPT revision cycles.</p>
+
+    <h3>The AMA CPT Editorial Panel Process</h3>
+    <p>CPT codes are owned and maintained by the AMA. Changes require approval by the AMA CPT Editorial Panel, which reviews applications from medical specialty societies. The process for the OB unbundling involved:</p>
+    <ul>
+      <li>Nearly two years of collaborative development between AMA editorial staff, ACOG, SMFM (Society for Maternal-Fetal Medicine), and other stakeholders</li>
+      <li>Clinical validation of new code definitions and criteria</li>
+      <li>Formal CPT Editorial Panel review and approval</li>
+      <li>Publication of the 2027 CPT code set with new maternity care codes finalized</li>
+    </ul>
+
+    <h3>Key Public Milestones</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Date</th><th>Event</th></tr></thead>
+      <tbody>
+        <tr><td>April 2026</td><td>AMA formally announces new obstetric codes; ACOG issues public statement welcoming the change</td></tr>
+        <tr><td>June 2, 2026</td><td>AMA hosts free public Coding Primer Webinar: "Previewing the CPT 2027 Restructure for Maternity Care Services Codes" — all code details and effective date confirmed</td></tr>
+        <tr><td>June 2026</td><td>AMA simultaneously publishes a Health Plan Primer for payers (confirming payer transition is expected)</td></tr>
+        <tr><td>July 2026</td><td>CMS expected to propose RVU (relative value unit) values for all new codes</td></tr>
+        <tr><td>November 2026</td><td>CMS publishes final RVU values — physician reimbursement rates confirmed</td></tr>
+        <tr><td>January 1, 2027</td><td>All new codes effective. All old global codes officially deleted. No exceptions.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>SMFM's Position</h3>
+    <p>The Society for Maternal-Fetal Medicine (SMFM) has also publicly supported the transition, noting the changes will better reflect the complexity of high-risk obstetric care and improve payment equity between general OB/GYN and MFM specialties — a long-standing concern for MFM practices.</p>
+
+    <div class="callout callout-navy">
+      <strong>Script note:</strong> When physicians ask "why are we doing this?" — the answer is: ACOG fought for this. The AMA approved it. This is the profession correcting a 30-year-old payment model that wasn't designed for how we practice today.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 4 -->
+<div class="sec" id="sec4">
+  <div class="sec-header" style="background: var(--red);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">4</div>
+    <div>
+      <div class="sec-title">Deleted Codes — What Goes Away January 1, 2027</div>
+      <div class="sec-sub">Every code being eliminated and what replaces it</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-red">
+      <strong>Hard deadline:</strong> Any claim submitted on or after January 1, 2027 using a deleted code will be denied by the payer's system — automatically. There is no grace period. There is no "legacy billing" option. These codes cease to exist in the CPT code set.
+    </div>
+
+    <div class="stats">
+      <div class="stat-box"><div class="sn">17</div><div class="sl">Codes Deleted</div></div>
+      <div class="stat-box"><div class="sn">12</div><div class="sl">New Codes Added</div></div>
+      <div class="stat-box"><div class="sn">6</div><div class="sl">Codes Revised</div></div>
+      <div class="stat-box"><div class="sn">35</div><div class="sl">Total Changes</div></div>
+    </div>
+
+    <h3>Complete Deleted Code List</h3>
+    <table class="data-table">
+      <thead><tr><th>CPT Code</th><th>Description</th><th>Replacement</th></tr></thead>
+      <tbody>
+        <tr><td><span class="del">59400</span></td><td>Routine OB care — vaginal delivery global package</td><td>Separate E/M codes per antepartum visit + new delivery code + E/M per postpartum visit</td></tr>
+        <tr><td><span class="del">59409</span></td><td>Vaginal delivery only (no antepartum/postpartum)</td><td>New stand-alone vaginal delivery code</td></tr>
+        <tr><td><span class="del">59410</span></td><td>Vaginal delivery with postpartum care</td><td>New delivery code + subsequent hospital care + E/M per postpartum office visit</td></tr>
+        <tr><td><span class="del">59425</span></td><td>Antepartum care only — 4 to 6 visits</td><td>E/M code per individual visit</td></tr>
+        <tr><td><span class="del">59426</span></td><td>Antepartum care only — 7 or more visits</td><td>E/M code per individual visit</td></tr>
+        <tr><td><span class="del">59430</span></td><td>Postpartum care only</td><td>E/M code per individual postpartum visit</td></tr>
+        <tr><td><span class="del">59510</span></td><td>Routine OB care — cesarean delivery global package</td><td>Separate E/M codes per visit + new C-section delivery code + postpartum E/M per visit</td></tr>
+        <tr><td><span class="del">59514</span></td><td>Cesarean delivery only</td><td>New stand-alone cesarean delivery code</td></tr>
+        <tr><td><span class="del">59515</span></td><td>Cesarean delivery with postpartum care</td><td>New C-section code + subsequent hospital care + E/M per postpartum visit</td></tr>
+        <tr><td><span class="del">59610</span></td><td>Routine OB care — VBAC, vaginal delivery</td><td>E/M per antepartum visit + new VBAC delivery code + postpartum E/M</td></tr>
+        <tr><td><span class="del">59612</span></td><td>VBAC vaginal delivery only</td><td>New stand-alone VBAC delivery code</td></tr>
+        <tr><td><span class="del">59614</span></td><td>VBAC vaginal delivery with postpartum care</td><td>New VBAC delivery code + subsequent hospital + postpartum E/M per visit</td></tr>
+        <tr><td><span class="del">59618</span></td><td>Routine OB care — VBAC attempt → cesarean</td><td>E/M per antepartum visit + new repeat C-section code + postpartum E/M</td></tr>
+        <tr><td><span class="del">59620</span></td><td>VBAC attempt → cesarean delivery only</td><td>New repeat cesarean delivery code</td></tr>
+        <tr><td><span class="del">59622</span></td><td>VBAC attempt → cesarean with postpartum care</td><td>New repeat C-section code + subsequent hospital + postpartum E/M per visit</td></tr>
+        <tr><td><span class="del">59055</span></td><td>Antepartum care — extended</td><td>Individual E/M codes per encounter</td></tr>
+        <tr><td><span class="del">59070</span></td><td>Transabdominal amnioinfusion with ultrasound guidance</td><td>Revised/reclassified code</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-gold">
+      <strong>The scale of this for your script:</strong> These are not obscure edge codes — 59400 and 59510 are among the most frequently submitted obstetric codes in the country. Their deletion affects virtually every OB/GYN practice and health system in the United States.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 5 -->
+<div class="sec" id="sec5">
+  <div class="sec-header" style="background: var(--teal);" onclick="toggle(this)">
+    <div class="sec-num">5</div>
+    <div>
+      <div class="sec-title">The New Framework — Four Phases of Maternity Care</div>
+      <div class="sec-sub">The conceptual architecture of CPT 2027 OB coding</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-teal">
+      <strong>The central idea for your script:</strong> The AMA essentially "broke apart" the bundled pregnancy into four distinct, separately billable phases. Each phase has its own codes. Each service within a phase is now individually reported. This is the fundamental shift.
+    </div>
+
+    <div class="phases">
+      <div class="phase-card" style="background: var(--light); border: 2px solid var(--teal);">
+        <div class="ph-num" style="color: var(--teal);">Phase 1</div>
+        <div class="ph-name" style="color: var(--navy);">Antepartum Care</div>
+        <div class="ph-desc" style="color: #333;">Every prenatal visit billed individually using standard E/M office visit codes. Each encounter stands alone.</div>
+      </div>
+      <div class="phase-card" style="background: #EEF1F5; border: 2px solid var(--navy);">
+        <div class="ph-num" style="color: var(--navy);">Phase 2</div>
+        <div class="ph-name" style="color: var(--navy);">Labor Management</div>
+        <div class="ph-desc" style="color: #333;">New dedicated codes billed once per calendar date. Distinguishes straightforward from complex and initial from subsequent days.</div>
+      </div>
+      <div class="phase-card" style="background: #FFF8EC; border: 2px solid var(--gold);">
+        <div class="ph-num" style="color: var(--gold);">Phase 3</div>
+        <div class="ph-name" style="color: var(--navy);">Delivery</div>
+        <div class="ph-desc" style="color: #333;">New stand-alone delivery codes by type (vaginal, VBAC, primary C-section, repeat C-section). Not bundled with labor or postpartum.</div>
+      </div>
+      <div class="phase-card" style="background: var(--light); border: 2px solid var(--sage);">
+        <div class="ph-num" style="color: var(--sage);">Phase 4</div>
+        <div class="ph-name" style="color: var(--navy);">Postpartum Care</div>
+        <div class="ph-desc" style="color: #333;">Inpatient post-delivery days billed with subsequent hospital care E/M codes. Outpatient postpartum visits billed per encounter.</div>
+      </div>
+    </div>
+
+    <h3>Phase 1 — Antepartum in Detail</h3>
+    <p>Each antepartum office visit is now reported with the standard E/M office visit code appropriate for that encounter. New patient codes run 99202–99205 and established patient codes run 99211–99215. The level selected depends on either the complexity of Medical Decision-Making (MDM) or total encounter time — the same selection methodology already used for all other office E/M visits.</p>
+    <p>Telehealth prenatal visits are reported with the telehealth E/M range (98000–98015). Inpatient management during pregnancy uses inpatient subsequent hospital care codes (99231–99233). Home visits use home service codes. Critical condition during pregnancy uses critical care codes (99291, 99292).</p>
+    <p><strong>How many claims does this generate?</strong> The ACOG recommendation for routine prenatal visits is approximately 10–14 office visits for a term pregnancy. Under the old model, all those visits were bundled into a single global code. Under the new model, each visit generates a separate claim. For a physician with 100 deliveries per year, this represents a shift from ~100 annual global claims to potentially 1,000–1,400+ annual antepartum claims alone — plus labor management and delivery claims.</p>
+
+    <h3>Phase 2 — Labor Management in Detail</h3>
+    <p>Labor management is now reported separately from delivery. The physician bills a labor management code for each calendar date on which they provide labor management services — distinct from the delivery itself. Labor management codes have two axes:</p>
+    <ul>
+      <li><strong>Initial vs. Subsequent Day:</strong> The first calendar date of labor management uses an "initial" code. Each subsequent calendar date uses a "subsequent" code.</li>
+      <li><strong>Straightforward vs. Complex:</strong> The complexity level is determined by six AMA-defined criteria (see Section 7). All six must be met for straightforward; one deviation triggers complex.</li>
+    </ul>
+
+    <h3>Phase 3 — Delivery in Detail</h3>
+    <p>The delivery itself is reported with a new stand-alone delivery code. There are separate codes by delivery type: vaginal, VBAC, primary cesarean, repeat cesarean. The delivery code does not include labor management (which is billed separately) and does not include postpartum care (which is billed as subsequent hospital care and/or office E/M visits). Routine same-day immediate postpartum care is included within the delivery code itself.</p>
+    <p>New codes also exist for third-degree and fourth-degree laceration repair — previously there were no dedicated codes for these, and they were unbillable when performed as part of a global delivery.</p>
+
+    <h3>Phase 4 — Postpartum in Detail</h3>
+    <p>All dedicated postpartum codes (including 59430) are deleted. Postpartum care is reported as follows:</p>
+    <ul>
+      <li><strong>Inpatient postpartum days (day after delivery through discharge):</strong> Subsequent hospital care codes per day (99231–99233)</li>
+      <li><strong>Hospital discharge:</strong> Discharge management code (99238 for ≤30 minutes, 99239 for &gt;30 minutes)</li>
+      <li><strong>Outpatient postpartum office visits:</strong> Office E/M codes (99211–99215) per encounter</li>
+    </ul>
+    <p>This is significant because it makes every postpartum encounter separately reimbursable — creating a direct financial incentive for postpartum follow-up that did not exist under the global model.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 6 -->
+<div class="sec" id="sec6">
+  <div class="sec-header" style="background: var(--sage);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">6</div>
+    <div>
+      <div class="sec-title">New Codes in Detail — What Replaces What</div>
+      <div class="sec-sub">Every new CPT 2027 code and its clinical definition</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-gold">
+      <strong>Note on final code numbers:</strong> The AMA has confirmed all new code definitions and effective dates. Delivery code final numbers (shown here as 59XX5 etc.) will be confirmed in the full CPT 2027 book release and finalized by CMS in November 2026. Labor management codes 59080–59083 are confirmed. All E/M code ranges are current and final.
+    </div>
+
+    <h3>New Labor Management Codes (AMA Confirmed)</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Code</th><th>Description</th><th>Key Clinical Criteria</th></tr></thead>
+      <tbody>
+        <tr><td><span class="new">59080</span></td><td>Labor management — initial day, straightforward</td><td>First calendar date; ALL 6 straightforward criteria met</td></tr>
+        <tr><td><span class="new">59081</span></td><td>Labor management — initial day, complex</td><td>First calendar date; ANY ONE complex criterion present</td></tr>
+        <tr><td><span class="new">59082</span></td><td>Labor management — subsequent day, straightforward</td><td>Second+ calendar date; ALL 6 straightforward criteria met</td></tr>
+        <tr><td><span class="new">59083</span></td><td>Labor management — subsequent day, complex</td><td>Second+ calendar date; ANY ONE complex criterion present</td></tr>
+      </tbody>
+    </table>
+
+    <h3>New Delivery Codes (Final Numbers Pending Full CPT 2027 Publication)</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Code (Placeholder)</th><th>Description</th><th>What's Included</th></tr></thead>
+      <tbody>
+        <tr><td><span class="new">59XX5</span></td><td>Vaginal delivery</td><td>Delivery of fetus and placenta; episiotomy if performed; 1st- and 2nd-degree laceration repair. Routine immediate postpartum care included.</td></tr>
+        <tr><td><span class="new">59XX6</span></td><td>VBAC — vaginal delivery after prior cesarean</td><td>Vaginal delivery when patient has prior cesarean history. All same inclusions as 59XX5.</td></tr>
+        <tr><td><span class="new">59XX7</span></td><td>Primary cesarean delivery</td><td>Abdominal incision, uterine incision, delivery of fetus and placenta, closure. No prior cesarean on record.</td></tr>
+        <tr><td><span class="new">59XX8</span></td><td>Repeat cesarean delivery</td><td>Same as primary C-section but patient has prior cesarean history. Coded separately due to added surgical complexity.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>New Separately Reportable Procedure Codes</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Code (Placeholder)</th><th>Description</th><th>Why This Is New</th></tr></thead>
+      <tbody>
+        <tr><td><span class="new">59X11</span></td><td>3rd-degree perineal laceration repair</td><td>Under the global code, this work was unbillable. Now separately reportable in addition to the delivery code.</td></tr>
+        <tr><td><span class="new">59X12</span></td><td>4th-degree perineal laceration repair</td><td>Same — this level of repair was previously subsumed into the global code with no additional payment.</td></tr>
+        <tr><td>New code</td><td>Uterine tamponade procedure</td><td>First-ever dedicated CPT code for this hemorrhage management procedure. Previously had no dedicated code.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Antepartum E/M Codes (No Change — Already in Use)</h3>
+    <p>No new E/M codes are created. Antepartum visits are billed with the existing E/M office visit codes already in use for all other specialties:</p>
+    <table class="data-table">
+      <thead><tr><th>Code Range</th><th>Patient Type</th><th>Complexity Levels</th></tr></thead>
+      <tbody>
+        <tr><td>99202 – 99205</td><td>New patient, outpatient office visit</td><td>Straightforward (99202) through high complexity (99205)</td></tr>
+        <tr><td>99211 – 99215</td><td>Established patient, outpatient office visit</td><td>Minimal (99211) through high complexity (99215)</td></tr>
+        <tr><td>99231 – 99233</td><td>Subsequent hospital care</td><td>Low (99231) through high complexity (99233)</td></tr>
+        <tr><td>99238 – 99239</td><td>Hospital discharge management</td><td>≤30 min (99238), &gt;30 min (99239)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-sage">
+      <strong>The structural insight for your script:</strong> The reason this matters is not the code numbers themselves — physicians may not memorize every code. What matters is understanding that <em>every service now generates a separate claim</em>, and the level/code selected depends on what the physician documented, not just what they did. Documentation quality is now directly tied to revenue in a way it never was before.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 7 -->
+<div class="sec" id="sec7">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">7</div>
+    <div>
+      <div class="sec-title">Labor Management Rules — The Six Criteria</div>
+      <div class="sec-sub">Straightforward vs. complex — how the determination is made</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-navy">
+      <strong>Why this section matters for your script:</strong> The straightforward vs. complex distinction is the most nuanced clinical decision in the new system. Every labor management day requires this determination. Physicians need to understand it cold.
+    </div>
+
+    <h3>The Six Straightforward Criteria (ALL must be met)</h3>
+    <div class="two-col">
+      <div class="criteria-col" style="background: #EEF4EF; border: 2px solid var(--sage);">
+        <h4 style="color: var(--sage);">✓ Straightforward — All Six Required</h4>
+        <ul>
+          <li>Singleton vertex presentation</li>
+          <li>Routine maternal and fetal monitoring</li>
+          <li>Fetal monitoring NOT requiring physician intervention</li>
+          <li>Normal labor progression OR routine induction / augmentation</li>
+          <li>Stable medical conditions — no additional management required</li>
+          <li>No prior cesarean delivery</li>
+        </ul>
+      </div>
+      <div class="criteria-col" style="background: #FFF0F0; border: 2px solid var(--red);">
+        <h4 style="color: var(--red);">✗ Complex — Any ONE Triggers This</h4>
+        <ul>
+          <li>Multiple gestation (twins, triplets, or more)</li>
+          <li>Non-vertex presentation (breech, transverse, oblique)</li>
+          <li>Fetal monitoring requiring physician intervention</li>
+          <li>Abnormal labor progression or labor arrest</li>
+          <li>Deteriorating or unstable medical condition during labor</li>
+          <li>Prior cesarean delivery (VBAC attempt is always complex)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>AMA Rule 1 — Same-Day Complexity Upgrade (AMA Confirmed)</h3>
+    <div class="callout callout-gold">
+      <p><strong>Scenario:</strong> Labor begins as straightforward on a given calendar date, but during that same day the patient develops a complication — labor arrest, fetal distress requiring intervention, unstable blood pressure — and transitions to complex.</p>
+      <p style="margin-top: 8px;"><strong>Correct coding:</strong> Report ONLY the complex labor management code for that calendar date (59081 for initial day, 59083 for subsequent). Do not report both straightforward and complex on the same day. The AMA has explicitly confirmed this rule in the June 2026 coding primer.</p>
+    </div>
+
+    <h3>AMA Rule 2 — Planned / Scheduled Cesarean (AMA Confirmed)</h3>
+    <div class="callout callout-gold">
+      <p><strong>Scenario:</strong> A patient is scheduled for an elective or planned cesarean with no trial of labor. The physician arrives, performs the C-section, and no labor management services were provided.</p>
+      <p style="margin-top: 8px;"><strong>Correct coding:</strong> Do NOT report any labor management code (59080–59083). Report only the cesarean delivery code. Labor management codes require that labor management services were actually provided. A physician cannot bill for labor management they did not perform simply because the patient was admitted for delivery.</p>
+    </div>
+
+    <h3>Labor Management vs. E/M — The Critical Distinction</h3>
+    <p>Labor management codes (59080–59083) are <strong>not</strong> E/M codes. They are procedure codes that cover a defined scope of physician services on the labor and delivery unit for that calendar date. They include:</p>
+    <ul>
+      <li>Interim evaluation and physical examination</li>
+      <li>Collection and interpretation of physiological data (fetal monitoring, contraction patterns)</li>
+      <li>Management of induction, augmentation, or spontaneous labor</li>
+      <li>Patient counseling and care coordination on L&D</li>
+    </ul>
+    <p>A physician does <strong>not</strong> separately bill an E/M code for the routine daily management visit on L&D — the labor management code covers that work. The distinction matters because it avoids double-billing for the same service.</p>
+
+    <div class="callout callout-teal">
+      <strong>For your script:</strong> A useful way to frame it is "one labor management code per calendar day covers everything I did on the floor that day for this patient — monitoring, interpreting, adjusting the plan." If the delivery happens on the same day, the delivery code is added on top.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 8 -->
+<div class="sec" id="sec8">
+  <div class="sec-header" style="background: var(--gold);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">8</div>
+    <div>
+      <div class="sec-title">The Documentation Shift — What Changes for Physicians at the Note Level</div>
+      <div class="sec-sub">Why documentation habits must change and what that looks like</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-red">
+      <strong>The single biggest behavioral change for physicians:</strong> Under the old global model, documentation complexity didn't directly affect payment. Under the new model, every antepartum and postpartum visit E/M code level is directly tied to what the physician documented. Underdocumentation = underpayment or audit exposure.
+    </div>
+
+    <h3>E/M Level Selection — MDM vs. Time</h3>
+    <p>For every antepartum and postpartum office visit, the physician (or their billing staff) must select an E/M code level. The AMA allows two methods:</p>
+    <ul>
+      <li><strong>Medical Decision-Making (MDM):</strong> The code level is determined by the complexity of the clinical decisions documented — the number of problems addressed, the amount of data reviewed, and the risk of the management plan.</li>
+      <li><strong>Total Time:</strong> The code level is determined by the total time the physician spent on the encounter on that date (including pre- and post-visit work, not just face-to-face time).</li>
+    </ul>
+    <p>The physician may choose whichever method supports the higher code for a given encounter — but the method must be documented. If billing by time, total encounter time must be recorded in the note.</p>
+
+    <h3>What Must Be in the Antepartum Note</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Element</th><th>Why It Matters Under New System</th></tr></thead>
+      <tbody>
+        <tr><td>Date of visit and gestational age</td><td>Establishes context; required for E/M selection</td></tr>
+        <tr><td>Problems addressed at this visit</td><td>Drives the "number of problems" MDM element</td></tr>
+        <tr><td>Data reviewed (labs, imaging, monitoring results)</td><td>Required for "amount and/or complexity of data" MDM element</td></tr>
+        <tr><td>Assessment and plan — specifically any management changes or new orders</td><td>Drives the "risk" MDM element; a new management decision elevates complexity</td></tr>
+        <tr><td>Total encounter time (if billing by time)</td><td>Must be explicitly documented if using the time-based method</td></tr>
+        <tr><td>Complicating conditions clearly documented</td><td>Comorbidities justify higher MDM complexity — underdocumented = underpaid</td></tr>
+      </tbody>
+    </table>
+
+    <h3>What Must Be in the Labor Management Note</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Element</th><th>Why It Matters</th></tr></thead>
+      <tbody>
+        <tr><td>Calendar date of service</td><td>Labor management is per calendar date — date determines initial vs. subsequent</td></tr>
+        <tr><td>All six straightforward criteria — documented as met OR deviation noted</td><td>This is the legal basis for the code level selected; must be explicit</td></tr>
+        <tr><td>Fetal monitoring interpretation</td><td>Required component of labor management; documents that the service was performed</td></tr>
+        <tr><td>Labor status and progression notes</td><td>Documents normal vs. abnormal progression — critical for straightforward vs. complex</td></tr>
+        <tr><td>Any physician intervention and clinical rationale</td><td>Any intervention immediately elevates to complex — must be documented when it occurs</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The Audit Risk</h3>
+    <p>Under the global package, post-payment audits focused on whether the delivery happened and the appropriate global code was used — relatively straightforward. Under the new system, every antepartum claim at a higher E/M level (99214, 99215) is a potential audit target. Auditors will look for documentation supporting:</p>
+    <ul>
+      <li>The problems addressed at that specific visit</li>
+      <li>The data reviewed and its complexity</li>
+      <li>The management decisions made and their risk level</li>
+      <li>OR the total encounter time if billing by time</li>
+    </ul>
+    <p>A physician who consistently bills 99214 (moderate complexity) for every prenatal visit without documentation supporting that complexity is at elevated audit risk. The EHR template updates being deployed before training are specifically designed to prompt the documentation elements needed to support these code levels.</p>
+
+    <div class="callout callout-sage">
+      <strong>For your script:</strong> The message isn't "document more to bill more." The message is: "You were already providing complex care — now your documentation needs to reflect that so you get paid for the work you were already doing."
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 9 -->
+<div class="sec" id="sec9">
+  <div class="sec-header" style="background: #4A4A4A;" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">9</div>
+    <div>
+      <div class="sec-title">Modifier TH — Context and Status ⚠</div>
+      <div class="sec-sub">Read this before scripting — approach TBD for our organization</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+
+    <div class="callout-asterisk">
+      <div class="ast-head">⚠ SCRIPTER NOTE — DO NOT SCRIPT THIS PIECE YET</div>
+      <p style="font-size:0.9rem; line-height:1.6; color:#333;">Our organization is evaluating an alternative approach for how antepartum and postpartum E/M visits will be identified and differentiated from non-OB visits at the claim level. Modifier TH <strong>may not be the route we implement</strong>. Do not include Modifier TH guidance in the training scripts until you receive explicit direction from the project team. Background context is provided below for reference only — so you understand what it is and why it exists — but leave it out of the modules for now. This note will be updated when a final decision is made.</p>
+    </div>
+
+    <h3>What Modifier TH Is (Background Reference Only)</h3>
+    <p>HCPCS Level II modifier <strong>TH</strong> stands for "Obstetrical treatment/services, prenatal or postpartum." It is a two-character code appended to the E/M code on the claim line to signal to the payer that this E/M visit is for obstetric/prenatal/postpartum care — differentiating it from a general medicine office visit billed by the same practice under the same code.</p>
+
+    <h3>Why the AMA and ACOG Discussed It</h3>
+    <p>Because antepartum and postpartum visits under the new system use the same E/M codes (99202–99215) as any other office visit, payers needed a mechanism to identify which claims were part of a pregnancy episode. Modifier TH was proposed as that identifier, allowing payers to:</p>
+    <ul>
+      <li>Apply the correct fee schedule rates negotiated for OB services (which may differ from general office visit rates)</li>
+      <li>Track pregnancy episode claims for data and audit purposes</li>
+      <li>Differentiate for any payer-specific OB-related policies (prior authorization, global episode flags, etc.)</li>
+    </ul>
+
+    <h3>The Complexity (Why Our Approach Is Under Review)</h3>
+    <p>Modifier TH implementation is not as simple as appending two characters to a claim. It involves:</p>
+    <ul>
+      <li>EHR and billing system configuration to automatically apply or flag the modifier</li>
+      <li>Verification that each contracted payer accepts and correctly processes TH</li>
+      <li>Staff training on when to apply vs. omit it</li>
+      <li>Risk of claim delays or denials if payers have varying implementations</li>
+    </ul>
+    <p>Our organization is evaluating whether an alternative claim-level identifier, a different internal workflow, or a payer-specific approach better fits our systems. A decision will be made before the training modules are finalized.</p>
+
+    <div class="callout callout-navy" style="margin-top: 16px;">
+      <strong>Action for scripter:</strong> Write your module drafts without any reference to Modifier TH. Leave a placeholder note in your script documents (e.g., "[MODIFIER APPROACH TBD — INSERT ONCE CONFIRMED]") wherever the topic of claim-level OB identification would naturally appear. You'll be notified when the decision is made and can insert the correct language at that point.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 10 -->
+<div class="sec" id="sec10">
+  <div class="sec-header" style="background: var(--red);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">10</div>
+    <div>
+      <div class="sec-title">Key Dates — The Timeline That Cannot Move</div>
+      <div class="sec-sub">Every hard deadline in the CPT 2027 transition</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Milestone</th><th>Why It's Fixed</th></tr></thead>
+      <tbody>
+        <tr><td><strong>June 2, 2026</strong></td><td>AMA Coding Primer Webinar — all CPT 2027 OB details confirmed</td><td>Already occurred. All code definitions, criteria, and effective date are finalized.</td></tr>
+        <tr><td><strong>July 2026</strong></td><td>CMS proposed rule — RVU values for new codes</td><td>Federal rulemaking calendar. CMS must propose before finalizing.</td></tr>
+        <tr><td><strong>September 1, 2026</strong></td><td>ACOG-recommended payer transition date</td><td>ACOG's formal recommendation that health plans have new code rates in place by this date.</td></tr>
+        <tr><td><strong>November 2026</strong></td><td>CMS final rule — RVU values published</td><td>Federal rulemaking calendar. This sets the Medicare reimbursement rates for 2027.</td></tr>
+        <tr><td><strong>November 2026</strong></td><td>Full CPT 2027 book published</td><td>Final delivery code numbers confirmed at this point.</td></tr>
+        <tr><td><strong>January 1, 2027</strong></td><td>All new codes effective. All deleted codes gone.</td><td>Federal CPT effective date. No exceptions. No grace period.</td></tr>
+        <tr><td><strong>January 1, 2027+</strong></td><td>Any claim with a deleted code is automatically denied</td><td>Payer systems will be updated to reject deleted codes effective this date.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-red">
+      <strong>January 1, 2027 is not a soft deadline.</strong> The AMA does not grant CPT transition grace periods. Payers will update their systems on January 1, 2027. A claim for 59400 submitted on January 2, 2027 will be rejected by every commercial payer that has updated its adjudication system. There is no appeals pathway for using a deleted code — the code simply doesn't exist in the system anymore.
+    </div>
+
+    <h3>What "No RVU Values Yet" Means for Your Script</h3>
+    <p>Because CMS doesn't finalize RVU values until November 2026, we cannot tell physicians exact dollar amounts for the new codes during training. This is normal for any CPT transition — code definitions are finalized before CMS assigns values. The important message for the script is:</p>
+    <ul>
+      <li>The code structure and clinical criteria are finalized and certain</li>
+      <li>Reimbursement rates will be confirmed in November 2026 — before go-live</li>
+      <li>ACOG has publicly stated that the new codes are expected to provide better payment for complex and high-risk care compared to the global package</li>
+      <li>The clinical and documentation requirements do not depend on knowing the RVU values</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 11 -->
+<div class="sec" id="sec11">
+  <div class="sec-header" style="background: var(--teal);" onclick="toggle(this)">
+    <div class="sec-num">11</div>
+    <div>
+      <div class="sec-title">Talking Points — Anticipating Physician Pushback</div>
+      <div class="sec-sub">The questions your modules will need to answer</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-teal">
+      <strong>For your script:</strong> Physicians are skeptical by nature and will arrive at training with objections. The best modules pre-empt the top questions rather than waiting for the Q&A. These are the ones you'll hear most.
+    </div>
+
+    <h3>"Why is this happening to us?"</h3>
+    <p><em>Script answer:</em> This isn't something imposed on OB. <strong>ACOG advocated for this change for years</strong>. The global package was designed in the early 1990s for a one-doctor, one-office model. Modern obstetrics — with hospitalists, MFM specialists, telehealth, and multi-site practices — outgrew it. ACOG and the AMA worked together to build a system that actually reflects how we practice today and pays appropriately for complex care.</p>
+
+    <h3>"This is going to create a lot more paperwork."</h3>
+    <p><em>Script answer:</em> Documentation habits need to change — but it's not about writing more. <strong>It's about writing what you were already doing.</strong> When you managed a patient with gestational diabetes, adjusted insulin, ordered additional monitoring, and coordinated with MFM — that's moderate-to-high complexity E/M work. You were doing it. You just weren't documenting it at the level that supports the code. The new templates are designed to make it easier to capture that work without adding significant time to your note.</p>
+
+    <h3>"What if I just keep billing the old codes?"</h3>
+    <p><em>Script answer:</em> The old codes don't exist after January 1, 2027. There is nothing to bill. The codes are deleted from the CPT code set entirely. A claim submitted with 59400 in 2027 will be rejected — not denied for medical necessity, not appealed — simply rejected because the code doesn't exist. There is no path forward with the old codes.</p>
+
+    <h3>"Will we get paid less under this system?"</h3>
+    <p><em>Script answer:</em> That depends directly on how well you document. <strong>For routine uncomplicated care, revenue should be comparable.</strong> For high-complexity care — high-risk pregnancies, complicated labors, complex medical management — the new system should produce better reimbursement because complexity is now visible to payers in a way the global package never allowed. Physicians who document well stand to benefit from the new model. Final CMS RVU values will be published in November 2026 before any 2027 claims are submitted.</p>
+
+    <h3>"I don't understand the labor management criteria."</h3>
+    <p><em>Script answer:</em> The AMA defined six criteria for "straightforward" labor management. Think of it as describing an uncomplicated labor: singleton vertex, normal monitoring, no interventions needed, normal progression, no prior cesarean, stable mom. If your patient meets all six — straightforward. If anything on that list is off — complex. Most practicing OBs will tell you that truly straightforward labor is the exception in their actual caseload, which is exactly why the AMA created a complex category with a higher-value code.</p>
+
+    <h3>"What about patients who see multiple providers during their pregnancy?"</h3>
+    <p><em>Script answer:</em> This is actually one of the problems the new system was designed to solve. Under the old global package, split-care arrangements were a billing headache — only one provider could bill the global code, and the "split" had to be negotiated between practices. Under the new system, each provider bills for the services they personally provided. The antepartum physician bills for the antepartum visits. The hospitalist bills for labor management. The MFM bills for the specialist consultations. Each physician bills their actual work. The system is now built for how modern OB is actually delivered.</p>
+
+    <h3>"What if the payers aren't ready?"</h3>
+    <p><em>Script answer:</em> The AMA published a Health Plan Primer simultaneously with the physician materials in June 2026. ACOG has formally recommended that health plans have new per-code rates in place by September 1, 2026. Our HP team is leading payer outreach now to ensure contracted rates are in place before go-live. January 1, 2027 is a federal CPT effective date — payers are not waiting to update their systems any more than providers are.</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function toggle(hdr) {
+  const body = hdr.nextElementSibling;
+  const sec  = hdr.parentElement;
+  const isHidden = body.classList.contains('hidden');
+  body.classList.toggle('hidden', !isHidden);
+  sec.classList.toggle('collapsed', !isHidden);
+}
+
+// smooth-scroll nav pills
+document.querySelectorAll('.nav-pill').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    // Ensure section is open
+    const body = target.querySelector('.sec-body');
+    if (body && body.classList.contains('hidden')) {
+      body.classList.remove('hidden');
+      target.classList.remove('collapsed');
+    }
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
