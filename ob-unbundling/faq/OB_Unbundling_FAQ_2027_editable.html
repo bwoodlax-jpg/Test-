@@ -242,10 +242,68 @@
   }
   .add-faq-btn:hover { background: var(--light); border-color: var(--teal); color: var(--teal); }
 
+  /* ── FAQ Sidebar ── */
+  .faq-sidebar {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 190px;
+    height: calc(100vh - 44px);
+    background: var(--navy);
+    overflow-y: auto;
+    padding: 14px 0 24px;
+    z-index: 100;
+  }
+  .faq-sidebar-label {
+    font-size: 0.63rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.38);
+    padding: 0 14px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 6px;
+  }
+  .faq-sidebar-link {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 6px 14px;
+    font-size: 0.74rem;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .faq-sidebar-link:hover {
+    color: white;
+    background: rgba(255,255,255,0.07);
+    border-left-color: var(--teal);
+  }
+  .faq-sidebar-link.active {
+    color: white;
+    background: rgba(0,123,138,0.22);
+    border-left-color: var(--teal);
+    font-weight: 700;
+  }
+  .faq-sidebar-link .qn {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--teal);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  body { padding-left: 190px; }
+
+  @media (max-width: 900px) {
+    .faq-sidebar { display: none; }
+    body { padding-left: 0; }
+  }
+
   /* ── Print Styles ── */
   @media print {
-    #toolbar, .edit-bar, .add-faq-btn { display: none !important; }
-    body { background: white; }
+    #toolbar, .edit-bar, .add-faq-btn, .faq-sidebar { display: none !important; }
+    body { background: white; padding-left: 0; }
     #page-wrap { margin: 0; box-shadow: none; border-radius: 0; }
     .faq-item { break-inside: avoid; box-shadow: none; }
     .faq-q-text, .faq-a-text { outline: none; }
@@ -256,6 +314,25 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
+
+<nav class="faq-sidebar" id="faq-sidebar">
+  <div class="faq-sidebar-label">Questions</div>
+  <a class="faq-sidebar-link active" href="#faq-1"><span class="qn">Q1</span>Why unbundling?</a>
+  <a class="faq-sidebar-link" href="#faq-2"><span class="qn">Q2</span>Effective date</a>
+  <a class="faq-sidebar-link" href="#faq-3"><span class="qn">Q3</span>Deleted codes</a>
+  <a class="faq-sidebar-link" href="#faq-4"><span class="qn">Q4</span>Antepartum billing</a>
+  <a class="faq-sidebar-link" href="#faq-5"><span class="qn">Q5</span>Modifier TH</a>
+  <a class="faq-sidebar-link" href="#faq-6"><span class="qn">Q6</span>MDM for prenatal</a>
+  <a class="faq-sidebar-link" href="#faq-7"><span class="qn">Q7</span>Labor mgmt codes</a>
+  <a class="faq-sidebar-link" href="#faq-8"><span class="qn">Q8</span>Straightforward vs. complex</a>
+  <a class="faq-sidebar-link" href="#faq-9"><span class="qn">Q9</span>Same-day upgrade</a>
+  <a class="faq-sidebar-link" href="#faq-10"><span class="qn">Q10</span>Planned C-section</a>
+  <a class="faq-sidebar-link" href="#faq-11"><span class="qn">Q11</span>Delivery codes</a>
+  <a class="faq-sidebar-link" href="#faq-12"><span class="qn">Q12</span>Postpartum coding</a>
+  <a class="faq-sidebar-link" href="#faq-13"><span class="qn">Q13</span>2026 → 2027 crossover</a>
+  <a class="faq-sidebar-link" href="#faq-14"><span class="qn">Q14</span>VBAC / TOLAC</a>
+  <a class="faq-sidebar-link" href="#faq-15"><span class="qn">Q15</span>Same-day labor + delivery</a>
+</nav>
 
 <!-- Toolbar -->
 <div id="toolbar">
@@ -304,7 +381,7 @@
   <div class="faq-body" id="faq-container">
 
     <!-- Q1 -->
-    <div class="faq-item" data-id="1">
+    <div class="faq-item" id="faq-1" data-id="1">
       <div class="faq-q">
         <div class="faq-num">Q1</div>
         <div class="faq-q-text" contenteditable="true" data-placeholder="Enter question...">What is the CPT 2027 OB unbundling and why is it happening?</div>
@@ -319,7 +396,7 @@
     </div>
 
     <!-- Q2 -->
-    <div class="faq-item" data-id="2">
+    <div class="faq-item" id="faq-2" data-id="2">
       <div class="faq-q">
         <div class="faq-num">Q2</div>
         <div class="faq-q-text" contenteditable="true">When does the new coding structure take effect?</div>
@@ -335,7 +412,7 @@
     </div>
 
     <!-- Q3 -->
-    <div class="faq-item" data-id="3">
+    <div class="faq-item" id="faq-3" data-id="3">
       <div class="faq-q">
         <div class="faq-num">Q3</div>
         <div class="faq-q-text" contenteditable="true">Which codes are being deleted on January 1, 2027?</div>
@@ -363,7 +440,7 @@
     </div>
 
     <!-- Q4 -->
-    <div class="faq-item" data-id="4">
+    <div class="faq-item" id="faq-4" data-id="4">
       <div class="faq-q">
         <div class="faq-num">Q4</div>
         <div class="faq-q-text" contenteditable="true">How do I bill for antepartum office visits starting January 1, 2027?</div>
@@ -387,7 +464,7 @@
     </div>
 
     <!-- Q5 -->
-    <div class="faq-item" data-id="5">
+    <div class="faq-item" id="faq-5" data-id="5">
       <div class="faq-q">
         <div class="faq-num">Q5</div>
         <div class="faq-q-text" contenteditable="true">What is Modifier TH and when do I use it?</div>
@@ -404,7 +481,7 @@
     </div>
 
     <!-- Q6 -->
-    <div class="faq-item" data-id="6">
+    <div class="faq-item" id="faq-6" data-id="6">
       <div class="faq-q">
         <div class="faq-num">Q6</div>
         <div class="faq-q-text" contenteditable="true">How does Medical Decision Making (MDM) apply to prenatal visits?</div>
@@ -425,7 +502,7 @@
     </div>
 
     <!-- Q7 -->
-    <div class="faq-item" data-id="7">
+    <div class="faq-item" id="faq-7" data-id="7">
       <div class="faq-q">
         <div class="faq-num">Q7</div>
         <div class="faq-q-text" contenteditable="true">What are the new labor management codes and what do they include?</div>
@@ -454,7 +531,7 @@
     </div>
 
     <!-- Q8 -->
-    <div class="faq-item" data-id="8">
+    <div class="faq-item" id="faq-8" data-id="8">
       <div class="faq-q">
         <div class="faq-num">Q8</div>
         <div class="faq-q-text" contenteditable="true">How do I determine if labor management is "straightforward" or "complex"?</div>
@@ -474,7 +551,7 @@
     </div>
 
     <!-- Q9 -->
-    <div class="faq-item" data-id="9">
+    <div class="faq-item" id="faq-9" data-id="9">
       <div class="faq-q">
         <div class="faq-num">Q9</div>
         <div class="faq-q-text" contenteditable="true">What if labor starts as straightforward but becomes complex during the same calendar day?</div>
@@ -491,7 +568,7 @@
     </div>
 
     <!-- Q10 -->
-    <div class="faq-item" data-id="10">
+    <div class="faq-item" id="faq-10" data-id="10">
       <div class="faq-q">
         <div class="faq-num">Q10</div>
         <div class="faq-q-text" contenteditable="true">Does a planned or scheduled cesarean require a labor management code?</div>
@@ -513,7 +590,7 @@
     </div>
 
     <!-- Q11 -->
-    <div class="faq-item" data-id="11">
+    <div class="faq-item" id="faq-11" data-id="11">
       <div class="faq-q">
         <div class="faq-num">Q11</div>
         <div class="faq-q-text" contenteditable="true">What are the confirmed new delivery codes effective January 1, 2027?</div>
@@ -544,7 +621,7 @@
     </div>
 
     <!-- Q12 -->
-    <div class="faq-item" data-id="12">
+    <div class="faq-item" id="faq-12" data-id="12">
       <div class="faq-q">
         <div class="faq-num">Q12</div>
         <div class="faq-q-text" contenteditable="true">What happens to postpartum care coding?</div>
@@ -568,7 +645,7 @@
     </div>
 
     <!-- Q13 -->
-    <div class="faq-item" data-id="13">
+    <div class="faq-item" id="faq-13" data-id="13">
       <div class="faq-q">
         <div class="faq-num">Q13</div>
         <div class="faq-q-text" contenteditable="true">How do I handle patients whose prenatal care starts in 2026 and delivery is in 2027?</div>
@@ -587,7 +664,7 @@
     </div>
 
     <!-- Q14 -->
-    <div class="faq-item" data-id="14">
+    <div class="faq-item" id="faq-14" data-id="14">
       <div class="faq-q">
         <div class="faq-num">Q14</div>
         <div class="faq-q-text" contenteditable="true">What about VBAC patients — trial of labor after cesarean (TOLAC)?</div>
@@ -608,7 +685,7 @@
     </div>
 
     <!-- Q15 -->
-    <div class="faq-item" data-id="15">
+    <div class="faq-item" id="faq-15" data-id="15">
       <div class="faq-q">
         <div class="faq-num">Q15</div>
         <div class="faq-q-text" contenteditable="true">Can a labor management code and delivery code be billed on the same day?</div>
@@ -844,6 +921,37 @@ async function cloudRefresh() {
     if (el) { el.textContent = '✗ Error: ' + e.message; el.style.color = '#8B0000'; }
   }
 }
+
+// ── Sidebar navigation ────────────────────────────────────────────────────
+document.querySelectorAll('.faq-sidebar-link').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.getElementById(a.getAttribute('href').replace('#', ''));
+    if (!target) return;
+    document.querySelectorAll('.faq-sidebar-link').forEach(l => l.classList.remove('active'));
+    a.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── Active sidebar link via IntersectionObserver ──────────────────────────
+(function() {
+  const faqItems = document.querySelectorAll('.faq-item[id]');
+  const sideLinks = document.querySelectorAll('.faq-sidebar-link');
+  const faqObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sideLinks.forEach(l => {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+        });
+        const activeLink = document.querySelector(`.faq-sidebar-link[href="#${id}"]`);
+        if (activeLink) activeLink.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
+  faqItems.forEach(item => faqObserver.observe(item));
+})();
 
 async function testCloud() {
   const el = document.getElementById('cloud-status');
