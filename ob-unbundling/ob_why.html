@@ -28,16 +28,51 @@
   .gold-bar { height: 5px; background: var(--gold); }
 
   /* ── SCRIPTER CALLOUT ── */
-  .scripter-note { background: #FFF8E7; border-left: 6px solid var(--gold); padding: 14px 24px; margin: 24px 40px 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; line-height: 1.6; }
+  .scripter-note { background: #FFF8E7; border-left: 6px solid var(--gold); padding: 14px 18px; margin: 0 0 20px; border-radius: 0 8px 8px 0; font-size: 0.88rem; line-height: 1.6; }
   .scripter-note strong { color: var(--navy); }
 
-  /* ── NAV PILLS ── */
-  .nav-wrap { padding: 16px 40px 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .nav-pill { background: white; border: 1.5px solid #ddd; border-radius: 20px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; color: var(--navy); cursor: pointer; text-decoration: none; transition: all 0.15s; }
-  .nav-pill:hover { background: var(--navy); color: white; border-color: var(--navy); }
+  /* ── PAGE LAYOUT ── */
+  .page-wrap { display: flex; align-items: flex-start; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 210px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    padding: 18px 0 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+  .sidebar-label {
+    font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: rgba(255,255,255,0.4);
+    padding: 0 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+  }
+  .sidebar-link {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.78rem; line-height: 1.4;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-link:hover { color: white; background: rgba(255,255,255,0.07); border-left-color: var(--teal); }
+  .sidebar-link.active { color: white; background: rgba(0,123,138,0.25); border-left-color: var(--teal); font-weight: 700; }
+  .sidebar-link .sn { font-size: 0.7rem; font-weight: 800; color: var(--teal); min-width: 16px; margin-top: 1px; flex-shrink: 0; }
+  .sidebar-link.active .sn { color: #5DD6E0; }
 
   /* ── MAIN CONTENT ── */
-  .main { padding: 24px 40px 60px; display: flex; flex-direction: column; gap: 28px; max-width: 1100px; }
+  .main { flex: 1; padding: 24px 32px 60px; display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 
   /* ── SECTION CARDS ── */
   .sec { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
@@ -102,9 +137,11 @@
   .criteria-col h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
   .criteria-col li { font-size: 0.86rem; line-height: 1.6; }
 
+  @media (max-width: 800px) {
+    .sidebar { display: none; }
+    .main { padding: 18px 18px 50px; }
+  }
   @media (max-width: 700px) {
-    .header, .nav-wrap, .main { padding-left: 18px; padding-right: 18px; }
-    .scripter-note { margin-left: 18px; margin-right: 18px; }
     .two-col { grid-template-columns: 1fr; }
     .phases { grid-template-columns: 1fr 1fr; }
   }
@@ -121,25 +158,30 @@
 </div>
 <div class="gold-bar"></div>
 
+<div class="page-wrap">
+
+<!-- ── STICKY SIDEBAR ── -->
+<nav class="sidebar">
+  <div class="sidebar-label">Sections</div>
+  <a class="sidebar-link active" href="#sec1"><span class="sn">1</span>The Old System</a>
+  <a class="sidebar-link" href="#sec2"><span class="sn">2</span>Why It Failed</a>
+  <a class="sidebar-link" href="#sec3"><span class="sn">3</span>Who Drove the Change</a>
+  <a class="sidebar-link" href="#sec4"><span class="sn">4</span>Deleted Codes</a>
+  <a class="sidebar-link" href="#sec5"><span class="sn">5</span>The New Framework</a>
+  <a class="sidebar-link" href="#sec6"><span class="sn">6</span>New Codes In Detail</a>
+  <a class="sidebar-link" href="#sec7"><span class="sn">7</span>Labor Management Rules</a>
+  <a class="sidebar-link" href="#sec8"><span class="sn">8</span>Documentation Shift</a>
+  <a class="sidebar-link" href="#sec9"><span class="sn">9</span>Modifier TH ⚠</a>
+  <a class="sidebar-link" href="#sec10"><span class="sn">10</span>Key Dates</a>
+  <a class="sidebar-link" href="#sec11"><span class="sn">11</span>Talking Points</a>
+</nav>
+
+<!-- ── CONTENT ── -->
+<div class="main">
+
 <div class="scripter-note">
   <strong>Who this page is for:</strong> This is your master reference for understanding the full context, history, and mechanics of the CPT 2027 OB unbundling before you script the education modules. Every "why" a physician will ask is answered here. Work through it top-to-bottom before drafting — the modules will be cleaner for it.
 </div>
-
-<div class="nav-wrap">
-  <a class="nav-pill" href="#sec1">1. The Old System</a>
-  <a class="nav-pill" href="#sec2">2. Why It Failed</a>
-  <a class="nav-pill" href="#sec3">3. Who Drove the Change</a>
-  <a class="nav-pill" href="#sec4">4. Deleted Codes</a>
-  <a class="nav-pill" href="#sec5">5. The New Framework</a>
-  <a class="nav-pill" href="#sec6">6. New Codes In Detail</a>
-  <a class="nav-pill" href="#sec7">7. Labor Management Rules</a>
-  <a class="nav-pill" href="#sec8">8. Documentation Shift</a>
-  <a class="nav-pill" href="#sec9">9. Modifier TH*</a>
-  <a class="nav-pill" href="#sec10">10. Key Dates</a>
-  <a class="nav-pill" href="#sec11">11. Talking Points</a>
-</div>
-
-<div class="main">
 
 <!-- ═══════════════════════════════════════════════════════ SECTION 1 -->
 <div class="sec" id="sec1">
@@ -724,8 +766,10 @@
 </div>
 
 </div><!-- /main -->
+</div><!-- /page-wrap -->
 
 <script>
+// ── Section toggle ────────────────────────────────────────────────────────
 function toggle(hdr) {
   const body = hdr.nextElementSibling;
   const sec  = hdr.parentElement;
@@ -734,13 +778,12 @@ function toggle(hdr) {
   sec.classList.toggle('collapsed', !isHidden);
 }
 
-// smooth-scroll nav pills
-document.querySelectorAll('.nav-pill').forEach(a => {
+// ── Sidebar click: open + smooth-scroll ───────────────────────────────────
+document.querySelectorAll('.sidebar-link').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     const target = document.querySelector(a.getAttribute('href'));
     if (!target) return;
-    // Ensure section is open
     const body = target.querySelector('.sec-body');
     if (body && body.classList.contains('hidden')) {
       body.classList.remove('hidden');
@@ -749,6 +792,26 @@ document.querySelectorAll('.nav-pill').forEach(a => {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+// ── Active section highlight via IntersectionObserver ────────────────────
+const sections = document.querySelectorAll('.sec');
+const links    = document.querySelectorAll('.sidebar-link');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+      // keep active link visible in sidebar
+      const activeLink = document.querySelector(`.sidebar-link[href="#${id}"]`);
+      if (activeLink) activeLink.scrollIntoView({ block: 'nearest' });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
 </script>
 
 </body>
