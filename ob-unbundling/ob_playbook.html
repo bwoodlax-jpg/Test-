@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OB Unbundling Playbook 2027 — Interactive</title>
+<style>
+  :root {
+    --navy: #1B2E4B;
+    --teal: #007B8A;
+    --gold: #C8973A;
+    --red:  #8B0000;
+    --sage: #4A7C59;
+    --light:#EAF4F6;
+    --mid:  #F5F5F5;
+    --dark: #1A1A1A;
+    --white:#FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header { background: var(--navy); padding: 22px 40px 18px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 1.55rem; font-weight: 800; color: white; letter-spacing: 0.3px; }
+  .header .sub { font-size: 0.82rem; color: #9ECDD6; margin-top: 4px; line-height: 1.5; }
+  .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .badge { background: var(--gold); color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; line-height: 1.5; white-space: nowrap; }
+  .print-btn { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .print-btn:hover { background: #a87a28; }
+  .gold-bar { height: 5px; background: var(--gold); }
+
+  /* ── PAGE LAYOUT ── */
+  .page-wrap { display: flex; align-items: flex-start; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 210px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    padding: 18px 0 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+  .sidebar-label {
+    font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: rgba(255,255,255,0.4);
+    padding: 0 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+  }
+  .sidebar-link {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.77rem; line-height: 1.4;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-link:hover { color: white; background: rgba(255,255,255,0.07); border-left-color: var(--teal); }
+  .sidebar-link.active { color: white; background: rgba(0,123,138,0.25); border-left-color: var(--teal); font-weight: 700; }
+  .sidebar-link .sn { font-size: 0.7rem; font-weight: 800; color: var(--teal); min-width: 18px; margin-top: 1px; flex-shrink: 0; }
+  .sidebar-link.active .sn { color: #5DD6E0; }
+
+  /* ── MAIN CONTENT ── */
+  .main { flex: 1; padding: 24px 32px 60px; display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+
+  /* ── SECTION CARDS ── */
+  .sec { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .sec-header { padding: 14px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
+  .sec-header:hover { filter: brightness(0.93); }
+  .sec-num { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; color: white; flex-shrink: 0; }
+  .sec-title { color: white; font-size: 1.02rem; font-weight: 700; letter-spacing: 0.2px; }
+  .sec-sub { color: rgba(255,255,255,0.8); font-size: 0.77rem; margin-top: 2px; }
+  .chevron { margin-left: auto; color: rgba(255,255,255,0.8); font-size: 1rem; transition: transform 0.2s; }
+  .collapsed .chevron { transform: rotate(-90deg); }
+  .sec-body { padding: 24px 28px 28px; border-top: 1px solid #f0f0f0; }
+  .sec-body.hidden { display: none; }
+
+  /* ── TYPOGRAPHY ── */
+  h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin: 20px 0 8px; }
+  h3:first-child { margin-top: 0; }
+  p { font-size: 0.9rem; line-height: 1.7; color: #333; margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 12px; }
+  li { font-size: 0.9rem; line-height: 1.7; color: #333; margin-bottom: 4px; }
+  strong { color: var(--dark); }
+
+  /* ── CALLOUT BOXES ── */
+  .callout { border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 0.88rem; line-height: 1.6; }
+  .callout-gold  { background: #FFF8E7; border-left: 5px solid var(--gold); }
+  .callout-teal  { background: var(--light); border-left: 5px solid var(--teal); }
+  .callout-red   { background: #FFF0F0; border-left: 5px solid var(--red); }
+  .callout-navy  { background: #EEF1F5; border-left: 5px solid var(--navy); }
+  .callout-sage  { background: #EEF4EF; border-left: 5px solid var(--sage); }
+
+  /* ── TABLES ── */
+  .data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.86rem; }
+  .data-table th { background: var(--navy); color: white; padding: 9px 12px; text-align: left; font-size: 0.8rem; letter-spacing: 0.3px; }
+  .data-table td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; line-height: 1.5; }
+  .data-table tr:nth-child(even) td { background: var(--mid); }
+  .data-table tr:hover td { background: var(--light); }
+  .teal-hdr th { background: var(--teal); }
+  .gold-hdr th { background: var(--gold); }
+  .red-hdr th { background: var(--red); }
+
+  /* ── STAT ROW ── */
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0; }
+  .stat-box { background: var(--mid); border-radius: 10px; padding: 14px 20px; text-align: center; flex: 1; min-width: 100px; border: 1.5px solid #e0e0e0; }
+  .stat-box .sn { font-size: 1.8rem; font-weight: 800; color: var(--teal); }
+  .stat-box .sl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-top: 2px; }
+
+  /* ── PHASE BLOCKS ── */
+  .phases { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 14px 0; }
+  .phase-card { border-radius: 8px; padding: 14px 16px; }
+  .phase-card .ph-num { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; opacity: 0.8; }
+  .phase-card .ph-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .phase-card .ph-desc { font-size: 0.82rem; line-height: 1.5; opacity: 0.9; }
+
+  /* ── TWO-COL CRITERIA ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .criteria-col { border-radius: 8px; padding: 14px 16px; }
+  .criteria-col h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .criteria-col li { font-size: 0.86rem; line-height: 1.6; }
+
+  /* ── TIMELINE TABLE ── */
+  .timeline-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.84rem; }
+  .timeline-table th { background: var(--navy); color: white; padding: 9px 12px; text-align: left; font-size: 0.78rem; letter-spacing: 0.3px; }
+  .timeline-table td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; line-height: 1.5; }
+  .timeline-table tr:nth-child(even) td { background: var(--mid); }
+  .phase-cell { color: white; font-weight: 700; text-align: center; font-size: 0.78rem; padding: 8px 6px; white-space: nowrap; }
+  .phase-now { background: #2A3F5F; }
+  .phase-1 { background: var(--teal); }
+  .phase-2 { background: var(--navy); }
+  .phase-3 { background: #9C7228; }
+  .phase-4 { background: var(--teal); }
+  .phase-golive { background: var(--red); }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-card { border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+  .scenario-hdr { background: var(--teal); color: white; padding: 10px 16px; font-weight: 700; font-size: 0.9rem; }
+  .scenario-meta { background: var(--mid); padding: 10px 16px; display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 0.85rem; }
+  .scenario-meta strong { color: var(--navy); }
+  .scenario-codes { overflow-x: auto; }
+  .scenario-bottom { background: var(--light); padding: 10px 16px; font-size: 0.84rem; line-height: 1.6; display: grid; grid-template-columns: 140px 1fr; gap: 8px; }
+  .scenario-bottom strong { color: var(--navy); }
+
+  /* ── CHECKLIST GROUPS ── */
+  .checklist-group { border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+  .checklist-hdr { color: white; padding: 10px 16px; font-weight: 700; font-size: 0.9rem; }
+  .checklist-items { padding: 8px 16px 12px; background: white; border: 1px solid #e0e0e0; border-top: none; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; line-height: 1.5; }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; width: 16px; height: 16px; }
+
+  /* ── HP NOTE ── */
+  .hp-note { background: #FFF8E7; border: 2px solid var(--gold); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-size: 0.88rem; line-height: 1.6; }
+  .hp-note strong { color: var(--navy); }
+
+  /* ── SUPER USER TABLE ── */
+  .del { color: var(--red); font-weight: 700; }
+  .new-code { color: var(--sage); font-weight: 700; }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid #eee; margin: 18px 0; }
+
+  @media (max-width: 800px) {
+    .sidebar { display: none; }
+    .main { padding: 18px 18px 50px; }
+    .two-col { grid-template-columns: 1fr; }
+    .scenario-meta, .scenario-bottom { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .sidebar, .header .print-btn { display: none !important; }
+    .header { padding: 16px 24px; }
+    body { background: white; }
+    .page-wrap { display: block; }
+    .main { padding: 0 24px; }
+    .sec { box-shadow: none; border: 1px solid #ddd; page-break-before: always; border-radius: 0; }
+    .sec:first-child { page-break-before: avoid; }
+    .sec-body.hidden { display: block !important; }
+    .sec-header { cursor: default; }
+    .chevron { display: none; }
+    @page { margin: 0.6in 0.7in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>OB Unbundling Playbook 2027</h1>
+    <div class="sub">CPT 2027 Maternity Care Transition · Complete Implementation Guide · Effective January 1, 2027</div>
+  </div>
+  <div class="header-right">
+    <div class="badge">EFFECTIVE<br>Jan 1, 2027</div>
+    <button class="print-btn" onclick="window.print()">Print / Export PDF</button>
+  </div>
+</div>
+<div class="gold-bar"></div>
+
+<div class="page-wrap">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-label">Sections</div>
+  <a class="sidebar-link active" href="#sec1"><span class="sn">1</span>Background &amp; What's Changing</a>
+  <a class="sidebar-link" href="#sec2"><span class="sn">2</span>Organizational Impact</a>
+  <a class="sidebar-link" href="#sec3"><span class="sn">3</span>Master Timeline</a>
+  <a class="sidebar-link" href="#sec4"><span class="sn">4</span>Education Modules &amp; Super Users</a>
+  <a class="sidebar-link" href="#sec5"><span class="sn">5</span>Intake Form &amp; SharePoint Hub</a>
+  <a class="sidebar-link" href="#sec6"><span class="sn">6</span>Coding Examples</a>
+  <a class="sidebar-link" href="#sec7"><span class="sn">7</span>New Billing Workflow</a>
+  <a class="sidebar-link" href="#sec8"><span class="sn">8</span>HP — Payer Contracting &amp; EHR</a>
+  <a class="sidebar-link" href="#sec9"><span class="sn">9</span>Roles &amp; Responsibilities</a>
+  <a class="sidebar-link" href="#sec10"><span class="sn">10</span>Master Readiness Checklist</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ═══════════════ SECTION 1 — BACKGROUND -->
+<div class="sec" id="sec1">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">1</div>
+    <div>
+      <div class="sec-title">Background &amp; What Is Changing</div>
+      <div class="sec-sub">The global OB package ends January 1, 2027 — what replaces it</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-gold">
+      <strong>RESEARCH VALIDATED — AMA Coding Primer Webinar, June 2, 2026.</strong> All guidance in this playbook is validated against the AMA's official CPT 2027 Maternity Care Services Code Changes documentation and the AMA's free public coding primer webinar held June 2, 2026. The webinar confirmed the four-phase framework, new code structure, and January 1, 2027 effective date.
+    </div>
+
+    <h3>What Is the Global OB Package?</h3>
+    <p>Since the early 1990s, maternity care in the United States has been billed under a <strong>"global package"</strong> model — a single bundled CPT code representing the full continuum of a patient's prenatal, delivery, and postpartum care as one reimbursable event. This model simplified billing but masked the complexity, volume, and variety of care that modern OB/GYN teams deliver.</p>
+
+    <h3>Why Is It Changing?</h3>
+    <p>Following nearly two years of collaborative work between the AMA CPT Editorial Panel, ACOG, and national specialty societies — and confirmed at the AMA's Coding Primer Webinar on <strong>June 2, 2026</strong> — the global package is being dismantled because:</p>
+    <ul>
+      <li>Pregnancy care is now routinely delivered by multiple, sometimes unaffiliated care teams across antepartum, labor, delivery, and postpartum phases.</li>
+      <li>Patients are frequently transferred from rural hospitals to facilities equipped for high-risk care — scenarios the bundled code never adequately captured.</li>
+      <li>The global model obscured care variation, complexity, and cost transparency.</li>
+      <li>Increasing use of home monitoring, telehealth, and additional postpartum monitoring (mental health, hemorrhage, cardiac conditions — the leading causes of maternal death) requires more granular reporting.</li>
+      <li>Maternal-Fetal Medicine (MFM) and high-risk practices were systematically underpaid relative to the volume and complexity of services rendered.</li>
+    </ul>
+
+    <h3>Scope of Code Changes (Effective January 1, 2027)</h3>
+    <div class="stats">
+      <div class="stat-box"><div class="sn">35</div><div class="sl">Total CPT Changes</div></div>
+      <div class="stat-box"><div class="sn">17</div><div class="sl">Codes Deleted</div></div>
+      <div class="stat-box"><div class="sn">12</div><div class="sl">New Codes Added</div></div>
+      <div class="stat-box"><div class="sn">6</div><div class="sl">Codes Revised</div></div>
+      <div class="stat-box"><div class="sn">4</div><div class="sl">Phases of Care</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Action</th><th>Count</th><th>Examples / Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Codes Deleted</td><td>17</td><td>59400, 59409, 59410, 59425, 59426, 59430, 59510, 59515, 59610, 59618, and others</td></tr>
+        <tr><td>New Codes Added</td><td>12</td><td>New labor management codes (initial/subsequent, straightforward/complex); new delivery-only codes; laceration repair codes; uterine tamponade code</td></tr>
+        <tr><td>Codes Revised</td><td>6</td><td>Delivery and postpartum codes updated to stand-alone (non-global) reporting</td></tr>
+        <tr><td>Total Changes</td><td>35</td><td>Largest restructuring of obstetric coding in 30+ years</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The Four New Phases of Maternity Care Reporting</h3>
+    <div class="phases">
+      <div class="phase-card" style="background: var(--light); border: 2px solid var(--teal);">
+        <div class="ph-num" style="color: var(--teal);">Phase 1</div>
+        <div class="ph-name" style="color: var(--navy);">Antepartum Care</div>
+        <div class="ph-desc" style="color: #333;">Every prenatal visit billed individually using E/M codes (99202–99499). Modifier TH appended. Code selection based on MDM or total time per encounter. Codes 59425, 59426 and all global codes deleted.</div>
+      </div>
+      <div class="phase-card" style="background: #EEF1F5; border: 2px solid var(--navy);">
+        <div class="ph-num" style="color: var(--navy);">Phase 2</div>
+        <div class="ph-name" style="color: var(--navy);">Labor Management</div>
+        <div class="ph-desc" style="color: #333;">Reported daily (once per calendar date). Distinguishes initial vs. subsequent days and straightforward vs. complex management. Includes interim physical exams, physiological data interpretation, and induction/augmentation.</div>
+      </div>
+      <div class="phase-card" style="background: #FFF8EC; border: 2px solid var(--gold);">
+        <div class="ph-num" style="color: var(--gold);">Phase 3</div>
+        <div class="ph-name" style="color: var(--navy);">Delivery</div>
+        <div class="ph-desc" style="color: #333;">Stand-alone codes: vaginal delivery, VBAC, primary cesarean, repeat cesarean. Delivery codes do NOT include labor management or postpartum. Routine same-day postpartum included in delivery code. New laceration repair codes.</div>
+      </div>
+      <div class="phase-card" style="background: var(--light); border: 2px solid var(--sage);">
+        <div class="ph-num" style="color: var(--sage);">Phase 4</div>
+        <div class="ph-name" style="color: var(--navy);">Postpartum Care</div>
+        <div class="ph-desc" style="color: #333;">All current postpartum codes deleted. Reported per encounter with E/M codes + modifier TH. Inpatient post-delivery days: subsequent hospital care codes. Outpatient postpartum visits: office E/M + modifier TH.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 2 — ORGANIZATIONAL IMPACT -->
+<div class="sec" id="sec2">
+  <div class="sec-header" style="background: var(--teal);" onclick="toggle(this)">
+    <div class="sec-num">2</div>
+    <div>
+      <div class="sec-title">Organizational Impact</div>
+      <div class="sec-sub">Revenue, volume, and operational shifts affecting our OB/GYN department</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <h3>Revenue &amp; Volume Impact</h3>
+    <p>Under the old global model, a typical pregnancy generated <strong>1 claim</strong> for the full episode. Under the new unbundled model, that same pregnancy will generate an estimated <strong>15× more claims</strong> — one per prenatal visit (avg. 10–14), multiple labor management days, a delivery claim, and multiple postpartum visits. This is a fundamental operational shift.</p>
+
+    <table class="data-table">
+      <thead><tr><th>Area</th><th>Old Model</th><th>New Model (Jan 1, 2027)</th></tr></thead>
+      <tbody>
+        <tr><td>Claims per pregnancy</td><td>1 global claim</td><td>~15+ individual claims</td></tr>
+        <tr><td>Antepartum billing</td><td>Bundled into global code</td><td>E/M code per visit + modifier TH</td></tr>
+        <tr><td>Labor management</td><td>Included in global code</td><td>Separate daily codes (initial/subsequent; straightforward/complex)</td></tr>
+        <tr><td>Delivery</td><td>Bundled</td><td>Stand-alone delivery code only</td></tr>
+        <tr><td>Postpartum</td><td>Bundled into global code</td><td>E/M code per visit + modifier TH</td></tr>
+        <tr><td>Documentation burden</td><td>Moderate</td><td>HIGH — every visit must independently justify E/M level</td></tr>
+        <tr><td>Payer contracting</td><td>Single global rate</td><td>Requires HP-led renegotiation of per-code rates</td></tr>
+        <tr><td>EHR templates</td><td>Minimal change needed</td><td>Must be updated for E/M documentation + all new codes</td></tr>
+        <tr><td>Revenue potential</td><td>Fixed global rate</td><td>Higher for complex/high-risk; risk if under-documented</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Risks If We Are Not Prepared</h3>
+    <ul>
+      <li><strong>Claim denials</strong> — payers without renegotiated contracts will auto-deny new codes.</li>
+      <li><strong>Revenue gap</strong> — practices billing deleted global codes after 1/1/2027 receive no payment.</li>
+      <li><strong>Audit exposure</strong> — under-documented E/M levels invite post-payment audits.</li>
+      <li><strong>Patient confusion</strong> — patients receiving multiple EOBs instead of one may call billing.</li>
+      <li><strong>Staff overwhelm</strong> — a 15× increase in claim volume without workflow changes breaks the billing cycle.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 3 — MASTER TIMELINE -->
+<div class="sec" id="sec3">
+  <div class="sec-header" style="background: #2A3F5F;" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">3</div>
+    <div>
+      <div class="sec-title">Master Implementation Timeline</div>
+      <div class="sec-sub">All milestones from June 2026 kickoff through post-go-live audits</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <p>All milestones are sequenced to ensure our OB/GYN providers are fully trained, all three education modules are deployed, physician EHR templates are updated, and our intake/communication system is live well ahead of the January 1, 2027 go-live.</p>
+
+    <table class="timeline-table">
+      <thead><tr><th style="width:130px;">Phase</th><th>Milestone</th><th style="width:110px;">Target Date</th><th style="width:100px;">Owner</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="phase-cell phase-now" rowspan="2">NOW<br>(June 2026)</td>
+          <td><strong>Project Kickoff</strong> — Assemble core project team (super users, HP lead, IT/EHR lead, practice manager, department medical director). Review AMA June 2 webinar recording. Assign module ownership.</td>
+          <td>June 2026</td><td>Dept. Lead</td>
+        </tr>
+        <tr>
+          <td><strong>Needs Assessment</strong> — Audit current global code usage (59400, 59510, etc.). Baseline current claim volume. Identify payers for HP-led contract renegotiation. Assess EHR documentation gaps.</td>
+          <td>June 2026</td><td>HP</td>
+        </tr>
+        <tr>
+          <td class="phase-cell phase-1" rowspan="5">PHASE 1<br>OFFICE VISITS</td>
+          <td><strong>Module 1 Video — First Draft (Office Visits)</strong> — Create video (less than 15 minutes) covering antepartum/postpartum E/M code selection (99202–99499), modifier TH, MDM documentation, time-based coding, and ICD-10-CM pregnancy codes.</td>
+          <td>July 1, 2026</td><td>Education Team</td>
+        </tr>
+        <tr>
+          <td><strong>Update Physician EHR Templates — Office Visits</strong> — Revise antepartum and postpartum office visit note templates to include MDM documentation elements and time capture fields. Coordinate with IT/EHR team and review with super users.</td>
+          <td>July 2026</td><td>IT / EHR Team</td>
+        </tr>
+        <tr>
+          <td><strong>Super User Review &amp; Pilot — Module 1</strong> — Super users review video draft, validate accuracy against AMA guidelines, pilot coding on 10 real antepartum visit notes. Document any corrections.</td>
+          <td>July 2026</td><td>Super Users</td>
+        </tr>
+        <tr>
+          <td><strong>SharePoint Hub &amp; Intake Form LIVE</strong> — SharePoint hub (home page, module library shell, FAQ, resources) and the physician coding intake form go live by mid-July.</td>
+          <td>Mid-July 2026</td><td>IT / EHR Team</td>
+        </tr>
+        <tr>
+          <td><strong>Module 1 Finalized &amp; Published</strong> — Incorporate feedback. Publish Module 1 (Office Visits) + quick-reference card to SharePoint. Track completion.</td>
+          <td>August 2026</td><td>Education + IT</td>
+        </tr>
+        <tr>
+          <td class="phase-cell phase-2" rowspan="4">PHASE 2<br>INPATIENT</td>
+          <td><strong>Module 2 Video — Inpatient</strong> — Develop video (less than 15 minutes) covering labor management codes (initial/subsequent, straightforward/complex), delivery-only codes, subsequent hospital care, and discharge coding.</td>
+          <td>July–Aug 2026</td><td>Education Team</td>
+        </tr>
+        <tr>
+          <td><strong>Update Physician EHR Templates — Inpatient / Delivery</strong> — Revise labor management documentation templates, delivery note templates, and subsequent hospital care note templates. Validate in EHR sandbox with IT team.</td>
+          <td>August 2026</td><td>IT / EHR Team</td>
+        </tr>
+        <tr>
+          <td><strong>Super User Review &amp; Pilot — Module 2</strong> — Validate inpatient module against AMA guidelines. Run tabletop coding scenarios. Pilot with hospitalist OB team.</td>
+          <td>August 2026</td><td>Super Users</td>
+        </tr>
+        <tr>
+          <td><strong>Inpatient Module Published</strong> — Publish Module 2 + scenario workbook to SharePoint.</td>
+          <td>August 2026</td><td>Education + IT</td>
+        </tr>
+        <tr>
+          <td class="phase-cell phase-3" rowspan="3">PHASE 3<br>OB COMPREHENSIVE</td>
+          <td><strong>Module 3 Video — OB Comprehensive</strong> — Build video (less than 15 minutes) as the capstone: full episode from confirmation through postpartum, edge cases (VBAC, C-section, split care/transfer), audit risk scenarios.</td>
+          <td>August 2026</td><td>Education Team</td>
+        </tr>
+        <tr>
+          <td><strong>Super User Review &amp; Pilot — Module 3</strong> — Full scenario testing. Build FAQ bank. Co-develop live Q&amp;A session content.</td>
+          <td>August 2026</td><td>Super Users</td>
+        </tr>
+        <tr>
+          <td><strong>All Three Modules Live in SharePoint</strong> — Full module library, attestation quizzes, and quick-reference cards published.</td>
+          <td>Late Aug 2026</td><td>Education + IT</td>
+        </tr>
+        <tr>
+          <td class="phase-cell phase-4" rowspan="4">PHASE 4<br>PROVIDER TRAINING</td>
+          <td><strong>EHR / EMR Go-Live Readiness</strong> — All new codes validated in sandbox. Old global codes removed. New labor management and delivery codes active. Utilization monitoring report built. Completed before or concurrent with provider training.</td>
+          <td>Aug–Sept 2026</td><td>IT / EHR Team</td>
+        </tr>
+        <tr>
+          <td><strong>All OB/GYN Providers Trained — September 1 Target</strong> — All physicians complete their respective module based on scope of practice. Live Q&amp;A sessions held. Attestation recorded.</td>
+          <td>Sept 1, 2026</td><td>Dept. Director</td>
+        </tr>
+        <tr>
+          <td><strong>HP Billing Staff &amp; Front Desk Training</strong> — HP-led training on new claim submission workflow, modifier TH,* prior auth changes, and patient EOB communication.</td>
+          <td>Sept 2026</td><td>HP*</td>
+        </tr>
+        <tr>
+          <td><strong>Payer Contract Renegotiations — HP Led</strong> — HP coordinates with HP leadership to renegotiate all major payer contracts for new per-code rates. Confirm no global code carve-outs remain. Written confirmations requested.</td>
+          <td>Sept–Oct 2026</td><td>HP*</td>
+        </tr>
+        <tr>
+          <td class="phase-cell phase-golive" rowspan="3">GO-LIVE<br>JAN 1, 2027</td>
+          <td><strong>January 1, 2027 — New CPT Codes Effective</strong> — All global OB codes officially deleted. All claims under new code structure. SharePoint dashboard active for ongoing provider coding questions.</td>
+          <td>Jan 1, 2027</td><td>All Teams</td>
+        </tr>
+        <tr>
+          <td><strong>30-Day Post-Go-Live Audit</strong> — Department team reviews documentation quality and coding accuracy. Super users provide live support. Rapid corrections issued. (Claim/denial revenue review handled separately by HP*.)</td>
+          <td>Feb 2027</td><td>Dept. Team</td>
+        </tr>
+        <tr>
+          <td><strong>60/90-Day Post-Go-Live Audit</strong> — Department team completes 60- and 90-day coding accuracy reviews and identifies undercoding patterns. Final reinforcement training delivered as needed. (Revenue reconciliation handled separately by HP*.)</td>
+          <td>Mar–Apr 2027</td><td>Dept. Team</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.8rem; color:#666; font-style:italic; margin-top:8px;">* HP (Health Plan / Billing Operations) work — payer contracting, billing operations, and revenue reconciliation — is handled by a separate group, not this internal OB unbundling / provider education workgroup. HP items are shown here for timeline visibility only. * Modifier TH approach TBD for our organization — confirm before training.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 4 — EDUCATION MODULES & SUPER USERS -->
+<div class="sec" id="sec4">
+  <div class="sec-header" style="background: var(--sage);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">4</div>
+    <div>
+      <div class="sec-title">Education Modules &amp; Super Users</div>
+      <div class="sec-sub">Three-module training plan, super user program, and deployment schedule</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-teal">
+      <strong>Module 1 — Office Visits (Antepartum &amp; Postpartum)</strong><br>
+      First Draft: July 1, 2026 · Published: August 2026<br>
+      <ul style="margin-top:8px;">
+        <li>Target Audience: All OB/GYN physicians, NPs, PAs, front-desk, and HP billing staff.</li>
+        <li>Format: Video lecture (less than 15 minutes) + downloadable quick-reference card.</li>
+        <li>Content: What the global code was; why it's ending; E/M code selection rules (MDM vs. time); modifier TH usage;* ICD-10-CM diagnosis coding; documentation requirements; common pitfalls and audit triggers.</li>
+        <li>Super User Role: Review draft script for clinical accuracy. Pilot new coding on 10 real antepartum visit notes.</li>
+        <li>EHR Template Update: Coordinate with IT to activate updated antepartum/postpartum office visit note templates before pilot begins.</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-navy">
+      <strong>Module 2 — Inpatient (Labor Management &amp; Delivery)</strong><br>
+      Development: July–Aug 2026 · Published: August 2026<br>
+      <ul style="margin-top:8px;">
+        <li>Target Audience: OB hospitalists, laborists, delivery nurses (documentation awareness), HP billing staff.</li>
+        <li>Format: Video lecture (less than 15 minutes) + inpatient coding scenario workbook.</li>
+        <li>Content: New labor management codes — initial vs. subsequent day; straightforward vs. complex definitions; delivery-only codes (vaginal, VBAC, primary C-section, repeat C-section); subsequent hospital care days; discharge management; new uterine tamponade code.</li>
+        <li>Super User Role: Run tabletop scenarios — given a clinical summary, select the correct labor management + delivery code combination.</li>
+        <li>EHR Template Update: Revised inpatient delivery notes, labor management templates, and subsequent hospital care fields activated in EHR sandbox.</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>Module 3 — OB Comprehensive (Full Episode + Edge Cases)</strong><br>
+      Development: August 2026 · Published: Late August 2026<br>
+      <ul style="margin-top:8px;">
+        <li>Target Audience: Physicians providing comprehensive / full-episode obstetric care + HP billing leads.</li>
+        <li>Format: Video lecture (less than 15 minutes) + live case-based department Q&amp;A session + attestation quiz.</li>
+        <li>Content: Complete pregnancy episode walkthrough; split care/transfer of care scenarios; VBAC and repeat C-section pathways; high-risk/MFM referral handoff coding; payer-specific nuances; patient communication about billing changes; auditing your own documentation.</li>
+        <li>Live Q&amp;A Session: Held for the department and led by the Department Chief or Chair. Super users attend in a support role.</li>
+        <li>Super User Role: Maintain a live FAQ document in SharePoint updated with questions arising during training.</li>
+      </ul>
+    </div>
+
+    <p style="font-size:0.8rem;color:#888;font-style:italic;">* Modifier TH approach TBD for our organization — confirm before training.</p>
+
+    <h3>Super User Program</h3>
+    <p>Super users are typically 2–4 experienced coders, billers, or clinically-trained staff who receive deep-dive training first, validate all education content, pilot new workflows, and serve as the first line of support for colleagues after go-live.</p>
+
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Super User Recommendation</th><th>Timeline</th></tr></thead>
+      <tbody>
+        <tr><td>Complete advanced self-study on new CPT guidelines; review AMA June 2, 2026 webinar recording</td><td>June–July 2026</td></tr>
+        <tr><td>Review and validate Module 1 (Office Visits) video script and reference materials</td><td>July 2026</td></tr>
+        <tr><td>Pilot Module 1 coding on 10 real patient encounters; document findings</td><td>July 2026</td></tr>
+        <tr><td>Review updated antepartum/postpartum office visit EHR templates before provider rollout</td><td>July 2026</td></tr>
+        <tr><td>Review and validate Module 2 (Inpatient) content; run scenario-based testing</td><td>July–August 2026</td></tr>
+        <tr><td>Review updated inpatient delivery/labor management EHR templates</td><td>August 2026</td></tr>
+        <tr><td>Review and validate Module 3 (Comprehensive) content; build FAQ bank</td><td>August 2026</td></tr>
+        <tr><td>Attend and support department live Q&amp;A sessions (led by the Department Chief or Chair)</td><td>September 2026</td></tr>
+        <tr><td>Serve as first-line peer support and escalation contacts for coding questions after go-live</td><td>Jan–Mar 2027</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 5 — INTAKE FORM & SHAREPOINT -->
+<div class="sec" id="sec5">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">5</div>
+    <div>
+      <div class="sec-title">Intake Form &amp; SharePoint Hub</div>
+      <div class="sec-sub">Physician coding consultation system and knowledge base specification</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-gold">
+      <strong>SCOPE OF THIS SYSTEM:</strong> This intake form and SharePoint hub are operated by the <strong>OB Unbundling Consulting Team</strong>. Our team provides clinical coding guidance and education to frontline OB/GYN physicians. We do <strong>not</strong> handle technology build, EHR configuration, payer contracting, or billing operations — those are managed separately by IT and HP. This system exists to answer one question: <em>"As a physician, how do I correctly code this encounter under the new CPT 2027 rules?"</em>
+    </div>
+
+    <h3>Physician Coding Consultation Intake Form</h3>
+    <p>This form is completed by frontline OB/GYN physicians, NPs, and PAs when they have a question about how to code a specific encounter or clinical scenario under the new CPT 2027 framework. Submitted forms are routed directly to the Documentation &amp; Coding Team and answered within the response window.</p>
+
+    <table class="data-table">
+      <thead><tr><th>Section</th><th>Questions / Fields</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Section A — About You</strong></td><td>Full name; Role/title (OB/GYN, MFM, NP/PA, Hospitalist OB, Resident/Fellow, Other); Best email for follow-up response</td></tr>
+        <tr><td><strong>Section B — Your Question</strong></td><td>Phase of care (Antepartum, Labor management, Delivery, Postpartum, Multiple phases, Not sure); Clinical scenario description; Specific question and CPT code attempted</td></tr>
+        <tr><td><strong>Section C — Urgency</strong></td><td>Routine (5 business days); Time-Sensitive (2 business days); Urgent — patient admitted now (24 hours); Permission to publish de-identified Q&amp;A to FAQ</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Response Time Commitments</h3>
+    <div class="callout callout-navy">
+      <strong>Routine</strong> (future guidance): Response within <strong>5 business days</strong>.<br>
+      <strong>Time-Sensitive</strong> (recent encounter): Response within <strong>2 business days</strong>.<br>
+      <strong>Urgent</strong> (patient admitted today): Response within <strong>24 hours</strong> — email the consulting team lead directly in addition to submitting this form.
+    </div>
+
+    <h3>SharePoint Hub Content Specification</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Hub Section</th><th>Owner</th><th>Update Frequency</th><th>Key Contents</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Home / Dashboard</strong></td><td>Consulting Team Lead</td><td>Real-time</td><td>Go-live countdown, module completion summary, open consultation queue, latest announcements, quick links, team contact card</td></tr>
+        <tr><td><strong>2. Submit a Coding Question</strong></td><td>Consulting Team</td><td>Always available</td><td>Intake form link (primary CTA), instructions, "my submissions" tracker, response SLA display</td></tr>
+        <tr><td><strong>3. Education Modules</strong></td><td>Consulting / Education Team</td><td>Per module revision</td><td>Embedded videos (less than 15 min each), downloadable quick-ref cards, attestation quiz links, completion tracker</td></tr>
+        <tr><td><strong>4. Coding Resources Library</strong></td><td>Consulting Team</td><td>When AMA/ACOG guidance changes</td><td>Code reference sheet, deleted codes alert list, modifier TH guide, E/M level decision grid, labor management decision tree, split-care guide</td></tr>
+        <tr><td><strong>5. FAQ / Knowledge Base</strong></td><td>Documentation &amp; Coding Team</td><td>Weekly — every Friday by 5 PM</td><td>Five tabbed sub-sections (Antepartum, Labor Mgmt, Delivery, Postpartum, General); pre-loaded with 20+ Q&amp;As at launch</td></tr>
+        <tr><td><strong>6. Announcements &amp; Policy Updates</strong></td><td>Consulting Team Lead</td><td>As AMA/ACOG/CMS issues updates</td><td>Critical alerts, CMS RVU publication summary (Nov 2026), training schedule, session recordings archive, AMA/ACOG resource links</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 6 — CODING EXAMPLES -->
+<div class="sec" id="sec6">
+  <div class="sec-header" style="background: var(--teal);" onclick="toggle(this)">
+    <div class="sec-num">6</div>
+    <div>
+      <div class="sec-title">Coding Examples</div>
+      <div class="sec-sub">Five scenarios showing how OB physicians will code in 2027</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="callout callout-teal">
+      <strong>Note on delivery code numbers:</strong> Labor management codes 59080–59083 are confirmed by the AMA. Delivery codes retain placeholder designations (59XX5, etc.) pending the full CPT 2027 book publication; final numbers confirmed November 2026 when CMS publishes RVU values. All E/M code levels and ICD-10 codes are current and final.
+    </div>
+
+    <!-- Example 1 -->
+    <div class="scenario-card">
+      <div class="scenario-hdr">EXAMPLE 1 — OUTPATIENT: Routine Antepartum Visit (Office)</div>
+      <div class="scenario-meta">
+        <strong>Setting:</strong><span>Outpatient Office Visit — Established Patient</span>
+        <strong>Clinical Scenario:</strong><span>A 28-year-old patient at 20 weeks gestation presents for a routine prenatal visit. The physician reviews labs, checks fundal height, documents fetal heart tones, reviews blood pressure and weight gain. Patient has minor round ligament pain questions. No significant comorbidities. Total encounter time: 22 minutes.</span>
+      </div>
+      <div class="scenario-codes">
+        <table class="data-table" style="margin:0;">
+          <thead><tr><th>Phase / Service</th><th>CPT Code</th><th>Modifier</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Antepartum E/M Visit</td><td><strong>99213</strong></td><td>TH*</td><td>Established patient, low complexity MDM; 20–29 min encounter. Modifier TH appended to identify as obstetric/prenatal service.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scenario-bottom">
+        <strong>ICD-10-CM:</strong><span>Z34.82 — Supervision of other normal pregnancy, second trimester; Z3A.20 — 20 weeks gestation</span>
+        <strong>Documentation Tips:</strong><span>Document: date, GA, BP, weight, fundal height, FHT, labs reviewed, patient concerns addressed. Select 99213 (low complexity MDM) or use time if ≥20 minutes total. Modifier TH appended by billing staff at charge submission.</span>
+      </div>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="scenario-card">
+      <div class="scenario-hdr">EXAMPLE 2 — OUTPATIENT: High-Risk Antepartum Visit (Complex Medical Problem)</div>
+      <div class="scenario-meta">
+        <strong>Setting:</strong><span>Outpatient Office Visit — Established Patient, High-Risk</span>
+        <strong>Clinical Scenario:</strong><span>A 32-year-old patient at 28 weeks with gestational diabetes requiring insulin. The physician reviews glucose logs, adjusts insulin dosing, orders additional fetal monitoring (BPP/NST), counsels on diet and hypoglycemia risk, and coordinates with MFM. Multiple data points reviewed and management changed. Total time: 38 minutes.</span>
+      </div>
+      <div class="scenario-codes">
+        <table class="data-table" style="margin:0;">
+          <thead><tr><th>Phase / Service</th><th>CPT Code</th><th>Modifier</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Antepartum E/M Visit — Moderate Complexity</td><td><strong>99214</strong></td><td>TH*</td><td>Established patient, moderate complexity MDM. New/worsening chronic condition requiring additional work-up or management change. 30–39 min.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scenario-bottom">
+        <strong>ICD-10-CM:</strong><span>O24.414 — Gestational diabetes mellitus in pregnancy, insulin controlled; Z3A.28 — 28 weeks gestation (do not report a Z34 supervision-of-normal-pregnancy code when a pregnancy complication code is present)</span>
+        <strong>Documentation Tips:</strong><span>Document: glucose log review, insulin adjustment rationale, additional testing ordered, MFM coordination note. MDM must reflect NEW management decision (insulin dose change) or complexity of data reviewed.</span>
+      </div>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="scenario-card">
+      <div class="scenario-hdr">EXAMPLE 3 — INPATIENT: Straightforward Labor Management + Same-Day Vaginal Delivery</div>
+      <div class="scenario-meta">
+        <strong>Setting:</strong><span>Inpatient Hospital — Labor &amp; Delivery Unit</span>
+        <strong>Clinical Scenario:</strong><span>A 30-year-old G2P1 patient at 39+2 weeks presents in active labor. Singleton vertex presentation. Routine maternal/fetal monitoring; no physician intervention needed. Normal progression of labor. No prior cesarean. No complicating medical conditions. She delivers vaginally the same day with a first-degree laceration (repaired at delivery). Physician manages the full labor and delivers the baby.</span>
+      </div>
+      <div class="scenario-codes">
+        <table class="data-table" style="margin:0;">
+          <thead><tr><th>Phase / Service</th><th>CPT Code</th><th>Modifier</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Labor Management — Initial Day, Straightforward</td><td><strong>59080</strong></td><td></td><td>First calendar date; ALL straightforward criteria met: singleton vertex, routine monitoring, normal fetal monitoring, normal labor progression, stable conditions, no prior C-section.</td></tr>
+            <tr><td>Vaginal Delivery</td><td><strong>59431</strong></td><td></td><td>Stand-alone delivery code. Includes delivery of fetus &amp; placenta, episiotomy if performed, and repair of 1st/2nd-degree laceration. Both 59080 and 59431 may be reported same day.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scenario-bottom">
+        <strong>ICD-10-CM:</strong><span>O70.0 — First-degree perineal laceration during delivery; Z37.0 — Single live birth; Z3A.39 — 39 weeks</span>
+        <strong>Documentation Tips:</strong><span>Document labor management note separately from delivery note. Labor management note must support ALL straightforward criteria. Delivery note must document fetal presentation, laceration degree, repair performed, and placenta delivery. Note: Routine same-day postpartum care is INCLUDED in the delivery code — do not bill separately.</span>
+      </div>
+    </div>
+
+    <!-- Example 4 -->
+    <div class="scenario-card">
+      <div class="scenario-hdr">EXAMPLE 4 — INPATIENT: Normal Vaginal Delivery with Multi-Day Labor (Induction)</div>
+      <div class="scenario-meta">
+        <strong>Setting:</strong><span>Inpatient Hospital — Labor &amp; Delivery / Postpartum Unit</span>
+        <strong>Clinical Scenario:</strong><span>A 26-year-old G1P0 at 40+1 weeks admitted on Day 1 for elective induction. Singleton vertex. Induction begins with Pitocin augmentation; routine progression. No complications on Day 1. Labor continues into Day 2 — she delivers vaginally on Day 2. Postpartum inpatient stay continues through Day 4 (discharge).</span>
+      </div>
+      <div class="scenario-codes">
+        <table class="data-table" style="margin:0;">
+          <thead><tr><th>Phase / Service</th><th>CPT Code</th><th>Modifier</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Day 1 — Labor Mgmt, Initial Day, Straightforward</td><td><strong>59080</strong></td><td></td><td>Routine induction/augmentation qualifies as straightforward. First calendar day of admission.</td></tr>
+            <tr><td>Day 2 — Labor Mgmt, Subsequent Day, Straightforward</td><td><strong>59082</strong></td><td></td><td>Second calendar day; continued labor management, still meets straightforward criteria.</td></tr>
+            <tr><td>Day 2 — Vaginal Delivery (same day)</td><td><strong>59431</strong></td><td></td><td>Delivery reported on Day 2 same date as subsequent labor management — both billable.</td></tr>
+            <tr><td>Day 3 — Subsequent Hospital Care</td><td><strong>99232</strong></td><td></td><td>Post-delivery inpatient management day; use appropriate subsequent hospital care E/M.</td></tr>
+            <tr><td>Day 4 — Discharge Management</td><td><strong>99238</strong></td><td></td><td>Discharge day; use discharge management code. 99238 (≤30 min) or 99239 (&gt;30 min).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scenario-bottom">
+        <strong>ICD-10-CM:</strong><span>O80 — Encounter for full-term uncomplicated delivery; Z37.0 — Single live birth; Z3A.40 — 40 weeks</span>
+        <strong>Documentation Tips:</strong><span>Billing generates 5 separate claims for this 4-day episode — a fundamental change from 1 global claim. Document each day's labor management note. Subsequent hospital care notes must support chosen E/M level. HP should verify payer has activated new code rates before claims are submitted.</span>
+      </div>
+    </div>
+
+    <!-- Example 5 -->
+    <div class="scenario-card">
+      <div class="scenario-hdr">EXAMPLE 5 — INPATIENT: Primary Cesarean Delivery (Complex Labor + C-Section)</div>
+      <div class="scenario-meta">
+        <strong>Setting:</strong><span>Inpatient Hospital — Labor &amp; Delivery / Postpartum Unit</span>
+        <strong>Clinical Scenario:</strong><span>A 29-year-old G1P0 at 39+4 weeks admitted in labor. Singleton vertex, no prior cesarean. Physician initiates labor management; after 20+ hours, labor arrest (active phase arrest) is diagnosed. Decision is made for primary cesarean. Physician performs the C-section. Patient remains inpatient through Day 4, then discharged.</span>
+      </div>
+      <div class="scenario-codes">
+        <table class="data-table" style="margin:0;">
+          <thead><tr><th>Phase / Service</th><th>CPT Code</th><th>Modifier</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Day 1 — Labor Mgmt, Initial Day, Straightforward</td><td><strong>59080</strong></td><td></td><td>At start of labor, all criteria met — straightforward. Report based on the day's status.</td></tr>
+            <tr><td>Day 2 — Labor Mgmt, Subsequent Day, COMPLEX</td><td><strong>59083</strong></td><td></td><td>Labor arrest = deviation from normal progression → elevates to COMPLEX. Any deviation from the 6 straightforward criteria triggers complex.</td></tr>
+            <tr><td>Day 2 — Primary Cesarean Delivery</td><td><strong>59502</strong></td><td></td><td>Stand-alone primary C-section code. Includes abdominal/uterine incision, fetal/placenta delivery, and closure. Billable same day as labor management.</td></tr>
+            <tr><td>Day 3 — Subsequent Hospital Care</td><td><strong>99232</strong></td><td></td><td>Post-C-section inpatient management. Document wound check, pain management, ambulation.</td></tr>
+            <tr><td>Day 4 — Discharge Management</td><td><strong>99238</strong></td><td></td><td>Discharge day management code. Provide discharge instructions, prescriptions, follow-up plan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scenario-bottom">
+        <strong>ICD-10-CM:</strong><span>O62.1 — Secondary uterine inertia (active-phase arrest of labor); Z37.0 — Single live birth; Z3A.39 — 39 weeks</span>
+        <strong>Documentation Tips:</strong><span>Key point: The SAME labor can shift from straightforward to complex mid-course — document the change clearly. The complex upgrade is triggered by ONE deviation from the 6 criteria. Coordinate with HP to confirm complex labor management rates are covered under renegotiated contract.</span>
+      </div>
+    </div>
+
+    <p style="font-size:0.8rem;color:#888;font-style:italic;">* Modifier TH approach TBD for our organization — confirm before training.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 7 — NEW BILLING WORKFLOW -->
+<div class="sec" id="sec7">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">7</div>
+    <div>
+      <div class="sec-title">New Billing Workflow</div>
+      <div class="sec-sub">Current-to-new mapping and labor management complexity criteria</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <h3>Current vs. New Billing Action</h3>
+    <table class="data-table">
+      <thead><tr><th>Service</th><th>Current (2026 &amp; Prior)</th><th>New (Jan 1, 2027)</th></tr></thead>
+      <tbody>
+        <tr><td>First prenatal visit</td><td>Count toward global 59400/59510</td><td>E/M 99202–99215 + modifier TH*</td></tr>
+        <tr><td>Subsequent antepartum visits</td><td>Count toward global package</td><td>E/M 99211–99215 per visit + modifier TH*</td></tr>
+        <tr><td>Antepartum-only (4–6 visits)</td><td>59425</td><td><span class="del">DELETED</span> — E/M + TH* each visit</td></tr>
+        <tr><td>Antepartum-only (7+ visits)</td><td>59426</td><td><span class="del">DELETED</span> — E/M + TH* each visit</td></tr>
+        <tr><td>Labor mgmt — initial day, straightforward</td><td>Included in global code</td><td>New Code 59080 — initial, straightforward</td></tr>
+        <tr><td>Labor mgmt — subsequent day, straightforward</td><td>Included in global code</td><td>New Code 59082 — subsequent, straightforward</td></tr>
+        <tr><td>Labor mgmt — initial day, complex</td><td>Included in global code</td><td>New Code 59081 — initial, complex</td></tr>
+        <tr><td>Labor mgmt — subsequent day, complex</td><td>Included in global code</td><td>New Code 59083 — subsequent, complex</td></tr>
+        <tr><td>Vaginal delivery</td><td>59400 (global) or 59409 (delivery only)</td><td>New Code 59431 — vaginal delivery</td></tr>
+        <tr><td>VBAC</td><td>59610 / 59612</td><td>New Code 59432 — VBAC delivery</td></tr>
+        <tr><td>Cesarean — primary</td><td>59510 (global) or 59514 (delivery only)</td><td>New Code 59502 — primary cesarean</td></tr>
+        <tr><td>Cesarean — repeat</td><td>59618 / 59620</td><td>New Code 59503 — repeat cesarean</td></tr>
+        <tr><td>3rd-degree laceration repair</td><td>No dedicated code</td><td>New Code 59433 — 3rd-degree repair</td></tr>
+        <tr><td>4th-degree laceration repair</td><td>No dedicated code</td><td>New Code 59434 — 4th-degree repair</td></tr>
+        <tr><td>Postpartum hospital days</td><td>Included in global code</td><td>Subsequent hospital care codes per day</td></tr>
+        <tr><td>Hospital discharge</td><td>Included in global code</td><td>Discharge management code (99238/99239)</td></tr>
+        <tr><td>Postpartum office visit(s)</td><td>59430 — <span class="del">DELETED</span></td><td>E/M 99211–99215 per visit + modifier TH*</td></tr>
+        <tr><td>Uterine tamponade</td><td>No dedicated code</td><td>New dedicated procedure code</td></tr>
+        <tr><td>Obstetrical ultrasound / fetal MRI</td><td>Always billed separately</td><td>No change — billed separately</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Labor Management — Straightforward vs. Complex Criteria</h3>
+    <p>ALL six criteria must be met for straightforward. One deviation triggers complex.</p>
+    <div class="two-col">
+      <div class="criteria-col" style="background: #EEF4EF; border: 2px solid var(--sage);">
+        <h4 style="color: var(--sage);">Straightforward — All Six Required</h4>
+        <ul>
+          <li>Singleton vertex presentation</li>
+          <li>Routine maternal/fetal monitoring</li>
+          <li>Fetal monitoring NOT requiring physician intervention</li>
+          <li>Normal labor progression OR routine induction/augmentation</li>
+          <li>Stable medical conditions — no additional management required</li>
+          <li>No prior cesarean delivery</li>
+        </ul>
+      </div>
+      <div class="criteria-col" style="background: #FFF0F0; border: 2px solid var(--red);">
+        <h4 style="color: var(--red);">Complex — Any ONE Triggers This</h4>
+        <ul>
+          <li>Multiple gestation (twins, triplets, etc.)</li>
+          <li>Non-vertex presentation (breech, transverse, oblique)</li>
+          <li>Fetal monitoring requiring physician intervention</li>
+          <li>Abnormal labor progression or labor arrest</li>
+          <li>Deteriorating or unstable medical condition during labor</li>
+          <li>Prior cesarean delivery (VBAC attempt = complex by default)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>AMA Rule — Same-Day Complexity Upgrade (AMA Confirmed):</strong> If labor management begins as straightforward (59080 or 59082) but transitions to complex on the same calendar date, report ONLY the complex labor management code (59081 or 59083) for that day. Do not report both codes on the same date.<br><br>
+      <strong>AMA Rule — Planned Cesarean (AMA Confirmed):</strong> A planned or scheduled cesarean has NO labor management code associated with it. Report only the cesarean delivery code. Labor management codes apply only when labor management services are actually performed.
+    </div>
+    <p style="font-size:0.8rem;color:#888;font-style:italic;">* Modifier TH approach TBD for our organization — confirm before training.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 8 — HP: PAYER CONTRACTING & EHR -->
+<div class="sec" id="sec8">
+  <div class="sec-header" style="background: var(--gold);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">8</div>
+    <div>
+      <div class="sec-title">HP — Payer Contracting &amp; EHR Readiness</div>
+      <div class="sec-sub">* HP work is handled by a separate group — included here for visibility only</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <div class="hp-note">
+      <strong>* HP SCOPE NOTE:</strong> All payer contracting, billing operations, and revenue-cycle work in this section is handled by <strong>HP — a separate group</strong> from this internal OB unbundling / provider education workgroup. HP manages its own tracking systems and communication channels. These items are included in the playbook for visibility and coordination only.
+    </div>
+
+    <h3>HP Payer Contracting Action Items</h3>
+    <p>ACOG recommends all health plans transition no later than <strong>September 1, 2026</strong>. HP must proactively lead all payer outreach to ensure new code rates are in place before claims are submitted.</p>
+    <ul>
+      <li>HP generates a full list of all contracted payers currently reimbursing global OB codes.</li>
+      <li>HP coordinates with HP leadership to develop payer outreach and negotiation strategy.</li>
+      <li>HP contacts each payer's provider relations representative to confirm their 2027 transition plan.</li>
+      <li>HP negotiates per-code rates for: antepartum E/M visits, labor management codes (straightforward/complex, initial/subsequent), delivery codes, and postpartum E/M visits.</li>
+      <li>HP confirms payers will accept modifier TH* without requiring prior authorization for antepartum visits.</li>
+      <li>HP requests written confirmation of new fee schedules before October 31, 2026.</li>
+      <li>HP flags payers that intend to maintain global payment structures (requires escalation to HP leadership).</li>
+      <li>HP updates all contracts in credentialing/contracting management system.</li>
+      <li>HP coordinates separate outreach to Medicaid managed care plans (MCOs) which may have different timelines.</li>
+      <li>HP maintains payer-by-payer contract status in HP's own tracking system (separate from this team's SharePoint hub).</li>
+    </ul>
+
+    <h3>EHR / EMR Update Checklist</h3>
+    <table class="data-table teal-hdr">
+      <thead><tr><th>Area</th><th>Action Required</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Charge Capture</strong></td><td>Remove all deleted global OB codes (59400, 59510, 59425, 59426, 59430, etc.) from order sets and charge capture screens.</td></tr>
+        <tr><td><strong>New Code Entry</strong></td><td>Add all new labor management codes, revised delivery codes, new laceration repair codes, modifier TH to charge master. Coordinate with HP on fee schedule mapping.</td></tr>
+        <tr><td><strong>Office Visit Templates</strong></td><td>Activate updated antepartum and postpartum office visit note templates with MDM elements and time capture. (Complete July 2026 — before Module 1 pilot.)</td></tr>
+        <tr><td><strong>Inpatient Templates</strong></td><td>Activate updated labor management documentation template, delivery note template, and subsequent hospital care templates. (Complete August 2026 — before Module 2 pilot.)</td></tr>
+        <tr><td><strong>Reporting</strong></td><td>Build utilization report to monitor new code usage vs. benchmarks. Flag if deleted codes appear on any 2027 claim.</td></tr>
+        <tr><td><strong>Sandbox Testing</strong></td><td>Test all new codes and templates in sandbox environment before November 30, 2026.</td></tr>
+        <tr><td><strong>Go-Live Validation</strong></td><td>First-week 2027 claims review: confirm all claims use new codes; zero tolerance for deleted codes.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.8rem;color:#888;font-style:italic;">* Modifier TH approach TBD for our organization — confirm before training.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 9 — ROLES & RESPONSIBILITIES -->
+<div class="sec" id="sec9">
+  <div class="sec-header" style="background: var(--navy);" onclick="toggle(this)">
+    <div class="sec-num">9</div>
+    <div>
+      <div class="sec-title">Roles &amp; Responsibilities</div>
+      <div class="sec-sub">Who owns what across all teams involved in the transition</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <h3>Department Medical Director / Chief / Chair</h3>
+    <ul>
+      <li>Executive sponsor. Ensures physician buy-in and mandates training completion by September 1.</li>
+      <li>Leads the live department Q&amp;A sessions during provider training (super users attend in support).</li>
+      <li>Approves final education module content.</li>
+      <li>Signs off on go-live readiness checklist.</li>
+      <li>Communicates urgency and importance to all OB/GYN physicians.</li>
+    </ul>
+
+    <h3>Practice Manager / Administrator</h3>
+    <ul>
+      <li>Owns overall project timeline and accountability tracker.</li>
+      <li>Coordinates with HP on payer contracting outreach strategy.</li>
+      <li>Manages SharePoint hub setup and maintenance.</li>
+      <li>Tracks training completion rates and escalates non-completion.</li>
+    </ul>
+
+    <h3>HP (Health Plan / Billing Operations) *</h3>
+    <div class="hp-note">* HP is a separate group from this internal OB unbundling / provider education workgroup — all billing, payer, and revenue work below is handled by HP through HP's own systems and channels.</div>
+    <ul>
+      <li>Leads all billing staff training on new claim submission workflow.</li>
+      <li>Coordinates with HP leadership on payer contract renegotiations.</li>
+      <li>Manages payer outreach, per-code rate negotiations, and fee schedule confirmations.</li>
+      <li>Runs needs assessment and revenue-side claim reviews (the department team leads the 30/60/90-day documentation and coding audits).</li>
+      <li>Monitors claim acceptance/denial rates beginning January 2027.</li>
+      <li>Maintains payer contract status in HP's own tracking system.</li>
+      <li>Handles billing/payer questions through HP's own channels (not this team's SharePoint intake).</li>
+    </ul>
+
+    <h3>Documentation &amp; Coding Team</h3>
+    <ul>
+      <li>Staffs the SharePoint intake queue post-go-live; answers physician coding questions per response SLAs.</li>
+      <li>Maintains and updates the SharePoint FAQ / knowledge base.</li>
+      <li>Leads the 30/60/90-day post-go-live documentation and coding accuracy audits with the department team.</li>
+      <li>Publishes coding scenario write-ups from recurring intake questions.</li>
+    </ul>
+
+    <h3>Super Users (2–4 Staff)</h3>
+    <ul>
+      <li>First to learn new coding guidelines — serve as internal subject matter experts.</li>
+      <li>Review and validate all three education modules.</li>
+      <li>Pilot new coding workflows before full deployment.</li>
+      <li>Review updated EHR templates before provider rollout.</li>
+      <li>Attend and support department live Q&amp;A sessions (led by the Department Chief or Chair).</li>
+      <li>Serve as first-line peer support for coding questions after go-live.</li>
+    </ul>
+
+    <h3>IT / EHR Team</h3>
+    <ul>
+      <li>Build and activate updated E/M documentation templates (office visit July, inpatient August).</li>
+      <li>Remove deleted codes from charge capture; add new codes to charge master.</li>
+      <li>Set up SharePoint hub and intake form (Microsoft Forms integration).</li>
+      <li>Run sandbox testing of all new code sets before go-live.</li>
+      <li>Build and maintain utilization monitoring reports.</li>
+    </ul>
+
+    <h3>Education Team</h3>
+    <ul>
+      <li>Produce all three video modules on schedule (each less than 15 minutes).</li>
+      <li>Coordinate with super users for content review at each draft stage.</li>
+      <li>Publish modules to SharePoint; manage attestation quiz system.</li>
+      <li>Update content promptly if AMA/ACOG/CMS guidance is revised before go-live.</li>
+    </ul>
+
+    <h3>All OB/GYN Physicians, NPs, PAs</h3>
+    <ul>
+      <li>Complete your respective training module(s) by September 1, 2026 — based on scope of practice: antepartum/office (Module 1), inpatient/delivery (Module 2), or comprehensive obstetrics (Module 3).</li>
+      <li>Complete attestation quiz for each assigned module.</li>
+      <li>Update documentation habits to support E/M level selection and time capture.</li>
+      <li>Use SharePoint intake system for any coding questions after training.</li>
+      <li>Participate in post-go-live support sessions and audits as needed.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 10 — MASTER READINESS CHECKLIST -->
+<div class="sec" id="sec10">
+  <div class="sec-header" style="background: var(--red);" onclick="toggle(this)">
+    <div class="sec-num" style="background: rgba(255,255,255,0.22);">10</div>
+    <div>
+      <div class="sec-title">Master Readiness Checklist</div>
+      <div class="sec-sub">All items by phase — check off as completed</div>
+    </div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="sec-body">
+    <p style="margin-bottom:16px;">All items must be completed before advancing to the next phase. HP is responsible for all payer/billing checklist items. <em>* HP items are handled by a separate group (billing/revenue operations), not this internal unbundling workgroup.</em></p>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: var(--navy);">JUNE 2026 — PROJECT LAUNCH</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>Core project team assembled and roles assigned (including HP lead)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>AMA June 2, 2026 webinar recording distributed to core team</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>AMA 2027 CPT maternity code documentation obtained and shared</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP needs assessment completed (current code usage, volume, payer list)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Super users identified and enrolled in advanced training</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>SharePoint hub structure designed and build started</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Microsoft Forms intake form drafted and routing logic configured</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: var(--teal);">JULY 2026 — MODULE 1, TEMPLATE UPDATE &amp; SHAREPOINT LIVE</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>Module 1 (Office Visits) video — first draft completed by July 1</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>SharePoint hub LIVE by mid-July (home page, module library shell, FAQ, resources)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Intake form (Microsoft Forms) LIVE by mid-July and routing to the Documentation &amp; Coding Team</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Super users reviewed Module 1 draft and provided feedback</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Updated antepartum/postpartum office visit EHR templates activated (sandbox)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Super users reviewed updated office visit templates for accuracy</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Pilot coding exercise completed on 10 antepartum encounters</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Module 1 quick-reference card designed</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: #9C7228;">AUGUST 2026 — MODULES 2 &amp; 3 + INPATIENT TEMPLATES</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>Module 1 finalized and published to SharePoint</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Module 2 (Inpatient) video completed and super user reviewed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Updated inpatient labor management and delivery EHR templates activated (sandbox)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Super users reviewed and approved inpatient EHR templates</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Inpatient coding scenario workbook published</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Module 3 (Comprehensive) video completed and super user reviewed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Attestation quiz built and tested for all three modules</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>FAQ bank seeded with top 20 anticipated questions</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>All three modules live in SharePoint by late August</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: var(--teal);">SEPTEMBER 2026 — PROVIDER TRAINING + EHR READINESS (IN PARALLEL)</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>All OB/GYN physicians trained on their respective module(s) by September 1</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Attestation records captured for all providers</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Live department Q&amp;A sessions held — led by Department Chief or Chair, super users supporting</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP billing staff training completed (new workflow, modifier TH,* prior auth changes)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Front desk patient communication scripts distributed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>IT: EHR sandbox testing of all new codes completed (in parallel with provider training)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>IT: Old global codes removed from live charge capture</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>IT: New labor management and delivery codes active in live system</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>IT: Utilization monitoring report built and tested</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: var(--navy);">OCTOBER–NOVEMBER 2026 — HP CONTRACT READINESS*</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>HP: All major payer contracts renegotiated with new per-code rates</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP: Written fee schedule confirmations received from all payers</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP: Medicaid managed care plans confirmed on new code structure</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP: Payer status tracker maintained in HP's own system</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Dept. Director: Go-live readiness sign-off obtained</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: #9C7228;">JANUARY 1, 2027 — GO-LIVE</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>Zero claims submitted with deleted global codes</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>All antepartum/postpartum visits billed with E/M + modifier TH*</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Labor management codes applied correctly (initial/subsequent, straightforward/complex)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Delivery codes applied as stand-alone (not bundled with labor management)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>SharePoint hub active; intake queue monitored daily by the Documentation &amp; Coding Team</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Super users available for first-week live support</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="checklist-hdr" style="background: var(--teal);">FEBRUARY–APRIL 2027 — POST-GO-LIVE</div>
+      <div class="checklist-items">
+        <div class="checklist-item"><input type="checkbox"><span>Dept. Team: 30-day documentation quality and coding accuracy audit completed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Dept. Team: 60-day coding accuracy review and undercoding pattern check completed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Dept. Team: 90-day audit completed and correction plan issued</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>HP*: Denial rate review and revenue reconciliation (handled separately by HP)</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Final provider training reinforcement sessions held if needed</span></div>
+        <div class="checklist-item"><input type="checkbox"><span>Playbook updated with lessons learned</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:0.8rem;color:#888;font-style:italic;margin-top:8px;">* Modifier TH approach TBD for our organization — confirm before training. HP items are handled by a separate group.</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /page-wrap -->
+
+<script>
+// ── Section toggle ────────────────────────────────────────────────────────
+function toggle(hdr) {
+  const body = hdr.nextElementSibling;
+  const sec  = hdr.parentElement;
+  const isHidden = body.classList.contains('hidden');
+  body.classList.toggle('hidden', !isHidden);
+  sec.classList.toggle('collapsed', !isHidden);
+}
+
+// ── Sidebar click: open + smooth-scroll ───────────────────────────────────
+document.querySelectorAll('.sidebar-link').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    const body = target.querySelector('.sec-body');
+    if (body && body.classList.contains('hidden')) {
+      body.classList.remove('hidden');
+      target.classList.remove('collapsed');
+    }
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── Active section highlight via IntersectionObserver ────────────────────
+const sections = document.querySelectorAll('.sec');
+const links    = document.querySelectorAll('.sidebar-link');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+      const activeLink = document.querySelector(`.sidebar-link[href="#${id}"]`);
+      if (activeLink) activeLink.scrollIntoView({ block: 'nearest' });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
