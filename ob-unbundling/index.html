@@ -110,6 +110,17 @@
   .stat .n { font-size: 1.5rem; font-weight: 800; color: var(--gold); }
   .stat .l { font-size: 0.7rem; color: #9ECDD6; text-transform: uppercase; letter-spacing: 0.5px; }
 
+  .section-label.hist { color: #bbb; border-color: #e0e0e0; }
+  .card.outdated { opacity: 0.68; border: 2px dashed #ccc; box-shadow: none; }
+  .card.outdated:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.07); transform: none; }
+  .card.outdated .card-title { color: #777; }
+  .card.outdated .open-btn { color: #aaa; }
+  .outdated-pill {
+    font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.5px; padding: 2px 8px; border-radius: 10px;
+    background: #FFE5E5; color: #8B0000; margin-top: 5px; display: inline-block;
+  }
+
   @media (max-width: 600px) {
     .header { padding: 20px 20px 16px; }
     .grid { padding: 20px 16px 40px; }
@@ -130,7 +141,7 @@
 <div class="gold-bar"></div>
 
 <div class="status-bar">
-  <div class="stat"><div class="n">7</div><div class="l">Tools</div></div>
+  <div class="stat"><div class="n">5</div><div class="l">Active Tools</div></div>
   <div class="stat"><div class="n">☁</div><div class="l">Cloud Sync</div></div>
   <div class="stat"><div class="n">∞</div><div class="l">Team Access</div></div>
   <div class="stat"><div class="n">2027</div><div class="l">Go-Live</div></div>
@@ -150,7 +161,7 @@
       <div class="card-icon" style="background:#EEF1F5;">💡</div>
       <div>
         <div class="card-title">Why OB Unbundling 2027</div>
-        <div class="card-desc">Complete scripter reference — the full "why" behind CPT 2027. History, deleted codes, new framework, labor management rules, documentation shift, and physician talking points. For education team use.</div>
+        <div class="card-desc">Complete scripter reference — the full "why" behind CPT 2027. History, deleted codes, new framework, labor management rules, documentation shift, and physician talking points.</div>
       </div>
     </div>
     <div class="card-footer">
@@ -169,20 +180,6 @@
     </div>
     <div class="card-footer">
       <span class="card-tag" style="background:#EAF4F6; color:#007B8A;">Tracker</span>
-      <span class="open-btn">Open</span>
-    </div>
-  </a>
-
-  <a class="card" href="OB_Working_Session_June9.html">
-    <div class="card-top">
-      <div class="card-icon" style="background:#FFF8EC;">📅</div>
-      <div>
-        <div class="card-title">Working Session Agenda</div>
-        <div class="card-desc">Collaborative meeting agenda with action items, parking lot, decisions log, and live attendee tracking.</div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <span class="card-tag" style="background:#FFF8EC; color:#C8973A;">Agenda</span>
       <span class="open-btn">Open</span>
     </div>
   </a>
@@ -215,21 +212,7 @@
     </div>
   </a>
 
-  <div class="section-label">Training & Education</div>
-
-  <a class="card" href="module1_script.html">
-    <div class="card-top">
-      <div class="card-icon" style="background:#F0EBF8;">🎬</div>
-      <div>
-        <div class="card-title">Module 1 — Video Script</div>
-        <div class="card-desc">Editable production script for the antepartum coding module. Includes word count, runtime estimate, and knowledge check questions.</div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <span class="card-tag" style="background:#F0EBF8; color:#5B4A8A;">Script</span>
-      <span class="open-btn">Open</span>
-    </div>
-  </a>
+  <div class="section-label">Training &amp; Education</div>
 
   <a class="card" href="faq/OB_Unbundling_FAQ_2027_editable.html">
     <div class="card-top">
@@ -242,6 +225,38 @@
     <div class="card-footer">
       <span class="card-tag" style="background:#F0F8F2; color:#4A7C59;">FAQ</span>
       <span class="open-btn">Open</span>
+    </div>
+  </a>
+
+  <div class="section-label hist">History — Archived</div>
+
+  <a class="card outdated" href="OB_Working_Session_June9.html">
+    <div class="card-top">
+      <div class="card-icon" style="background:#F5F5F5;">🗂️</div>
+      <div>
+        <div class="card-title">Working Session Agenda — June 9</div>
+        <div class="outdated-pill">Historical · Archived</div>
+        <div class="card-desc" style="margin-top:6px;">Meeting agenda from the June 9 working session. Archived for reference only — no longer the active agenda.</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag" style="background:#F5F5F5; color:#999;">Archived</span>
+      <span class="open-btn" style="color:#aaa;">View</span>
+    </div>
+  </a>
+
+  <a class="card outdated" href="module1_script.html">
+    <div class="card-top">
+      <div class="card-icon" style="background:#F5F5F5;">🎬</div>
+      <div>
+        <div class="card-title">Module 1 Video Script — Outdated</div>
+        <div class="outdated-pill">Outdated · Do Not Use</div>
+        <div class="card-desc" style="margin-top:6px;">Original script draft. Superseded by an updated version from the education team. Do not use for production scripting.</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag" style="background:#FFE5E5; color:#8B0000;">Outdated</span>
+      <span class="open-btn" style="color:#aaa;">View</span>
     </div>
   </a>
 
