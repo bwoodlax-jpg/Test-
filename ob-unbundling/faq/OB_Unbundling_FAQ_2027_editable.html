@@ -752,7 +752,6 @@ function loadSaved() {
   try {
     const items = JSON.parse(raw);
     const container = document.getElementById('faq-container');
-    // Clear existing FAQ items (not the Add button)
     container.querySelectorAll('.faq-item').forEach(el => el.remove());
     const addBtn = container.querySelector('.add-faq-btn');
 
@@ -779,6 +778,7 @@ function addFAQ() {
 function makeFAQEl(num, qHtml, aHtml) {
   const div = document.createElement('div');
   div.className = 'faq-item';
+  div.id = 'faq-' + num;
   div.dataset.id = num;
   div.innerHTML = `
     <div class="faq-q">
@@ -795,6 +795,7 @@ function makeFAQEl(num, qHtml, aHtml) {
 
 function renumberAll() {
   document.querySelectorAll('.faq-item').forEach((item, i) => {
+    item.id = 'faq-' + (i + 1);
     item.dataset.id = i + 1;
     item.querySelector('.faq-num').textContent = 'Q' + (i + 1);
   });
