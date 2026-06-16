@@ -827,7 +827,7 @@
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
   <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
-  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'; loadSMAScan()" data-tab="sma">&#9651; SMA Stack</button>
+  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'" data-tab="sma">&#9651; SMA Stack</button>
 </div>
 
 <main>
@@ -1622,9 +1622,9 @@
     <br><br>
     <strong>Criteria:</strong> Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &nbsp;&bull;&nbsp;
     Sorted by days in alignment ASC (freshest cross first) &nbsp;&bull;&nbsp;
-    Mid-cap or larger (&sim;120 S&amp;P 500 + mid-cap names) &nbsp;&bull;&nbsp;
-    Universe scanned live via yfinance &nbsp;&bull;&nbsp; Results cached 15 min.
-    <br><em style="color:var(--accent);font-size:10px">Requires Flask server running locally (python app.py). Not available on static GitHub Pages build.</em>
+    Mid-cap or larger (&sim;65 large/mid-cap names across all sectors) &nbsp;&bull;&nbsp;
+    Data fetched live from Yahoo Finance &mdash; works on GitHub Pages and locally.
+    <br><em style="color:var(--accent);font-size:10px">First scan takes 20&ndash;40 seconds. Results update live as each batch completes.</em>
   </div>
 
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
@@ -1649,16 +1649,22 @@
   </div>
 
   <div class="sma-loading" x-show="smaLoading">
-    <div style="font-size:22px;margin-bottom:12px">&#9651;</div>
-    Downloading 13 months of price history for ~120 stocks&hellip;<br>
-    Computing SMA 50 / 100 / 150 / 200 for each&hellip;<br>
-    <span style="color:var(--accent)">This takes 15&ndash;45 seconds. Do not navigate away.</span>
+    <div style="font-size:22px;margin-bottom:10px">&#9651;</div>
+    <div style="font-size:13px;color:var(--text);margin-bottom:6px">
+      Scanning <strong x-text="smaProgress"></strong> of <strong x-text="smaProgressOf"></strong> stocks&hellip;
+    </div>
+    <div style="width:240px;height:6px;background:var(--surf2);border-radius:3px;margin:8px auto">
+      <div style="height:100%;background:var(--accent);border-radius:3px;transition:width .3s"
+           :style="'width:' + (smaProgressOf > 0 ? Math.round(smaProgress/smaProgressOf*100) : 0) + '%'"></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">
+      Fetching Yahoo Finance historical data &bull; Computing SMA 50/100/150/200<br>
+      <span style="color:var(--accent)" x-show="smaResults.length > 0">&#10003; <span x-text="smaResults.length"></span> qualifying stocks found so far</span>
+    </div>
   </div>
 
-  <div class="sma-err" x-show="!smaLoading && smaError"
-       :style="smaError && smaError.startsWith('STATIC') ? 'background:rgba(244,176,74,.1);border-color:rgba(244,176,74,.3);color:var(--accent)' : ''">
-    <strong x-text="smaError && smaError.startsWith('STATIC') ? 'Local Server Required' : 'Scan failed'"></strong><br>
-    <span x-text="smaError && smaError.startsWith('STATIC') ? smaError.replace('STATIC BUILD: ','') : smaError"></span>
+  <div class="sma-err" x-show="!smaLoading && smaError">
+    <strong>Scan error:</strong> <span x-text="smaError"></span>
   </div>
 
   <div class="sma-grid" x-show="!smaLoading && smaResults.length > 0">
@@ -1776,32 +1782,105 @@ function bwoodApp() {
     smaLoading: false,
     smaError: null,
     smaLoaded: false,
+    smaProgress: 0,
+    smaProgressOf: 0,
     smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
     init() { window._bwoodApp = this; },
+
+    async scanOneTicker(entry) {
+      const { t, c, s } = entry;
+      try {
+        const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + t
+                  + '?range=15mo&interval=1d&includePrePost=false&events=div';
+        const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        const res = data && data.chart && data.chart.result && data.chart.result[0];
+        if (!res) return null;
+        const rawC = res.indicators && res.indicators.quote && res.indicators.quote[0] && res.indicators.quote[0].close;
+        if (!rawC) return null;
+        const closes = rawC.filter(function(v){ return v != null && !isNaN(v); });
+        if (closes.length < 200) return null;
+        // Rolling SMA via sliding window (O(n))
+        function rollSMA(period) {
+          var out = new Array(closes.length).fill(null), sum = 0;
+          for (var i = 0; i < closes.length; i++) {
+            sum += closes[i];
+            if (i >= period) sum -= closes[i - period];
+            if (i >= period - 1) out[i] = sum / period;
+          }
+          return out;
+        }
+        var r50 = rollSMA(50), r100 = rollSMA(100), r150 = rollSMA(150), r200 = rollSMA(200);
+        var n = closes.length - 1;
+        var price = closes[n], s50 = r50[n], s100 = r100[n], s150 = r150[n], s200 = r200[n];
+        if (!s50 || !s100 || !s150 || !s200) return null;
+        // Must be fully stacked: P > SMA50 > SMA100 > SMA150 > SMA200
+        if (!(price > s50 && s50 > s100 && s100 > s150 && s150 > s200)) return null;
+        // Count consecutive aligned trading days from today backwards
+        var days = 0;
+        for (var i = n; i >= 0; i--) {
+          if (r50[i] != null && r200[i] != null &&
+              closes[i] > r50[i] && r50[i] > r100[i] && r100[i] > r150[i] && r150[i] > r200[i]) {
+            days++;
+          } else break;
+        }
+        return { ticker: t, company: c, sector: s,
+          price: +price.toFixed(2), sma50: +s50.toFixed(2), sma100: +s100.toFixed(2),
+          sma150: +s150.toFixed(2), sma200: +s200.toFixed(2),
+          pct_above_200: +((price - s200) / s200 * 100).toFixed(2), days_aligned: days };
+      } catch(e) { return null; }
+    },
+
     async loadSMAScan() {
-      // Detect static hosting (GitHub Pages) — Flask backend not available there
-      const isStatic = window.location.protocol === 'file:' ||
-                       window.location.hostname.includes('github.io') ||
-                       window.location.hostname.includes('github.com');
-      if (isStatic) {
-        this.smaError = 'STATIC BUILD: The SMA Scanner computes 200-day moving averages server-side via yfinance. It cannot run on GitHub Pages. To use it: clone the repo, run python app.py, then open http://localhost:5000 — the scanner will work there.';
-        return;
-      }
       this.smaLoading = true;
       this.smaError = null;
-      try {
-        const r = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(90000) });
-        if (!r.ok) throw new Error('Server error ' + r.status + '. Make sure Flask is running: python app.py');
-        const d = await r.json();
-        if (d.error) throw new Error(d.error);
-        this.smaResults = d.results || [];
-        this.smaMeta = { timestamp: d.timestamp || '', scanned: d.scanned || 0, qualified: d.qualified || 0 };
-        this.smaLoaded = true;
-      } catch(e) {
-        this.smaError = e.message || 'Unknown error';
-      } finally {
-        this.smaLoading = false;
+      this.smaResults = [];
+      this.smaProgress = 0;
+      this.smaProgressOf = SMA_SCAN_TICKERS.length;
+
+      // Try local Flask backend first (instant if running python app.py)
+      var isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalhost) {
+        try {
+          var fr = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(5000) });
+          if (fr.ok) {
+            var fd = await fr.json();
+            if (!fd.error && fd.results) {
+              this.smaResults = fd.results;
+              this.smaMeta = { timestamp: fd.timestamp || '', scanned: fd.scanned || 0, qualified: fd.qualified || 0 };
+              this.smaLoaded = true; this.smaLoading = false; return;
+            }
+          }
+        } catch(e) {}
       }
+
+      // Client-side scan — fetch Yahoo Finance historical data in parallel batches
+      var all = [];
+      var BATCH = 8;
+      for (var i = 0; i < SMA_SCAN_TICKERS.length; i += BATCH) {
+        var batch = SMA_SCAN_TICKERS.slice(i, i + BATCH);
+        var bRes = await Promise.allSettled(batch.map(function(e){ return this.scanOneTicker(e); }, this));
+        for (var j = 0; j < bRes.length; j++) {
+          if (bRes[j].status === 'fulfilled' && bRes[j].value) all.push(bRes[j].value);
+        }
+        this.smaProgress = Math.min(i + BATCH, SMA_SCAN_TICKERS.length);
+        // Show results live as they come in
+        var live = all.slice().sort(function(a,b){ return a.days_aligned - b.days_aligned; });
+        this.smaResults = live.slice(0, 10);
+        if (i + BATCH < SMA_SCAN_TICKERS.length) await new Promise(function(r){ setTimeout(r, 100); });
+      }
+
+      var final = all.sort(function(a,b){ return a.days_aligned - b.days_aligned; });
+      this.smaResults = final.slice(0, 10);
+      var nowStr = new Date().toLocaleString('en-US', { timeZone:'America/New_York',
+        month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' }) + ' ET';
+      this.smaMeta = { timestamp: nowStr, scanned: SMA_SCAN_TICKERS.length, qualified: all.length };
+      if (all.length === 0) {
+        this.smaError = 'No data returned from Yahoo Finance. Your browser may be blocking cross-origin requests, or try refreshing and scanning again.';
+      }
+      this.smaLoaded = true;
+      this.smaLoading = false;
     },
   };
 }
@@ -2379,6 +2458,91 @@ const HISTORY = [
     reason:'(1) IRAN DEAL CONFIRMED: Trump declared deal "complete" Jun 14 on Truth Social. Formal signing ceremony Geneva Fri Jun 19. WTI $80.07 (-18% from $97+ cycle high). Energy CPI floor cracking — first meaningful relief in 8 months. Dec 2026 rate-hike probability collapsing. Nasdaq futures +2.1%, S&P +1.3%, VIX 16.73 (-14%). (2) WARSH FOMC JUN 16–17: First meeting as chair. Hold at 3.50–3.75% is 99% probability. Critical variable: dot plot and press conference tone. If Warsh keeps Sep 2026 window open and signals easing bias → BULLISH → ENTER MSFT + NOW Wed Jun 17 AH. If signals hike or removes Sep window → STAND DOWN. (3) MSFT POTW — IN ZONE: ~$408 at open, zone $393–$412, stop $372, target $625, R/R 6.0:1. Dual catalyst: Iran deal macro unlock + Warsh hold. Entry trigger = Warsh neutral press conference Wed Jun 17. Size: 1% bankroll. (4) NOW SECONDARY — IN ZONE: ~$108, zone $103–$118, stop $88, target $175, R/R 3.0:1. Enter alongside MSFT post-Warsh. Combined cap 1.5% bankroll. (5) MRVL CAPITAL PLAY — S&P 500 INCLUSION WEEK: ~$281, trail stop $263, target $325, B. Riley PT $345. S&P 500 effective date Jun 22 = 7 days. Peak forced index buying Jun 18–20. ATH $324.20 (Jun 3 intraday). (6) AVGO $382.57 — just above zone $350–$375. Watch for pullback into zone post-Warsh. Stop $328, target $550, R/R 5.4:1 if reached. (7) ORCL approaching zone: ~$193–$199 falling toward $165–$182. Patient entry when price reaches zone AND Warsh clears.',
     lesson:'—',
   },
+];
+
+// ── SMA Stack Scanner universe — 65 mid/large-cap stocks, all sectors ────────
+const SMA_SCAN_TICKERS = [
+  // AI / Mega-cap tech
+  {t:'AAPL',c:'Apple Inc',s:'Technology'},
+  {t:'MSFT',c:'Microsoft Corp',s:'Technology'},
+  {t:'GOOGL',c:'Alphabet Inc',s:'Technology'},
+  {t:'AMZN',c:'Amazon.com',s:'Consumer Discr.'},
+  {t:'META',c:'Meta Platforms',s:'Technology'},
+  {t:'NVDA',c:'NVIDIA Corp',s:'Technology'},
+  {t:'AMD',c:'Advanced Micro Devices',s:'Technology'},
+  {t:'AVGO',c:'Broadcom Inc',s:'Technology'},
+  {t:'CRM',c:'Salesforce Inc',s:'Technology'},
+  {t:'ADBE',c:'Adobe Inc',s:'Technology'},
+  {t:'NOW',c:'ServiceNow Inc',s:'Technology'},
+  {t:'PLTR',c:'Palantir Technologies',s:'Technology'},
+  {t:'PANW',c:'Palo Alto Networks',s:'Technology'},
+  {t:'CRWD',c:'CrowdStrike Holdings',s:'Technology'},
+  {t:'ANET',c:'Arista Networks',s:'Technology'},
+  {t:'DELL',c:'Dell Technologies',s:'Technology'},
+  {t:'IBM',c:'IBM Corp',s:'Technology'},
+  {t:'ACN',c:'Accenture plc',s:'Technology'},
+  {t:'INTU',c:'Intuit Inc',s:'Technology'},
+  {t:'MRVL',c:'Marvell Technology',s:'Technology'},
+  {t:'SNPS',c:'Synopsys Inc',s:'Technology'},
+  {t:'CDNS',c:'Cadence Design Systems',s:'Technology'},
+  {t:'DDOG',c:'Datadog Inc',s:'Technology'},
+  {t:'NET',c:'Cloudflare Inc',s:'Technology'},
+  {t:'WDAY',c:'Workday Inc',s:'Technology'},
+  {t:'FTNT',c:'Fortinet Inc',s:'Technology'},
+  {t:'UBER',c:'Uber Technologies',s:'Consumer Discr.'},
+  {t:'SMCI',c:'Super Micro Computer',s:'Technology'},
+  {t:'ARM',c:'Arm Holdings',s:'Technology'},
+  // Financials
+  {t:'JPM',c:'JPMorgan Chase',s:'Financials'},
+  {t:'V',c:'Visa Inc',s:'Financials'},
+  {t:'MA',c:'Mastercard Inc',s:'Financials'},
+  {t:'GS',c:'Goldman Sachs',s:'Financials'},
+  {t:'BLK',c:'BlackRock Inc',s:'Financials'},
+  {t:'SPGI',c:'S&P Global Inc',s:'Financials'},
+  {t:'CME',c:'CME Group',s:'Financials'},
+  {t:'AXP',c:'American Express',s:'Financials'},
+  {t:'SCHW',c:'Charles Schwab',s:'Financials'},
+  // Healthcare
+  {t:'LLY',c:'Eli Lilly & Co',s:'Healthcare'},
+  {t:'ABBV',c:'AbbVie Inc',s:'Healthcare'},
+  {t:'ISRG',c:'Intuitive Surgical',s:'Healthcare'},
+  {t:'VRTX',c:'Vertex Pharmaceuticals',s:'Healthcare'},
+  {t:'UNH',c:'UnitedHealth Group',s:'Healthcare'},
+  {t:'SYK',c:'Stryker Corp',s:'Healthcare'},
+  {t:'AMGN',c:'Amgen Inc',s:'Healthcare'},
+  // Consumer Discretionary
+  {t:'TSLA',c:'Tesla Inc',s:'Consumer Discr.'},
+  {t:'HD',c:'Home Depot',s:'Consumer Discr.'},
+  {t:'MCD',c:'McDonald\'s Corp',s:'Consumer Discr.'},
+  {t:'COST',c:'Costco Wholesale',s:'Consumer Staples'},
+  {t:'NKE',c:'Nike Inc',s:'Consumer Discr.'},
+  {t:'BKNG',c:'Booking Holdings',s:'Consumer Discr.'},
+  {t:'SBUX',c:'Starbucks Corp',s:'Consumer Discr.'},
+  // Consumer Staples
+  {t:'WMT',c:'Walmart Inc',s:'Consumer Staples'},
+  {t:'PG',c:'Procter & Gamble',s:'Consumer Staples'},
+  {t:'KO',c:'Coca-Cola Co',s:'Consumer Staples'},
+  {t:'PEP',c:'PepsiCo Inc',s:'Consumer Staples'},
+  // Energy
+  {t:'XOM',c:'Exxon Mobil',s:'Energy'},
+  {t:'CVX',c:'Chevron Corp',s:'Energy'},
+  {t:'COP',c:'ConocoPhillips',s:'Energy'},
+  // Industrials
+  {t:'GE',c:'GE Aerospace',s:'Industrials'},
+  {t:'CAT',c:'Caterpillar Inc',s:'Industrials'},
+  {t:'HON',c:'Honeywell International',s:'Industrials'},
+  {t:'RTX',c:'RTX Corp',s:'Industrials'},
+  {t:'LMT',c:'Lockheed Martin',s:'Industrials'},
+  {t:'VRT',c:'Vertiv Holdings',s:'Industrials'},
+  // Communication
+  {t:'NFLX',c:'Netflix Inc',s:'Communication'},
+  {t:'DIS',c:'Walt Disney Co',s:'Communication'},
+  // Materials / Real Estate
+  {t:'LIN',c:'Linde plc',s:'Materials'},
+  {t:'EQIX',c:'Equinix Inc',s:'Real Estate'},
+  {t:'AMT',c:'American Tower',s:'Real Estate'},
+  // Mid-cap specials
+  {t:'MELI',c:'MercadoLibre',s:'Consumer Discr.'},
 ];
 
 // ── Build monitor tab ─────────────────────────────────────────────────────────
