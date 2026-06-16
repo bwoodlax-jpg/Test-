@@ -1621,10 +1621,8 @@
     Freshly-formed stacks (&le;20 days) are the most actionable &mdash; you catch the structural shift early, before institutions fully position.
     <br><br>
     <strong>Criteria:</strong> Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &nbsp;&bull;&nbsp;
-    Sorted by days in alignment ASC (freshest cross first) &nbsp;&bull;&nbsp;
-    Mid-cap or larger (&sim;65 large/mid-cap names across all sectors) &nbsp;&bull;&nbsp;
-    Data fetched live from Yahoo Finance &mdash; works on GitHub Pages and locally.
-    <br><em style="color:var(--accent);font-size:10px">First scan takes 20&ndash;40 seconds. Results update live as each batch completes.</em>
+    Sorted freshest cross first &nbsp;&bull;&nbsp; 65 large/mid-cap stocks across all sectors.
+    <br><em style="color:var(--accent);font-size:10px">Uses your Finnhub API key (same one as Live Watchlist) for reliable historical data. If you don&rsquo;t have one yet, get a free key at finnhub.io and add it via the API Key button. Scan takes ~60&ndash;90 seconds (Finnhub free tier = 60 req/min).</em>
   </div>
 
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
@@ -1658,8 +1656,8 @@
            :style="'width:' + (smaProgressOf > 0 ? Math.round(smaProgress/smaProgressOf*100) : 0) + '%'"></div>
     </div>
     <div style="font-size:10px;color:var(--muted);margin-top:8px">
-      Fetching Yahoo Finance historical data &bull; Computing SMA 50/100/150/200<br>
-      <span style="color:var(--accent)" x-show="smaResults.length > 0">&#10003; <span x-text="smaResults.length"></span> qualifying stocks found so far</span>
+      Fetching Finnhub daily candles &bull; Computing SMA 50/100/150/200 &bull; ~60&ndash;90 sec total<br>
+      <span style="color:var(--accent)" x-show="smaResults.length > 0">&#10003; <span x-text="smaResults.length"></span> qualifying stack(s) found so far</span>
     </div>
   </div>
 
@@ -1787,21 +1785,38 @@ function bwoodApp() {
     smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
     init() { window._bwoodApp = this; },
 
-    async scanOneTicker(entry) {
-      const { t, c, s } = entry;
+    async scanOneTicker(entry, apiKey) {
+      var t = entry.t, c = entry.c, s = entry.s;
+      var closes;
       try {
-        const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + t
-                  + '?range=15mo&interval=1d&includePrePost=false&events=div';
-        const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
-        if (!resp.ok) return null;
-        const data = await resp.json();
-        const res = data && data.chart && data.chart.result && data.chart.result[0];
-        if (!res) return null;
-        const rawC = res.indicators && res.indicators.quote && res.indicators.quote[0] && res.indicators.quote[0].close;
-        if (!rawC) return null;
-        const closes = rawC.filter(function(v){ return v != null && !isNaN(v); });
-        if (closes.length < 200) return null;
-        // Rolling SMA via sliding window (O(n))
+        if (apiKey) {
+          // Finnhub candle API — CORS-friendly, reliable, uses stored key
+          var nowTs = Math.floor(Date.now() / 1000);
+          var fromTs = nowTs - (430 * 86400); // 430 days = 300+ trading days
+          var url = 'https://finnhub.io/api/v1/stock/candle?symbol=' + t
+                  + '&resolution=D&from=' + fromTs + '&to=' + nowTs + '&token=' + apiKey;
+          var resp = await fetch(url, { signal: AbortSignal.timeout(12000) });
+          if (resp.status === 429) { var re = new Error('RATE_LIMIT'); re.rateLimit = true; throw re; }
+          if (!resp.ok) return null;
+          var data = await resp.json();
+          if (data.s !== 'ok' || !data.c || data.c.length < 200) return null;
+          closes = data.c;
+        } else {
+          // Yahoo Finance fallback (no key — may hit CORS in some browsers)
+          var yUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + t
+                   + '?range=15mo&interval=1d&includePrePost=false';
+          var yr = await fetch(yUrl, { signal: AbortSignal.timeout(10000) });
+          if (!yr.ok) return null;
+          var yd = await yr.json();
+          var yr2 = yd && yd.chart && yd.chart.result && yd.chart.result[0];
+          if (!yr2) return null;
+          var rawC = yr2.indicators && yr2.indicators.quote && yr2.indicators.quote[0] && yr2.indicators.quote[0].close;
+          if (!rawC) return null;
+          closes = rawC.filter(function(v){ return v != null && !isNaN(v); });
+          if (closes.length < 200) return null;
+        }
+
+        // Rolling SMA via O(n) sliding window
         function rollSMA(period) {
           var out = new Array(closes.length).fill(null), sum = 0;
           for (var i = 0; i < closes.length; i++) {
@@ -1815,7 +1830,7 @@ function bwoodApp() {
         var n = closes.length - 1;
         var price = closes[n], s50 = r50[n], s100 = r100[n], s150 = r150[n], s200 = r200[n];
         if (!s50 || !s100 || !s150 || !s200) return null;
-        // Must be fully stacked: P > SMA50 > SMA100 > SMA150 > SMA200
+        // Full bullish stack required: P > SMA50 > SMA100 > SMA150 > SMA200
         if (!(price > s50 && s50 > s100 && s100 > s150 && s150 > s200)) return null;
         // Count consecutive aligned trading days from today backwards
         var days = 0;
@@ -1829,19 +1844,23 @@ function bwoodApp() {
           price: +price.toFixed(2), sma50: +s50.toFixed(2), sma100: +s100.toFixed(2),
           sma150: +s150.toFixed(2), sma200: +s200.toFixed(2),
           pct_above_200: +((price - s200) / s200 * 100).toFixed(2), days_aligned: days };
-      } catch(e) { return null; }
+      } catch(e) {
+        if (e.rateLimit) throw e;
+        return null;
+      }
     },
 
     async loadSMAScan() {
+      var apiKey = getKey(); // reads Finnhub key from localStorage (same key as Live Watchlist)
+
       this.smaLoading = true;
       this.smaError = null;
       this.smaResults = [];
       this.smaProgress = 0;
       this.smaProgressOf = SMA_SCAN_TICKERS.length;
 
-      // Try local Flask backend first (instant if running python app.py)
-      var isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isLocalhost) {
+      // Try local Flask backend first (fast when running python app.py locally)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         try {
           var fr = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(5000) });
           if (fr.ok) {
@@ -1855,30 +1874,50 @@ function bwoodApp() {
         } catch(e) {}
       }
 
-      // Client-side scan — fetch Yahoo Finance historical data in parallel batches
-      var all = [];
-      var BATCH = 8;
+      // Client-side scan
+      // Finnhub: batch 3 at a time, dynamic delay to stay under 60 req/min
+      // Yahoo Finance fallback (no key): batch 8, no delay
+      var BATCH = apiKey ? 3 : 8;
+      var MIN_MS  = apiKey ? 3500 : 0; // 3 calls / 3.5s = ~51/min, under free limit
+      var all = [], rateLimited = false;
+
       for (var i = 0; i < SMA_SCAN_TICKERS.length; i += BATCH) {
+        if (rateLimited) break;
         var batch = SMA_SCAN_TICKERS.slice(i, i + BATCH);
-        var bRes = await Promise.allSettled(batch.map(function(e){ return this.scanOneTicker(e); }, this));
+        var t0 = Date.now();
+        var bRes = await Promise.allSettled(batch.map(function(e){ return this.scanOneTicker(e, apiKey); }, this));
+
         for (var j = 0; j < bRes.length; j++) {
+          if (bRes[j].status === 'rejected' && bRes[j].reason && bRes[j].reason.rateLimit) {
+            rateLimited = true; break;
+          }
           if (bRes[j].status === 'fulfilled' && bRes[j].value) all.push(bRes[j].value);
         }
+
         this.smaProgress = Math.min(i + BATCH, SMA_SCAN_TICKERS.length);
-        // Show results live as they come in
         var live = all.slice().sort(function(a,b){ return a.days_aligned - b.days_aligned; });
         this.smaResults = live.slice(0, 10);
-        if (i + BATCH < SMA_SCAN_TICKERS.length) await new Promise(function(r){ setTimeout(r, 100); });
+
+        if (!rateLimited && i + BATCH < SMA_SCAN_TICKERS.length && MIN_MS > 0) {
+          var wait = Math.max(0, MIN_MS - (Date.now() - t0));
+          if (wait > 0) await new Promise(function(r){ setTimeout(r, wait); });
+        }
       }
 
-      var final = all.sort(function(a,b){ return a.days_aligned - b.days_aligned; });
+      var final = all.slice().sort(function(a,b){ return a.days_aligned - b.days_aligned; });
       this.smaResults = final.slice(0, 10);
       var nowStr = new Date().toLocaleString('en-US', { timeZone:'America/New_York',
         month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' }) + ' ET';
-      this.smaMeta = { timestamp: nowStr, scanned: SMA_SCAN_TICKERS.length, qualified: all.length };
-      if (all.length === 0) {
-        this.smaError = 'No data returned from Yahoo Finance. Your browser may be blocking cross-origin requests, or try refreshing and scanning again.';
+      this.smaMeta = { timestamp: nowStr, scanned: this.smaProgress, qualified: all.length };
+
+      if (rateLimited) {
+        this.smaError = 'Finnhub rate limit hit (' + this.smaProgress + ' of ' + SMA_SCAN_TICKERS.length + ' scanned). Wait 60 seconds and scan again for remaining stocks.';
+      } else if (all.length === 0) {
+        this.smaError = !apiKey
+          ? 'Yahoo Finance is blocking cross-origin requests. Click the "API Key" button at the top of the page, paste your free Finnhub key (finnhub.io), and scan again — the Finnhub data API works from any browser.'
+          : 'No data returned from Finnhub. Verify your API key is valid (it should be the same key the Live Watchlist uses).';
       }
+
       this.smaLoaded = true;
       this.smaLoading = false;
     },
