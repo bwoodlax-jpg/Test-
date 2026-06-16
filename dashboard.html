@@ -827,7 +827,7 @@
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
   <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
-  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'; if(!smaLoaded) loadSMAScan()" data-tab="sma">&#9651; SMA Stack</button>
+  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'; loadSMAScan()" data-tab="sma">&#9651; SMA Stack</button>
 </div>
 
 <main>
@@ -1655,9 +1655,10 @@
     <span style="color:var(--accent)">This takes 15&ndash;45 seconds. Do not navigate away.</span>
   </div>
 
-  <div class="sma-err" x-show="!smaLoading && smaError">
-    <strong>Scan failed:</strong> <span x-text="smaError"></span>
-    <br><span style="font-size:10px;opacity:.7">Make sure Flask is running locally: <code>python app.py</code></span>
+  <div class="sma-err" x-show="!smaLoading && smaError"
+       :style="smaError && smaError.startsWith('STATIC') ? 'background:rgba(244,176,74,.1);border-color:rgba(244,176,74,.3);color:var(--accent)' : ''">
+    <strong x-text="smaError && smaError.startsWith('STATIC') ? 'Local Server Required' : 'Scan failed'"></strong><br>
+    <span x-text="smaError && smaError.startsWith('STATIC') ? smaError.replace('STATIC BUILD: ','') : smaError"></span>
   </div>
 
   <div class="sma-grid" x-show="!smaLoading && smaResults.length > 0">
@@ -1778,11 +1779,19 @@ function bwoodApp() {
     smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
     init() { window._bwoodApp = this; },
     async loadSMAScan() {
+      // Detect static hosting (GitHub Pages) — Flask backend not available there
+      const isStatic = window.location.protocol === 'file:' ||
+                       window.location.hostname.includes('github.io') ||
+                       window.location.hostname.includes('github.com');
+      if (isStatic) {
+        this.smaError = 'STATIC BUILD: The SMA Scanner computes 200-day moving averages server-side via yfinance. It cannot run on GitHub Pages. To use it: clone the repo, run python app.py, then open http://localhost:5000 — the scanner will work there.';
+        return;
+      }
       this.smaLoading = true;
       this.smaError = null;
       try {
         const r = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(90000) });
-        if (!r.ok) throw new Error('Server error ' + r.status + ' — is Flask running locally?');
+        if (!r.ok) throw new Error('Server error ' + r.status + '. Make sure Flask is running: python app.py');
         const d = await r.json();
         if (d.error) throw new Error(d.error);
         this.smaResults = d.results || [];
