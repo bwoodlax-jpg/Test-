@@ -1,5 +1,6 @@
 from datetime import datetime, time
 from zoneinfo import ZoneInfo
+import time as _time
 
 import yfinance as yf
 from flask import Flask, jsonify, render_template
@@ -21,6 +22,129 @@ WATCHLIST = [
     {"ticker": "AVGO", "company": "Broadcom Inc",               "tier": "AI Custom Silicon",         "tier_class": "t2", "entry": "$350–$375", "target": "$550", "stop": "$328",  "catalyst": "Q1 AI rev $8.4B (+106% YoY); Q2 AI guide $10.7B; CEO $100B AI rev by 2027; Google TPU/Meta MTIA/ByteDance XPU lock-in", "note": "Zone redrawn: prior $415–$445 + stop $385 invalidated at ~$378. New zone = pre-Q1 accumulation base. Stop $328 = below Q4 2025 structural support. R/R 5.4:1."},
     {"ticker": "NOW",  "company": "ServiceNow Inc",             "tier": "AI Enterprise Control Plane","tier_class": "t1", "entry": "$103–$118", "target": "$175", "stop": "$88",   "catalyst": "Knowledge 2026: AI Control Tower + Otto agent; Experian multi-year agentic deal; consensus PT $142; 19/22 analysts Buy", "note": "Stop-becomes-entry: $103–$118 = AI Control Plane re-rating base. Stop $88 = below enterprise switching cost floor. R/R 3.0:1. Currently ~$108, in zone."},
 ]
+
+# ── SMA Stack Scanner ────────────────────────────────────────────────────────
+SMA_UNIVERSE = [
+    # Mega/Large-cap tech
+    "AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA",
+    "AMD", "ORCL", "CRM", "ADBE", "INTC", "QCOM", "TXN", "AVGO", "MU",
+    "AMAT", "LRCX", "KLAC", "MRVL", "SNPS", "CDNS", "DELL", "ANET", "IBM", "ACN", "INTU",
+    # Cybersecurity / Cloud SaaS
+    "PANW", "FTNT", "CRWD", "ZS", "NET", "OKTA",
+    "DDOG", "SNOW", "PLTR", "NOW", "HUBS", "WDAY", "VEEV", "ZM", "UBER",
+    # Financials
+    "JPM", "BAC", "GS", "MS", "V", "MA", "AXP", "BLK", "SCHW", "COF",
+    "SPGI", "CME", "ICE", "PNC", "USB",
+    # Healthcare
+    "LLY", "ABBV", "JNJ", "MRK", "AMGN", "REGN", "VRTX", "ISRG",
+    "UNH", "MDT", "ABT", "SYK", "BSX", "EW", "HCA",
+    # Consumer Discretionary
+    "HD", "LOW", "TGT", "COST", "MCD", "SBUX", "CMG", "NKE",
+    "TSCO", "BKNG", "MAR", "HLT", "ABNB",
+    # Consumer Staples
+    "WMT", "PG", "KO", "PEP", "PM", "MDLZ", "CL",
+    # Energy
+    "XOM", "CVX", "COP", "EOG", "DVN", "SLB", "OXY", "MPC", "VLO", "PSX",
+    # Industrials
+    "GE", "HON", "CAT", "DE", "UNP", "FDX", "UPS", "RTX", "LMT", "BA", "TDG",
+    "ROK", "EMR", "ETN", "CARR",
+    # Communication
+    "NFLX", "DIS", "TMUS", "CMCSA",
+    # Materials
+    "FCX", "APD", "LIN", "SHW", "NEM", "ECL",
+    # Real Estate / Infra
+    "AMT", "PLD", "EQIX", "CCI", "DLR",
+    # Utilities
+    "NEE", "DUK", "SO",
+    # Mid-cap specials
+    "VRT", "LMND", "MELI", "SE", "DASH", "RBLX", "ARM", "SMCI", "MRNA",
+]
+
+_COMPANY = {
+    "AAPL":"Apple Inc","MSFT":"Microsoft Corp","GOOGL":"Alphabet Inc","AMZN":"Amazon.com Inc",
+    "META":"Meta Platforms","NVDA":"NVIDIA Corp","TSLA":"Tesla Inc","AMD":"Advanced Micro Devices",
+    "ORCL":"Oracle Corp","CRM":"Salesforce Inc","ADBE":"Adobe Inc","INTC":"Intel Corp",
+    "QCOM":"Qualcomm Inc","TXN":"Texas Instruments","AVGO":"Broadcom Inc","MU":"Micron Technology",
+    "AMAT":"Applied Materials","LRCX":"Lam Research","KLAC":"KLA Corp","MRVL":"Marvell Technology",
+    "SNPS":"Synopsys Inc","CDNS":"Cadence Design","DELL":"Dell Technologies","ANET":"Arista Networks",
+    "IBM":"IBM Corp","ACN":"Accenture plc","INTU":"Intuit Inc","PANW":"Palo Alto Networks",
+    "FTNT":"Fortinet Inc","CRWD":"CrowdStrike Holdings","ZS":"Zscaler Inc","NET":"Cloudflare Inc",
+    "OKTA":"Okta Inc","DDOG":"Datadog Inc","SNOW":"Snowflake Inc","PLTR":"Palantir Technologies",
+    "NOW":"ServiceNow Inc","HUBS":"HubSpot Inc","WDAY":"Workday Inc","VEEV":"Veeva Systems",
+    "ZM":"Zoom Video","UBER":"Uber Technologies","JPM":"JPMorgan Chase","BAC":"Bank of America",
+    "GS":"Goldman Sachs","MS":"Morgan Stanley","V":"Visa Inc","MA":"Mastercard Inc",
+    "AXP":"American Express","BLK":"BlackRock Inc","SCHW":"Charles Schwab","COF":"Capital One",
+    "SPGI":"S&P Global Inc","CME":"CME Group","ICE":"Intercontinental Exchange",
+    "PNC":"PNC Financial","USB":"U.S. Bancorp","LLY":"Eli Lilly & Co","ABBV":"AbbVie Inc",
+    "JNJ":"Johnson & Johnson","MRK":"Merck & Co","AMGN":"Amgen Inc","REGN":"Regeneron Pharma",
+    "VRTX":"Vertex Pharmaceuticals","ISRG":"Intuitive Surgical","UNH":"UnitedHealth Group",
+    "MDT":"Medtronic plc","ABT":"Abbott Laboratories","SYK":"Stryker Corp","BSX":"Boston Scientific",
+    "EW":"Edwards Lifesciences","HCA":"HCA Healthcare","HD":"Home Depot","LOW":"Lowe's Companies",
+    "TGT":"Target Corp","COST":"Costco Wholesale","MCD":"McDonald's Corp","SBUX":"Starbucks Corp",
+    "CMG":"Chipotle Mexican Grill","NKE":"Nike Inc","TSCO":"Tractor Supply Co","BKNG":"Booking Holdings",
+    "MAR":"Marriott International","HLT":"Hilton Worldwide","ABNB":"Airbnb Inc",
+    "WMT":"Walmart Inc","PG":"Procter & Gamble","KO":"Coca-Cola Co","PEP":"PepsiCo Inc",
+    "PM":"Philip Morris","MDLZ":"Mondelez International","CL":"Colgate-Palmolive",
+    "XOM":"Exxon Mobil","CVX":"Chevron Corp","COP":"ConocoPhillips","EOG":"EOG Resources",
+    "DVN":"Devon Energy","SLB":"SLB (Schlumberger)","OXY":"Occidental Petroleum",
+    "MPC":"Marathon Petroleum","VLO":"Valero Energy","PSX":"Phillips 66",
+    "GE":"GE Aerospace","HON":"Honeywell International","CAT":"Caterpillar Inc","DE":"Deere & Co",
+    "UNP":"Union Pacific","FDX":"FedEx Corp","UPS":"United Parcel Service","RTX":"RTX Corp",
+    "LMT":"Lockheed Martin","BA":"Boeing Co","TDG":"TransDigm Group","ROK":"Rockwell Automation",
+    "EMR":"Emerson Electric","ETN":"Eaton Corp","CARR":"Carrier Global",
+    "NFLX":"Netflix Inc","DIS":"Walt Disney Co","TMUS":"T-Mobile US","CMCSA":"Comcast Corp",
+    "FCX":"Freeport-McMoRan","APD":"Air Products & Chemicals","LIN":"Linde plc",
+    "SHW":"Sherwin-Williams","NEM":"Newmont Corp","ECL":"Ecolab Inc",
+    "AMT":"American Tower","PLD":"Prologis Inc","EQIX":"Equinix Inc","CCI":"Crown Castle",
+    "DLR":"Digital Realty","NEE":"NextEra Energy","DUK":"Duke Energy","SO":"Southern Co",
+    "VRT":"Vertiv Holdings","LMND":"Lemonade Inc","MELI":"MercadoLibre","SE":"Sea Limited",
+    "DASH":"DoorDash Inc","RBLX":"Roblox Corp","ARM":"Arm Holdings",
+    "SMCI":"Super Micro Computer","MRNA":"Moderna Inc",
+}
+
+_SECTOR = {
+    "AAPL":"Technology","MSFT":"Technology","GOOGL":"Technology","AMZN":"Consumer Discr.",
+    "META":"Technology","NVDA":"Technology","TSLA":"Consumer Discr.","AMD":"Technology",
+    "ORCL":"Technology","CRM":"Technology","ADBE":"Technology","INTC":"Technology",
+    "QCOM":"Technology","TXN":"Technology","AVGO":"Technology","MU":"Technology",
+    "AMAT":"Technology","LRCX":"Technology","KLAC":"Technology","MRVL":"Technology",
+    "SNPS":"Technology","CDNS":"Technology","DELL":"Technology","ANET":"Technology",
+    "IBM":"Technology","ACN":"Technology","INTU":"Technology","PANW":"Technology",
+    "FTNT":"Technology","CRWD":"Technology","ZS":"Technology","NET":"Technology",
+    "OKTA":"Technology","DDOG":"Technology","SNOW":"Technology","PLTR":"Technology",
+    "NOW":"Technology","HUBS":"Technology","WDAY":"Technology","VEEV":"Healthcare",
+    "ZM":"Technology","UBER":"Consumer Discr.","JPM":"Financials","BAC":"Financials",
+    "GS":"Financials","MS":"Financials","V":"Financials","MA":"Financials",
+    "AXP":"Financials","BLK":"Financials","SCHW":"Financials","COF":"Financials",
+    "SPGI":"Financials","CME":"Financials","ICE":"Financials","PNC":"Financials",
+    "USB":"Financials","LLY":"Healthcare","ABBV":"Healthcare","JNJ":"Healthcare",
+    "MRK":"Healthcare","AMGN":"Healthcare","REGN":"Healthcare","VRTX":"Healthcare",
+    "ISRG":"Healthcare","UNH":"Healthcare","MDT":"Healthcare","ABT":"Healthcare",
+    "SYK":"Healthcare","BSX":"Healthcare","EW":"Healthcare","HCA":"Healthcare",
+    "HD":"Consumer Discr.","LOW":"Consumer Discr.","TGT":"Consumer Discr.",
+    "COST":"Consumer Staples","MCD":"Consumer Discr.","SBUX":"Consumer Discr.",
+    "CMG":"Consumer Discr.","NKE":"Consumer Discr.","TSCO":"Consumer Discr.",
+    "BKNG":"Consumer Discr.","MAR":"Consumer Discr.","HLT":"Consumer Discr.",
+    "ABNB":"Consumer Discr.","WMT":"Consumer Staples","PG":"Consumer Staples",
+    "KO":"Consumer Staples","PEP":"Consumer Staples","PM":"Consumer Staples",
+    "MDLZ":"Consumer Staples","CL":"Consumer Staples","XOM":"Energy","CVX":"Energy",
+    "COP":"Energy","EOG":"Energy","DVN":"Energy","SLB":"Energy","OXY":"Energy",
+    "MPC":"Energy","VLO":"Energy","PSX":"Energy","GE":"Industrials","HON":"Industrials",
+    "CAT":"Industrials","DE":"Industrials","UNP":"Industrials","FDX":"Industrials",
+    "UPS":"Industrials","RTX":"Industrials","LMT":"Industrials","BA":"Industrials",
+    "TDG":"Industrials","ROK":"Industrials","EMR":"Industrials","ETN":"Industrials",
+    "CARR":"Industrials","NFLX":"Communication","DIS":"Communication",
+    "TMUS":"Communication","CMCSA":"Communication","FCX":"Materials","APD":"Materials",
+    "LIN":"Materials","SHW":"Materials","NEM":"Materials","ECL":"Materials",
+    "AMT":"Real Estate","PLD":"Real Estate","EQIX":"Real Estate","CCI":"Real Estate",
+    "DLR":"Real Estate","NEE":"Utilities","DUK":"Utilities","SO":"Utilities",
+    "VRT":"Industrials","LMND":"Financials","MELI":"Consumer Discr.","SE":"Consumer Discr.",
+    "DASH":"Consumer Discr.","RBLX":"Communication","ARM":"Technology",
+    "SMCI":"Technology","MRNA":"Healthcare",
+}
+
+_sma_cache = {"data": None, "ts": 0}
+SMA_CACHE_TTL = 900  # 15 minutes
 
 
 def is_market_open():
@@ -65,6 +189,93 @@ def quotes():
         "source": "yfinance",
         "timestamp": datetime.now(ZoneInfo("America/New_York")).strftime("%b %d, %Y  %I:%M:%S %p ET"),
     })
+
+
+@app.route("/api/sma_scan")
+def sma_scan():
+    global _sma_cache
+    now_ts = _time.time()
+    if _sma_cache["data"] and (now_ts - _sma_cache["ts"]) < SMA_CACHE_TTL:
+        return jsonify(_sma_cache["data"])
+
+    try:
+        raw = yf.download(
+            SMA_UNIVERSE, period="13mo",
+            auto_adjust=True, progress=False,
+            group_by="ticker", threads=True,
+        )
+
+        results = []
+        for ticker in SMA_UNIVERSE:
+            try:
+                closes = raw[ticker]["Close"].dropna() if len(SMA_UNIVERSE) > 1 else raw["Close"].dropna()
+                if len(closes) < 200:
+                    continue
+
+                r50  = closes.rolling(50).mean()
+                r100 = closes.rolling(100).mean()
+                r150 = closes.rolling(150).mean()
+                r200 = closes.rolling(200).mean()
+
+                sma50  = float(r50.iloc[-1])
+                sma100 = float(r100.iloc[-1])
+                sma150 = float(r150.iloc[-1])
+                sma200 = float(r200.iloc[-1])
+                price  = float(closes.iloc[-1])
+
+                # Full bullish SMA stack: P > SMA50 > SMA100 > SMA150 > SMA200
+                if not (price > sma50 > sma100 > sma150 > sma200):
+                    continue
+
+                # Count consecutive trading days the full stack has been aligned
+                aligned = (closes > r50) & (r50 > r100) & (r100 > r150) & (r150 > r200)
+                days_aligned = 0
+                for v in reversed(aligned.dropna().values.tolist()):
+                    if v:
+                        days_aligned += 1
+                    else:
+                        break
+
+                results.append({
+                    "ticker":        ticker,
+                    "company":       _COMPANY.get(ticker, ticker),
+                    "sector":        _SECTOR.get(ticker, "—"),
+                    "price":         round(price, 2),
+                    "sma50":         round(sma50, 2),
+                    "sma100":        round(sma100, 2),
+                    "sma150":        round(sma150, 2),
+                    "sma200":        round(sma200, 2),
+                    "pct_above_200": round((price - sma200) / sma200 * 100, 2),
+                    "days_aligned":  int(days_aligned),
+                })
+            except Exception:
+                continue
+
+        # Sort: freshest alignment first — smallest days_aligned = most recent 200 cross
+        results.sort(key=lambda x: x["days_aligned"])
+        top10 = results[:10]
+
+        et = ZoneInfo("America/New_York")
+        ts = datetime.now(et).strftime("%b %d, %Y  %I:%M:%S %p ET")
+
+        out = {
+            "results":   top10,
+            "timestamp": ts,
+            "scanned":   len(SMA_UNIVERSE),
+            "qualified": len(results),
+        }
+        _sma_cache["data"] = out
+        _sma_cache["ts"]   = now_ts
+        return jsonify(out)
+
+    except Exception as e:
+        return jsonify({
+            "error":     str(e),
+            "results":   [],
+            "timestamp": "",
+            "scanned":   0,
+            "qualified": 0,
+        }), 500
 
 
 if __name__ == "__main__":

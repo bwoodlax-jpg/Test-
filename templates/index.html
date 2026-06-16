@@ -449,6 +449,44 @@
     .sp500-source-note a:hover{text-decoration:underline}
     .sp-empty{text-align:center;padding:40px;color:var(--muted);font-size:12px}
     .sp-pp-flag{font-size:10px;color:var(--green);font-weight:700;margin-left:6px}
+  /* ── SMA Stack Scanner ── */
+  .sma-explainer{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:11px;color:var(--muted);line-height:1.7}
+  .sma-explainer strong{color:var(--text)}
+  .sma-scan-btn{background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;white-space:nowrap}
+  .sma-scan-btn:hover{opacity:.85}
+  .sma-scan-btn:disabled{opacity:.45;cursor:not-allowed}
+  .sma-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .sma-stat{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;min-width:90px}
+  .sma-stat-num{font-size:20px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .sma-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+  .sma-loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:12px;line-height:1.8}
+  .sma-err{background:rgba(224,62,62,.1);border:1px solid rgba(224,62,62,.25);border-radius:8px;padding:16px 20px;color:var(--red);font-size:12px;margin-top:16px}
+  .sma-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:16px}
+  .sma-card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s}
+  .sma-card:hover{border-color:rgba(244,176,74,.35)}
+  .sma-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .sma-ticker{font-size:22px;font-weight:900;letter-spacing:.5px;color:var(--accent)}
+  .sma-co{font-size:10px;color:var(--muted);margin-top:2px}
+  .sma-price{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--text);text-align:right}
+  .sma-badges{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
+  .sma-badge-days{background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);color:var(--green);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px}
+  .sma-badge-days.sma-fresh{background:rgba(244,176,74,.15);border-color:rgba(244,176,74,.4);color:var(--accent)}
+  .sma-badge-sector{background:var(--surf2);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:3px 10px;border-radius:4px}
+  .sma-badge-pct{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);color:#60a5fa;font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px}
+  .sma-stack{margin-top:4px}
+  .sma-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .sma-lbl{font-size:9px;font-weight:700;color:var(--muted);width:44px;text-align:right;letter-spacing:.3px;flex-shrink:0}
+  .sma-bar-wrap{flex:1;background:var(--surf2);border-radius:2px;height:6px;overflow:hidden}
+  .sma-bar{height:100%;border-radius:2px;transition:width .4s}
+  .sma-val{font-size:10px;color:var(--muted);width:60px;font-variant-numeric:tabular-nums;text-align:right;flex-shrink:0}
+  .b-price{background:var(--green)}
+  .b-50{background:var(--accent)}
+  .b-100{background:#60a5fa}
+  .b-150{background:#a78bfa}
+  .b-200{background:rgba(255,255,255,.2)}
+  .sma-note{margin-top:12px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;line-height:1.55}
+  .sma-ts{font-size:10px;color:var(--muted);margin-top:16px;text-align:right}
+  .sma-rank{font-size:11px;font-weight:700;color:var(--muted);background:var(--surf2);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0}
   /* ── Alpine.js cloaking ── */
   [x-cloak] { display: none !important; }
   /* ── Market Pulse tab ── */
@@ -789,6 +827,7 @@
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
   <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
+  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'; if(!smaLoaded) loadSMAScan()" data-tab="sma">&#9651; SMA Stack</button>
 </div>
 
 <main>
@@ -1566,6 +1605,150 @@
   <div id="mos-content" style="padding:4px 0"></div>
 </div><!-- end tab-mos -->
 
+<!-- ── SMA Stack Scanner Tab ─────────────────────────── -->
+<div id="tab-sma" class="tab-panel" x-show="tab === 'sma'" x-cloak>
+
+  <div class="sec-label">SMA Stack Scanner &mdash; Bullish 200/150/100/50 Alignment</div>
+
+  <div class="sma-explainer">
+    <strong>The Signal:</strong> When all three shorter SMAs (50, 100, 150-day) rise above the 200-day SMA simultaneously,
+    the long-term trend has structurally shifted. This <strong>bullish SMA stack</strong> &mdash;
+    Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &mdash;
+    means the 200-day has crossed <em>below</em> all three, confirming the trend has flipped long-term.
+    The 200 is now the floor, with each shorter SMA acting as a rising support layer above it.
+    <br><br>
+    <strong>Why it matters:</strong> Three simultaneous golden crosses (50&gt;200, 100&gt;200, 150&gt;200) in the same stock is rare.
+    Freshly-formed stacks (&le;20 days) are the most actionable &mdash; you catch the structural shift early, before institutions fully position.
+    <br><br>
+    <strong>Criteria:</strong> Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &nbsp;&bull;&nbsp;
+    Sorted by days in alignment ASC (freshest cross first) &nbsp;&bull;&nbsp;
+    Mid-cap or larger (&sim;120 S&amp;P 500 + mid-cap names) &nbsp;&bull;&nbsp;
+    Universe scanned live via yfinance &nbsp;&bull;&nbsp; Results cached 15 min.
+    <br><em style="color:var(--accent);font-size:10px">Requires Flask server running locally (python app.py). Not available on static GitHub Pages build.</em>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="sma-scan-btn" @click="loadSMAScan()" :disabled="smaLoading">
+      <span x-show="!smaLoading">&#9651; Run Scanner</span>
+      <span x-show="smaLoading">Scanning&hellip;</span>
+    </button>
+    <div class="sma-meta" x-show="smaMeta.scanned > 0">
+      <div class="sma-stat">
+        <div class="sma-stat-num" x-text="smaMeta.scanned">0</div>
+        <div class="sma-stat-lbl">Stocks Scanned</div>
+      </div>
+      <div class="sma-stat">
+        <div class="sma-stat-num" x-text="smaMeta.qualified">0</div>
+        <div class="sma-stat-lbl">Stack Aligned</div>
+      </div>
+      <div class="sma-stat">
+        <div class="sma-stat-num" style="color:var(--green)" x-text="smaResults.length">0</div>
+        <div class="sma-stat-lbl">Showing Top 10</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sma-loading" x-show="smaLoading">
+    <div style="font-size:22px;margin-bottom:12px">&#9651;</div>
+    Downloading 13 months of price history for ~120 stocks&hellip;<br>
+    Computing SMA 50 / 100 / 150 / 200 for each&hellip;<br>
+    <span style="color:var(--accent)">This takes 15&ndash;45 seconds. Do not navigate away.</span>
+  </div>
+
+  <div class="sma-err" x-show="!smaLoading && smaError">
+    <strong>Scan failed:</strong> <span x-text="smaError"></span>
+    <br><span style="font-size:10px;opacity:.7">Make sure Flask is running locally: <code>python app.py</code></span>
+  </div>
+
+  <div class="sma-grid" x-show="!smaLoading && smaResults.length > 0">
+    <template x-for="(s, i) in smaResults" :key="s.ticker">
+      <div class="sma-card">
+        <div class="sma-card-top">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="sma-rank" x-text="i + 1"></span>
+            <div>
+              <div class="sma-ticker" x-text="s.ticker"></div>
+              <div class="sma-co" x-text="s.company"></div>
+            </div>
+          </div>
+          <div>
+            <div class="sma-price" x-text="'$' + s.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})"></div>
+          </div>
+        </div>
+
+        <div class="sma-badges">
+          <span class="sma-badge-days" :class="{'sma-fresh': s.days_aligned <= 20}">
+            <span x-show="s.days_aligned <= 5">&#9733; NEW &mdash; </span>
+            <span x-text="s.days_aligned + ' days aligned'"></span>
+          </span>
+          <span class="sma-badge-pct" x-text="'+' + s.pct_above_200.toFixed(1) + '% vs SMA200'"></span>
+          <span class="sma-badge-sector" x-text="s.sector"></span>
+        </div>
+
+        <!-- SMA Stack visual: bars scaled relative to SMA200 baseline -->
+        <div class="sma-stack">
+          <div class="sma-row">
+            <div class="sma-lbl">PRICE</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-price" :style="'width:' + Math.min(100, Math.max(10, (s.price / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.price.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 50</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-50" :style="'width:' + Math.min(100, Math.max(10, (s.sma50 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma50.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 100</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-100" :style="'width:' + Math.min(100, Math.max(10, (s.sma100 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma100.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 150</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-150" :style="'width:' + Math.min(100, Math.max(10, (s.sma150 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma150.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 200</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-200" :style="'width:' + Math.min(100, Math.max(10, (s.sma200 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma200.toFixed(2)"></div>
+          </div>
+        </div>
+
+        <div class="sma-note">
+          <span x-show="s.days_aligned <= 10" style="color:var(--accent);font-weight:700">&#9733; Fresh cross &mdash; </span>
+          <span x-show="s.days_aligned > 10 && s.days_aligned <= 30" style="color:var(--green);font-weight:700">Stack intact &mdash; </span>
+          Stack aligned for <strong style="color:var(--text)" x-text="s.days_aligned"></strong> trading days.
+          Price is <strong style="color:var(--green)" x-text="'+' + s.pct_above_200.toFixed(1) + '% above the 200 SMA'"></strong>.
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <div x-show="!smaLoading && !smaError && smaResults.length === 0 && smaMeta.scanned > 0"
+       style="text-align:center;padding:50px 20px;color:var(--muted);font-size:13px">
+    No stocks in the scanned universe currently meet the full bullish SMA stack criteria.
+  </div>
+
+  <div x-show="!smaLoading && !smaError && !smaLoaded"
+       style="text-align:center;padding:50px 20px;color:var(--muted);font-size:12px;line-height:1.8">
+    Click <strong style="color:var(--accent)">Run Scanner</strong> to scan ~120 mid/large-cap stocks for the bullish SMA alignment.<br>
+    First run takes 20&ndash;45 seconds. Results cached for 15 minutes.
+  </div>
+
+  <div class="sma-ts" x-show="smaMeta.timestamp" x-text="'Last scan: ' + smaMeta.timestamp"></div>
+
+</div><!-- end tab-sma -->
+
 </main>
 
 <footer>
@@ -1588,7 +1771,29 @@ function bwoodApp() {
   return {
     tab: 'watchlist',
     showApiPanel: false,
-    init() { window._bwoodApp = this; }
+    smaResults: [],
+    smaLoading: false,
+    smaError: null,
+    smaLoaded: false,
+    smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
+    init() { window._bwoodApp = this; },
+    async loadSMAScan() {
+      this.smaLoading = true;
+      this.smaError = null;
+      try {
+        const r = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(90000) });
+        if (!r.ok) throw new Error('Server error ' + r.status + ' — is Flask running locally?');
+        const d = await r.json();
+        if (d.error) throw new Error(d.error);
+        this.smaResults = d.results || [];
+        this.smaMeta = { timestamp: d.timestamp || '', scanned: d.scanned || 0, qualified: d.qualified || 0 };
+        this.smaLoaded = true;
+      } catch(e) {
+        this.smaError = e.message || 'Unknown error';
+      } finally {
+        this.smaLoading = false;
+      }
+    },
   };
 }
 
