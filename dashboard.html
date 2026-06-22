@@ -455,6 +455,10 @@
   .sma-scan-btn{background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;white-space:nowrap}
   .sma-scan-btn:hover{opacity:.85}
   .sma-scan-btn:disabled{opacity:.45;cursor:not-allowed}
+  .semi-desc{font-size:10px;color:var(--muted);max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:help}
+  .semi-val{font-weight:700;font-size:12px;font-variant-numeric:tabular-nums;text-align:right}
+  .semi-fwd{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;text-align:right}
+  .semi-pos{color:var(--green)}.semi-neg{color:var(--red)}.semi-na{color:var(--muted);font-size:10px}
   .sma-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .sma-stat{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;min-width:90px}
   .sma-stat-num{font-size:20px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
@@ -828,6 +832,7 @@
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
   <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
   <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'" data-tab="sma">&#9651; SMA Stack</button>
+  <button class="tab-btn" :class="{'active': tab === 'semis'}" @click="tab = 'semis'" data-tab="semis">&#9711; Semis &amp; AI</button>
 </div>
 
 <main>
@@ -1794,6 +1799,99 @@
 
 </div><!-- end tab-sma -->
 
+<!-- ── Semis & AI Discovery Tab ──────────────────────────── -->
+<div id="tab-semis" class="tab-panel" x-show="tab === 'semis'" x-cloak>
+
+  <div class="sec-label">Semiconductor &amp; AI Infrastructure &mdash; Discovery Screen</div>
+  <p class="monitor-sub">
+    30 mid/large-cap semiconductor and AI infrastructure names beyond the obvious (NVDA, AMD, AVGO, MRVL &mdash; already on the watchlist).
+    Covers power semis, fab equipment, process control, IP licensing, edge AI, and advanced packaging.
+    Click <strong style="color:var(--accent)">Load Live Data</strong> to fetch YTD%, PE, and EPS from Finnhub (requires API key &mdash; free tier, same key as Live Watchlist).
+    Forward PE / Forward EPS populated if available from Finnhub free tier; otherwise shown as N/A.
+  </p>
+
+  <!-- Load button + progress -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="sma-scan-btn" @click="loadSemiData()" :disabled="semiLoading">
+      <span x-show="!semiLoading">&#9889; Load Live Data</span>
+      <span x-show="semiLoading">Loading&hellip; (<span x-text="semiProgress"></span>/<span x-text="semiProgressOf"></span>)</span>
+    </button>
+    <div x-show="semiLoading" style="flex:1;min-width:160px">
+      <div style="height:4px;background:var(--surf2);border-radius:2px;overflow:hidden">
+        <div style="height:100%;background:var(--accent);border-radius:2px;transition:width .4s"
+             :style="'width:' + (semiProgressOf > 0 ? Math.round(semiProgress/semiProgressOf*100) : 0) + '%'"></div>
+      </div>
+    </div>
+    <div x-show="semiLoaded && !semiLoading" style="font-size:11px;color:var(--muted)">
+      &#10003; <span x-text="semiRows.filter(function(r){return r.loaded;}).length"></span> of 30 loaded
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div x-show="semiError" style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.3);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:var(--red)" x-text="semiError"></div>
+
+  <!-- Table -->
+  <div style="overflow-x:auto">
+    <table class="sp500-table" style="min-width:900px">
+      <thead>
+        <tr>
+          <th style="width:60px">#</th>
+          <th style="width:110px">Ticker</th>
+          <th style="width:160px">Company</th>
+          <th>Synopsis</th>
+          <th style="width:72px;text-align:right">YTD%</th>
+          <th style="width:65px;text-align:right">PE</th>
+          <th style="width:72px;text-align:right">Fwd PE</th>
+          <th style="width:70px;text-align:right">EPS</th>
+          <th style="width:78px;text-align:right">Fwd EPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in semiRows" :key="row.t">
+          <tr>
+            <td class="sp-rank" x-text="idx + 1"></td>
+            <td>
+              <div class="sp-ticker" x-text="row.t"></div>
+              <div class="sp-sector-badge sec-tech" x-text="row.sec" style="display:inline-block;margin-top:3px"></div>
+            </td>
+            <td><div class="sp-company" style="font-weight:700;font-size:11px" x-text="row.c"></div></td>
+            <td><div class="semi-desc" :title="row.desc" x-text="row.desc"></div></td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    :class="row.ytd != null ? (row.ytd >= 0 ? 'semi-pos' : 'semi-neg') : ''"
+                    x-text="row.ytd != null ? (row.ytd >= 0 ? '+' : '') + row.ytd.toFixed(1) + '%' : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    x-text="row.pe != null ? row.pe.toFixed(1) + 'x' : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-fwd"
+                    x-text="row.fwdPE != null ? row.fwdPE.toFixed(1) + 'x' : (row.loaded ? 'N/A' : (row.err ? 'ERR' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    x-text="row.eps != null ? '$' + row.eps.toFixed(2) : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-fwd"
+                    x-text="row.fwdEPS != null ? '$' + row.fwdEPS.toFixed(2) : (row.loaded ? 'N/A' : (row.err ? 'ERR' : '&hellip;'))"></span>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:14px;font-size:10px;color:var(--muted);line-height:1.6">
+    <strong style="color:var(--dim)">Data source:</strong> Finnhub.io free tier &mdash; YTD% uses <code>ytdPriceReturnDaily</code>, PE/EPS use <code>peTTM</code>/<code>epsTTM</code>.
+    Forward PE and Fwd EPS use <code>forwardPE</code>/<code>epsForward</code> &mdash; shown as N/A if not in free tier response.
+    Hover any synopsis cell for the full description. Rates: 30 stocks = 30 API calls ~20s at Finnhub free tier (60 calls/min).
+  </div>
+
+</div><!-- end tab-semis -->
+
+
 </main>
 
 <footer>
@@ -1823,7 +1921,18 @@ function bwoodApp() {
     smaProgress: 0,
     smaProgressOf: 0,
     smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
-    init() { window._bwoodApp = this; },
+    semiRows: [],
+    semiLoading: false,
+    semiError: null,
+    semiLoaded: false,
+    semiProgress: 0,
+    semiProgressOf: 0,
+    init() {
+      window._bwoodApp = this;
+      this.semiRows = SEMI_AI_STOCKS.map(function(s) {
+        return {t:s.t, c:s.c, sec:s.s, desc:s.desc, ytd:null, pe:null, fwdPE:null, eps:null, fwdEPS:null, loaded:false, err:false};
+      });
+    },
 
     async scanOneTicker(entry, apiKey) {
       var t = entry.t, c = entry.c, s = entry.s;
@@ -1960,6 +2069,62 @@ function bwoodApp() {
 
       this.smaLoaded = true;
       this.smaLoading = false;
+    },
+
+    async loadSemiData() {
+      var apiKey = getKey();
+      if (!apiKey) {
+        this.semiError = 'Finnhub API key required — click the API Key button at the top and paste your free key from finnhub.io (same key the Live Watchlist uses).';
+        return;
+      }
+      this.semiLoading = true;
+      this.semiError = null;
+      this.semiProgress = 0;
+      this.semiProgressOf = SEMI_AI_STOCKS.length;
+      this.semiRows = SEMI_AI_STOCKS.map(function(s) {
+        return {t:s.t, c:s.c, sec:s.s, desc:s.desc, ytd:null, pe:null, fwdPE:null, eps:null, fwdEPS:null, loaded:false, err:false};
+      });
+      var self = this;
+      var BATCH = 3, MIN_MS = 3500, rateLimited = false;
+      for (var i = 0; i < SEMI_AI_STOCKS.length; i += BATCH) {
+        if (rateLimited) break;
+        var batch = SEMI_AI_STOCKS.slice(i, i + BATCH);
+        var t0 = Date.now();
+        var bres = await Promise.allSettled(batch.map(function(stock, bi) {
+          var idx = i + bi;
+          var url = 'https://finnhub.io/api/v1/stock/metric?symbol=' + stock.t + '&metric=all&token=' + apiKey;
+          return fetch(url, {signal: AbortSignal.timeout(10000)}).then(function(r) {
+            if (r.status === 429) { var e = new Error('RL'); e.rateLimit = true; throw e; }
+            if (!r.ok) { self.semiRows[idx].err = true; return; }
+            return r.json().then(function(d) {
+              var m = (d && d.metric) || {};
+              var pick = function(a,b){ return a != null ? a : (b != null ? b : null); };
+              self.semiRows[idx].ytd    = pick(m['ytdPriceReturnDaily'], m['yearToDatePriceReturn']);
+              self.semiRows[idx].pe     = pick(m['peTTM'], m['peNormalizedAnnual']);
+              self.semiRows[idx].fwdPE  = m['forwardPE'] != null ? m['forwardPE'] : null;
+              self.semiRows[idx].eps    = pick(m['epsTTM'], m['epsNormalizedAnnual']);
+              self.semiRows[idx].fwdEPS = pick(m['epsForward'], m['epsEstimateNextYear']);
+              self.semiRows[idx].loaded = true;
+            });
+          }).catch(function(e) {
+            if (e.rateLimit) throw e;
+            self.semiRows[idx].err = true;
+          });
+        }));
+        for (var j = 0; j < bres.length; j++) {
+          if (bres[j].status === 'rejected' && bres[j].reason && bres[j].reason.rateLimit) {
+            rateLimited = true; break;
+          }
+        }
+        this.semiProgress = Math.min(i + BATCH, SEMI_AI_STOCKS.length);
+        if (!rateLimited && i + BATCH < SEMI_AI_STOCKS.length) {
+          var wait = Math.max(0, MIN_MS - (Date.now() - t0));
+          if (wait > 0) await new Promise(function(r){ setTimeout(r, wait); });
+        }
+      }
+      if (rateLimited) this.semiError = 'Rate limit hit after ' + this.semiProgress + ' of ' + SEMI_AI_STOCKS.length + ' stocks. Wait 60s and click Load again.';
+      this.semiLoaded = true;
+      this.semiLoading = false;
     },
   };
 }
@@ -2558,6 +2723,39 @@ const HISTORY = [
 ];
 
 // ── SMA Stack Scanner universe — 65 mid/large-cap stocks, all sectors ────────
+const SEMI_AI_STOCKS = [
+  {t:'MPWR', c:'Monolithic Power Systems', s:'Power Semis',         desc:'Power management ICs (VRMs, buck converters) for AI servers, data centers, and automotive. Every NVDA/AMD GPU rack runs on MPWR voltage regulators. ~80% gross margins. Direct AI capex beneficiary without chip supply constraints.'},
+  {t:'ENTG', c:'Entegris',                 s:'Semi Materials',      desc:'Semiconductor materials leader: CMP slurries, filters, carriers, and contamination control. No chip fab runs without Entegris materials. Acquired CMC Materials 2022. ~90% consumables revenue — repeatable across node transitions.'},
+  {t:'ONTO', c:'Onto Innovation',           s:'Process Control',     desc:'Optical critical dimension (OCD) metrology and inspection for advanced semiconductor nodes. Ensures chipmakers measure sub-5nm patterns. Sole-source for several advanced packaging steps critical to CoWoS AI accelerator packaging.'},
+  {t:'ACLS', c:'Axcelis Technologies',      s:'Fab Equipment',       desc:'Sole-source supplier of ion implant equipment — mandatory in every chip production flow including SiC power devices. SiC automotive/EV growth + AI logic ramp = dual tailwinds. Near-monopoly in ion implant.'},
+  {t:'LSCC', c:'Lattice Semiconductor',     s:'FPGA / Edge AI',      desc:'Low-power FPGAs and programmable logic for edge AI, server management (BMC), 5G, and industrial. Not competing at the high-end — owns the low-power FPGA segment. Nexus platform targets sensing and control at the edge.'},
+  {t:'FORM', c:'FormFactor',                s:'Test Equipment',      desc:'Wafer probe cards used to test semiconductor wafers before dicing. Every DRAM and logic chip requires probing. Near-monopoly in DRAM probe cards. HBM memory for AI accelerators requires next-gen probing technology.'},
+  {t:'CEVA', c:'CEVA Inc',                  s:'IP Licensing',        desc:'Licenses semiconductor IP cores — AI inference engines, DSPs, wireless connectivity — to chip designers worldwide. Revenue = royalty per chip shipped. Customers include Apple, Samsung, MediaTek. AI inference IP growing rapidly.'},
+  {t:'AMBA', c:'Ambarella Inc',             s:'AI Vision SoC',       desc:'AI vision SoCs for automotive cameras, security cameras, and robot perception. CVflow AI architecture processes video at the edge under 2W. Growing ADAS win rates at Tier-1 automotive suppliers as camera mandates expand globally.'},
+  {t:'RMBS', c:'Rambus Inc',                s:'Memory IP',           desc:'Licenses high-speed memory interface IP for DDR5, HBM, and CXL. Every AI data center memory interface — including HBM3 stacks on NVDA/AMD AI GPUs — incorporates Rambus IP. Also develops security silicon and memory subsystems.'},
+  {t:'WOLF', c:'Wolfspeed',                 s:'SiC Power Semis',     desc:'Leading SiC substrate and power device maker for EV charging, industrial motors, and data center power delivery. SiC enables efficient high-voltage power conversion. World&#39;s largest SiC fab in Mohawk Valley (NY). Key EV powertrain supplier.'},
+  {t:'NVTS', c:'Navitas Semiconductor',     s:'GaN / SiC Power',     desc:'GaN and SiC power ICs for EV chargers, solar inverters, AI data center PSUs, and consumer fast-chargers. GaN enables smaller, cooler, faster power conversion vs. silicon. Hyperscaler power supply design-wins accelerating.'},
+  {t:'ON',   c:'ON Semiconductor',          s:'SiC / Automotive',    desc:'Tier-1 SiC power device maker for automotive EV drivetrains and industrial. Grew SiC revenue 4x in 2023. IntelliSense for SiC manufacturing platform. Competing with Infineon and STM for EV powertrain socket wins at OEMs.'},
+  {t:'SITM', c:'SiTime Corp',               s:'MEMS Timing',         desc:'MEMS-based timing semiconductors — oscillators, resonators, clock generators — that replace quartz in high-reliability applications. MEMS timing is immune to shock, vibration, and temperature extremes. Hyperscaler and defense adoption growing.'},
+  {t:'ALGM', c:'Allegro MicroSystems',      s:'Sensors / Power ICs', desc:'Magnetic sensor ICs and power ICs for automotive and industrial. Hall-effect current and position sensors. Every EV has dozens of Allegro sensors. Spun off from Sanken Electric (Japan) in 2020, listed on Nasdaq.'},
+  {t:'CRUS', c:'Cirrus Logic',              s:'Audio / Power ICs',   desc:'Audio signal processing chips and codecs. Primary Apple iPhone audio IC supplier — near-single-customer but extremely sticky. Expanding into haptics, PC audio, and power conversion ICs for Apple products. ~100% EPS beat rate.'},
+  {t:'COHU', c:'Cohu Inc',                  s:'Test Handlers',       desc:'Semiconductor test handlers and contactors. Growing in SiC and power device test as automotive semis require 100% device screening. Works alongside ATE vendors (Teradyne, Advantest) to handle chips during test. Acquired Xcerra for scale.'},
+  {t:'ICHR', c:'Ichor Holdings',            s:'Gas Delivery',        desc:'Precision gas delivery subsystems for semiconductor process equipment (AMAT, Lam Research, KLAC). Revenue tracks directly with semiconductor capex. Pure-play: if etch or CVD tools ship, Ichor gas boxes ship with them.'},
+  {t:'ACMR', c:'ACM Research',              s:'Cleaning Equipment',  desc:'Single-wafer wet cleaning equipment with strong presence in Chinese fabs (CXMT, YMTC, SMIC) and expanding internationally. Beneficiary of Chinese domestic chip buildout. Low-profile but growing rapidly. CXMT memory expansion driving demand.'},
+  {t:'VECO', c:'Veeco Instruments',         s:'Deposition Equipment',desc:'Atomic layer deposition (ALD), ion beam, and laser annealing equipment for advanced semiconductor and compound semiconductor fabs. ALD enables the precise thin-film layers required at sub-3nm nodes. Growing in advanced packaging and compound semis.'},
+  {t:'UCTT', c:'Ultra Clean Holdings',      s:'Equipment Components',desc:'Sub-assemblies, weldments, and fluid delivery components for semiconductor equipment OEMs (AMAT, Lam, KLAC, TEL). Pure-play components play on overall semi capex. High-beta proxy: revenue rises when equipment OEMs ramp production.'},
+  {t:'AZTA', c:'Azenta Inc',                s:'Wafer Automation',    desc:'Automated wafer handling, storage systems, and semiconductor lifecycle services. Wafer automation critical as fabs scale to 300mm. Formerly Brooks Automation. Also operates Brooks Life Sciences (genomics biorepository).'},
+  {t:'SMTC', c:'Semtech Corp',              s:'Analog / IoT',        desc:'Analog/mixed-signal semis for IoT connectivity (LoRa LPWAN — dominant in industrial IoT), data center optical transceivers, and circuit protection. LoRa is deployed in billions of IoT sensors globally. ClearEdge acquisition for AI data center interconnects.'},
+  {t:'IPGP', c:'IPG Photonics',             s:'Fiber Lasers',        desc:'High-power fiber lasers for industrial manufacturing, EV battery welding, and semiconductor process support. Laser welding of EV battery cells uses IPG systems. Russia exposure has pressured stock since 2022 — discount vs. fundamentals.'},
+  {t:'POWI', c:'Power Integrations',        s:'Power Conversion',    desc:'Power conversion ICs for EV chargers, smart home appliances, industrial motors, and consumer fast-chargers. EcoSmart and GaN technology for ultra-compact chargers. Benefits from global electrification mandates. Consistent dividend payer.'},
+  {t:'DIOD', c:'Diodes Inc',                s:'Discrete Semis',      desc:'Discrete semiconductors (MOSFETs, Schottky diodes, BJTs, TVS), analog ICs, and logic chips for automotive, computing, and consumer. Over 90% own-brand products. Consistent, under-the-radar performer in commodity-adjacent semiconductor markets.'},
+  {t:'TER',  c:'Teradyne',                  s:'ATE / Robotics',      desc:'Automatic test equipment (ATE) for AI chips, memory, and storage — every NVDA GPU and AMD accelerator is tested on Teradyne systems before shipping. Also owns Universal Robots (UR), global leader in collaborative robot arms. Dual play: AI test + factory automation.'},
+  {t:'CAMT', c:'Camtek',                    s:'Advanced Packaging',  desc:'Optical inspection and metrology for advanced semiconductor packaging — fan-out, 2.5D/3D chiplet integration, CoWoS. TSMC&#39;s CoWoS packaging for AI accelerators (NVDA H100/H200) requires Camtek inspection tools. Direct heterogeneous integration beneficiary.'},
+  {t:'NXPI', c:'NXP Semiconductors',        s:'Automotive / Edge',   desc:'Automotive-grade MCUs, secure element chips (NFC payments), and industrial IoT SoCs. Processing chips in 90%+ of new vehicles. Automotive semi content per EV is 3-5x an ICE vehicle. Also makes radar processors for ADAS and V2X communication chips.'},
+  {t:'STM',  c:'STMicroelectronics',        s:'Automotive / SiC',    desc:'European semiconductor maker: automotive MCUs, SiC power MOSFETs, industrial analog, and IoT chips. Large Apple content supplier historically. Deep SiC manufacturing partnership with Sanan (China). Broad diversified semi portfolio.'},
+  {t:'MKSI', c:'MKS Instruments',           s:'Process Control',     desc:'Pressure/flow/temperature sensors, RF power generators, photonics, and laser technology for semiconductor fabs and industrial processes. Every etch and CVD tool uses MKS sensors and RF power systems. Also makes fiber laser systems for AI server PCB drilling.'},
+];
+
 const SMA_SCAN_TICKERS = [
   // AI / Mega-cap tech
   {t:'AAPL',c:'Apple Inc',s:'Technology'},
