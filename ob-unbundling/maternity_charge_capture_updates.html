@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maternity Charge Capture — Updated Progress</title>
+<style>
+  :root {
+    --navy:  #1B2E4B;
+    --teal:  #007B8A;
+    --gold:  #C8973A;
+    --red:   #8B0000;
+    --sage:  #4A7C59;
+    --amber: #B87A1A;
+    --light: #EAF4F6;
+    --dark:  #1A1A1A;
+    --white: #FFFFFF;
+    --lgray: #F5F5F5;
+    --mgray: #E8E8E8;
+    --border:#D0D7DE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
+
+  .header {
+    background: var(--navy);
+    padding: 26px 40px 20px;
+    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .header h1 { font-size: 1.55rem; font-weight: 800; color: white; letter-spacing: 0.2px; line-height: 1.25; }
+  .header .sub { font-size: 0.83rem; color: #9ECDD6; margin-top: 5px; }
+  .back-btn {
+    background: rgba(255,255,255,0.12); color: white; border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 8px 18px; border-radius: 7px; font-size: 0.8rem; font-weight: 700;
+    text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+
+  .gold-bar { height: 5px; background: var(--gold); }
+
+  .stats-bar {
+    background: var(--navy);
+    padding: 10px 40px;
+    display: flex; gap: 32px; flex-wrap: wrap; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat { text-align: center; }
+  .stat .n { font-size: 1.45rem; font-weight: 800; color: var(--gold); line-height: 1; }
+  .stat .l { font-size: 0.68rem; color: #9ECDD6; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  .source-banner {
+    background: #FFF8E7; border-bottom: 2px solid var(--gold);
+    padding: 11px 40px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-size: 0.82rem; color: #6B4F10;
+  }
+  .source-banner .src-tag {
+    background: var(--gold); color: white;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 3px 10px; border-radius: 10px; white-space: nowrap;
+  }
+
+  .main { max-width: 1160px; margin: 0 auto; padding: 30px 40px 60px; }
+
+  .section-heading {
+    font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.9px;
+    color: #888; border-bottom: 2px solid #ddd; padding-bottom: 6px; margin: 32px 0 18px;
+  }
+  .section-heading:first-child { margin-top: 0; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+
+  .update-card {
+    background: white; border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-left: 5px solid var(--teal);
+    padding: 16px 18px;
+  }
+  .update-card.gold  { border-left-color: var(--gold); }
+  .update-card.sage  { border-left-color: var(--sage); }
+  .update-card.red   { border-left-color: var(--red); }
+  .update-card.amber { border-left-color: #D4900A; }
+
+  .card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .card-icon { font-size: 1.25rem; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+  .card-title { font-size: 0.92rem; font-weight: 700; color: var(--navy); line-height: 1.35; }
+  .card-pill {
+    font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; margin-top: 3px;
+  }
+  .pill-confirm { background: #E4F4E8; color: #2E6B3E; }
+  .pill-new     { background: #EAF4F6; color: #005F6B; }
+  .pill-pending { background: #FFF3CD; color: #7A5A00; }
+  .pill-action  { background: #FFE5E5; color: #8B0000; }
+
+  .card-body { font-size: 0.8rem; color: #555; line-height: 1.65; }
+  .card-body strong { color: var(--navy); }
+  .card-body .code { font-family: monospace; font-weight: 700; color: var(--teal); }
+
+  .wide-card {
+    background: white; border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    overflow: hidden; margin-bottom: 16px;
+  }
+  .wide-card-head {
+    background: var(--navy); color: white;
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .wide-card-head .wc-title { font-size: 0.9rem; font-weight: 700; }
+  .wide-card-head .wc-sub   { font-size: 0.75rem; opacity: 0.65; margin-top: 2px; }
+  .wide-card-body { padding: 0; }
+
+  table.data-tbl { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  table.data-tbl thead th {
+    background: var(--light); color: var(--navy);
+    padding: 8px 16px; text-align: left;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 2px solid #C5DFE3;
+  }
+  table.data-tbl tbody tr:nth-child(odd)  { background: var(--lgray); }
+  table.data-tbl tbody tr:nth-child(even) { background: white; }
+  table.data-tbl td {
+    padding: 9px 16px; border-bottom: 1px solid #EAECEF;
+    vertical-align: top; line-height: 1.55;
+  }
+  table.data-tbl td:first-child { font-family: monospace; font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .badge {
+    display: inline-block; font-size: 0.63rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.4px; padding: 2px 7px; border-radius: 8px; white-space: nowrap;
+  }
+  .badge-new      { background: #E0F4FF; color: #005A8C; }
+  .badge-deleted  { background: #FFE5E5; color: #8B0000; }
+  .badge-modified { background: #FFF3CD; color: #7A5A00; }
+
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px;
+    width: 2px; background: #ddd; border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute; left: -22px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--teal); border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--teal);
+  }
+  .tl-dot.gold   { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .tl-dot.sage   { background: var(--sage); box-shadow: 0 0 0 2px var(--sage); }
+  .tl-dot.amber  { background: #D4900A;     box-shadow: 0 0 0 2px #D4900A; }
+  .tl-dot.red    { background: var(--red);  box-shadow: 0 0 0 2px var(--red); }
+  .tl-date { font-size: 0.68rem; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; }
+  .tl-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin: 2px 0 4px; }
+  .tl-body  { font-size: 0.79rem; color: #666; line-height: 1.6; }
+
+  .pending-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .pending-table thead th {
+    background: #4A3F2A; color: white;
+    padding: 9px 16px; text-align: left;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .pending-table tbody tr:nth-child(odd)  { background: #FAFAFA; }
+  .pending-table tbody tr:nth-child(even) { background: white; }
+  .pending-table td { padding: 9px 16px; border-bottom: 1px solid #EAECEF; vertical-align: top; line-height: 1.55; }
+  .pending-table td:first-child { font-weight: 700; color: var(--navy); }
+
+  .footer-note {
+    background: white; border-radius: 10px;
+    padding: 14px 20px; margin-top: 28px;
+    font-size: 0.77rem; color: #888; line-height: 1.6;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .footer-note strong { color: var(--navy); }
+
+  @media (max-width: 680px) {
+    .header  { padding: 18px 20px 14px; }
+    .main    { padding: 20px 16px 40px; }
+    .stats-bar { padding: 10px 20px; gap: 20px; }
+    .source-banner { padding: 10px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Maternity Charge Capture — Updated Progress</h1>
+    <div class="sub">OB Unbundling 2027 · Confirmed Updates &amp; New Guidance Since June 2, 2026</div>
+  </div>
+  <a class="back-btn" href="index.html">&#8592; Hub</a>
+</div>
+<div class="gold-bar"></div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="n">9</div><div class="l">Confirmed Rules</div></div>
+  <div class="stat"><div class="n">11</div><div class="l">New CPT Codes</div></div>
+  <div class="stat"><div class="n">17</div><div class="l">Deleted Codes</div></div>
+  <div class="stat"><div class="n">Jan 1</div><div class="l">Go-Live 2027</div></div>
+  <div class="stat"><div class="n">190</div><div class="l">Days Remaining</div></div>
+</div>
+
+<div class="source-banner">
+  <span class="src-tag">Primary Source</span>
+  <span><strong>AMA CPT Coding Primer Webinar — June 2, 2026</strong> &nbsp;|&nbsp; All rule confirmations below reference this webinar unless otherwise noted. Additional guidance expected from AMA and CMS prior to go-live.</span>
+</div>
+
+<div class="main">
+
+  <div class="section-heading">Key Rule Confirmations — Effective June 2, 2026 Webinar</div>
+  <div class="cards">
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Modifier TH Confirmed — Antepartum &amp; Postpartum</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        AMA confirmed Modifier TH (“Obstetrical treatment/services, antepartum or postpartum”) must be appended to <strong>all antepartum and postpartum E/M claims</strong> filed under the new framework. Modifier TH is NOT applied to labor management codes (59080–59083) or delivery codes — antepartum and postpartum E/M only.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Same-Day Complexity Upgrade — Report Complex Only</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        When labor starts as straightforward (59080) and upgrades to complex on the <strong>same calendar day</strong>, report <strong>only the complex code (59081)</strong>. Do not report both. Exception: if a separate provider group takes over care, each group may bill their own labor management code for that date.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Planned Cesarean — No Labor Management Code</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        A scheduled or planned cesarean has <strong>no associated labor management code</strong>. Labor management codes apply only when labor management services are actually performed. Report delivery code only (59502 or 59503).
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Labor Management + Delivery — Billable Same Day</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        A delivery code <strong>may be reported on the same calendar date</strong> as an initial or subsequent labor management code, even when the same physician provides both. Explicitly confirmed — one of the most common same-day scenarios under the new framework.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">VBAC / TOLAC Always Complex</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        All TOLAC/VBAC patients are <strong>complex by default</strong>. “No previous cesarean delivery” is a required criterion for straightforward classification. VBAC patients fail that criterion automatically — use 59081 (initial) or 59083 (subsequent) regardless of other clinical factors.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">59504 — Hysterectomy Now Standalone (Not Add-On)</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        The old add-on code <span class="code">+59525</span> is deleted. It is replaced by <span class="code">59504</span> as a <strong>standalone CPT code</strong>. May be reported by the same or a different physician who performed the cesarean delivery.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Delivery Includes Same-Day Postpartum — Do Not Bill Separately</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Routine postpartum care on the <strong>date of delivery is included</strong> in the delivery code valuation. Do not separately bill a postpartum E/M code on the same calendar date as delivery. Postpartum E/M begins with the first encounter after the delivery date.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Primary C-Section: Same-Day Hospital E/M Separately Reportable</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        For a <strong>primary cesarean (59502)</strong>, the initial hospital E/M (99221–99223) on the same date <strong>may be separately reported</strong>. For a <strong>repeat cesarean (59503)</strong>, the admission E/M is included in valuation and <strong>cannot</strong> be billed separately.
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="card-header">
+        <div class="card-icon">&#10003;</div>
+        <div>
+          <div class="card-title">Pregnancy = “Problems Addressed” for MDM</div>
+          <span class="card-pill pill-confirm">Confirmed</span>
+        </div>
+      </div>
+      <div class="card-body">
+        AMA confirmed pregnancy is evaluated under the <strong>“Problems Addressed”</strong> element of Medical Decision Making. Complexity of the pregnancy drives the E/M level. Each prenatal note must independently support the level billed.
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="section-heading">New Code Set — Confirmed Effective January 1, 2027</div>
+
+  <div class="wide-card">
+    <div class="wide-card-head">
+      <div>
+        <div class="wc-title">Labor Management Codes — 4 New Codes (59080–59083)</div>
+        <div class="wc-sub">Replace bundled labor-during-delivery services &middot; Billed per physician, per patient, per calendar date</div>
+      </div>
+    </div>
+    <div class="wide-card-body">
+      <table class="data-tbl">
+        <thead><tr><th>Code</th><th>Descriptor</th><th>Complexity</th><th>Day</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>59080</td><td>Labor management; straightforward, per day</td><td>Straightforward</td><td>Initial</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59081</td><td>Labor management; complex, per day</td><td>Complex</td><td>Initial</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59082</td><td>Labor management; straightforward, per day</td><td>Straightforward</td><td>Subsequent</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59083</td><td>Labor management; complex, per day</td><td>Complex</td><td>Subsequent</td><td><span class="badge badge-new">New 2027</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="wide-card">
+    <div class="wide-card-head">
+      <div>
+        <div class="wc-title">Delivery Codes — Confirmed New &amp; Restructured</div>
+        <div class="wc-sub">7 codes cover vaginal, cesarean, VBAC, and associated procedures</div>
+      </div>
+    </div>
+    <div class="wide-card-body">
+      <table class="data-tbl">
+        <thead><tr><th>Code</th><th>Descriptor</th><th>Notes</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>59431</td><td>Vaginal delivery, with or without episiotomy — no prior cesarean</td><td>Includes 1st &amp; 2nd degree laceration repair</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59432</td><td>Vaginal delivery, after previous cesarean (VBAC)</td><td>Used for successful TOLAC/VBAC</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59433</td><td>Repair of laceration; third-degree</td><td>Separately reportable by any physician</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59434</td><td>Repair of laceration; fourth-degree</td><td>Separately reportable by any physician</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59502</td><td>Cesarean delivery; primary (first cesarean)</td><td>Same-day initial hospital E/M separately reportable</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59503</td><td>Cesarean delivery; repeat (prior cesarean)</td><td>Admission E/M bundled — do not bill separately</td><td><span class="badge badge-new">New 2027</span></td></tr>
+          <tr><td>59504</td><td>Hysterectomy after cesarean delivery</td><td>Replaces add-on +59525; now standalone</td><td><span class="badge badge-new">New 2027</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="wide-card">
+    <div class="wide-card-head" style="background:#8B0000;">
+      <div>
+        <div class="wc-title">17 Deleted Codes — Expired December 31, 2026</div>
+        <div class="wc-sub">Claims using these codes for 2027 dates of service will be rejected</div>
+      </div>
+    </div>
+    <div class="wide-card-body">
+      <table class="data-tbl">
+        <thead><tr><th>Code</th><th>Former Descriptor</th><th>Replaced By</th></tr></thead>
+        <tbody>
+          <tr><td>59400</td><td>Routine OB care — vaginal delivery global package</td><td>E/M antepartum + 59431 + postpartum E/M</td></tr>
+          <tr><td>59409</td><td>Vaginal delivery only, without postpartum care</td><td>59431 or 59432</td></tr>
+          <tr><td>59410</td><td>Vaginal delivery with postpartum care</td><td>59431 + postpartum E/M</td></tr>
+          <tr><td>59425</td><td>Antepartum care only; 4–6 visits</td><td>Individual E/M per visit + Modifier TH</td></tr>
+          <tr><td>59426</td><td>Antepartum care only; 7 or more visits</td><td>Individual E/M per visit + Modifier TH</td></tr>
+          <tr><td>59430</td><td>Postpartum care only, separate procedure</td><td>E/M codes + Modifier TH</td></tr>
+          <tr><td>59510</td><td>Routine OB care — cesarean delivery global package</td><td>E/M antepartum + 59502/59503 + postpartum E/M</td></tr>
+          <tr><td>59514</td><td>Cesarean delivery only, without postpartum care</td><td>59502 or 59503</td></tr>
+          <tr><td>59515</td><td>Cesarean delivery with postpartum care</td><td>59502/59503 + postpartum E/M</td></tr>
+          <tr><td>+59525</td><td>Hysterectomy after cesarean — add-on</td><td>59504 (now standalone)</td></tr>
+          <tr><td>59610</td><td>OB care — vaginal delivery after prior cesarean, global</td><td>E/M antepartum + 59432 + postpartum E/M</td></tr>
+          <tr><td>59612</td><td>Vaginal delivery after prior cesarean only</td><td>59432</td></tr>
+          <tr><td>59614</td><td>VBAC delivery with postpartum care</td><td>59432 + postpartum E/M</td></tr>
+          <tr><td>59618</td><td>OB care — cesarean after attempted VBAC, global</td><td>Labor mgmt + 59503</td></tr>
+          <tr><td>59620</td><td>Cesarean delivery after attempted VBAC only</td><td>59503</td></tr>
+          <tr><td>59622</td><td>Cesarean after VBAC with postpartum care</td><td>59503 + postpartum E/M</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="section-heading">Labor Complexity Determination — AMA Criteria Table (New for 2027)</div>
+
+  <div class="wide-card">
+    <div class="wide-card-head" style="background: var(--teal);">
+      <div>
+        <div class="wc-title">Straightforward vs. Complex Labor — AMA Six-Criterion Test</div>
+        <div class="wc-sub">All six criteria must be met for straightforward. A single deviation = complex.</div>
+      </div>
+    </div>
+    <div class="wide-card-body">
+      <table class="data-tbl">
+        <thead><tr><th>#</th><th>Criterion</th><th>Straightforward Requires</th><th>Complex If...</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Fetal presentation</td><td>Singleton vertex presentation</td><td>Multiple gestation or non-vertex presentation</td></tr>
+          <tr><td>2</td><td>Maternal/fetal monitoring</td><td>Routine monitoring only</td><td>Monitoring beyond routine required</td></tr>
+          <tr><td>3</td><td>Fetal monitoring response</td><td>No physician intervention required</td><td>Physician intervention needed based on monitoring</td></tr>
+          <tr><td>4</td><td>Labor progression</td><td>Normal progression OR routine induction/augmentation</td><td>Abnormal progression; non-routine induction</td></tr>
+          <tr><td>5</td><td>Maternal medical conditions</td><td>Stable; no additional management needed</td><td>Conditions deteriorating or requiring active management</td></tr>
+          <tr><td>6</td><td>Prior cesarean history</td><td>No previous cesarean delivery</td><td>Any prior cesarean (VBAC/TOLAC = always complex)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="section-heading">Timeline — Key Milestones &amp; Updates</div>
+
+  <div style="background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.07); padding:24px 28px;">
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date">Pre-June 2026</div>
+        <div class="tl-title">AMA CPT 2027 Maternity Care Guidelines Published</div>
+        <div class="tl-body">AMA formally publishes the CPT 2027 code set introducing the unbundled maternity care framework. 17 global/antepartum codes deleted; new labor management and delivery codes introduced. Official code descriptions and parenthetical notes released.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">June 2, 2026</div>
+        <div class="tl-title">AMA CPT Coding Primer Webinar — 9 Key Rules Confirmed</div>
+        <div class="tl-body">AMA hosts a national webinar specifically addressing the 2027 maternity care restructuring. Key confirmations: Modifier TH usage, same-day complexity upgrade rule, planned cesarean exclusion, labor+delivery same-day billing, VBAC complexity classification, postpartum-on-delivery-date bundling, and primary vs. repeat cesarean E/M rules.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot sage"></div>
+        <div class="tl-date">June 2026 — Present</div>
+        <div class="tl-title">Internal Tools Built &amp; Deployed</div>
+        <div class="tl-body">Team tools developed and deployed to GitHub Pages: Playbook 2027 (interactive), OB Unbundling FAQ (editable, cloud-synced), Project Tracker, “Why OB Unbundling” scripter reference, and this updates page. All tools live at the internal team portal.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-date">Q3–Q4 2026 — Expected</div>
+        <div class="tl-title">Payer-Specific Guidance Expected</div>
+        <div class="tl-body">CMS and major payer contractors expected to release Medicare/Medicaid billing guidance for the new codes, including national RVU values, LCD/NCD updates, and payer-specific Modifier TH acceptance policies. Monitor payer bulletins closely in Q3–Q4 2026.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-date">Q4 2026 — Deadline</div>
+        <div class="tl-title">EHR Charge Capture &amp; Billing System Updates Required</div>
+        <div class="tl-body">All EHR order sets, charge capture templates, fee schedules, and billing system code tables must be updated before December 31, 2026. Crossover pregnancy billing workflows must be implemented for patients spanning 2026–2027.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-date">December 31, 2026</div>
+        <div class="tl-title">All Global / Antepartum Bundle Codes Expire</div>
+        <div class="tl-body">Final date of service under old codes. Any 2026 dates still pending must be billed under old framework. 2027 dates of service submitted with deleted codes will reject.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date">January 1, 2027</div>
+        <div class="tl-title">GO-LIVE — All New Codes Effective</div>
+        <div class="tl-body">New unbundled coding framework fully effective. Every OB/GYN service — antepartum, labor management, delivery, and postpartum — billed individually. No parallel reporting period. All teams must be trained and all systems updated before this date.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="section-heading">Pending Items — Awaiting CMS / Payer Guidance</div>
+
+  <table class="pending-table">
+    <thead>
+      <tr>
+        <th style="width:30%">Item</th>
+        <th style="width:22%">Expected Source</th>
+        <th style="width:18%">Expected Timing</th>
+        <th>Impact if Unresolved</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>RVU values for 59080–59083 (labor management)</td>
+        <td>CMS / RUC</td><td>Q3 2026</td>
+        <td>Cannot finalize expected reimbursement; fee schedule modeling incomplete</td>
+      </tr>
+      <tr>
+        <td>RVU values for new delivery codes (59431–59504)</td>
+        <td>CMS / RUC</td><td>Q3 2026</td>
+        <td>Revenue projection and payer contracting impacted until published</td>
+      </tr>
+      <tr>
+        <td>Payer acceptance of Modifier TH — commercial plans</td>
+        <td>Individual payer bulletins</td><td>Q3–Q4 2026</td>
+        <td>Risk of underpayment or denial if payers don’t recognize TH on E/M claims</td>
+      </tr>
+      <tr>
+        <td>Medicaid state plan amendments for new OB code set</td>
+        <td>State Medicaid agencies</td><td>Q3–Q4 2026</td>
+        <td>State Medicaid may lag federal effective date; billing rules may vary by state</td>
+      </tr>
+      <tr>
+        <td>Global period / transfer of care rules for shared OB care</td>
+        <td>AMA / CMS clarification</td><td>TBD</td>
+        <td>Group practices with multiple providers in a single delivery need clear claim attribution rules</td>
+      </tr>
+      <tr>
+        <td>Office-on-admission E/M same-day billing — vaginal delivery</td>
+        <td>AMA / CMS</td><td>TBD</td>
+        <td>Confirmed for primary cesarean; rules for vaginal delivery same-day office visit not yet clarified</td>
+      </tr>
+      <tr>
+        <td>Telehealth / RPM codes during antepartum (98000-series)</td>
+        <td>CMS telehealth policy</td><td>Q4 2026</td>
+        <td>Telehealth antepartum visits require CMS telehealth coverage determination for new code series</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="section-heading">Required Practice Actions — Before January 1, 2027</div>
+
+  <div class="cards">
+
+    <div class="update-card red">
+      <div class="card-header">
+        <div class="card-icon">&#9888;</div>
+        <div>
+          <div class="card-title">Update EHR Charge Capture Templates</div>
+          <span class="card-pill pill-action">Action Required</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Remove deleted global codes from all OB order sets and charge capture templates. Add new labor management codes (59080–59083), new delivery codes, and postpartum E/M workflows with Modifier TH. Target: complete by November 1, 2026.
+      </div>
+    </div>
+
+    <div class="update-card red">
+      <div class="card-header">
+        <div class="card-icon">&#9888;</div>
+        <div>
+          <div class="card-title">Train Billing &amp; Coding Staff</div>
+          <span class="card-pill pill-action">Action Required</span>
+        </div>
+      </div>
+      <div class="card-body">
+        All billers and coders must understand the new framework before go-live. Key topics: labor complexity determination, same-day billing rules, Modifier TH application, crossover pregnancy handling (2026 vs. 2027 rules by date of service).
+      </div>
+    </div>
+
+    <div class="update-card red">
+      <div class="card-header">
+        <div class="card-icon">&#9888;</div>
+        <div>
+          <div class="card-title">Physician Documentation Education</div>
+          <span class="card-pill pill-action">Action Required</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Physicians must document MDM elements in each prenatal note to support E/M code selection. Labor notes must document complexity criteria. Delivery notes must capture laceration degree. Education module under development.
+      </div>
+    </div>
+
+    <div class="update-card amber">
+      <div class="card-header">
+        <div class="card-icon">&#9654;</div>
+        <div>
+          <div class="card-title">Crossover Pregnancy Billing Protocol</div>
+          <span class="card-pill pill-pending">In Progress</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Build workflow for pregnancies spanning 2026–2027. Antepartum visits in 2026 bill under old rules; visits in 2027 bill as individual E/M. Identify patients expected to deliver Q1 2027 and flag EHR records for dual-year billing.
+      </div>
+    </div>
+
+    <div class="update-card amber">
+      <div class="card-header">
+        <div class="card-icon">&#9654;</div>
+        <div>
+          <div class="card-title">Payer Contract Review</div>
+          <span class="card-pill pill-pending">In Progress</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Review payer contracts for reimbursement language tied to deleted global codes. Initiate re-negotiation discussions where global code rates are referenced. Monitor payer bulletins Q3–Q4 2026 for updated fee schedules.
+      </div>
+    </div>
+
+    <div class="update-card sage">
+      <div class="card-header">
+        <div class="card-icon">&#9733;</div>
+        <div>
+          <div class="card-title">Revenue Impact Modeling</div>
+          <span class="card-pill pill-new">Planned</span>
+        </div>
+      </div>
+      <div class="card-body">
+        Model expected revenue change using new RVU values (once published by CMS). Compare against current global code reimbursement. Identify high-volume payers and service types to prioritize in contract negotiations.
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="footer-note">
+    <strong>Source &amp; Disclaimer:</strong> All confirmed rule items on this page reference the AMA CPT 2027 Maternity Care Coding Guidelines and the AMA CPT Coding Primer Webinar held June 2, 2026. Pending items reflect guidance not yet published as of June 24, 2026. This page is for internal team use only. Monitor <strong>AMA CPT Insider</strong>, <strong>CMS transmittals</strong>, and payer bulletins for updates. Page last updated: June 24, 2026.
+  </div>
+
+</div>
+
+</body>
+</html>
