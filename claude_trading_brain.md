@@ -101,6 +101,34 @@ Before touching any stock, run this sequence in order:
 
 ---
 
+## SCALPER BRIEF — Daily News Tool
+
+`news_scalper.py` generates `scalper_brief.md` — a structured signal file for this session.
+
+**Run locally before market open:**
+```bash
+FINNHUB_KEY=your_key python3 news_scalper.py
+# or
+python3 news_scalper.py --key your_key
+```
+
+**At Claude Trading session start, read the brief:**
+```
+Read /path/to/Test-/scalper_brief.md
+```
+
+**What it produces:**
+- `ZONE ALERTS` — which of the 13 watchlist names are at entry/stop/target
+- `GAP WATCH` — moves ≥1.5% from prior close (intraday scalp triggers)
+- `EARNINGS CALENDAR` — upcoming dates for watchlist names (next 14 days)
+- `CATALYST` / `UPGRADE` / `DOWNGRADE` / `RISK` / `MACRO` signals from headlines
+- Raw headline dump with signal scores
+
+**Note:** RSS feeds and Finnhub are blocked from cloud containers (proxy restriction).
+The script must run from your local machine where internet access is unrestricted.
+
+---
+
 ## AUTHENTICATION NOTE
 
 The Robinhood MCP server (`https://agent.robinhood.com/mcp/trading`) requires OAuth.
