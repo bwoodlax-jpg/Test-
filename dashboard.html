@@ -3114,10 +3114,10 @@ function renderSP500() {
 
 // ── Market Pulse data (update each session) ───────────────────────────────
 const MARKET_PULSE = {
-  date: 'June 22, 2026',
-  updated: 'Call Up &mdash; Mon Jun 22',
-  headline: 'MRVL S&amp;P Inclusion TODAY (Jun 22) &mdash; Trail Stop $290 &mdash; ORCL POTW Zone $165&ndash;182 ($184 Jun 18) &mdash; MSFT Stop $372 Watch &mdash; Prices TBD (Jun 20 data pending)',
-  sentiment: 'RISK-ON &mdash; MRVL INCLUSION DAY',
+  date: 'June 30, 2026',
+  updated: 'Call Up &mdash; Mon Jun 30 Open',
+  headline: 'MRVL POST-INCLUSION TEST (Did $290 hold?) &mdash; ORCL ENTRY TRIGGER? &mdash; MSFT RED ALERT $7 FROM STOP &mdash; NOW WATCH $103 RECLAIM &mdash; Iran Deal + Warsh Gates CLEARED',
+  sentiment: 'RISK-ON &mdash; WEEK OF DECISIONS',
   sentimentCls: 'mkt-caution',
   indices: [
     {name:'QQQ',        val:'$739.68', chg:'+2.38% Jun 18',                   dir:'up'},
@@ -3135,11 +3135,11 @@ const MARKET_PULSE = {
     {tag:'WATCH',    tagCls:'evt-watch', headline:'ORCL $184.31 &mdash; Zone Top $182 Only $2 Away &mdash; Entry Trigger Ready &mdash; AI RPO $523B', body:'ORCL closed $184.31 Jun 18. Long-term zone TOP is $182 &mdash; ORCL is $2.31 above zone. Beat-but-fell Jun 10 drove it toward this Graham value zone. Iran deal = AI cloud spend intact. Stop $148, target $275 (Wedbush PT), R/R 4.0:1. ACTION: Set buy alert $183. If ORCL touches $182 or below, enter. Warsh neutral + oil down = favorable macro. Entry could trigger this week.'},
   ],
   portfolio: [
-    {ticker:'GFS',  cls:'pi-green',  impact:'POSITION HELD &#10003;',       note:'12 shares @ $85.24 avg. Jun 18 close $85.86 (+0.7% from avg, +6.5% on day). Only actual position. $1,197 total portfolio ($1,028 equity). Monitor.'},
-    {ticker:'MRVL', cls:'pi-green',  impact:'CAPITAL PLAY +18% &#10003;',   note:'$310.85 Jun 18 (AH $313.57). Entry ~$263. P&L: +$47.85/share (+18.2%). S&P 500 inclusion Jun 22 = 3 days. ACTION: Raise trail stop $263 &rarr; $290. Hold toward $325 ATH. Peak forced buying Jun 19&ndash;22.'},
-    {ticker:'MSFT', cls:'pi-red',    impact:'POTW STAND-DOWN &#9888;',      note:'$379.05 Jun 18. Zone $393&ndash;$412. BELOW zone. Stop $372 only $7 away. Stand-down was CORRECT. Do not enter at $379. Scenarios: $372 breaks = exit thesis; $379 holds + July Azure earnings = re-approach $393.'},
-    {ticker:'NOW',  cls:'pi-red',    impact:'STAND-DOWN &#9888;',            note:'$95.14 Jun 18. Zone $103&ndash;$118. BELOW zone floor $103. Stop $88. Stand-down was CORRECT. Otto AI + Experian deal intact. Wait for $103+ price action before entry.'},
-    {ticker:'ORCL', cls:'pi-yellow', impact:'ENTRY TRIGGER READY &#9650;',  note:'$184.31 Jun 18. Zone top $182 = $2.31 away. Set buy alert $183. AI cloud RPO $523B. Stop $148, target $275, R/R 4.0:1. Iran deal + Warsh neutral = favorable. Entry imminent.'},
+    {ticker:'GFS',  cls:'pi-green',  impact:'POSITION HELD &#10003;',       note:'12 shares @ $85.24 avg (Jun 18: $85.86). Only actual position. $1,197 total portfolio. Monitor Jun 30 open.'},
+    {ticker:'MRVL', cls:'pi-yellow', impact:'SWING TEST JUN 30–JUL 4 &#9650;', note:'Jun 18: $310.85 (+18% from $263). Trail stop RAISED to $290 Jun 22. CRITICAL: Did MRVL hold $290 through Jun 22&ndash;27? Yes = hold toward $325. No = stop triggered, exit. CHECK FIRST on Mon open.'},
+    {ticker:'MSFT', cls:'pi-red',    impact:'RED ALERT — $7 FROM STOP &#9888;', note:'Jun 18: $379.05. Zone $393&ndash;$412. Stop $372. Stand-down in effect. If drops to $373 or below = EXIT. WATCH CLOSELY Mon open. Do not add.'},
+    {ticker:'NOW',  cls:'pi-red',    impact:'STAND-DOWN — WAIT $103+ &#9888;',   note:'Jun 18: $95.14. Zone $103&ndash;$118. Below zone floor. Thesis intact (Otto + Experian). Re-entry trigger: $103+ sustained close. Stop $88 is hard floor.'},
+    {ticker:'ORCL', cls:'pi-green',  impact:'SWING PRIMARY JUN 30–JUL 4 &#10003;', note:'Jun 18: $184.31. Alert $183. Zone top $182. CRITICAL: Did ORCL touch $182 or below Jun 22&ndash;27? Yes = entry triggered Mon. Stop $148, target $275, R/R 4:1. CHECK FIRST on open.'},
     {ticker:'NVDA', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; MONITOR',   note:'$210.20 Jun 18. Above zone $175&ndash;$192. Iran deal risk-on sustaining above zone. Monitor only. R/R 4.1:1 at zone.'},
     {ticker:'AMD',  cls:'pi-yellow', impact:'FAR ABOVE ZONE &mdash; WAIT',  note:'$536.44 Jun 18. Zone $370&ndash;$390. +37% above zone top. No position. MI400 Q3 2026. Wait for pullback to zone.'},
     {ticker:'AVGO', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; WATCH',     note:'$410.79 Jun 18. Zone $350&ndash;$375. $35 above zone top. Stop $328. Target $550. R/R 5.4:1. Wait for zone test.'},
@@ -3147,14 +3147,13 @@ const MARKET_PULSE = {
     {ticker:'LMND', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; WAIT',      note:'$58.90 Jun 18. Zone $45&ndash;$56. Above zone. Tesla autonomous insurance AZ+OR LIVE. Stop $38. Target $88. R/R 3.0:1.'},
   ],
   macro_watch: [
-    'IRAN DEAL SIGNED TODAY JUN 19: Signing ceremony Geneva today. Both sides declared permanent end Jun 14. US lifts oil sanctions, Iran reopens Strait of Hormuz in 30 days. WTI down from $97+ to ~$78&ndash;$80 range (-18%+). Energy CPI reversal begins. Nasdaq +2.38% Jun 18, SPY +0.76%. Primary macro headwind since Feb 28 RESOLVED.',
-    'WARSH FOMC COMPLETE: Held 3.50&ndash;3.75% Jun 16&ndash;17. Tone neutral, noted Iran deal reduces energy inflation. September 2026 cut window PRESERVED per dot plot. Market accepted as neutral-dovish. Growth multiples unlocked. MSFT/NOW entry gate triggered but BOTH broke below zones &mdash; stand-downs CORRECT.',
-    'MSFT $379 STAND-DOWN CORRECT: Closed $379.05 Jun 18. Zone $393&ndash;$412. Stop $372 = only $7 away. DO NOT enter at $379. Scenarios: (1) $372 breaks = exit thesis, zone reload failed. (2) $379 holds + July Azure earnings = next entry at $393+. Watch stop $372 closely.',
-    'NOW $95 STAND-DOWN CORRECT: Closed $95.14 Jun 18. Zone $103&ndash;$118. Below zone floor. Stand-down correct. Otto AI + Experian deal intact. Do not enter until $103+ price action confirms. Stop $88 if entered.',
-    'MRVL $311 ACTION &mdash; RAISE TRAIL STOP TO $290: Closed $310.85 Jun 18 (+18.2% from $263 entry). S&P 500 inclusion Jun 22 = 3 trading days. Raise trail stop $263 &rarr; $290 NOW. Peak forced buying window Jun 19&ndash;22. B. Riley PT $345. Post-inclusion: if holds $290+ &rarr; hold toward $325 ATH. If drops below $290 post-Jun 22 &rarr; exit.',
-    'ORCL $184 ENTRY TRIGGER IMMINENT: Closed $184.31 Jun 18. Zone top $182 = $2.31 away. Set buy alert $183. AI cloud RPO $523B. Stop $148, target $275, R/R 4.0:1. Iran deal + Warsh neutral = favorable macro. Be ready for ORCL entry this week.',
-    'GFS ONLY POSITION: 12 shares @ $85.24 avg. Jun 18 close $85.86 (+0.7% from cost basis). Jun 18 +6.5% on day. Total portfolio $1,197 ($1,028 equity + $43 options + $83 crypto + $43 cash). Agentic account empty.',
-    'MRVL POST-INCLUSION PLAN: Inclusion effective Jun 22. If price holds $290+ post-Jun 22: hold toward $325 ATH (B. Riley PT $345). If drops below $290 post-inclusion: exit immediately. Inclusion pump rarely holds &mdash; trail discipline critical.',
+    '🚀 MRVL POST-INCLUSION TEST: S&P 500 inclusion effective Jun 22. Peak forced buying Jun 18&ndash;22 complete. Trail stop $290 is the decision point. CRITICAL FOR MON OPEN: Did MRVL hold $290 through Jun 22&ndash;27? Yes = hold swing through Jul 4. No = stop was triggered, exit immediately. No weekend holds on swing.',
+    '🎯 ORCL ENTRY TRIGGER CHECK: Jun 18 close $184.31, alert $183, zone top $182. CRITICAL FOR MON OPEN: Did ORCL touch $182 or below Jun 22&ndash;27? Yes = entry triggered, size 1% bankroll, stop $148, target $275. No = alert stays live, patience. AI cloud RPO $523B intact.',
+    '🔴 MSFT RED ALERT — $7 FROM STOP: Jun 18 close $379.05, stop $372. Stand-down in effect (zone $393&ndash;$412). If Monday open is below $373 = STOP TRIGGERED. Exit before market avalanche. Do not add. If holds $373+, reassess at $372 level. Watch first hour closely.',
+    '⚠️ NOW STAND-DOWN HOLDING: Jun 18 close $95.14, zone $103&ndash;$118. Below zone floor. Otto AI + Experian deal thesis intact. WAIT for $103+ price action before entry. Stop $88 is hard floor. No position until $103 reclaim confirmed.',
+    '✅ MACRO GATES CLEARED: Iran deal signed Geneva Jun 19 (oil -18% from $97+ to $78&ndash;$80). Warsh FOMC Jun 16&ndash;17 = hold, neutral tone, Sep 2026 rate cut window preserved. VIX ~16. QQQ ~$739. Risk-on backdrop stable through Jun 30&ndash;Jul 4.',
+    '📊 SMA STACK STATUS: Run scanner in dashboard SMA tab with Finnhub key. Look for bullish 200/150/100/50 alignment in watchlist + SMA_UNIVERSE. PLTR, AVGO, ANET likely candidates for confluence. Update after scanner complete Mon open.',
+    '🔵 NEXT FOMC: Late July 2026. Watch Warsh commentary on jobs vs. inflation balance. No Fed event risk this week. Earnings season light. Focus is pure technicals: prices vs. zones + trail stops.',
   ],
   weekly: {
     week: 'June 16&ndash;20, 2026',
