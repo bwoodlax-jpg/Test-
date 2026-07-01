@@ -1,188 +1,83 @@
-# Scalper Brief — Monday June 30, 2026 (Market Open)
-> Curated for Jun 30 open decision checklist | Framework: Stop-Becomes-Entry + Swing Thesis
-> Key decisions: MRVL $290 trail | ORCL entry trigger | MSFT stop $372 | NOW $103 reclaim
+# Scalper Brief — Wednesday July 1, 2026 (Jun 30 close, LIVE Robinhood data)
+> Prices, positions, and SMA stacks pulled live from Robinhood + FMP. This is real data, not a Jun 18 baseline.
+> Bottom line: no clean new entry. Manage MRVL (only bullish stack), preserve capital. Buying power $13.64.
 
 ---
 
-## ZONE ALERTS (Critical for Today)
+## 🧾 REAL ACCOUNT (margin ••8092)
 
-| 🚨 Alert | Ticker | Current* | Zone | Stop | Status | Action |
-|---------|--------|---------|------|------|--------|--------|
-| 🔴🔴 CRITICAL | **MRVL** | ~$311 | $220–$242 | Trail $290 | SWING TEST | Did $290 hold Fri close? YES=hold | NO=EXIT |
-| 🟢 ENTRY | **ORCL** | ~$184 | $165–$182 | $148 | ENTRY TRIGGER READY | Alert $183 fired? YES=enter 1% | NO=wait |
-| 🔴 RED | **MSFT** | ~$379 | $393–$412 | $372 | STOP WATCH | Below zone, $7 from stop. If <$373 = EXIT |
-| 🔴 RED | **NOW** | ~$95 | $103–$118 | $88 | STAND-DOWN | Wait for $103+ reclaim. Do NOT enter. |
-| ⚪ GRAY | **NVDA** | ~$210 | $175–$192 | $155 | Above zone | No action. Monitor $192 for pullback. |
-| ⚪ GRAY | **AMD** | ~$536 | $370–$390 | $348 | Far above | No action. Wait for zone test. |
-| ⚪ GRAY | **PLTR** | ~$128 | $108–$122 | $95 | Above zone | Trail stop $95 intact. Hold or monitor. |
-| ⚪ GRAY | **AVGO** | ~$411 | $350–$375 | $328 | Above zone | Monitor $375 for re-entry test. |
-| ⚪ GRAY | **ANET** | ~$170 | $128–$148 | $112 | Above zone | No action. |
-| ⚪ GRAY | **PANW** | ~$288 | $232–$252 | $215 | Above zone | No action. |
-| ⚪ GRAY | **DELL** | ~$410 | $335–$355 | $310 | Above zone | No action. |
-| ⚪ GRAY | **VRT** | ~$333 | $290–$312 | $268 | Above zone | No action. |
-| ⚪ GRAY | **LMND** | ~$59 | $45–$56 | $38 | Above zone | No action. No chase. |
+| Field | Value |
+|-------|-------|
+| Total value | **$1,205.09** |
+| Equity | $1,089.55 |
+| Options | $31.00 |
+| Crypto | $70.90 |
+| Cash | $13.64 |
+| **Buying power** | **$13.64** — cannot buy any $100+ watchlist name |
 
-**\*Jun 18 baseline; use actual Monday open prices. UPDATE PRICES IN FINNHUB LIVE WATCHLIST TAB FIRST.**
+**Real equity position:** QCML ×55 @ $21.37 avg → $19.81 (**−7.3%, ≈−$86**). No stop set — SET ONE.
+**Real options (all deep OTM, near-worthless):**
+- SOFI ×15 @ $1.00 — **exp Jul 2 (tomorrow)**, mark ~$0.01, CoP 1.7% → let expire
+- CLOV ×12 @ $2.00 — **exp Jul 2 (tomorrow)**, mark ~$0.01, CoP 3.0% → let expire
+- KWEB ×4 @ $8.00 — exp Jul 17, mark ~$0.01, CoP 0.35% → dead
 
----
-
-## ⚡ GAP WATCH (Jun 28–30)
-
-**Monitor pre-market and first 30 minutes:**
-- MSFT gap down through $372 → STOP TRIGGERED. Exit before 9:35.
-- ORCL gap down to $182 or below → ENTRY TRIGGERED. Enter 1% bankroll.
-- MRVL gap down through $290 → TRAIL STOP TRIGGERED. Exit.
-- Any name gap up >3% above zone → Do NOT chase. Wait for re-test.
-
-**Note:** No actual gap data available yet (market closed Fri). Simulate with Monday morning prices.
+> The 13-name AI watchlist has ZERO overlap with what's actually held. It is a research/paper board until cash is added or fractional shares are used.
 
 ---
 
-## 📅 EARNINGS CALENDAR (This Week & Next)
+## ZONE ALERTS (live Jun 30 close)
 
-| Ticker | Event | Window | Impact |
-|--------|-------|--------|--------|
-| — | No watchlist earnings this week (Jun 30–Jul 4) | — | Light earnings load = price-driven week |
-| PLTR | Q2 2026 earnings | ~Early Aug | AIP commercial + DIA contract key metrics |
-| NVDA | Q2 FY2027 earnings | ~Late Aug | Blackwell GB300 ramp rate critical |
-| ORCL | Q1 FY2027 earnings | ~Sep 2026 | AI cloud RPO growth vs $523B backlog |
-
----
-
-## 🚀 CATALYST SIGNALS
-
-### 🟢 PRIMARY — MRVL Post-Inclusion Swing (Jun 30–Jul 4)
-**Status:** S&P 500 inclusion effective Jun 22. Peak forced buying Jun 18–22 complete.
-
-**Setup:** MRVL entry $263, trail stop raised to $290 post-inclusion.
-- If MRVL held $290 through Fri Jun 27 close: swing is ACTIVE. Post-inclusion week (Jun 30–Jul 4) is secondary test.
-- If MRVL dropped below $290 before Fri close: stop was triggered. EXIT immediately Mon.
-
-**Thesis:** Forced institutional buying ($8T+ AUM Vanguard/BlackRock/State Street S&P 500 index funds). Mechanical demand complete. Next week is alpha deterioration phase. Inclusion pump rarely holds post-effective date — trail discipline critical.
-
-**Action:** Trim 50% if above $305 early week. Hold 50% if AI trend intact through Jul 4. No weekend holds.
+| Alert | Ticker | Close | Zone | Stop | SMA stack | Status / Action |
+|-------|--------|-------|------|------|-----------|-----------------|
+| 🟢 HOLD | **MRVL** | $297.89 | 220–242 | trail $290 | **BULLISH (above all, 50 rising)** | Only healthy trend. Trim >$305, exit on close <$290. AH $293.53 ≈ $3 over stop. |
+| 🔪 DEAD | **ORCL** | $146.55 | 165–182 | $148 | below all | Broke stop, fell through zone. Setup dead. Re-eval after base + reclaim $150. |
+| ⚠️ AT STOP | **MSFT** | $373.02 | 393–412 | $372 | **bearish (below all)** | $1 above stop. Zone stale (above all price). No entry; if $372 breaks, done. |
+| 🔪 KNIFE | **PLTR** | $116.67 | 108–122 | $95 | **bearish, SMA50 falling** | In zone but trend filter vetoes. NO entry until SMA50 turns. |
+| 👀 WATCH | **AVGO** | $377.75 | 350–375 | $328 | — | At zone top $375. First name pulling back TO zone. Watch for hold + turn. |
+| 🟡 RECOVER | **NOW** | $99.28 | 103–118 | $88 | — | Below floor, recovering from $95. Re-entry only on sustained $103+. |
+| ⚪ MONITOR | **NVDA** | $200.09 | 175–192 | $155 | — | Pulled back from $210, still above zone. |
+| 🟢 EXTENDED | **AMD** | $580.91 | 370–390 | $348 | — | New high, +49% above zone. No chase. |
+| 🟢 EXTENDED | **PANW** | $341.02 | 232–252 | $215 | — | New high, breakout leader. No chase. |
+| 🟢 EXTENDED | **DELL** | $431.46 | 335–355 | $310 | — | New high. No entry. |
+| ⚪ MONITOR | **VRT** | $334.82 | 290–312 | $268 | — | Above zone. Monitor. |
+| ⚪ MONITOR | **ANET** | $169.88 | 128–148 | $112 | — | Above zone. Monitor. |
+| ⚪ MONITOR | **LMND** | $65.05 | 45–56 | $38 | — | Above zone. No chase. |
 
 ---
 
-### 🟢 SECONDARY — ORCL Zone Entry (if triggered Jun 22–27)
-**Status:** Jun 18 close $184.31, alert $183, zone top $182 = $2 away.
+## ⚡ GAP / MOMENTUM
 
-**Setup:** If ORCL touched $182 or below during Jun 22–27, entry is triggered.
-- Entry: $182 (zone top) or below (zone mid $173.50)
-- Stop: $148 (below all 2025–2026 structural support)
-- Target: $275 (Wedbush PT)
-- R/R: 2.7:1 at zone top, 4.0:1 at zone mid
-- Size: 1% bankroll
+- **Up:** AMD, PANW, DELL to new highs — the momentum sleeve the framework can't touch (buys pullbacks only).
+- **Down:** ORCL (−through stop), MSFT, PLTR rolled over — the "value zone" names became knives.
+- Divergence, not broad risk-off: SPY $746.77 near ATH, VIX 16.45.
 
-**Thesis:** AI cloud RPO $523B (largest in software history). 100% EPS beat rate last 8 quarters. Beat-but-fell Jun 10 on $20B share sale (one-time dilution event). Iran deal + Warsh neutral = AI cloud spend intact. Database lock-in = catastrophic switching cost (18–36 month customer migration). This is a structural entry, not a swing.
-
-**Action:** If alert fired: enter immediately at market. Set stop $148. Trail up once price moves +10% above entry. This is a patient long-term hold, not a day trade.
+## 📅 EARNINGS — none for the 13 watchlist names this week (light tape).
 
 ---
 
-### ⚠️ MSFT — Stop Watch (Red Alert)
-**Status:** Jun 18 close $379.05, stop $372, only $7 buffer.
+## 🚀 CATALYST / 🌐 MACRO / ⚠️ RISK
 
-**Scenario A (Likely):** Price drops to $372 or below = STOP TRIGGERED.
-- Exit immediately before broader market avalanche.
-- Stand-down framework prevented entry at higher prices. Framework says EXIT at stop.
-- Loss = capital preserved by standing down at higher zone.
-
-**Scenario B (Recovery):** Price holds $379–$385 range, then re-approaches $393+ on July Azure earnings.
-- Next entry point: $393 or higher once zone is reclaimed.
-- Thesis intact (Azure +40% YoY, 20M Copilot seats, Wedbush PT $625).
-- Do NOT add at $379. DO NOT chase. Zone entries only.
-
-**Action:** First thing Mon: check MSFT price vs $372. If below $373, prepare exit order. Watch first 30 minutes closely.
+- **MACRO calm:** SPY $746.77 (+0.8%), QQQ $736.40, VIX 16.45, 10Y 4.42%. No Fed event (next FOMC late July). Macro is not the constraint; price structure is.
+- **RISK — QCML:** the only real equity, −7.3%, no defined stop. Set one.
+- **RISK — expiring options:** SOFI/CLOV worthless tomorrow; accept the loss, don't roll into more lotto.
+- **CATALYST — none actionable:** the framework buys pullbacks that hold at rising support; none qualify this week.
 
 ---
 
-### 🔵 NOW — Stand-Down Holding
-**Status:** Jun 18 close $95.14, zone $103–$118, below zone floor.
-
-**Thesis Intact:** Otto AI agent + Experian multi-year agentic deal. Pricing power high (enterprise switching cost $103–$118 structural floor = correct). Stop $88 is hard floor.
-
-**Re-entry Trigger:** Price reclaims and sustains $103+ close. Do NOT pre-enter at $95. WAIT for zone.
-
-**Action:** Zero action this week unless price closes above $103. If it does, that's the re-entry signal for next week.
-
----
-
-## 🌐 MACRO CONTEXT (Jun 22–27 confirmed, Jun 30 forward-looking)
-
-### ✅ GATES CLEARED
-- **Iran Deal SIGNED** (Geneva Jun 19) → WTI -18% from $97+ to $78–$80 → No energy inflation drag
-- **Warsh FOMC HOLD** (Jun 17, 3.50–3.75%, neutral tone) → Sep 2026 rate cut window open
-- **VIX ~16** → Low volatility regime sustained
-- **Nasdaq +2.38% (Jun 18)** → Risk-on momentum intact into Jun 30 open
-
-### 📊 RISK FACTORS
-- **MSFT stop $372** — if broken, questions "stop-becomes-entry" framework. Exit discipline critical.
-- **MRVL trail $290** — inclusion pumps rarely hold post-effective date. Trail discipline critical.
-- **Rate re-emergence** — if July data (CPI, jobs) surprise hot, Warsh dovish window closes. Watch Fed calendar.
-- **China tariffs** — any Trump tariff escalation would pressure NVDA/AMD/TSLA. Monitor geopolitical risk.
-
-### 📈 WATCH
-- SPY $746.57 → resistance $750 | support $740
-- QQQ $739.68 → resistance $745 | support $735
-- 10Y Yield → watch 4.50–4.70% band
-- Next FOMC: Late July 2026. Watch Warsh commentary on jobs vs. inflation balance.
-
----
-
-## 🎯 TODAY'S DECISION TREE
-
-**Mon Jun 30 Market Open — Execute in this order:**
+## 🎯 DECISION TREE — Jul 1
 
 ```
-[ 1 ] Check MRVL $290 trail stop
-      ├─ Held Fri close? → HOLD SWING (trim 50% above $305)
-      └─ Below $290 Fri? → EXIT (stop triggered)
-
-[ 2 ] Check ORCL alert $183
-      ├─ Fired Jun 22–27? → ENTER 1% bankroll (stop $148, target $275)
-      └─ Did NOT fire? → WAIT (alert stays live)
-
-[ 3 ] Check MSFT $372 stop
-      ├─ Price above $373? → HOLD WATCH (reassess at $372)
-      └─ Price at/below $372? → EXIT (stop triggered)
-
-[ 4 ] Check NOW $103 zone
-      ├─ Reclaimed $103+? → WATCH for entry trigger next week
-      └─ Still below $103? → DO NOTHING (wait for $103 sustained)
-
-[ 5 ] All others above zones → MONITOR (no action)
-
-[ 6 ] Run SMA Stack scanner (Finnhub key required)
-      → Look for bullish 200/150/100/50 alignment
-      → Primary candidates: PLTR, AVGO, ANET
-
-[ 7 ] Refresh Semis & AI tab
-      → Click "Load Live Data" button
-      → YTD% + PE/EPS updated from Finnhub
+[ MRVL ]  hold; trail $290; trim >$305; exit on close <$290
+[ ORCL ]  setup dead (below stop) — no action, remove from POTW
+[ MSFT ]  no entry; watch $372 — break = thesis dead
+[ PLTR ]  no entry (falling SMA50) despite being in zone
+[ AVGO ]  watch $375 zone top for a hold+turn = next week's candidate
+[ NOW  ]  no entry until sustained $103+
+[ REAL BOOK ] set QCML stop; let SOFI/CLOV expire Jul 2; add cash/fractional before any watchlist entry
 ```
 
----
-
-## 📋 FRAMEWORK CHECKLIST
-
-- [ ] Prices verified in Live Watchlist tab (Finnhub live feed)
-- [ ] MRVL trail stop $290 decision made (hold or exit)
-- [ ] ORCL entry trigger confirmed (if fired)
-- [ ] MSFT stop watch active ($372 level monitored)
-- [ ] NOW reclaim watch set (no position until $103+)
-- [ ] SMA Stack scanner run (bullish alignment check)
-- [ ] Semis & AI YTD% refreshed (load live data)
-- [ ] No new entries except ORCL zone or MRVL continuation swing
-- [ ] Bankroll allocation: 1% max per new position
-- [ ] All stops are hard exits (no averaging down)
-- [ ] No weekend holds on swing positions (MRVL exits Thu close)
+**This week's play = manage the winner + preserve capital. "No trade" that dodged the ORCL knife is a win.**
 
 ---
-
-> **Framework validated:** Jun 22 call up — Iran deal + Warsh hold = gates cleared. MSFT/NOW stand-down decisions were CORRECT. Capital preserved. Ready to execute zone entries and swing management on technical breakouts.
->
-> **To get live news headlines:** Run locally before market each day:  
-> `FINNHUB_KEY=your_key python3 news_scalper.py`
->
-> Generated: Jun 30, 2026 — 8:00 AM ET
+> Live data via Robinhood MCP (quotes, positions, historicals) + FMP (indices). SMAs computed from Robinhood daily historicals.
+> Generated: Jul 1, 2026.
