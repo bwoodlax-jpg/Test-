@@ -4,28 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bwoodshares — Watchlist Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:       #0a0c10;
-      --surf:     #111318;
-      --surf2:    #181c24;
-      --border:   #222830;
-      --accent:   #f0a500;
-      --accent2:  #c97f00;
-      --green:    #00c87a;
-      --gdim:     rgba(0,200,122,.12);
-      --red:      #e03e3e;
-      --rdim:     rgba(224,62,62,.12);
-      --blue:     #4f9cf9;
-      --muted:    #5a6275;
-      --text:     #dde1ea;
-      --dim:      #8b929f;
-      --t1:       #f0a500;
-      --t2:       #4f9cf9;
-      --t3:       #e03e3e;
+      --bg:       #07090d;
+      --surf:     #0e1218;
+      --surf2:    #151a23;
+      --border:   #1d242f;
+      --accent:   #f4b04a;
+      --accent2:  #d99a2e;
+      --green:    #2dd896;
+      --gdim:     rgba(45,216,150,.12);
+      --red:      #f25f5c;
+      --rdim:     rgba(242,95,92,.12);
+      --blue:     #5ba8ff;
+      --muted:    #6b7488;
+      --text:     #e8ecf4;
+      --dim:      #98a0b3;
+      --t1:       #f4b04a;
+      --t2:       #5ba8ff;
+      --t3:       #f25f5c;
+      --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.5);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 16px 40px -16px rgba(0,0,0,.6);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+    body{
+      background:var(--bg);
+      background-image:radial-gradient(1200px 500px at 50% -10%, rgba(244,176,74,.045), transparent 60%);
+      color:var(--text);
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
 
     /* ── Setup overlay — off-canvas right drawer (Alpine-controlled) ── */
     #setup-overlay{
@@ -436,6 +449,48 @@
     .sp500-source-note a:hover{text-decoration:underline}
     .sp-empty{text-align:center;padding:40px;color:var(--muted);font-size:12px}
     .sp-pp-flag{font-size:10px;color:var(--green);font-weight:700;margin-left:6px}
+  /* ── SMA Stack Scanner ── */
+  .sma-explainer{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:11px;color:var(--muted);line-height:1.7}
+  .sma-explainer strong{color:var(--text)}
+  .sma-scan-btn{background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;white-space:nowrap}
+  .sma-scan-btn:hover{opacity:.85}
+  .sma-scan-btn:disabled{opacity:.45;cursor:not-allowed}
+  .semi-desc{font-size:10px;color:var(--muted);max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:help}
+  .semi-val{font-weight:700;font-size:12px;font-variant-numeric:tabular-nums;text-align:right}
+  .semi-fwd{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;text-align:right}
+  .semi-pos{color:var(--green)}.semi-neg{color:var(--red)}.semi-na{color:var(--muted);font-size:10px}
+  .sma-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .sma-stat{background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;min-width:90px}
+  .sma-stat-num{font-size:20px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .sma-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+  .sma-loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:12px;line-height:1.8}
+  .sma-err{background:rgba(224,62,62,.1);border:1px solid rgba(224,62,62,.25);border-radius:8px;padding:16px 20px;color:var(--red);font-size:12px;margin-top:16px}
+  .sma-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:16px}
+  .sma-card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s}
+  .sma-card:hover{border-color:rgba(244,176,74,.35)}
+  .sma-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .sma-ticker{font-size:22px;font-weight:900;letter-spacing:.5px;color:var(--accent)}
+  .sma-co{font-size:10px;color:var(--muted);margin-top:2px}
+  .sma-price{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--text);text-align:right}
+  .sma-badges{display:flex;gap:6px;margin-bottom:13px;flex-wrap:wrap}
+  .sma-badge-days{background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);color:var(--green);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px}
+  .sma-badge-days.sma-fresh{background:rgba(244,176,74,.15);border-color:rgba(244,176,74,.4);color:var(--accent)}
+  .sma-badge-sector{background:var(--surf2);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:3px 10px;border-radius:4px}
+  .sma-badge-pct{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);color:#60a5fa;font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px}
+  .sma-stack{margin-top:4px}
+  .sma-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .sma-lbl{font-size:9px;font-weight:700;color:var(--muted);width:44px;text-align:right;letter-spacing:.3px;flex-shrink:0}
+  .sma-bar-wrap{flex:1;background:var(--surf2);border-radius:2px;height:6px;overflow:hidden}
+  .sma-bar{height:100%;border-radius:2px;transition:width .4s}
+  .sma-val{font-size:10px;color:var(--muted);width:60px;font-variant-numeric:tabular-nums;text-align:right;flex-shrink:0}
+  .b-price{background:var(--green)}
+  .b-50{background:var(--accent)}
+  .b-100{background:#60a5fa}
+  .b-150{background:#a78bfa}
+  .b-200{background:rgba(255,255,255,.2)}
+  .sma-note{margin-top:12px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;line-height:1.55}
+  .sma-ts{font-size:10px;color:var(--muted);margin-top:16px;text-align:right}
+  .sma-rank{font-size:11px;font-weight:700;color:var(--muted);background:var(--surf2);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0}
   /* ── Alpine.js cloaking ── */
   [x-cloak] { display: none !important; }
   /* ── Market Pulse tab ── */
@@ -553,6 +608,81 @@
   .mos-pick-badge-new{background:var(--accent);color:#000}
   .mos-pick-ticker-new{color:var(--accent)}
 
+  /* ══ Design polish layer — modern facelift (overrides, no class renames) ══ */
+  /* Header: frosted glass */
+  header{
+    background:rgba(14,18,24,.82);
+    backdrop-filter:blur(14px) saturate(150%);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .logo-icon{
+    background:linear-gradient(135deg,#f6c065,#e09422);
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(244,176,74,.35);
+  }
+  .logo-text h1{letter-spacing:-.2px}
+
+  /* Tab bar: refined active state */
+  .tab-bar{
+    background:rgba(14,18,24,.6);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .tab-btn{font-weight:600;font-size:12.5px;color:var(--muted);transition:color .18s,border-color .18s,background .18s;border-radius:8px 8px 0 0}
+  .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+  .tab-btn.active{color:var(--accent);background:linear-gradient(180deg,rgba(244,176,74,.07),transparent)}
+
+  /* Cards: depth + soft radius */
+  .card{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .card:hover{border-color:rgba(244,176,74,.4);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .card::before{height:2px;opacity:.9}
+  .mon-card{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .sw-col,.swing-banner{border-radius:14px;box-shadow:var(--shadow);border-color:rgba(255,255,255,.055)}
+  .obox,.litem{border-radius:8px}
+  .mkt-idx,.mkt-event,.mkt-pi-card,.wr-potw-box,.wr-missed-box,.wr-perf-card,.wr-eow-card{border-radius:10px;border-color:rgba(255,255,255,.05)}
+  .potw-stat,.mos-pick-stat,.mos-source-card,.fil-item{border-radius:9px}
+  .mos-step{border-radius:10px}
+  .sp500-stat{border-radius:12px}
+
+  /* Hero wraps: bigger radius + glow */
+  .potw-wrap{border-radius:18px;border-width:1px;border-color:rgba(244,176,74,.5);box-shadow:0 0 0 1px rgba(244,176,74,.08), var(--shadow-lg)}
+  .wr-wrap{border-radius:18px;border-width:1px}
+  .mos-pick-wrap{border-radius:18px;border-width:1px}
+  .mos-pick-wrap-new{border-width:1px}
+
+  /* Tables */
+  .tbl-wrap{border-radius:14px;box-shadow:var(--shadow)}
+  th{font-weight:700}
+  tbody tr:hover{background:rgba(255,255,255,.025)}
+  .sp500-table tr:hover td{background:rgba(255,255,255,.025)}
+  .mos-screener tr:hover td{background:rgba(255,255,255,.025)}
+
+  /* Buttons + inputs */
+  .btn{border-radius:9px;background:linear-gradient(135deg,#f6c065,#e09422);box-shadow:0 2px 8px rgba(244,176,74,.25)}
+  .btn:hover{background:linear-gradient(135deg,#f0b44f,#cf8a1e);box-shadow:0 3px 12px rgba(244,176,74,.35)}
+  .btn-ghost,.refresh-btn{border-radius:9px}
+  .sp500-search{border-radius:9px}
+  .sector-btn{border-radius:7px}
+
+  /* Price strip: cleaner separators */
+  .strip{background:rgba(14,18,24,.5)}
+  .strip-item{border-right:1px solid rgba(255,255,255,.045)}
+
+  /* Section labels: slightly brighter rule */
+  .sec-label{letter-spacing:2.4px;font-weight:600}
+  .sec-label::after{background:linear-gradient(90deg,var(--border),transparent)}
+
+  /* Modern thin scrollbars */
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#2a3340;border-radius:6px;border:2px solid var(--bg)}
+  ::-webkit-scrollbar-thumb:hover{background:#39455a}
+
+  /* Footer */
+  footer{border-top:1px solid rgba(255,255,255,.05)}
+
   /* ── Mobile — phones ≤ 640px ── */
   @media(max-width:640px){
     /* Tab bar: tighter, smaller font */
@@ -588,18 +718,18 @@
       theme: {
         extend: {
           colors: {
-            'bw-bg':      '#0a0c10',
-            'bw-surf':    '#111318',
-            'bw-surf2':   '#181c24',
-            'bw-bdr':     '#222830',
-            'bw-accent':  '#f0a500',
-            'bw-accent2': '#c97f00',
-            'bw-green':   '#00c87a',
-            'bw-red':     '#e03e3e',
-            'bw-blue':    '#4f9cf9',
-            'bw-muted':   '#5a6275',
-            'bw-text':    '#dde1ea',
-            'bw-dim':     '#8b929f',
+            'bw-bg':      '#07090d',
+            'bw-surf':    '#0e1218',
+            'bw-surf2':   '#151a23',
+            'bw-bdr':     '#1d242f',
+            'bw-accent':  '#f4b04a',
+            'bw-accent2': '#d99a2e',
+            'bw-green':   '#2dd896',
+            'bw-red':     '#f25f5c',
+            'bw-blue':    '#5ba8ff',
+            'bw-muted':   '#6b7488',
+            'bw-text':    '#e8ecf4',
+            'bw-dim':     '#98a0b3',
           }
         }
       }
@@ -701,6 +831,8 @@
   <button class="tab-btn" :class="{'active': tab === 'sp500'}" @click="tab = 'sp500'" data-tab="sp500">S&amp;P 500 Losers</button>
   <button class="tab-btn" :class="{'active': tab === 'pulse'}" @click="tab = 'pulse'" data-tab="pulse">&#9670; Market Pulse</button>
   <button class="tab-btn" :class="{'active': tab === 'mos'}" @click="tab = 'mos'" data-tab="mos">&#9670; Long Horizon</button>
+  <button class="tab-btn" :class="{'active': tab === 'sma'}" @click="tab = 'sma'" data-tab="sma">&#9651; SMA Stack</button>
+  <button class="tab-btn" :class="{'active': tab === 'semis'}" @click="tab = 'semis'" data-tab="semis">&#9711; Semis &amp; AI</button>
 </div>
 
 <main>
@@ -762,10 +894,102 @@
     </div>
   </div>
 
+  <!-- ══ POTW: MRVL MANAGE-THE-WINNER (live Jul 1 data) ══ -->
+  <div class="potw-wrap">
+    <div class="potw-badge">&#9733; Play of the Week &mdash; June 30&ndash;July 4, 2026 (live Robinhood data)</div>
+    <div class="potw-ticker">MRVL</div>
+    <div class="potw-company">Marvell Technology &mdash; Manage the Winner &mdash; <span style="color:var(--green);font-size:12px;font-weight:800">ONLY BULLISH SMA STACK ON THE BOARD &mdash; TRAIL $290 &mdash; NO NEW ENTRY ELSEWHERE</span></div>
+
+    <div style="background:rgba(0,200,122,.08);border:1px solid rgba(0,200,122,.35);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--green)">&#10003; MRVL &mdash; HOLD &amp; TRAIL (the only healthy trend):</strong>
+      $297.89 Jun 30 close (AH $293.53). Computed from live Robinhood historicals, MRVL trades ABOVE all four SMAs (50=$216 and rising, 100=$154, 150=$131, 200=$120) &mdash; the single genuine uptrend among the 13 names. Post-inclusion fade from $311 is ordinary profit-taking, not a break.
+      <strong style="color:var(--text)">Plan:</strong> trail stop $290 (AH sits only ~$3 above it). Trim into strength above $305; hard exit on any close below $290. No adds up here. This is the entire active playbook this week.
+    </div>
+
+    <div style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.35);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--red)">&#10008; NO CLEAN NEW ENTRY &mdash; the &ldquo;value zone&rdquo; names are knives:</strong>
+      <strong>ORCL $146.55</strong> broke the $148 stop &mdash; fell through the entire zone, setup DEAD.
+      <strong>MSFT $373.02</strong> sits $1 above its $372 stop, below all SMAs &mdash; bearish, no entry.
+      <strong>PLTR $116.67</strong> is inside zone $108&ndash;122 but below all SMAs with a falling SMA50 &mdash; the trend filter vetoes it.
+      When the only &ldquo;buy&rdquo; signals are falling knives, the disciplined play is to NOT trade. Cash is a position.
+    </div>
+
+    <div style="background:rgba(244,176,74,.07);border:1px solid rgba(244,176,74,.3);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--accent)">&#9650; ONE TO WATCH &mdash; AVGO $377.75:</strong>
+      First quality name to pull back TO its zone top ($375) rather than through it. Not an entry yet &mdash; needs to hold and turn up off a rising/flattening SMA. If it bases here it becomes next week&#39;s candidate. Stop $328, target $550.
+      <br><strong style="color:var(--red)">Reality check:</strong> account buying power is $13.64 &mdash; every entry above is paper until cash is added or fractional shares are used. Manage the real book first (QCML stop, let SOFI/CLOV expire Jul 2).
+    </div>
+
+    <div class="potw-grid">
+      <div class="potw-stat"><div class="potw-stat-lbl">MRVL Close</div><div class="potw-stat-val" style="color:var(--green)">$297.89</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">After Hours</div><div class="potw-stat-val" style="color:var(--accent)">$293.53</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Trail Stop</div><div class="potw-stat-val" style="color:var(--red)">$290</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Trim Above</div><div class="potw-stat-val" style="color:var(--green)">$305</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">SMA Stack</div><div class="potw-stat-val" style="color:var(--green)">BULLISH &#10003;</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">SMA50</div><div class="potw-stat-val" style="color:var(--green)">$216 rising</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">New Entries</div><div class="potw-stat-val" style="color:var(--red)">NONE</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Buying Power</div><div class="potw-stat-val" style="color:var(--red)">$13.64</div></div>
+    </div>
+
+    <div style="font-size:12px;color:var(--dim);line-height:1.65;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+      <strong style="color:var(--text)">Why &ldquo;manage the winner&rdquo; is the play:</strong>
+      The tape split this week &mdash; AMD, PANW and DELL broke to new highs (far above zones, un-chaseable on framework rules) while MSFT, ORCL and PLTR rolled over into or through their zones on falling SMAs. The framework only buys pullbacks that hold at rising support; none qualify. So the highest-value action is defensive: protect the one real trend (MRVL, trail $290) and preserve capital. A &ldquo;no trade&rdquo; week that avoids the ORCL knife (&minus;19% if the zone entry had triggered) is a framework win, not a miss.
+    </div>
+  </div>
+
+  <!-- ══ POTW: MSFT POST-WARSH ENTRY ══════════════════════════ -->
+  <div class="potw-wrap">
+    <div class="potw-badge">&#9733; Play of the Week &mdash; June 16&ndash;20, 2026</div>
+    <div class="potw-ticker">MSFT</div>
+    <div class="potw-company">Microsoft Corporation &mdash; Azure AI Backbone &mdash; POST-WARSH SWING ENTRY &mdash; <span style="color:var(--red);font-size:12px;font-weight:800">STAND-DOWN CORRECT &mdash; $379.05 JUN 18 &mdash; BELOW ZONE $393&ndash;$412</span></div>
+
+    <div style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.35);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--red)">&#10008; STAND-DOWN EXECUTED (Jun 18, 2026):</strong>
+      Warsh held 3.50&ndash;3.75% Jun 16&ndash;17 (neutral tone, Sep 2026 window preserved) &mdash; macro gate passed. <strong style="color:var(--text)">BUT MSFT fell to $379.05 by Jun 18 close, breaking BELOW zone $393&ndash;$412 rather than confirming it.</strong>
+      Framework required price IN zone at entry trigger &mdash; price broke below zone instead. STAND-DOWN was the correct call. No capital deployed.
+      Stop $372 is now only $7 away. Thesis remains intact (Azure +40% YoY, 20M Copilot seats) but price action overrides macro signal until zone is reclaimed.
+    </div>
+
+    <div style="background:rgba(0,200,122,.07);border:1px solid rgba(0,200,122,.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--green)">&#10003; FRAMEWORK RULING (June 15, 2026):</strong>
+      MSFT structural entry zone $393&ndash;$412 (2026 rate-fear consolidation base). Stop $372 = below Feb 2026 re-accumulation floor &mdash; named structural level. Target $625 (Wedbush) / $650 (Morgan Stanley).
+      Fundamental: Azure +40% YoY. 20M Copilot enterprise seats monetizing. AI Backbone = non-discretionary spend. Iran deal removes oil inflation headwind.
+      <strong style="color:var(--accent)">Next entry scenarios:</strong> (1) $372 holds + price reclaims $393 = zone reload, re-enter. (2) $372 breaks = exit thesis entirely &mdash; zone reload failed. (3) $379 consolidates into July Azure earnings = watch for new entry from $393+.
+    </div>
+
+    <div class="potw-grid">
+      <div class="potw-stat"><div class="potw-stat-lbl">Entry Zone</div><div class="potw-stat-val" style="color:var(--green)">$393&ndash;$412</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Jun 18 Close</div><div class="potw-stat-val" style="color:var(--red)">$379.05</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Stop</div><div class="potw-stat-val" style="color:var(--red)">$372 ($7 away)</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Target</div><div class="potw-stat-val" style="color:var(--green)">$625</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Result</div><div class="potw-stat-val" style="color:var(--accent)">STAND-DOWN</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Capital</div><div class="potw-stat-val" style="color:var(--green)">PRESERVED &#10003;</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Warsh Gate</div><div class="potw-stat-val" style="color:var(--green)">HELD &#10003;</div></div>
+      <div class="potw-stat"><div class="potw-stat-lbl">Zone Status</div><div class="potw-stat-val" style="color:var(--red)">BELOW ZONE</div></div>
+    </div>
+
+    <div style="font-size:12px;color:var(--dim);line-height:1.65;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+      <strong style="color:var(--text)">Stand-Down Framework Validated:</strong>
+      Warsh held (macro gate &#10003;) AND Iran deal signed today (geo gate &#10003;) &mdash; but price action broke below zone. The framework requires BOTH macro condition AND price-in-zone simultaneously. MSFT missed the price condition by breaking below $393. Stand-down preserved capital that would have entered at $408 and is now at $379 (-7.2%).
+      <br><br>
+      <strong style="color:rgba(139,92,246,.9)">NOW Secondary also stand-down:</strong>
+      ServiceNow $95.14 Jun 18, below zone floor $103. Same outcome &mdash; both stand-downs correct. Combined capital preserved = 1.5% bankroll.
+    </div>
+  </div>
+
   <div class="potw-wrap">
     <div class="potw-badge">&#9733; Play of the Week &mdash; June 9&ndash;13, 2026</div>
     <div class="potw-ticker">ORCL</div>
-    <div class="potw-company">Oracle Corporation &mdash; AI Cloud + Database &mdash; POST-EARNINGS GAP PLAY &mdash; <span style="color:var(--accent);font-size:12px">CONDITIONAL ON JUN 10 AH BEAT + RAISE &mdash; ENTRY WED JUN 11 ONLY</span></div>
+    <div class="potw-company">Oracle Corporation &mdash; AI Cloud + Database &mdash; POST-EARNINGS GAP PLAY &mdash; <span style="color:var(--red);font-size:12px;font-weight:800">RESULT JUN 10: BEAT BUT NO GAP &mdash; NO ENTRY &#10008; PLAY CLOSED</span></div>
+
+    <!-- RESULT (June 11 Call Up) -->
+    <div style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.35);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--red)">&#10008; RESULT (June 10 AH &mdash; Call Up June 11):</strong>
+      ORCL <strong style="color:var(--green)">BEAT</strong> &mdash; EPS $2.11 vs $1.97 est, revenue $19.18B vs $19.09B est. But the stock <strong style="color:var(--red)">FELL below $200 ($193&ndash;$199 AH)</strong> instead of gapping up.
+      Two reasons: cloud revenue $9.91B came in light, and Oracle announced a <strong style="color:var(--red)">$40B capital raise including a $20B share sale</strong> (dilution) on top of $48B already raised in FY2026.
+      Framework verdict: entry required beat + raise + <em>gap up</em> + volume. The gap condition <strong style="color:var(--red)">FAILED &mdash; NO ENTRY. Capital preserved.</strong>
+      This is the <strong style="color:var(--accent)">THIRD &ldquo;sell on good news&rdquo; in the sector in 8 days</strong> (PANW Jun 2, AVGO Jun 3, ORCL Jun 10) &mdash; institutional distribution regime confirmed. <strong style="color:var(--text)">No new swing longs this week. Stand down into Warsh Jun 16&ndash;17.</strong>
+    </div>
 
     <!-- Framework ruling -->
     <div style="background:rgba(0,200,122,.07);border:1px solid rgba(0,200,122,.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
@@ -790,20 +1014,20 @@
         <div style="font-size:11px;font-weight:700;color:var(--accent);margin-top:3px">CPI + ORCL AH</div>
         <div style="font-size:10px;color:var(--muted)">Double event. Watch only.</div>
       </div>
-      <div style="background:rgba(0,200,122,.07);border:1px solid rgba(0,200,122,.25);border-radius:6px;padding:8px 10px;text-align:center">
-        <div style="font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:.5px">Wed Jun 11</div>
-        <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:3px">ENTRY (IF BEAT)</div>
-        <div style="font-size:10px;color:var(--muted)">First green candle &ge;1.5&times; ADV.</div>
+      <div style="background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.3);border-radius:6px;padding:8px 10px;text-align:center">
+        <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.5px">Wed Jun 11</div>
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:3px">NO ENTRY &#10008;</div>
+        <div style="font-size:10px;color:var(--muted)">Gap condition failed. Play closed.</div>
       </div>
       <div style="background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;text-align:center">
         <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Thu Jun 12</div>
-        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:3px">HOLD / TRIM</div>
-        <div style="font-size:10px;color:var(--muted)">Trim half at $260+. Lock gains.</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:3px">STAND DOWN</div>
+        <div style="font-size:10px;color:var(--muted)">No swing longs. Distribution regime.</div>
       </div>
-      <div style="background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.3);border-radius:6px;padding:8px 10px;text-align:center">
-        <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.5px">Fri Jun 13</div>
-        <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:3px">HARD EXIT</div>
-        <div style="font-size:10px;color:var(--muted)">Full close EOD. No exceptions.</div>
+      <div style="background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;text-align:center">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Fri Jun 13</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:3px">STAND DOWN</div>
+        <div style="font-size:10px;color:var(--muted)">Flat into Warsh Jun 16&ndash;17.</div>
       </div>
     </div>
 
@@ -862,7 +1086,14 @@
     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:rgba(139,92,246,.8)"></div>
     <div style="display:inline-block;font-size:9px;font-weight:800;background:rgba(139,92,246,.8);color:#fff;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px">&#9733; Secondary POTW &mdash; June 9&ndash;13, 2026</div>
     <div style="font-size:30px;font-weight:900;letter-spacing:1px;color:rgba(139,92,246,1)">NVDA</div>
-    <div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">NVIDIA Corporation &mdash; AI Infrastructure &mdash; DIP BUY IN ZONE &mdash; <span style="color:rgba(139,92,246,1);font-weight:700">BACK IN ENTRY ZONE $200&ndash;$215 &mdash; ORCL BEAT REQUIRED FOR FULL CONVICTION</span></div>
+    <div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">NVIDIA Corporation &mdash; AI Infrastructure &mdash; DIP BUY IN ZONE &mdash; <span style="color:var(--red);font-weight:800">JUN 11 UPDATE: SKIP &#10008; &mdash; ORCL CONFIRMATION FAILED, SECTOR IN DISTRIBUTION</span></div>
+
+    <div style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.35);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--red)">&#10008; RESULT (Call Up June 11):</strong>
+      The entry was conditional on ORCL confirming a sector tailwind. ORCL beat but <strong style="color:var(--red)">sold off below $200 on dilution + cloud-miss concerns</strong> &mdash; that is distribution, not a tailwind. Confirmation FAILED.
+      NVDA ~$200&ndash;$208, technically still in zone, but the zone entry rule does not override a sector distribution regime (3 sell-on-good-news events in 8 days).
+      <strong style="color:var(--text)">SKIP this week. Zone re-entry reassessed after Warsh Jun 16&ndash;17 clears.</strong> Risk-off headlines Jun 10: &ldquo;Super Micro, Nvidia, Micron fall as risk-off mood intensifies.&rdquo;
+    </div>
 
     <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
       <strong style="color:rgba(139,92,246,1)">&#10003; FRAMEWORK RULING (June 7, 2026):</strong>
@@ -923,13 +1154,21 @@
   <!-- ══ CAPITAL PLAY: $10K / 20% BY JULY ══════════════════ -->
   <div style="background:linear-gradient(135deg,rgba(0,200,122,.1),rgba(0,200,122,.03));border:2px solid rgba(0,200,122,.5);border-radius:12px;padding:20px 24px;margin-bottom:24px;position:relative;overflow:hidden">
     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,200,122,.85)"></div>
-    <div style="display:inline-block;font-size:9px;font-weight:800;background:rgba(0,200,122,.85);color:#000;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px">&#9733; Capital Play &mdash; $10K / 20% by July</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="display:inline-block;font-size:9px;font-weight:800;background:rgba(0,200,122,.85);color:#000;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px">&#9733; Capital Play &mdash; $10K / 20% by July</div>
+      <div style="display:inline-block;font-size:9px;font-weight:800;background:rgba(0,200,122,.85);color:#000;padding:3px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:1.2px">&#10003; ACTIVE &mdash; $280.71 +11.2% &mdash; Jun 12 CONFIRMED</div>
+    </div>
     <div style="font-size:28px;font-weight:900;letter-spacing:1px;color:var(--green)">MRVL</div>
     <div style="font-size:13px;color:var(--dim);margin-top:2px;margin-bottom:14px">Marvell Technology &mdash; S&amp;P 500 Forced Inclusion Buy &mdash; <span style="color:var(--green);font-weight:700">STRUCTURAL CATALYST: JUN 22 INCLUSION EFFECTIVE DATE</span></div>
 
     <div style="background:rgba(0,200,122,.07);border:1px solid rgba(0,200,122,.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--dim);line-height:1.65">
+      <strong style="color:var(--green)">&#10003; JUN 12 CALL UP &mdash; CAPITAL PLAY ACTIVATED:</strong>
+      MRVL +11.2% to $280.71 on June 12 (prev close $252.59). Iran deal risk-on bid + S&amp;P 500 inclusion Jun 22 pre-positioning both firing simultaneously. <strong style="color:var(--text)">First green stabilization day confirmed &mdash; entry condition MET.</strong>
+      If entered at $263: current P&amp;L +$17.71/share (+6.7% on $10K = +$751). <strong style="color:var(--accent)">Trail stop to $263 immediately (cost basis, no free rides below entry).</strong> Target $316 (ATH recovery, +12.6% from $280.71).
+      Peak forced buying Jun 18&ndash;20 still ahead &mdash; $8T+ AUM index funds must own MRVL before Jun 22 effective date. No new entries above $280 &mdash; structural zone is $220&ndash;$242.
+      <br><br>
       <strong style="color:var(--green)">&#10003; CALL UP (June 9, 2026) &mdash; $10,000 Capital / Target +20% by July:</strong>
-      MRVL confirmed for S&amp;P 500 inclusion effective <strong style="color:var(--text)">June 22, 2026</strong>. Index funds tracking the S&amp;P 500 manage $8T+ AUM &mdash; they <em>must</em> buy MRVL before the effective date. This creates guaranteed structural demand from June 18&ndash;22. Stock pulled back <strong style="color:var(--accent)">&#8209;16.74% from ATH $316 on June 5 (NFP fear selloff)</strong> &mdash; not a fundamental impairment. Prior win on MRVL swing May 28 validates the framework.
+      MRVL confirmed for S&amp;P 500 inclusion effective <strong style="color:var(--text)">June 22, 2026</strong>. Index funds tracking the S&amp;P 500 manage $8T+ AUM &mdash; they <em>must</em> buy MRVL before the effective date. This creates guaranteed structural demand from June 18&ndash;22. Stock pulled back from ATH <strong style="color:var(--accent)">$324.20 (Jun 3 intraday) / $316 close</strong> on NFP fear selloff &mdash; not a fundamental impairment. B. Riley raised PT to $345 on Jun 12 (street high). Prior win on MRVL swing May 28 validates the framework.
       <br><strong style="color:var(--red)">Risk: broader macro deterioration or S&amp;P 500 rebalance delay (rare, confirms before effective date).</strong>
     </div>
 
@@ -951,11 +1190,11 @@
         </div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Target (ATH Recovery)</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)">$316</div>
+          <div style="font-size:18px;font-weight:800;color:var(--green)">$325</div>
         </div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Return at Target</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)">+$2,014 (+20.2%) &#10003;</div>
+          <div style="font-size:18px;font-weight:800;color:var(--green)">+$2,356 (+23.8%) &#10003;</div>
         </div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Stop Loss</div>
@@ -963,7 +1202,7 @@
         </div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Street High PT</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)">$321 (Stifel)</div>
+          <div style="font-size:18px;font-weight:800;color:var(--green)">$345 (B. Riley)</div>
         </div>
         <div>
           <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">R/R Ratio</div>
@@ -1028,12 +1267,13 @@
       swing &mdash; every entry requires <em>two concurrent signals</em>: a specific, identifiable
       catalyst (Josh Rule 7) confirmed by technical alignment &mdash; price above SMA50 and entry
       candle volume &ge;1.5&times; the 20-day average.
-      <strong>ORCL</strong> is the primary play &mdash; post-earnings gap play after Jun 10 AH print.
-      <strong>Entry Wednesday Jun 11 ONLY</strong> on confirmed beat + raise + gap up + volume &ge;1.5&times; ADV.
-      <strong style="color:var(--accent)">&#9888; May CPI prints Tue Jun 10 AM &mdash; double macro event day. Assess CPI reaction before sizing ORCL entry Wednesday.</strong>
-      Secondary: <strong>NVDA</strong> dip buy in zone $200&ndash;$215 at $204. Entry also Wednesday post-ORCL confirmation.
-      <strong style="color:var(--red)">Scenario B (ORCL miss): PASS on ORCL. Apply new framework rule &mdash; buy QQQ/SMH puts (sector distribution).</strong>
-      Total max exposure: 1.5% bankroll (0.75% each if running both). Hard exit both: Fri Jun 13 EOD.
+      <strong style="color:var(--green)">WEEK STATUS (Jun 15): MACRO UNLOCKED &mdash; WARSH IS THE GATE.</strong>
+      Iran deal CONFIRMED &mdash; WTI <strong>$80.07 (-18% from $97+)</strong>. VIX 16.73. Nasdaq futures +2.1%. The Feb&ndash;Jun macro overhang is resolved.
+      <strong style="color:var(--accent)">TODAY: Warsh FOMC Day 1 (Jun 16). TOMORROW: Decision + press conference (Jun 17, 2pm ET).</strong>
+      <strong style="color:var(--green)">MSFT POTW: In zone $393&ndash;$412 at ~$408. ENTRY TRIGGER = Warsh hold + neutral tone Wed Jun 17 AH.</strong>
+      <strong style="color:var(--green)">NOW SECONDARY: In zone $103&ndash;$118. Enter alongside MSFT post-Warsh. Combined 1.5% bankroll max.</strong>
+      MRVL capital play running &mdash; S&amp;P inclusion Jun 22 = 7 days. Trail stop $263. Peak forced buying Jun 18&ndash;20.
+      If Warsh signals hike or removes Sep 2026 window: STAND DOWN on MSFT/NOW &mdash; MRVL capital play stops at $263 regardless.
     </div>
   </div>
 
@@ -1132,7 +1372,7 @@
       </span></div>
       <div class="sw-rule"><span class="sw-rn">5</span><span>
         <strong>SMA50 trend filter applies to every new long.</strong> Price must be above the
-        50-day moving average. TAP is the current example of a Rule 5 violation &mdash; below SMA50,
+        50-day moving average. TAP (now archived) was the canonical Rule 5 violation &mdash; below SMA50,
         no new swing longs.
       </span></div>
       <div class="sw-rule"><span class="sw-rn">6</span><span>
@@ -1190,15 +1430,16 @@
         <tr>
           <td><span class="rank-dot r1">2</span></td>
           <td><span class="tk">SG</span><div class="co">Sweetgreen</div></td>
-          <td style="font-size:11px">Momentum + Wrap Catalyst</td>
-          <td><span class="sma-t">Testing (~$8.50&ndash;$9.00)</span></td>
+          <td style="font-size:11px">ARCHIVED Jun 10 &mdash; thesis closed</td>
+          <td><span class="sma-b">Below zone (~$8.00) &#9888;</span></td>
           <td style="font-size:11px">&ge;4M shares/day<div class="co">Avg ~2.5M</div></td>
-          <td class="r" style="font-size:12px;color:var(--green)">3.5:1</td>
+          <td class="r" style="font-size:12px;color:var(--muted)">&mdash;</td>
           <td class="r" style="font-size:12px;color:var(--red)">$7.50</td>
-          <td><span class="fit-hi">GOOD</span></td>
+          <td><span class="fit-lo">SKIP</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            Small price ($9.60) = most shares per 1% bankroll dollar. Wrap catalyst still live.
-            High beta = 10&ndash;15% weekly moves possible. Watch SMA50 &mdash; if lost, Rule 5 voids the entry.
+            <strong style="color:var(--red)">Archived June 10, 2026</strong> at ~$8.00 (&minus;6% from Oct 2025 entry).
+            Infinite Kitchen sale killed the moat thesis Nov 2025; the wrap swing never held the zone.
+            See History tab for the full post-mortem. No new entries.
           </td>
         </tr>
         <tr>
@@ -1291,17 +1532,17 @@
         </tr>
         <tr>
           <td><span class="rank-dot r4">9</span></td>
-          <td><span class="tk">TAP</span><div class="co">Molson Coors</div></td>
-          <td style="font-size:11px">Income / Ex-Div Only</td>
-          <td><span class="sma-b">Below SMA50 &mdash; downtrend &#9888;</span></td>
-          <td style="font-size:11px">N/A &mdash; income hold only</td>
-          <td class="r" style="font-size:12px;color:var(--muted)">&mdash;</td>
-          <td class="r" style="font-size:12px;color:var(--red)">$38</td>
-          <td><span class="fit-lo">SKIP</span></td>
+          <td><span class="tk">DELL</span><div class="co">Dell Technologies</div></td>
+          <td style="font-size:11px">AI Server Assembly &mdash; ZONE REDRAWN Jun 11</td>
+          <td><span class="sma-b">Knife &mdash; &ndash;20% from $461 &#9888;</span></td>
+          <td style="font-size:11px">$335&ndash;$355 (gap-fill, stabilized only)</td>
+          <td class="r" style="font-size:12px;color:var(--green)">$497</td>
+          <td class="r" style="font-size:12px;color:var(--red)">$310</td>
+          <td><span class="fit-lo">WAIT</span></td>
           <td style="font-size:11px;color:var(--dim);max-width:190px">
-            Below SMA50 = <strong style="color:var(--red)">Rule 5 violation</strong> for new long
-            swing entries. Ex-div May 29 is an income event, not a swing catalyst. TAP is Josh&rsquo;s
-            long-term income hold only. Do not swing trade this name under the current framework.
+            Original $420&ndash;450 zone + $395 stop blown through in 3 sessions &mdash; zone was too
+            shallow after a +33% spike. <strong style="color:var(--accent)">Redrawn to gap-fill $335&ndash;$355.</strong>
+            Thesis intact ($51.3B backlog). Entry only after stabilization + Warsh Jun 16&ndash;17 clears.
           </td>
         </tr>
       </tbody>
@@ -1332,7 +1573,8 @@
 
   <div class="sec-label">S&amp;P 500 — YTD Losers (Down 10%+)</div>
   <p class="monitor-sub">
-    S&amp;P 500 components confirmed down 10%+ year-to-date as of <strong style="color:var(--text)">May 22, 2026</strong>.
+    S&amp;P 500 components confirmed down 10%+ year-to-date as of <strong style="color:var(--text)">June 22, 2026</strong>.
+    YTD % figures last refreshed ~May 26 &mdash; <strong style="color:var(--accent)">refresh pending live data.</strong>
     Source: Financial news aggregation &amp; market research.
     <a href="https://slickcharts.com/sp500/performance" target="_blank" style="color:var(--accent)">Slickcharts live data ↗</a> &nbsp;|&nbsp;
     <a href="https://slickcharts.com/sp500/losers" target="_blank" style="color:var(--accent)">Losers page ↗</a>.
@@ -1391,7 +1633,7 @@
 
   <div class="sp500-source-note">
     <strong style="color:var(--text)">Data Note:</strong>
-    Figures compiled from financial news sources (@WOLF_Financial, Sherwood News, 247WallSt, IndexBox, StockTwits) and market research — all as of approximately May 26, 2026. S&P 500 index +8.74% YTD as of May 26 — making these underperformers stand out further.
+    Figures compiled from financial news sources (@WOLF_Financial, Sherwood News, 247WallSt, IndexBox, StockTwits) and market research. YTD % last refreshed ~May 26, 2026 — <strong>live refresh pending Robinhood reconnect.</strong> S&P 500 index was +8.74% YTD as of May 26; Iran deal + Warsh hold (Jun 14&ndash;19) have pushed the index significantly higher — underperformers stand out even further vs. current index level. Visit Slickcharts for real-time ranked list.
     Slickcharts.com blocks server-side fetches — visit
     <a href="https://slickcharts.com/sp500/performance" target="_blank">slickcharts.com/sp500/performance</a>
     in your browser for the authoritative, real-time ranked list.
@@ -1410,6 +1652,248 @@
 <div id="tab-mos" class="tab-panel" x-show="tab === 'mos'" x-cloak>
   <div id="mos-content" style="padding:4px 0"></div>
 </div><!-- end tab-mos -->
+
+<!-- ── SMA Stack Scanner Tab ─────────────────────────── -->
+<div id="tab-sma" class="tab-panel" x-show="tab === 'sma'" x-cloak>
+
+  <div class="sec-label">SMA Stack Scanner &mdash; Bullish 200/150/100/50 Alignment</div>
+
+  <div class="sma-explainer">
+    <strong>The Signal:</strong> When all three shorter SMAs (50, 100, 150-day) rise above the 200-day SMA simultaneously,
+    the long-term trend has structurally shifted. This <strong>bullish SMA stack</strong> &mdash;
+    Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &mdash;
+    means the 200-day has crossed <em>below</em> all three, confirming the trend has flipped long-term.
+    The 200 is now the floor, with each shorter SMA acting as a rising support layer above it.
+    <br><br>
+    <strong>Why it matters:</strong> Three simultaneous golden crosses (50&gt;200, 100&gt;200, 150&gt;200) in the same stock is rare.
+    Freshly-formed stacks (&le;20 days) are the most actionable &mdash; you catch the structural shift early, before institutions fully position.
+    <br><br>
+    <strong>Criteria:</strong> Price &gt; SMA(50) &gt; SMA(100) &gt; SMA(150) &gt; SMA(200) &nbsp;&bull;&nbsp;
+    Sorted freshest cross first &nbsp;&bull;&nbsp; 65 large/mid-cap stocks across all sectors.
+    <br><em style="color:var(--accent);font-size:10px">Uses your Finnhub API key (same one as Live Watchlist) for reliable historical data. If you don&rsquo;t have one yet, get a free key at finnhub.io and add it via the API Key button. Scan takes ~60&ndash;90 seconds (Finnhub free tier = 60 req/min).</em>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="sma-scan-btn" @click="loadSMAScan()" :disabled="smaLoading">
+      <span x-show="!smaLoading">&#9651; Run Scanner</span>
+      <span x-show="smaLoading">Scanning&hellip;</span>
+    </button>
+    <div class="sma-meta" x-show="smaMeta.scanned > 0">
+      <div class="sma-stat">
+        <div class="sma-stat-num" x-text="smaMeta.scanned">0</div>
+        <div class="sma-stat-lbl">Stocks Scanned</div>
+      </div>
+      <div class="sma-stat">
+        <div class="sma-stat-num" x-text="smaMeta.qualified">0</div>
+        <div class="sma-stat-lbl">Stack Aligned</div>
+      </div>
+      <div class="sma-stat">
+        <div class="sma-stat-num" style="color:var(--green)" x-text="smaResults.length">0</div>
+        <div class="sma-stat-lbl">Showing Top 10</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sma-loading" x-show="smaLoading">
+    <div style="font-size:22px;margin-bottom:10px">&#9651;</div>
+    <div style="font-size:13px;color:var(--text);margin-bottom:6px">
+      Scanning <strong x-text="smaProgress"></strong> of <strong x-text="smaProgressOf"></strong> stocks&hellip;
+    </div>
+    <div style="width:240px;height:6px;background:var(--surf2);border-radius:3px;margin:8px auto">
+      <div style="height:100%;background:var(--accent);border-radius:3px;transition:width .3s"
+           :style="'width:' + (smaProgressOf > 0 ? Math.round(smaProgress/smaProgressOf*100) : 0) + '%'"></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">
+      Fetching Finnhub daily candles &bull; Computing SMA 50/100/150/200 &bull; ~60&ndash;90 sec total<br>
+      <span style="color:var(--accent)" x-show="smaResults.length > 0">&#10003; <span x-text="smaResults.length"></span> qualifying stack(s) found so far</span>
+    </div>
+  </div>
+
+  <div class="sma-err" x-show="!smaLoading && smaError">
+    <strong>Scan error:</strong> <span x-text="smaError"></span>
+  </div>
+
+  <div class="sma-grid" x-show="!smaLoading && smaResults.length > 0">
+    <template x-for="(s, i) in smaResults" :key="s.ticker">
+      <div class="sma-card">
+        <div class="sma-card-top">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="sma-rank" x-text="i + 1"></span>
+            <div>
+              <div class="sma-ticker" x-text="s.ticker"></div>
+              <div class="sma-co" x-text="s.company"></div>
+            </div>
+          </div>
+          <div>
+            <div class="sma-price" x-text="'$' + s.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})"></div>
+          </div>
+        </div>
+
+        <div class="sma-badges">
+          <span class="sma-badge-days" :class="{'sma-fresh': s.days_aligned <= 20}">
+            <span x-show="s.days_aligned <= 5">&#9733; NEW &mdash; </span>
+            <span x-text="s.days_aligned + ' days aligned'"></span>
+          </span>
+          <span class="sma-badge-pct" x-text="'+' + s.pct_above_200.toFixed(1) + '% vs SMA200'"></span>
+          <span class="sma-badge-sector" x-text="s.sector"></span>
+        </div>
+
+        <!-- SMA Stack visual: bars scaled relative to SMA200 baseline -->
+        <div class="sma-stack">
+          <div class="sma-row">
+            <div class="sma-lbl">PRICE</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-price" :style="'width:' + Math.min(100, Math.max(10, (s.price / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.price.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 50</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-50" :style="'width:' + Math.min(100, Math.max(10, (s.sma50 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma50.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 100</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-100" :style="'width:' + Math.min(100, Math.max(10, (s.sma100 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma100.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 150</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-150" :style="'width:' + Math.min(100, Math.max(10, (s.sma150 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma150.toFixed(2)"></div>
+          </div>
+          <div class="sma-row">
+            <div class="sma-lbl">SMA 200</div>
+            <div class="sma-bar-wrap">
+              <div class="sma-bar b-200" :style="'width:' + Math.min(100, Math.max(10, (s.sma200 / (s.sma200 * 1.45)) * 100)) + '%'"></div>
+            </div>
+            <div class="sma-val" x-text="'$' + s.sma200.toFixed(2)"></div>
+          </div>
+        </div>
+
+        <div class="sma-note">
+          <span x-show="s.days_aligned <= 10" style="color:var(--accent);font-weight:700">&#9733; Fresh cross &mdash; </span>
+          <span x-show="s.days_aligned > 10 && s.days_aligned <= 30" style="color:var(--green);font-weight:700">Stack intact &mdash; </span>
+          Stack aligned for <strong style="color:var(--text)" x-text="s.days_aligned"></strong> trading days.
+          Price is <strong style="color:var(--green)" x-text="'+' + s.pct_above_200.toFixed(1) + '% above the 200 SMA'"></strong>.
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <div x-show="!smaLoading && !smaError && smaResults.length === 0 && smaMeta.scanned > 0"
+       style="text-align:center;padding:50px 20px;color:var(--muted);font-size:13px">
+    No stocks in the scanned universe currently meet the full bullish SMA stack criteria.
+  </div>
+
+  <div x-show="!smaLoading && !smaError && !smaLoaded"
+       style="text-align:center;padding:50px 20px;color:var(--muted);font-size:12px;line-height:1.8">
+    Click <strong style="color:var(--accent)">Run Scanner</strong> to scan ~120 mid/large-cap stocks for the bullish SMA alignment.<br>
+    First run takes 20&ndash;45 seconds. Results cached for 15 minutes.
+  </div>
+
+  <div class="sma-ts" x-show="smaMeta.timestamp" x-text="'Last scan: ' + smaMeta.timestamp"></div>
+
+</div><!-- end tab-sma -->
+
+<!-- ── Semis & AI Discovery Tab ──────────────────────────── -->
+<div id="tab-semis" class="tab-panel" x-show="tab === 'semis'" x-cloak>
+
+  <div class="sec-label">Semiconductor &amp; AI Infrastructure &mdash; Discovery Screen</div>
+  <p class="monitor-sub">
+    30 mid/large-cap semiconductor and AI infrastructure names beyond the obvious (NVDA, AMD, AVGO, MRVL &mdash; already on the watchlist).
+    Covers power semis, fab equipment, process control, IP licensing, edge AI, and advanced packaging.
+    PE, EPS, and Forward values are pre-loaded from static ~2025 estimates &mdash; visible immediately.
+    Click <strong style="color:var(--accent)">Load Live Data</strong> to refresh all metrics + add current YTD% (requires Finnhub API key &mdash; same key as Live Watchlist).
+  </p>
+
+  <!-- Load button + progress -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="sma-scan-btn" @click="loadSemiData()" :disabled="semiLoading">
+      <span x-show="!semiLoading">&#9889; Load Live Data</span>
+      <span x-show="semiLoading">Loading&hellip; (<span x-text="semiProgress"></span>/<span x-text="semiProgressOf"></span>)</span>
+    </button>
+    <div x-show="semiLoading" style="flex:1;min-width:160px">
+      <div style="height:4px;background:var(--surf2);border-radius:2px;overflow:hidden">
+        <div style="height:100%;background:var(--accent);border-radius:2px;transition:width .4s"
+             :style="'width:' + (semiProgressOf > 0 ? Math.round(semiProgress/semiProgressOf*100) : 0) + '%'"></div>
+      </div>
+    </div>
+    <div x-show="semiLoaded && !semiLoading" style="font-size:11px;color:var(--muted)">
+      &#10003; <span x-text="semiRows.filter(function(r){return r.loaded;}).length"></span> of 30 loaded
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div x-show="semiError" style="background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.3);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:var(--red)" x-text="semiError"></div>
+
+  <!-- Table -->
+  <div style="overflow-x:auto">
+    <table class="sp500-table" style="min-width:900px">
+      <thead>
+        <tr>
+          <th style="width:60px">#</th>
+          <th style="width:110px">Ticker</th>
+          <th style="width:160px">Company</th>
+          <th>Synopsis</th>
+          <th style="width:72px;text-align:right">YTD%</th>
+          <th style="width:65px;text-align:right">PE</th>
+          <th style="width:72px;text-align:right">Fwd PE</th>
+          <th style="width:70px;text-align:right">EPS</th>
+          <th style="width:78px;text-align:right">Fwd EPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in semiRows" :key="row.t">
+          <tr>
+            <td class="sp-rank" x-text="idx + 1"></td>
+            <td>
+              <div class="sp-ticker" x-text="row.t"></div>
+              <div class="sp-sector-badge sec-tech" x-text="row.sec" style="display:inline-block;margin-top:3px"></div>
+            </td>
+            <td><div class="sp-company" style="font-weight:700;font-size:11px" x-text="row.c"></div></td>
+            <td><div class="semi-desc" :title="row.desc" x-text="row.desc"></div></td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    :class="row.ytd != null ? (row.ytd >= 0 ? 'semi-pos' : 'semi-neg') : ''"
+                    x-text="row.ytd != null ? (row.ytd >= 0 ? '+' : '') + row.ytd.toFixed(1) + '%' : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    x-text="row.pe != null ? row.pe.toFixed(1) + 'x' : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-fwd"
+                    x-text="row.fwdPE != null ? row.fwdPE.toFixed(1) + 'x' : (row.loaded ? 'N/A' : (row.err ? 'ERR' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-val"
+                    x-text="row.eps != null ? '$' + row.eps.toFixed(2) : (row.err ? 'ERR' : (row.loaded ? '&mdash;' : '&hellip;'))"></span>
+            </td>
+            <td style="text-align:right">
+              <span class="semi-fwd"
+                    x-text="row.fwdEPS != null ? '$' + row.fwdEPS.toFixed(2) : (row.loaded ? 'N/A' : (row.err ? 'ERR' : '&hellip;'))"></span>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:14px;font-size:10px;color:var(--muted);line-height:1.6">
+    <strong style="color:var(--dim)">PE / EPS / Fwd values:</strong> static estimates (~2025 data) &mdash; shown immediately without an API key.
+    <strong style="color:var(--dim)">YTD%:</strong> requires Finnhub API key &mdash; click <strong>Load Live Data</strong> to fetch current YTD% and refresh all metrics.
+    Hover any synopsis cell for the full description. Rates: 30 stocks = 30 API calls ~20s at Finnhub free tier (60 calls/min).
+  </div>
+
+</div><!-- end tab-semis -->
+
 
 </main>
 
@@ -1433,25 +1917,241 @@ function bwoodApp() {
   return {
     tab: 'watchlist',
     showApiPanel: false,
-    init() { window._bwoodApp = this; }
+    smaResults: [],
+    smaLoading: false,
+    smaError: null,
+    smaLoaded: false,
+    smaProgress: 0,
+    smaProgressOf: 0,
+    smaMeta: { timestamp: '', scanned: 0, qualified: 0 },
+    semiRows: [],
+    semiLoading: false,
+    semiError: null,
+    semiLoaded: false,
+    semiProgress: 0,
+    semiProgressOf: 0,
+    init() {
+      window._bwoodApp = this;
+      this.semiRows = SEMI_AI_STOCKS.map(function(s) {
+        return {t:s.t, c:s.c, sec:s.s, desc:s.desc, ytd:null,
+          pe:s.pe!=null?s.pe:null, fwdPE:s.fwdPE!=null?s.fwdPE:null,
+          eps:s.eps!=null?s.eps:null, fwdEPS:s.fwdEPS!=null?s.fwdEPS:null,
+          loaded:true, err:false};
+      });
+    },
+
+    async scanOneTicker(entry, apiKey) {
+      var t = entry.t, c = entry.c, s = entry.s;
+      var closes;
+      try {
+        if (apiKey) {
+          // Finnhub candle API — CORS-friendly, reliable, uses stored key
+          var nowTs = Math.floor(Date.now() / 1000);
+          var fromTs = nowTs - (430 * 86400); // 430 days = 300+ trading days
+          var url = 'https://finnhub.io/api/v1/stock/candle?symbol=' + t
+                  + '&resolution=D&from=' + fromTs + '&to=' + nowTs + '&token=' + apiKey;
+          var resp = await fetch(url, { signal: AbortSignal.timeout(12000) });
+          if (resp.status === 429) { var re = new Error('RATE_LIMIT'); re.rateLimit = true; throw re; }
+          if (!resp.ok) return null;
+          var data = await resp.json();
+          if (data.s !== 'ok' || !data.c || data.c.length < 200) return null;
+          closes = data.c;
+        } else {
+          // Yahoo Finance fallback (no key — may hit CORS in some browsers)
+          var yUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + t
+                   + '?range=15mo&interval=1d&includePrePost=false';
+          var yr = await fetch(yUrl, { signal: AbortSignal.timeout(10000) });
+          if (!yr.ok) return null;
+          var yd = await yr.json();
+          var yr2 = yd && yd.chart && yd.chart.result && yd.chart.result[0];
+          if (!yr2) return null;
+          var rawC = yr2.indicators && yr2.indicators.quote && yr2.indicators.quote[0] && yr2.indicators.quote[0].close;
+          if (!rawC) return null;
+          closes = rawC.filter(function(v){ return v != null && !isNaN(v); });
+          if (closes.length < 200) return null;
+        }
+
+        // Rolling SMA via O(n) sliding window
+        function rollSMA(period) {
+          var out = new Array(closes.length).fill(null), sum = 0;
+          for (var i = 0; i < closes.length; i++) {
+            sum += closes[i];
+            if (i >= period) sum -= closes[i - period];
+            if (i >= period - 1) out[i] = sum / period;
+          }
+          return out;
+        }
+        var r50 = rollSMA(50), r100 = rollSMA(100), r150 = rollSMA(150), r200 = rollSMA(200);
+        var n = closes.length - 1;
+        var price = closes[n], s50 = r50[n], s100 = r100[n], s150 = r150[n], s200 = r200[n];
+        if (!s50 || !s100 || !s150 || !s200) return null;
+        // Full bullish stack required: P > SMA50 > SMA100 > SMA150 > SMA200
+        if (!(price > s50 && s50 > s100 && s100 > s150 && s150 > s200)) return null;
+        // Count consecutive aligned trading days from today backwards
+        var days = 0;
+        for (var i = n; i >= 0; i--) {
+          if (r50[i] != null && r200[i] != null &&
+              closes[i] > r50[i] && r50[i] > r100[i] && r100[i] > r150[i] && r150[i] > r200[i]) {
+            days++;
+          } else break;
+        }
+        return { ticker: t, company: c, sector: s,
+          price: +price.toFixed(2), sma50: +s50.toFixed(2), sma100: +s100.toFixed(2),
+          sma150: +s150.toFixed(2), sma200: +s200.toFixed(2),
+          pct_above_200: +((price - s200) / s200 * 100).toFixed(2), days_aligned: days };
+      } catch(e) {
+        if (e.rateLimit) throw e;
+        return null;
+      }
+    },
+
+    async loadSMAScan() {
+      var apiKey = getKey(); // reads Finnhub key from localStorage (same key as Live Watchlist)
+
+      this.smaLoading = true;
+      this.smaError = null;
+      this.smaResults = [];
+      this.smaProgress = 0;
+      this.smaProgressOf = SMA_SCAN_TICKERS.length;
+
+      // Try local Flask backend first (fast when running python app.py locally)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        try {
+          var fr = await fetch('/api/sma_scan', { signal: AbortSignal.timeout(5000) });
+          if (fr.ok) {
+            var fd = await fr.json();
+            if (!fd.error && fd.results) {
+              this.smaResults = fd.results;
+              this.smaMeta = { timestamp: fd.timestamp || '', scanned: fd.scanned || 0, qualified: fd.qualified || 0 };
+              this.smaLoaded = true; this.smaLoading = false; return;
+            }
+          }
+        } catch(e) {}
+      }
+
+      // Client-side scan
+      // Finnhub: batch 3 at a time, dynamic delay to stay under 60 req/min
+      // Yahoo Finance fallback (no key): batch 8, no delay
+      var BATCH = apiKey ? 3 : 8;
+      var MIN_MS  = apiKey ? 3500 : 0; // 3 calls / 3.5s = ~51/min, under free limit
+      var all = [], rateLimited = false;
+
+      for (var i = 0; i < SMA_SCAN_TICKERS.length; i += BATCH) {
+        if (rateLimited) break;
+        var batch = SMA_SCAN_TICKERS.slice(i, i + BATCH);
+        var t0 = Date.now();
+        var bRes = await Promise.allSettled(batch.map(function(e){ return this.scanOneTicker(e, apiKey); }, this));
+
+        for (var j = 0; j < bRes.length; j++) {
+          if (bRes[j].status === 'rejected' && bRes[j].reason && bRes[j].reason.rateLimit) {
+            rateLimited = true; break;
+          }
+          if (bRes[j].status === 'fulfilled' && bRes[j].value) all.push(bRes[j].value);
+        }
+
+        this.smaProgress = Math.min(i + BATCH, SMA_SCAN_TICKERS.length);
+        var live = all.slice().sort(function(a,b){ return a.days_aligned - b.days_aligned; });
+        this.smaResults = live.slice(0, 10);
+
+        if (!rateLimited && i + BATCH < SMA_SCAN_TICKERS.length && MIN_MS > 0) {
+          var wait = Math.max(0, MIN_MS - (Date.now() - t0));
+          if (wait > 0) await new Promise(function(r){ setTimeout(r, wait); });
+        }
+      }
+
+      var final = all.slice().sort(function(a,b){ return a.days_aligned - b.days_aligned; });
+      this.smaResults = final.slice(0, 10);
+      var nowStr = new Date().toLocaleString('en-US', { timeZone:'America/New_York',
+        month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' }) + ' ET';
+      this.smaMeta = { timestamp: nowStr, scanned: this.smaProgress, qualified: all.length };
+
+      if (rateLimited) {
+        this.smaError = 'Finnhub rate limit hit (' + this.smaProgress + ' of ' + SMA_SCAN_TICKERS.length + ' scanned). Wait 60 seconds and scan again for remaining stocks.';
+      } else if (all.length === 0) {
+        this.smaError = !apiKey
+          ? 'Yahoo Finance is blocking cross-origin requests. Click the "API Key" button at the top of the page, paste your free Finnhub key (finnhub.io), and scan again — the Finnhub data API works from any browser.'
+          : 'No data returned from Finnhub. Verify your API key is valid (it should be the same key the Live Watchlist uses).';
+      }
+
+      this.smaLoaded = true;
+      this.smaLoading = false;
+    },
+
+    async loadSemiData() {
+      var apiKey = getKey();
+      if (!apiKey) {
+        this.semiError = 'Finnhub API key required — click the API Key button at the top and paste your free key from finnhub.io (same key the Live Watchlist uses).';
+        return;
+      }
+      this.semiLoading = true;
+      this.semiError = null;
+      this.semiProgress = 0;
+      this.semiProgressOf = SEMI_AI_STOCKS.length;
+      this.semiRows = SEMI_AI_STOCKS.map(function(s) {
+        return {t:s.t, c:s.c, sec:s.s, desc:s.desc, ytd:null,
+          pe:s.pe!=null?s.pe:null, fwdPE:s.fwdPE!=null?s.fwdPE:null,
+          eps:s.eps!=null?s.eps:null, fwdEPS:s.fwdEPS!=null?s.fwdEPS:null,
+          loaded:true, err:false};
+      });
+      var self = this;
+      var BATCH = 3, MIN_MS = 3500, rateLimited = false;
+      for (var i = 0; i < SEMI_AI_STOCKS.length; i += BATCH) {
+        if (rateLimited) break;
+        var batch = SEMI_AI_STOCKS.slice(i, i + BATCH);
+        var t0 = Date.now();
+        var bres = await Promise.allSettled(batch.map(function(stock, bi) {
+          var idx = i + bi;
+          var url = 'https://finnhub.io/api/v1/stock/metric?symbol=' + stock.t + '&metric=all&token=' + apiKey;
+          return fetch(url, {signal: AbortSignal.timeout(10000)}).then(function(r) {
+            if (r.status === 429) { var e = new Error('RL'); e.rateLimit = true; throw e; }
+            if (!r.ok) { self.semiRows[idx].err = true; return; }
+            return r.json().then(function(d) {
+              var m = (d && d.metric) || {};
+              var pick = function(a,b){ return a != null ? a : (b != null ? b : null); };
+              self.semiRows[idx].ytd    = pick(m['ytdPriceReturnDaily'], m['yearToDatePriceReturn']);
+              self.semiRows[idx].pe     = pick(m['peTTM'], m['peNormalizedAnnual']);
+              self.semiRows[idx].fwdPE  = m['forwardPE'] != null ? m['forwardPE'] : null;
+              self.semiRows[idx].eps    = pick(m['epsTTM'], m['epsNormalizedAnnual']);
+              self.semiRows[idx].fwdEPS = pick(m['epsForward'], m['epsEstimateNextYear']);
+              self.semiRows[idx].loaded = true;
+            });
+          }).catch(function(e) {
+            if (e.rateLimit) throw e;
+            self.semiRows[idx].err = true;
+          });
+        }));
+        for (var j = 0; j < bres.length; j++) {
+          if (bres[j].status === 'rejected' && bres[j].reason && bres[j].reason.rateLimit) {
+            rateLimited = true; break;
+          }
+        }
+        this.semiProgress = Math.min(i + BATCH, SEMI_AI_STOCKS.length);
+        if (!rateLimited && i + BATCH < SEMI_AI_STOCKS.length) {
+          var wait = Math.max(0, MIN_MS - (Date.now() - t0));
+          if (wait > 0) await new Promise(function(r){ setTimeout(r, wait); });
+        }
+      }
+      if (rateLimited) this.semiError = 'Rate limit hit after ' + this.semiProgress + ' of ' + SEMI_AI_STOCKS.length + ' stocks. Wait 60s and click Load again.';
+      this.semiLoaded = true;
+      this.semiLoading = false;
+    },
   };
 }
 
 const WL = [
-  {ticker:'MSFT', company:'Microsoft Corporation',   tier:'AI Backbone ⚠',      tc:'t1', entry:'$415–$430', target:'$625', stop:'$390',  catalyst:'Azure +40% YoY; 20M Copilot enterprise seats; Wedbush PT $625; Morgan Stanley PT $650', note:'BELOW ZONE at $412. Entry zone $415–$430. Stop $390 — watch closely. Rate hike fear week sold tech broadly. Thesis intact long-term. ✓ Price verified $412 Jun 5'},
-  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure ↑', tc:'t2', entry:'$200–$215', target:'$300', stop:'$175',  catalyst:'Blackwell GB300 ramp; new PC AI chip announced Jun 3; China H200 watch; $500B revenue visibility', note:'BACK IN ZONE at $204. Zone $200–$215 ✓. Trail stop to $200 (zone floor). Re-entry valid for new positions in zone. ✓ Price verified $204 Jun 5'},
-  {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold ↑',   tc:'t1', entry:'$185–$200', target:'$275', stop:'$165',  catalyst:'AI cloud RPO $523B; Wedbush PT $275',          note:"Benjamin Graham value buy (Josh, Mar 2026). Enterprise DB lock-in = structural pricing power. ✓ Price verified ~$193 May 25"},
-  {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick ↑',     tc:'t2', entry:'$390–$400', target:'$550', stop:'$370',  catalyst:'MI400 Q3 launch; $60B hyperscaler commits; record $5.8B DC revenue; stock at $515 May 31 — HOLD ONLY, above zone', note:'ABOVE entry zone at $515 — hold existing, no new buys. Dell blowout validated AI server demand. Wait for $440–$460 support retest before adding. Stop $370. ✓ Price verified $515 May 31'},
-  {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption ↑',    tc:'t2', entry:'$52–$60',   target:'$75',  stop:'$45',   catalyst:'Tesla FSD insurance LIVE; Baird + Piper conferences Jun 2-3; Q1 rev +71% YoY; stock at $66 May 31 — above zone, trail stop', note:'ABOVE entry zone at $66 — up +13% from zone top. If in from $56–58: trail stop to $58. Not in: wait for pullback below $60 before adding. Target $75 intact. ✓ Price verified ~$66 Jun 2'},
-  {ticker:'TAP',  company:'Molson Coors Beverage',   tier:'Dividend (Josh only)',tc:'t1', entry:'$40–$44',   target:'$49',  stop:'$38',   catalyst:'4.58% yield; ex-div May 29 🔔 — fails Kevin pricing power test',    note:'Josh-only hold from Dec 2025. No innovation story. Kevin would not hold. Small income position only.'},
-  {ticker:'SG',   company:'Sweetgreen Inc.',          tier:'Short Swing ⚠',     tc:'t2', entry:'$9.00–$9.50',target:'$13', stop:'$7.50', catalyst:'Q2 wrap sales data — AI moat sold to Wonder Nov 2025',              note:'Thesis revised: sold Infinite Kitchen tech. Now a pure Josh catalyst swing on wrap menu. Tighter stop, shorter horizon.'},
-  {ticker:'PANW', company:'Palo Alto Networks',       tier:'AI Security ↑ — Earnings Beat ✓', tc:'t1', entry:'$250–$265',  target:'$360', stop:'$275',  catalyst:'Q3 FY2026 BEAT: EPS $0.85 (beat $0.06), Rev $3.002B (beat 1.96%); Q4+FY raise; NGS ARR +60% YoY; AH $301.70', note:'BEAT + RAISE confirmed Jun 2. $302 AH — FAR above entry zone. Stop trailed from $232 → $275. No new entries. POTW pass (1.52% AH gap too small). Target $360 intact. ✓ Price verified $301.70 AH Jun 2'},
-  {ticker:'PLTR', company:'Palantir Technologies',    tier:'AI Operating System 🆕',tc:'t1', entry:'$125–$140',  target:'$183', stop:'$108',  catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY', note:'AI data fabric for government + enterprise. Once classified data lives in Foundry, switching is an 18-month ATO rebuild. 139% NRR. DIA contract win = H2 2026 catalyst. ✓ Price verified $137 May 26'},
-  {ticker:'VRT',  company:'Vertiv Holdings Co',       tier:'AI Infrastructure Hardware 🆕',tc:'t2', entry:'$310–$340',  target:'$420', stop:'$290',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY, EPS +83% YoY; BofA PT $440; RBC PT $435; Americas DC +44%', note:'Power + cooling for every AI GPU rack. 18–24 month equipment lead times lock in revenue. 75% of revenue from data centers. Backlog $15B covers 12+ months forward. ✓ Price verified $327 May 26'},
-  {ticker:'ANET', company:'Arista Networks Inc',      tier:'AI Networking ↑',         tc:'t1', entry:'$148–$168',  target:'$220', stop:'$128',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; 29 analysts Strong Buy; PT avg $188', note:'BACK IN ZONE at $154. Zone $148–$168 ✓. Trail stop to $148 (zone floor). Re-entry valid for new positions in zone. ✓ Price verified $154 Jun 5'},
-  {ticker:'AVGO', company:'Broadcom Inc',              tier:'AI Custom Silicon ↑',   tc:'t2', entry:'$415–$445',  target:'$550', stop:'$385',  catalyst:'Q1 AI rev $8.4B (+106% YoY); Q2 AI guide $10.7B; CEO $100B AI rev by 2027; $73B backlog; stock $457 Jun 2 — above zone', note:'ABOVE entry zone at $457. Entry window closed — hold existing. Scale-in only on pullback to $415–$430. Stop $385. ✓ Price verified $457 Jun 2'},
-  {ticker:'NOW',  company:'ServiceNow Inc',            tier:'AI Enterprise Control Plane ⚠',tc:'t1', entry:'$118–$132',  target:'$175', stop:'$103',  catalyst:'Knowledge 2026: AI Control Tower + Otto AI agent launched; Experian multi-year agentic partnership; BofA Buy $130; consensus PT $142; 19/22 analysts Buy', note:'BELOW ZONE at $111. Entry zone $118–$132. Stop $103 critical — if breaks $103 with volume, reassess thesis. Rate fear week sold SaaS broadly. Enterprise lock-in thesis intact. ✓ Price verified $111 Jun 5'},
-  {ticker:'MRVL', company:'Marvell Technology Inc',    tier:'AI Custom Silicon &#128640; NEW', tc:'t2', entry:'$245–$265',  target:'$350', stop:'$220',  catalyst:'AWS Trainium3 + Google TPU custom chip contracts; AI networking ASIC revenue +87% YoY; S&P 500 inclusion Jun 22 (structural buyer); POTW WIN May 28; EPS growth 37% YoY', note:'POST-NFP DIP at $263 — down -16.74% Jun 5 from ATH $316 (Jun 4). Custom AI silicon for hyperscalers: AWS, Google, Microsoft. S&P 500 inclusion Jun 22 = index fund forced buying. Zone $245–265. Swing desk WIN May 28 validated the setup. ✓ Price verified $263 Jun 5'},
+  {ticker:'MSFT', company:'Microsoft Corporation',   tier:'AI Backbone',            tc:'t1', entry:'$393–$412', target:'$625', stop:'$372',  catalyst:'Azure +40% YoY; 20M Copilot enterprise seats; Wedbush PT $625; Morgan Stanley PT $650', note:'Stop-becomes-entry: $393–$412 is the 2026 rate-fear consolidation base. Stop $372 = below Feb 2026 re-accumulation floor — breaks here means macro has invalidated the premium growth multiple, not just a pullback. Current ~$402 is INSIDE zone. Distribution regime: no entry until Warsh Jun 16–17 clears. R/R from $402: 7.3:1 ✓'},
+  {ticker:'NVDA', company:'NVIDIA Corporation',      tier:'AI Infrastructure',       tc:'t2', entry:'$175–$192', target:'$300', stop:'$155',  catalyst:'Blackwell GB300 ramp; China H200 cleared; $500B revenue visibility; PC AI chip expansion', note:'Stop-becomes-entry: $175–$192 = Blackwell re-rating base + H200 China-clearance support level. Stop $155 = below pre-China-clearance structural floor — breaks here means China revenue thesis is structurally damaged. Current ~$202 = above zone, wait for pullback. Distribution regime: skip until Warsh Jun 16–17 clears. R/R from $183 mid: 4.1:1 ✓'},
+  {ticker:'ORCL', company:'Oracle Corporation',      tier:'Long-Term Hold',          tc:'t1', entry:'$165–$182', target:'$275', stop:'$148',  catalyst:'AI cloud RPO $523B; Wedbush PT $275; beat-but-fell Jun 10 ($20B share sale) driving price toward zone', note:'Stop-becomes-entry: $165–$182 is the Graham value zone + structural DB lock-in support. Stop $148 = below all 2025–2026 support — breaks here means AI cloud migration thesis has failed, not repriced. Current ~$193–199, approaching zone from above after Jun 10 dilution. Do not anticipate — wait for zone. R/R from $173 mid: 4.0:1 ✓'},
+  {ticker:'AMD',  company:'Advanced Micro Devices',  tier:'Primary Pick',            tc:'t2', entry:'$370–$390', target:'$550', stop:'$348',  catalyst:'MI400 Q3 2026 launch; $60B hyperscaler commits; record $5.8B DC revenue; dual-vendor GPU sourcing standardizing', note:'Stop-becomes-entry: $370–$390 = pre-May-run consolidation base. Stop $348 = below the data-center re-rating floor — breaks here means hyperscaler MI400 commitment revisions, not profit-taking. If above zone: hold existing, no adds until pullback to $370–$390. R/R from $380 mid: 5.3:1 ✓'},
+  {ticker:'LMND', company:'Lemonade Inc.',            tier:'AI Disruption',           tc:'t2', entry:'$45–$56',   target:'$88',  stop:'$38',   catalyst:'Tesla FSD autonomous insurance AZ+OR LIVE; Q4 2026 EBITDA profitability target; 6% LAE vs industry 8–10%; AI underwriting moat', note:'Stop-becomes-entry: $45–$56 = structural base below the Tesla announcement move. Stop $38 = below IPO-era support — breaks here questions whether AI-native insurance thesis survives vs. incumbent capital. Target raised $75→$88 (Tesla full multi-state rollout + EBITDA inflection). Current ~$60 = above zone, wait for pullback. R/R from $50 mid: 3.0:1 ✓'},
+  {ticker:'DELL', company:'Dell Technologies Inc',   tier:'AI Server Assembly ⚠ REDRAWN', tc:'t2', entry:'$335–$355', target:'$497', stop:'$310', catalyst:'Q1 FY27 blowout May 28: AI server rev $16.1B (+757% YoY); $24.4B new AI orders; record $51.3B backlog; FY guide raised to $165–169B; median PT $497', note:'ZONE REDRAWN Jun 11: stop $310 = below pre-earnings May 29 structural base (~$330 consolidation). If $310 breaks, the May gap fully fills and macro has overwhelmed the backlog thesis. Entry requires stabilization day + Warsh Jun 16–17 clearance. R/R at $345: 4.3:1 ✓'},
+  {ticker:'PANW', company:'Palo Alto Networks',      tier:'AI Security',             tc:'t1', entry:'$232–$252', target:'$360', stop:'$215',  catalyst:'Q3 FY2026 beat + raise; NGS ARR +60% YoY; XSIAM SOC expansion; AI Firewall revenue; distribution selloff from $300 ATH Jun 2', note:'Stop-becomes-entry: $232–$252 = XSIAM re-rating base (the level PANW consolidated at before platformization premium). Stop $215 = below that re-rating floor — breaks here means platformization premium is unwinding, not profit-taking. Current ~$257 = approaching zone from above. Distribution regime: no entry until Warsh clears. R/R from $242 mid: 4.4:1 ✓'},
+  {ticker:'PLTR', company:'Palantir Technologies',   tier:'AI Operating System',     tc:'t1', entry:'$108–$122', target:'$183', stop:'$95',   catalyst:'85% YoY revenue; $7.65B FY2026 guide; DIA contract pending; Ukraine AI expansion; US gov rev +84% YoY; AIP commercial tripling', note:'Stop-becomes-entry: $108–$122 = AIP commercial ramp base (the consolidation before AIP tripling drove the re-rating). Stop $95 = below ATO lock-in support floor — breaks here means government contract pipeline has stalled, not multiple compression. Current ~$134 = above zone, wait for pullback. R/R from $115 mid: 3.4:1 ✓'},
+  {ticker:'VRT',  company:'Vertiv Holdings Co',      tier:'AI Infrastructure Hardware', tc:'t2', entry:'$290–$312', target:'$420', stop:'$268',  catalyst:'Order backlog $15B (+109% YoY); Q1 rev +30% YoY; EPS +83% YoY; BofA PT $440; 18–24 month lead times lock in revenue', note:'Stop-becomes-entry: $290–$312 = AI DC buildout re-rating base (power + cooling contract layer support). Stop $268 = below backlog-driven re-rating support — breaks here means DC capex pullback is real, not timing. R/R from $301 mid: 3.6:1 ✓. Requires Warsh Jun 16–17 clearance.'},
+  {ticker:'ANET', company:'Arista Networks Inc',     tier:'AI Networking',           tc:'t1', entry:'$128–$148', target:'$220', stop:'$112',  catalyst:'Q1 rev +35% YoY beat; FY2026 guide $11.5B (+28%); $3.5B AI fabric revenue 2026; Ultra Ethernet Consortium leader; 29 analysts Strong Buy', note:'Stop-becomes-entry: $128–$148 = EOS switching cost base (hyperscaler AI cluster networking commitment level). Stop $112 = below structural moat floor — breaks here means Ethernet/InfiniBand share shift or in-house switching at scale. Current ~$152 = above zone, wait for pullback. R/R from $138 mid: 3.2:1 ✓. Distribution regime: no new entries.'},
+  {ticker:'AVGO', company:'Broadcom Inc',            tier:'AI Custom Silicon',       tc:'t2', entry:'$350–$375', target:'$550', stop:'$328',  catalyst:'Q1 AI rev $8.4B (+106% YoY); Q2 AI guide $10.7B; CEO $100B AI rev by 2027; Google TPU / Meta MTIA / ByteDance XPU 18–24 month design lock-in', note:'ZONE REDRAWN: prior zone $415–$445 + stop $385 invalidated — AVGO fell to ~$378 through both. New zone = pre-Q1-earnings accumulation base $350–$375. Stop $328 = below Q4 2025 structural support — breaks here means custom silicon hyperscaler commitments are being revised. Current ~$378 = at/just above zone. Requires stabilization + Warsh clearance. R/R from $362 mid: 5.4:1 ✓'},
+  {ticker:'NOW',  company:'ServiceNow Inc',          tier:'AI Enterprise Control Plane', tc:'t1', entry:'$103–$118', target:'$175', stop:'$88',   catalyst:'Knowledge 2026: AI Control Tower + Otto agent; Experian multi-year agentic deal; BofA Buy $130; consensus PT $142; 19/22 analysts Buy', note:'Stop-becomes-entry: $103–$118 = AI Control Plane re-rating base (the consolidation before Otto + agentic workflow premium). Stop $88 = below enterprise workflow switching cost floor — breaks here means agentic AI monetization is failing and competitors are taking workflow share. Current ~$108 is INSIDE zone. Distribution regime: monitor only until Warsh clears. R/R from $110 mid: 3.0:1 ✓'},
+  {ticker:'MRVL', company:'Marvell Technology Inc',  tier:'AI Custom Silicon &#128640;', tc:'t2', entry:'$220–$242', target:'$350', stop:'$198',  catalyst:'AWS Trainium3 + Google TPU custom chip contracts; AI networking ASIC revenue +87% YoY; S&P 500 inclusion Jun 22 (structural forced buying)', note:'Stop-becomes-entry: $220–$242 = hyperscaler custom silicon contract base (support level before AWS Trainium3 win drove premium). Stop $198 = below custom silicon re-rating floor — breaks here means hyperscaler in-house silicon is eating MRVL\'s contract pipeline. Current ~$250s = above patient zone, capital play on hold. S&P 500 inclusion Jun 22 = index fund forced buying regardless of distribution. R/R from $231 mid: 3.7:1 ✓'},
 ];
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -1787,19 +2487,12 @@ const MONITOR_DATA = {
     thesis:'INTACT — ABOVE ENTRY ZONE', verdict:'ABOVE ZONE — $66 TRAIL STOP TO $58', verdictCls:'vd-caution',
     alert:'Call Up — June 2, 2026: LMND ~$66.41 — up +13% from top of entry zone $60. Catalysts: Baird Global Consumer/Tech Conference Jun 2 (CEO Daniel Schreiber presenting), Piper Sandler Fintech Conference Jun 3, Morgan Stanley Financials Conference Jun 10 — three investor conferences in 10 days providing sustained catalyst flow. Q1 2026: revenue $258M (+71% YoY), EPS -$0.47 vs -$0.57 estimate. Tesla FSD insurance LIVE in AZ and OR. ABOVE ENTRY ZONE: If holding from $52–$60 zone: trail stop up to $58 (zone top), targeting $75. If NOT in: do not chase at $66 — wait for pullback below $60 for better R/R. Stock approaching target $75 ($9 upside vs $21 downside from here = poor R/R for new entry). Thesis fully intact.',
   },
-  TAP: {
-    pp:  {score:3,  note:'FAILS pricing power test. Consumers are shifting to craft/premium/alternative. TAP is a price-taker in a declining category.'},
-    mac: {score:4,  note:'Consumer discretionary headwinds. Premiumization trend working directly against TAP core brand. No growth catalyst visible.'},
-    cat: {score:4,  note:'⚠ EX-DIVIDEND TOMORROW MAY 29. $0.48/share dividend, payment date June 12. Annual yield 4.58%. Must hold shares before open May 29 to capture.'},
-    thesis:'WEAK — JOSH INCOME HOLD ONLY', verdict:'⚠ EX-DIV TOMORROW MAY 29', verdictCls:'vd-caution',
-    alert:'Call Up — May 28, 2026: ACTION REQUIRED — TAP ex-dividend date is TOMORROW May 29. $0.48/share, payment June 12. Annual yield 4.58%. If Josh is holding for the dividend, confirm position is open BEFORE market open tomorrow. Stock will drop ~$0.48 on ex-date — do NOT buy specifically for dividend capture. Existing holders: lock in position tonight. TAP fails pricing power framework; no new buys. Income hold only.',
-  },
-  SG: {
-    pp:  {score:4,  note:'PARTIAL FAIL — sold Infinite Kitchen tech to Wonder (Nov 2025, $100M cash + $86.4M stock). The owned technology moat is gone. Now a pure wrap-menu momentum play.'},
-    mac: {score:5,  note:'Rate cuts help growth restaurants but fast-casual is highly competitive. Wraps priced under $15 — accessible price point is a positive for traffic frequency.'},
-    cat: {score:7,  note:'Wrap national rollout LIVE — tested well in NY, Midwest, LA. JPMorgan upgraded to Overweight PT $13. Oppenheimer Outperform PT $10. Q2 same-store sales (July) is the make-or-break event.'},
-    thesis:'REVISED — SWING ONLY', verdict:'ABOVE ZONE — HOLD STOP $7.50', verdictCls:'vd-caution',
-    alert:'Call Up — May 28, 2026: SG $9.26 (May 23), was $9.71 May 22. Wrap national rollout active and tracking well — NY, Midwest, LA reception positive. JPMorgan upgraded to Overweight PT $13; Oppenheimer Outperform PT $10. Stock is ABOVE entry zone $9.00–$9.50. Do not chase. If in from zone: hold with stop $7.50. Target $13. Q2 same-store sales (July) is the exit decision point — if the wrap launch does not show up in Q2 data, exit on that print.',
+  DELL: {
+    pp:  {score:7,  note:'Enterprise AI server assembly at scale — only Dell and SMCI build full-rack AI systems at hyperscale volume, and Dell owns the enterprise channel relationships SMCI lacks. ISG (Infrastructure Solutions Group) attach rates: services, financing, networking bundled per rack. Record $51.3B backlog = 12+ months of contracted revenue visibility.'},
+    mac: {score:8,  note:'Every enterprise AI deployment needs assembled, integrated, serviced rack systems — Dell is the layer between chip vendors and the data center floor. $24.4B new AI orders in a single quarter confirms enterprise AI capex is accelerating, not slowing. Direct beneficiary of the same wave driving NVDA, AVGO, ANET, VRT.'},
+    cat: {score:9,  note:'Q1 FY27 (May 28): AI server revenue $16.1B (+757% YoY). $24.4B new AI orders. Record backlog $51.3B. FY guide raised to $165–169B revenue, ~$60B AI server revenue. Stock +33% May 29 — best single day ever. PT raises: Loop Capital $550, Wells Fargo $505, JPM/Raymond James/Bernstein $500, Citi $475. Median PT $497.'},
+    thesis:'INTACT — ZONE REDRAWN', verdict:'REDRAWN — GAP-FILL ZONE $335–$355', verdictCls:'vd-caution',
+    alert:'Call Up — June 11, 2026 (ZONE REDRAWN): DELL fell to ~$369 — through the original $420–450 zone AND the $395 stop in three sessions. Cause: sector-wide AI hardware de-risk (SMCI -11%, DELL -9% single day), Silver Lake insider block sales creating supply overhang, and profit-taking on a stock stretched far above its moving averages. NOT a thesis break — no order cancellations, no guidance cut, $51.3B backlog intact, and ORCL\'s beat confirms AI capex demand. STRUCTURAL LESSON LOGGED: the original zone was a 2–9% pullback from a +33% best-day-ever spike — too shallow. The same parabolic caution that rejected MU should have set DELL\'s zone at the gap origin. NEW STRUCTURE: entry $335–$355 (full gap-fill of the May 29 move, pre-print base ~$347), target $497 (median PT), stop $310. R/R at $345: $152 up / $35 down = 4.3:1 ✓. Entry conditions: stabilization base + selling volume dry-up + Warsh Jun 16–17 cleared. Do not catch the knife at $369.',
   },
   PANW: {
     pp:  {score:9,  note:'Platformization = catastrophic switching cost. Once PANW deploys Cortex + XSIAM across an enterprise, 8-12 security tools are consolidated on a single platform. Unwinding it requires a 12-18 month project. Cybersecurity spend is non-discretionary — it grows in recessions.'},
@@ -1941,7 +2634,7 @@ const HISTORY = [
     ticker:'Watchlist v8→v9', company:'Call Up June 5, 2026 — ORCL POTW Loss; Rate Fear Week; New Put-Buying Rule',
     added:'June 5, 2026', addedPrice:'—',
     exitDate:'—', exitPrice:'—',
-    pnl:'—', status:'ACTIVE', statusCls:'hs-active',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
     fw:'Josh + Kevin + Institutional research',
     reason:'Week of Jun 2–5: NFP double-beat (+172K, wages +3.9% YoY) killed June Fed cut probability — rate path reset to Sep/Oct 2026. ORCL POTW LOSS: entered ~$224, high $249 Thu, NFP crushed to $213.68 Fri — hard exit honored, -4.6%. PANW gap fully faded Tue ($338→$283). AVGO beat -8% AH Wed. Two "sell on good news" signals in 48hrs = NEW RULE: buy QQQ/SMH puts at first signal (30d out, 3–5% OTM, 0.5% bankroll). S&P -3%, Nasdaq -3.7%, SOX -10.4% on week. Zone changes: NVDA back in zone $204, MSFT below zone $412, ANET back in zone $154, NOW below zone $111 (stop $103 critical). AVGO recovered to $472 from AH selloff.',
     lesson:'Rate macro can invalidate a working trade overnight. ORCL was up +11% Thu; NFP erased it Fri. The hard exit rule prevented holding into earnings Jun 9 — framework protected capital. New rule codified: two sector "sell on good news" signals within 48 hours = institutional distribution. Buy puts immediately. Size: 0.5% bankroll. Do not wait for confirmation.',
@@ -1950,11 +2643,210 @@ const HISTORY = [
     ticker:'Watchlist v9→v10', company:'Call Up June 8, 2026 — ORCL Gap Play Active; CPI Double Macro Day; TTD Long Horizon Find',
     added:'June 8, 2026', addedPrice:'—',
     exitDate:'—', exitPrice:'—',
-    pnl:'—', status:'ACTIVE', statusCls:'hs-active',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
     fw:'Josh + Kevin',
     reason:'Week of Jun 9–13: ORCL earnings CORRECTED to Tue Jun 10 AH (was Mon Jun 9). May CPI also Tue Jun 10 AM — double macro event. Entry window shifts to Wed Jun 11 only (from Tue Jun 10). NVDA secondary entry also moves to Wed post-confirmation. Scenario B (miss): buy QQQ/SMH puts — new rule applies. LMND Morgan Stanley Financials Conference Tue Jun 10 (CEO presenting) — watch for sentiment. Long Horizon tab updated: (1) All stocks now use sector industry average PE instead of company 5-yr median PE. (2) TTD (The Trade Desk) added as new qualifying stock: $19.95 current, MOS price $36, 72% below fair value — ad-tech industry PE 35x, 2 doublings at 16% growth. Formula inputs: futureEPS $8.28, fairValue $72, mosPrice $36.',
     lesson:'Verify earnings dates from primary source (Oracle IR) before finalizing the entry calendar. Media reports can list the wrong day name. The correction from Mon Jun 9 to Tue Jun 10 moved the entry window by one full trading day — a significant impact on a 5-day gap play.',
   },
+  {
+    ticker:'Watchlist v10→v11', company:'Call Up June 10, 2026 — CPI In-Line; ORCL Prints Tonight; MRVL Capital Play Entry Zone Active; Warsh Warning',
+    added:'June 10, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'Double Macro Day debrief: (1) CPI IN-LINE — core +0.2% MoM (below +0.3% est). Macro overlay cleared. Full size on ORCL tomorrow if beat tonight. (2) ORCL earnings tonight AH — EPS consensus $1.89–$1.96, rev $19B. Beat prob 70%. Entry Wed Jun 11 ONLY on beat + raise + gap + 1.5x ADV. Miss = PASS + Scenario B puts. (3) MRVL Capital Play ENTRY ZONE ACTIVE — $260.94 Jun 10, inside $255–$268 zone. S&P 500 inclusion Jun 22 confirmed (replaces Pool Corp + Campbell\'s). Entry window Jun 11–13. Target $316. Stop $228. (4) WARSH WARNING: 70% warning signals flashing, Kevin Warsh Fed event Jun 16–17 = macro risk. Hard exit all swings Fri Jun 13 EOD is doubly critical. (5) NVDA $201–$207 still in zone. VIX +10% today — elevated premium, tighter stops. (6) December 25bp rate HIKE now priced in — H2 macro headwind elevated.',
+    lesson:'CPI result confirms the value of the macro overlay rule: always wait for the data before sizing. Core came in below estimate, clearing the path for full-size entry. The Warsh June 16–17 event reinforces why the Fri Jun 13 hard exit rule exists — unknown macro events on the horizon mean no weekend holds, ever.',
+  },
+  {
+    ticker:'TAP', company:'Molson Coors Beverage',
+    added:'Dec 2025', addedPrice:'$40–$44 zone',
+    exitDate:'June 12, 2026 (post-dividend)', exitPrice:'—',
+    pnl:'~Flat + 4.6% yield collected', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh only — dividend income hold; failed Kevin pricing power test from day one (PP 3/10)',
+    reason:'Dividend hold thesis completed its purpose: ex-div May 29 captured, $0.48/share payment lands June 12. No remaining catalyst — consumers shifting to craft/premium works directly against the core brand, and the framework scored it PP 3/10, Macro 4/10 months ago. Capital is better deployed in the AI infrastructure stack. Instruction: collect the June 12 dividend payment, then close the position.',
+    lesson:'A position that fails the pricing power test should never have survived two framework revisions. Income holds belong in a separate income account, not on a catalyst-driven watchlist — they occupy attention and capital without a path to the 2:1 R/R minimum.',
+  },
+  {
+    ticker:'SG', company:'Sweetgreen Inc.',
+    added:'Oct 5, 2025', addedPrice:'~$8.50',
+    exitDate:'June 10, 2026', exitPrice:'~$8.00',
+    pnl:'~−6%', status:'ARCHIVED', statusCls:'hs-archived',
+    fw:'Josh catalyst swing (downgraded from Josh + Kevin after Infinite Kitchen sale Nov 2025)',
+    reason:'Final close of a twice-revised thesis. Original AI Infinite Kitchen moat thesis died Nov 2025 when the tech was sold to Wonder. The remaining wrap-menu swing went nowhere: $9.26 May 23 → $8.00 June 9 (range $7.41–$8.26), drifting below the $9.00–$9.50 entry zone with stop $7.50 nearly tested. Q2 same-store sales (July) was the decision point, but the stock is not holding the zone long enough to reach it. Exit ~$8.00 for roughly −6% from the Oct 2025 entry.',
+    lesson:'When the core differentiator is sold, close the position — do not downgrade and linger. The Nov 2025 revision kept SG alive for seven months of dead capital. A thesis kill event is an exit signal, not a rewrite signal.',
+  },
+  {
+    ticker:'Watchlist v11→v12', company:'June 10, 2026 — Dashboard Facelift; DELL Added (AI Server Assembly); TAP + SG Archived',
+    added:'June 10, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'Three changes: (1) DELL added as 13th ticker — AI server assembly layer completing the infrastructure stack (NVDA compute, AVGO/MRVL silicon, ANET networking, VRT power/cooling, DELL assembly). Q1 FY27: AI server rev $16.1B (+757% YoY), $24.4B new orders, record $51.3B backlog. ABOVE ZONE at ~$461 after +33% best-day-ever — entry on pullback to $420–$450, target $550, stop $395. (2) TAP archived — dividend captured (payment Jun 12), PP 3/10 from day one, no catalyst path. (3) SG archived at ~$8.00 (~−6%) — thesis died with the Infinite Kitchen sale Nov 2025; wrap swing never held the zone. Considered and rejected: MU at $1,040 (+912% in 12 months, avg PT $717 BELOW spot — the INTC RSI-80 lesson applies). Also this session: full visual redesign — Inter typography, refreshed palette, depth/shadows, frosted-glass header — zero functional changes.',
+    lesson:'Watchlist hygiene is part of the framework. Two positions that failed their tests months ago survived on inertia. The call up cadence exists to force these decisions — archive on thesis failure, not on portfolio review guilt. And never add a parabolic name just because the sector is hot: MU up 912% with consensus PT below spot is the same setup that got INTC archived.',
+  },
+  {
+    ticker:'Watchlist v12→v13', company:'Call Up June 11, 2026 — ORCL Beat-But-Fell (No Entry); Third Distribution Signal; DELL Zone Redrawn; STAND DOWN Week',
+    added:'June 11, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'Post-ORCL debrief: (1) ORCL BEAT (EPS $2.11 vs $1.97, rev $19.18B vs $19.09B) but FELL below $200 — cloud rev $9.91B light + $40B capital raise announced including $20B SHARE SALE. Gap condition failed → NO ENTRY on the POTW. Capital preserved. (2) THIRD sell-on-good-news in 8 days (PANW Jun 2, AVGO Jun 3, ORCL Jun 10) = institutional distribution regime. NVDA secondary SKIPPED — its required confirmation became a distribution signal. No new swing longs; flat into Warsh Jun 16–17. (3) DELL fell to ~$369, through the $420–450 zone AND $395 stop in 3 sessions (SMCI -11%, DELL -9% single day; Silver Lake insider supply; profit-taking). Thesis intact — no cancellations, $51.3B backlog confirmed. Zone REDRAWN to gap-fill $335–$355, target $497 (median PT), stop $310 = 4.3:1 at $345. (4) MRVL capital play ON HOLD: ~$250s, at/below zone floor. Jun 22 S&P inclusion catalyst structural and unaffected. Entry window extended to Jun 12–18, first stabilization day only, abort below $228 close. (5) ORCL now ~$193–$199 — approaching its OWN long-term WL zone $175–$185 set in March. Watch only.',
+    lesson:'Two lessons. FIRST: the DELL zone was a structural error — a 2–9% pullback zone after a +33% best-day-ever spike is inside the hype, not below it. The MU parabolic-rejection logic written the same session should have applied to DELL itself: after a violent gap, the zone belongs at the gap origin (~$347), not just below the spike high. The stop did its job only in the sense that we never entered. SECOND: a clean macro overlay (CPI in-line) does not override a sector distribution regime. Beat + no gap = no entry saved the week — the framework conditions exist precisely for nights like Jun 10 when the headline is good and the tape is not.',
+  },
+  {
+    ticker:'Watchlist v13→v14', company:'Call Up June 12, 2026 — Iran Deal Draft; Oil -12%; SpaceX IPO; MRVL +11% Activated; Stop-Becomes-Entry Board Restructure; Conditional Regime Shift',
+    added:'June 12, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'(1) IRAN DEAL DRAFT: Trump hails "great settlement" Jun 11, sign possible this weekend. WTI dropped $9.30 (-9.6%) to $87.71 — oil inflation floor cracking after months of $97+ suppressing Fed pivot. If signed: Strait of Hormuz reopens, WTI targets $75-80, Dec 2026 hike probability collapses. (2) SPACEX IPO JUN 12: $135/share, $1.78T valuation, multiple times oversubscribed. First of OpenAI/Anthropic/SpaceX AI IPO trio — maximum institutional risk appetite signal. S&P +1.75%, Nasdaq +2.54%, VIX 21 (-17%). (3) MRVL CAPITAL PLAY ACTIVATED: $280.71 (+11.2%) — Iran risk-on bid + S&P 500 inclusion Jun 22 pre-positioning started simultaneously. First green stabilization day confirmed. If entered at $263: P&L +$17.71/share (+6.7%). Trail stop $263, target $316 (ATH, +12.6%). Peak forced buying Jun 18-20. (4) MSFT $393 IN ZONE $393-412 + NOW $108 IN ZONE $103-118 — two names at structural entry, FINAL GATE = Warsh Jun 16-17. If benign: enter both Mon Jun 16. (5) BOARD RESTRUCTURED: All 13 stops now named structural levels. Stop-becomes-entry philosophy applied. Min R/R 2.5:1 gate enforced. LMND target raised $75→$88. PANW stop corrected from $275 (above entry, erroneous) to $215. PLTR, ANET, NOW entries shifted down for better R/R. AVGO zone fully redrawn after falling through old stop. All zones now have named structural reasoning.',
+    lesson:'Stop-becomes-entry framework validated within 24hrs: MSFT ($393 vs old zone $415-430) and NOW ($108 vs old zone $118-132) both pulled back INTO their new structural zones the very next session. Old zones showed them "below zone" — new zones correctly identify them AT structural support. This is the difference between zones anchored to hype levels vs. zones anchored to the actual structural defense.',
+  },
+  {
+    ticker:'Watchlist v14→v15', company:'Call Up June 15, 2026 — Iran Deal CONFIRMED (Trump Jun 14); Signing Geneva Jun 19; WTI $80.07 (-18% from $97+); VIX 16.73; Nasdaq +2.1%; MSFT POTW In Zone; Warsh FOMC Jun 16–17',
+    added:'June 15, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'(1) IRAN DEAL CONFIRMED: Trump declared deal "complete" Jun 14 on Truth Social. Formal signing ceremony Geneva Fri Jun 19. WTI $80.07 (-18% from $97+ cycle high). Energy CPI floor cracking — first meaningful relief in 8 months. Dec 2026 rate-hike probability collapsing. Nasdaq futures +2.1%, S&P +1.3%, VIX 16.73 (-14%). (2) WARSH FOMC JUN 16–17: First meeting as chair. Hold at 3.50–3.75% is 99% probability. Critical variable: dot plot and press conference tone. If Warsh keeps Sep 2026 window open and signals easing bias → BULLISH → ENTER MSFT + NOW Wed Jun 17 AH. If signals hike or removes Sep window → STAND DOWN. (3) MSFT POTW — IN ZONE: ~$408 at open, zone $393–$412, stop $372, target $625, R/R 6.0:1. Dual catalyst: Iran deal macro unlock + Warsh hold. Entry trigger = Warsh neutral press conference Wed Jun 17. Size: 1% bankroll. (4) NOW SECONDARY — IN ZONE: ~$108, zone $103–$118, stop $88, target $175, R/R 3.0:1. Enter alongside MSFT post-Warsh. Combined cap 1.5% bankroll. (5) MRVL CAPITAL PLAY — S&P 500 INCLUSION WEEK: ~$281, trail stop $263, target $325, B. Riley PT $345. S&P 500 effective date Jun 22 = 7 days. Peak forced index buying Jun 18–20. ATH $324.20 (Jun 3 intraday). (6) AVGO $382.57 — just above zone $350–$375. Watch for pullback into zone post-Warsh. Stop $328, target $550, R/R 5.4:1 if reached. (7) ORCL approaching zone: ~$193–$199 falling toward $165–$182. Patient entry when price reaches zone AND Warsh clears.',
+    lesson:'MSFT/NOW stand-down framework validated: Despite Iran deal AND Warsh hold (both bullish), price action broke BELOW structural zones rather than confirm them. Stand-down rule (do not enter unless price is IN zone) prevented capital deployment into a declining setup. Framework prevented loss on both names.',
+  },
+  {
+    ticker:'Watchlist v15→v16', company:'Call Up June 19, 2026 — Iran Deal SIGNED Geneva Today; MSFT $379 Stand-Down CORRECT; MRVL $311 +18% (raise trail $290); ORCL $184 AT Zone Top; Warsh FOMC COMPLETE (Hold 3.50–3.75%)',
+    added:'June 19, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'SUPERSEDED', statusCls:'hs-revised',
+    fw:'Josh + Kevin',
+    reason:'(1) IRAN DEAL SIGNED TODAY: Signing ceremony Geneva Jun 19 (today). Both sides declared permanent end Jun 14. US lifts oil sanctions, Iran reopens Strait of Hormuz in 30 days. WTI down from $97+ to ~$78–$80 range (-18%+). Energy CPI reversal begins. Nasdaq +2.38% Jun 18, SPY +0.76%. Primary macro headwind since Feb 28 RESOLVED. (2) WARSH FOMC COMPLETE: Held 3.50–3.75% Jun 16–17 as expected. Tone neutral, noted Iran deal reduces energy inflation. September 2026 cut window PRESERVED per dot plot. (3) MSFT POTW STAND-DOWN CORRECT: Closed $379.05 Jun 18, BELOW zone $393–$412. Warsh hold was insufficient to pull MSFT into zone. Stop $372 is only $7 away. Stand-down was correct — thesis intact (Azure +40% YoY) but price action not confirming. Scenarios: $372 breaks = exit thesis; $379 holds into July Azure earnings = re-approach $393. (4) NOW STAND-DOWN CORRECT: Closed $95.14 Jun 18, below zone floor $103. Stand-down correct. Otto AI + Experian deal intact — wait for $103+ price action. (5) MRVL $310.85 +18.2%: S&P 500 inclusion Jun 22 = 3 days. ACTION: Raise trail stop $263 → $290 (Jun 17 structural floor). Peak forced buying Jun 19–22. B. Riley PT $345. Post-inclusion: hold $290+ toward $325 ATH; exit if drops below $290 post-Jun 22. (6) ORCL $184 AT ZONE: Closed $184.31 Jun 18. Zone top $182 = $2.31 away. Set buy alert $183. AI cloud RPO $523B. Stop $148, target $275, R/R 4.0:1. Entry imminent this week. (7) GFS ONLY POSITION: 12 shares @ $85.24 avg. Close $85.86 Jun 18 (+6.5% on day). Total portfolio $1,197 ($1,028 equity).',
+    lesson:'—',
+  },
+  {
+    ticker:'Watchlist v16→v17', company:'Call Up June 21, 2026 — MRVL S&P Inclusion Monday; Prices TBD (Robinhood offline); ORCL Zone Entry Pending; MSFT $372 Stop Watch',
+    added:'June 21, 2026', addedPrice:'—',
+    exitDate:'—', exitPrice:'—',
+    pnl:'—', status:'ACTIVE', statusCls:'hs-active',
+    fw:'Josh + Kevin',
+    reason:'(1) MRVL S&P 500 INCLUSION EFFECTIVE MON JUN 22: Peak forced buying window is TODAY/TOMORROW. Trail stop raised to $290 (Jun 17 structural floor). From $263 entry: +18.2% as of Jun 18. Post-inclusion plan: hold $290+ toward $325 ATH; exit if drops below $290 after Jun 22. B. Riley PT $345 (highest street). (2) ORCL ENTRY TRIGGER: $184.31 Jun 18. Zone top $182 = $2.31 away. Buy alert set at $183. AI cloud RPO $523B. Stop $148, target $275, R/R 4.0:1. Entry could trigger week of Jun 22. (3) MSFT $372 STOP WATCH: $379.05 Jun 18, stop $372 = $7 away. Stand-down from Jun 15 was correct. Thesis intact (Azure +40% YoY) but price must reclaim $393 before re-entry. Watch $372 — break = exit thesis. (4) NOW $95 BELOW ZONE: Zone $103-$118. Stand-down correct. Wait for $103+ price action. (5) GFS POSITION: 12 shares @ $85.24 avg. Only actual position. (6) STRUCTURAL UPDATES Jun 21: History cleaned up (v8→v9, v12→v13, v13→v14, v14→v15 all marked SUPERSEDED). Weekly section updated to Jun 16–20 with MSFT stand-down POTW. Fri Jun 20 prices pending Robinhood reconnect.',
+    lesson:'—',
+  },
+];
+
+// ── SMA Stack Scanner universe — 65 mid/large-cap stocks, all sectors ────────
+const SEMI_AI_STOCKS = [
+  {t:'MPWR', c:'Monolithic Power Systems', s:'Power Semis',         pe:52.0, fwdPE:39.0, eps:12.85, fwdEPS:16.4, desc:'Power management ICs (VRMs, buck converters) for AI servers, data centers, and automotive. Every NVDA/AMD GPU rack runs on MPWR voltage regulators. ~80% gross margins. Direct AI capex beneficiary without chip supply constraints.'},
+  {t:'ENTG', c:'Entegris',                 s:'Semi Materials',      pe:67.0, fwdPE:41.0, eps:2.68, fwdEPS:4.25, desc:'Semiconductor materials leader: CMP slurries, filters, carriers, and contamination control. No chip fab runs without Entegris materials. Acquired CMC Materials 2022. ~90% consumables revenue — repeatable across node transitions.'},
+  {t:'ONTO', c:'Onto Innovation',           s:'Process Control',     pe:27.0, fwdPE:21.0, eps:4.35, fwdEPS:5.6, desc:'Optical critical dimension (OCD) metrology and inspection for advanced semiconductor nodes. Ensures chipmakers measure sub-5nm patterns. Sole-source for several advanced packaging steps critical to CoWoS AI accelerator packaging.'},
+  {t:'ACLS', c:'Axcelis Technologies',      s:'Fab Equipment',       pe:13.0, fwdPE:11.0, eps:8.65, fwdEPS:9.4, desc:'Sole-source supplier of ion implant equipment — mandatory in every chip production flow including SiC power devices. SiC automotive/EV growth + AI logic ramp = dual tailwinds. Near-monopoly in ion implant.'},
+  {t:'LSCC', c:'Lattice Semiconductor',     s:'FPGA / Edge AI',      pe:42.0, fwdPE:32.0, eps:1.12, fwdEPS:1.58, desc:'Low-power FPGAs and programmable logic for edge AI, server management (BMC), 5G, and industrial. Not competing at the high-end — owns the low-power FPGA segment. Nexus platform targets sensing and control at the edge.'},
+  {t:'FORM', c:'FormFactor',                s:'Test Equipment',      pe:23.0, fwdPE:18.0, eps:1.65, fwdEPS:2.05, desc:'Wafer probe cards used to test semiconductor wafers before dicing. Every DRAM and logic chip requires probing. Near-monopoly in DRAM probe cards. HBM memory for AI accelerators requires next-gen probing technology.'},
+  {t:'CEVA', c:'CEVA Inc',                  s:'IP Licensing',        pe:64.0, fwdPE:44.0, eps:0.6, fwdEPS:0.88, desc:'Licenses semiconductor IP cores — AI inference engines, DSPs, wireless connectivity — to chip designers worldwide. Revenue = royalty per chip shipped. Customers include Apple, Samsung, MediaTek. AI inference IP growing rapidly.'},
+  {t:'AMBA', c:'Ambarella Inc',             s:'AI Vision SoC',       pe:null, fwdPE:82.0, eps:-0.38, fwdEPS:0.42, desc:'AI vision SoCs for automotive cameras, security cameras, and robot perception. CVflow AI architecture processes video at the edge under 2W. Growing ADAS win rates at Tier-1 automotive suppliers as camera mandates expand globally.'},
+  {t:'RMBS', c:'Rambus Inc',                s:'Memory IP',           pe:27.0, fwdPE:21.0, eps:1.74, fwdEPS:2.18, desc:'Licenses high-speed memory interface IP for DDR5, HBM, and CXL. Every AI data center memory interface — including HBM3 stacks on NVDA/AMD AI GPUs — incorporates Rambus IP. Also develops security silicon and memory subsystems.'},
+  {t:'WOLF', c:'Wolfspeed',                 s:'SiC Power Semis',     pe:null, fwdPE:null, eps:-3.45, fwdEPS:null, desc:'Leading SiC substrate and power device maker for EV charging, industrial motors, and data center power delivery. SiC enables efficient high-voltage power conversion. World&#39;s largest SiC fab in Mohawk Valley (NY). Key EV powertrain supplier.'},
+  {t:'NVTS', c:'Navitas Semiconductor',     s:'GaN / SiC Power',     pe:null, fwdPE:null, eps:-0.38, fwdEPS:null, desc:'GaN and SiC power ICs for EV chargers, solar inverters, AI data center PSUs, and consumer fast-chargers. GaN enables smaller, cooler, faster power conversion vs. silicon. Hyperscaler power supply design-wins accelerating.'},
+  {t:'ON',   c:'ON Semiconductor',          s:'SiC / Automotive',    pe:13.0, fwdPE:11.0, eps:4.45, fwdEPS:4.85, desc:'Tier-1 SiC power device maker for automotive EV drivetrains and industrial. Grew SiC revenue 4x in 2023. IntelliSense for SiC manufacturing platform. Competing with Infineon and STM for EV powertrain socket wins at OEMs.'},
+  {t:'SITM', c:'SiTime Corp',               s:'MEMS Timing',         pe:60.0, fwdPE:44.0, eps:1.28, fwdEPS:1.88, desc:'MEMS-based timing semiconductors — oscillators, resonators, clock generators — that replace quartz in high-reliability applications. MEMS timing is immune to shock, vibration, and temperature extremes. Hyperscaler and defense adoption growing.'},
+  {t:'ALGM', c:'Allegro MicroSystems',      s:'Sensors / Power ICs', pe:27.0, fwdPE:21.0, eps:0.94, fwdEPS:1.22, desc:'Magnetic sensor ICs and power ICs for automotive and industrial. Hall-effect current and position sensors. Every EV has dozens of Allegro sensors. Spun off from Sanken Electric (Japan) in 2020, listed on Nasdaq.'},
+  {t:'CRUS', c:'Cirrus Logic',              s:'Audio / Power ICs',   pe:17.0, fwdPE:14.0, eps:6.55, fwdEPS:7.85, desc:'Audio signal processing chips and codecs. Primary Apple iPhone audio IC supplier — near-single-customer but extremely sticky. Expanding into haptics, PC audio, and power conversion ICs for Apple products. ~100% EPS beat rate.'},
+  {t:'COHU', c:'Cohu Inc',                  s:'Test Handlers',       pe:22.0, fwdPE:17.0, eps:1.12, fwdEPS:1.52, desc:'Semiconductor test handlers and contactors. Growing in SiC and power device test as automotive semis require 100% device screening. Works alongside ATE vendors (Teradyne, Advantest) to handle chips during test. Acquired Xcerra for scale.'},
+  {t:'ICHR', c:'Ichor Holdings',            s:'Gas Delivery',        pe:22.0, fwdPE:17.0, eps:2.35, fwdEPS:3.15, desc:'Precision gas delivery subsystems for semiconductor process equipment (AMAT, Lam Research, KLAC). Revenue tracks directly with semiconductor capex. Pure-play: if etch or CVD tools ship, Ichor gas boxes ship with them.'},
+  {t:'ACMR', c:'ACM Research',              s:'Cleaning Equipment',  pe:21.0, fwdPE:16.0, eps:2.12, fwdEPS:2.65, desc:'Single-wafer wet cleaning equipment with strong presence in Chinese fabs (CXMT, YMTC, SMIC) and expanding internationally. Beneficiary of Chinese domestic chip buildout. Low-profile but growing rapidly. CXMT memory expansion driving demand.'},
+  {t:'VECO', c:'Veeco Instruments',         s:'Deposition Equipment',pe:23.0, fwdPE:17.0, eps:1.22, fwdEPS:1.62, desc:'Atomic layer deposition (ALD), ion beam, and laser annealing equipment for advanced semiconductor and compound semiconductor fabs. ALD enables the precise thin-film layers required at sub-3nm nodes. Growing in advanced packaging and compound semis.'},
+  {t:'UCTT', c:'Ultra Clean Holdings',      s:'Equipment Components',pe:21.0, fwdPE:16.0, eps:2.05, fwdEPS:2.65, desc:'Sub-assemblies, weldments, and fluid delivery components for semiconductor equipment OEMs (AMAT, Lam, KLAC, TEL). Pure-play components play on overall semi capex. High-beta proxy: revenue rises when equipment OEMs ramp production.'},
+  {t:'AZTA', c:'Azenta Inc',                s:'Wafer Automation',    pe:null, fwdPE:28.0, eps:0.52, fwdEPS:1.25, desc:'Automated wafer handling, storage systems, and semiconductor lifecycle services. Wafer automation critical as fabs scale to 300mm. Formerly Brooks Automation. Also operates Brooks Life Sciences (genomics biorepository).'},
+  {t:'SMTC', c:'Semtech Corp',              s:'Analog / IoT',        pe:92.0, fwdPE:38.0, eps:0.5, fwdEPS:1.22, desc:'Analog/mixed-signal semis for IoT connectivity (LoRa LPWAN — dominant in industrial IoT), data center optical transceivers, and circuit protection. LoRa is deployed in billions of IoT sensors globally. ClearEdge acquisition for AI data center interconnects.'},
+  {t:'IPGP', c:'IPG Photonics',             s:'Fiber Lasers',        pe:24.0, fwdPE:21.0, eps:4.25, fwdEPS:4.85, desc:'High-power fiber lasers for industrial manufacturing, EV battery welding, and semiconductor process support. Laser welding of EV battery cells uses IPG systems. Russia exposure has pressured stock since 2022 — discount vs. fundamentals.'},
+  {t:'POWI', c:'Power Integrations',        s:'Power Conversion',    pe:37.0, fwdPE:29.0, eps:1.48, fwdEPS:1.88, desc:'Power conversion ICs for EV chargers, smart home appliances, industrial motors, and consumer fast-chargers. EcoSmart and GaN technology for ultra-compact chargers. Benefits from global electrification mandates. Consistent dividend payer.'},
+  {t:'DIOD', c:'Diodes Inc',                s:'Discrete Semis',      pe:12.0, fwdPE:10.0, eps:4.55, fwdEPS:5.25, desc:'Discrete semiconductors (MOSFETs, Schottky diodes, BJTs, TVS), analog ICs, and logic chips for automotive, computing, and consumer. Over 90% own-brand products. Consistent, under-the-radar performer in commodity-adjacent semiconductor markets.'},
+  {t:'TER',  c:'Teradyne',                  s:'ATE / Robotics',      pe:32.0, fwdPE:27.0, eps:3.42, fwdEPS:4.15, desc:'Automatic test equipment (ATE) for AI chips, memory, and storage — every NVDA GPU and AMD accelerator is tested on Teradyne systems before shipping. Also owns Universal Robots (UR), global leader in collaborative robot arms. Dual play: AI test + factory automation.'},
+  {t:'CAMT', c:'Camtek',                    s:'Advanced Packaging',  pe:27.0, fwdPE:21.0, eps:2.12, fwdEPS:2.72, desc:'Optical inspection and metrology for advanced semiconductor packaging — fan-out, 2.5D/3D chiplet integration, CoWoS. TSMC&#39;s CoWoS packaging for AI accelerators (NVDA H100/H200) requires Camtek inspection tools. Direct heterogeneous integration beneficiary.'},
+  {t:'NXPI', c:'NXP Semiconductors',        s:'Automotive / Edge',   pe:16.0, fwdPE:13.0, eps:12.65, fwdEPS:14.55, desc:'Automotive-grade MCUs, secure element chips (NFC payments), and industrial IoT SoCs. Processing chips in 90%+ of new vehicles. Automotive semi content per EV is 3-5x an ICE vehicle. Also makes radar processors for ADAS and V2X communication chips.'},
+  {t:'STM',  c:'STMicroelectronics',        s:'Automotive / SiC',    pe:11.0, fwdPE:9.0, eps:2.85, fwdEPS:3.25, desc:'European semiconductor maker: automotive MCUs, SiC power MOSFETs, industrial analog, and IoT chips. Large Apple content supplier historically. Deep SiC manufacturing partnership with Sanan (China). Broad diversified semi portfolio.'},
+  {t:'MKSI', c:'MKS Instruments',           s:'Process Control',     pe:37.0, fwdPE:27.0, eps:3.88, fwdEPS:5.25, desc:'Pressure/flow/temperature sensors, RF power generators, photonics, and laser technology for semiconductor fabs and industrial processes. Every etch and CVD tool uses MKS sensors and RF power systems. Also makes fiber laser systems for AI server PCB drilling.'},
+];
+
+const SMA_SCAN_TICKERS = [
+  // AI / Mega-cap tech
+  {t:'AAPL',c:'Apple Inc',s:'Technology'},
+  {t:'MSFT',c:'Microsoft Corp',s:'Technology'},
+  {t:'GOOGL',c:'Alphabet Inc',s:'Technology'},
+  {t:'AMZN',c:'Amazon.com',s:'Consumer Discr.'},
+  {t:'META',c:'Meta Platforms',s:'Technology'},
+  {t:'NVDA',c:'NVIDIA Corp',s:'Technology'},
+  {t:'AMD',c:'Advanced Micro Devices',s:'Technology'},
+  {t:'AVGO',c:'Broadcom Inc',s:'Technology'},
+  {t:'CRM',c:'Salesforce Inc',s:'Technology'},
+  {t:'ADBE',c:'Adobe Inc',s:'Technology'},
+  {t:'NOW',c:'ServiceNow Inc',s:'Technology'},
+  {t:'PLTR',c:'Palantir Technologies',s:'Technology'},
+  {t:'PANW',c:'Palo Alto Networks',s:'Technology'},
+  {t:'CRWD',c:'CrowdStrike Holdings',s:'Technology'},
+  {t:'ANET',c:'Arista Networks',s:'Technology'},
+  {t:'DELL',c:'Dell Technologies',s:'Technology'},
+  {t:'IBM',c:'IBM Corp',s:'Technology'},
+  {t:'ACN',c:'Accenture plc',s:'Technology'},
+  {t:'INTU',c:'Intuit Inc',s:'Technology'},
+  {t:'MRVL',c:'Marvell Technology',s:'Technology'},
+  {t:'SNPS',c:'Synopsys Inc',s:'Technology'},
+  {t:'CDNS',c:'Cadence Design Systems',s:'Technology'},
+  {t:'DDOG',c:'Datadog Inc',s:'Technology'},
+  {t:'NET',c:'Cloudflare Inc',s:'Technology'},
+  {t:'WDAY',c:'Workday Inc',s:'Technology'},
+  {t:'FTNT',c:'Fortinet Inc',s:'Technology'},
+  {t:'UBER',c:'Uber Technologies',s:'Consumer Discr.'},
+  {t:'SMCI',c:'Super Micro Computer',s:'Technology'},
+  {t:'ARM',c:'Arm Holdings',s:'Technology'},
+  // Financials
+  {t:'JPM',c:'JPMorgan Chase',s:'Financials'},
+  {t:'V',c:'Visa Inc',s:'Financials'},
+  {t:'MA',c:'Mastercard Inc',s:'Financials'},
+  {t:'GS',c:'Goldman Sachs',s:'Financials'},
+  {t:'BLK',c:'BlackRock Inc',s:'Financials'},
+  {t:'SPGI',c:'S&P Global Inc',s:'Financials'},
+  {t:'CME',c:'CME Group',s:'Financials'},
+  {t:'AXP',c:'American Express',s:'Financials'},
+  {t:'SCHW',c:'Charles Schwab',s:'Financials'},
+  // Healthcare
+  {t:'LLY',c:'Eli Lilly & Co',s:'Healthcare'},
+  {t:'ABBV',c:'AbbVie Inc',s:'Healthcare'},
+  {t:'ISRG',c:'Intuitive Surgical',s:'Healthcare'},
+  {t:'VRTX',c:'Vertex Pharmaceuticals',s:'Healthcare'},
+  {t:'UNH',c:'UnitedHealth Group',s:'Healthcare'},
+  {t:'SYK',c:'Stryker Corp',s:'Healthcare'},
+  {t:'AMGN',c:'Amgen Inc',s:'Healthcare'},
+  // Consumer Discretionary
+  {t:'TSLA',c:'Tesla Inc',s:'Consumer Discr.'},
+  {t:'HD',c:'Home Depot',s:'Consumer Discr.'},
+  {t:'MCD',c:'McDonald\'s Corp',s:'Consumer Discr.'},
+  {t:'COST',c:'Costco Wholesale',s:'Consumer Staples'},
+  {t:'NKE',c:'Nike Inc',s:'Consumer Discr.'},
+  {t:'BKNG',c:'Booking Holdings',s:'Consumer Discr.'},
+  {t:'SBUX',c:'Starbucks Corp',s:'Consumer Discr.'},
+  // Consumer Staples
+  {t:'WMT',c:'Walmart Inc',s:'Consumer Staples'},
+  {t:'PG',c:'Procter & Gamble',s:'Consumer Staples'},
+  {t:'KO',c:'Coca-Cola Co',s:'Consumer Staples'},
+  {t:'PEP',c:'PepsiCo Inc',s:'Consumer Staples'},
+  // Energy
+  {t:'XOM',c:'Exxon Mobil',s:'Energy'},
+  {t:'CVX',c:'Chevron Corp',s:'Energy'},
+  {t:'COP',c:'ConocoPhillips',s:'Energy'},
+  // Industrials
+  {t:'GE',c:'GE Aerospace',s:'Industrials'},
+  {t:'CAT',c:'Caterpillar Inc',s:'Industrials'},
+  {t:'HON',c:'Honeywell International',s:'Industrials'},
+  {t:'RTX',c:'RTX Corp',s:'Industrials'},
+  {t:'LMT',c:'Lockheed Martin',s:'Industrials'},
+  {t:'VRT',c:'Vertiv Holdings',s:'Industrials'},
+  // Communication
+  {t:'NFLX',c:'Netflix Inc',s:'Communication'},
+  {t:'DIS',c:'Walt Disney Co',s:'Communication'},
+  // Materials / Real Estate
+  {t:'LIN',c:'Linde plc',s:'Materials'},
+  {t:'EQIX',c:'Equinix Inc',s:'Real Estate'},
+  {t:'AMT',c:'American Tower',s:'Real Estate'},
+  // Mid-cap specials
+  {t:'MELI',c:'MercadoLibre',s:'Consumer Discr.'},
 ];
 
 // ── Build monitor tab ─────────────────────────────────────────────────────────
@@ -2109,7 +3001,7 @@ const SP500_LOSERS = [
   {rank:5,  ticker:'FICO', company:'Fair Isaac Corp',          ytd:-42.6, sector:'Technology',             pp:8, note:'Credit score monopoly — pricing power remains intact'},
   {rank:6,  ticker:'CRL',  company:'Charles River Labs',       ytd:-42.0, sector:'Healthcare',             pp:5, note:'Contract drug research; biopharma client slowdown'},
   {rank:7,  ticker:'APP',  company:'AppLovin Corp',            ytd:-41.0, sector:'Technology',             pp:4, note:'Ad-tech; Q1 worst performer — AI ad model under scrutiny'},
-  {rank:8,  ticker:'NOW',  company:'ServiceNow Inc',           ytd:-40.0, sector:'Technology',             pp:7, note:'IT service management SaaS; "Saaspocalypse" + Agentic AI fears'},
+  {rank:8,  ticker:'NOW',  company:'ServiceNow Inc',           ytd:-40.0, sector:'Technology',             pp:7, note:'$95.14 Jun 18. Zone $103&ndash;118 (watchlist). PP 7 = contrarian candidate. Otto AI agent + Experian agentic deal intact. Stand-down until $103+.'},
   {rank:9,  ticker:'ARES', company:'Ares Management Corp',     ytd:-39.5, sector:'Financials',             pp:5, note:'Alt-asset manager; AUM fee revenue rate-sensitive'},
   {rank:10, ticker:'TTD',  company:'The Trade Desk Inc',       ytd:-38.0, sector:'Technology',             pp:5, note:'Programmatic DSP; CTV ad spend normalization'},
   {rank:11, ticker:'INTU', company:'Intuit Inc',               ytd:-38.3, sector:'Technology',             pp:7, note:'TurboTax + QuickBooks franchise; AI substitution fear narrative'},
@@ -2127,7 +3019,7 @@ const SP500_LOSERS = [
   {rank:23, ticker:'DG',   company:'Dollar General Corp',      ytd:-25.0, sector:'Consumer Discretionary', pp:4, note:'Value retail; lower-income consumer stress; inventory issues'},
   {rank:24, ticker:'WYNN', company:'Wynn Resorts Ltd',         ytd:-18.0, sector:'Consumer Discretionary', pp:5, note:'Luxury casino; Macau recovery choppy; US slowdown fears'},
   {rank:25, ticker:'LVS',  company:'Las Vegas Sands Corp',     ytd:-18.0, sector:'Consumer Discretionary', pp:5, note:'Casino resort; Singapore + Macau; high-end consumer resilient'},
-  {rank:26, ticker:'UNH',  company:'UnitedHealth Group',       ytd:-13.0, sector:'Healthcare',             pp:7, note:'Managed care + Optum; Medicaid uncertainty; CEO transition'},
+  {rank:26, ticker:'UNH',  company:'UnitedHealth Group',       ytd:-13.0, sector:'Healthcare',             pp:7, note:'Managed care + Optum; Medicaid uncertainty; CEO transition; DOJ antitrust investigation into Optum. YTD likely worse than May 26 figure.'},
 ];
 
 let spSortCol = 'rank', spSortDir = 1, spSectorFilter = 'all';
@@ -2223,85 +3115,98 @@ function renderSP500() {
 
 // ── Market Pulse data (update each session) ───────────────────────────────
 const MARKET_PULSE = {
-  date: 'June 9, 2026',
-  updated: 'Week Ahead Preview &mdash; Sun Jun 8',
-  headline: 'ORCL Earnings Tue Jun 10 AH + CPI Same Morning &mdash; Double Macro Day. Entry Window Wed Jun 11.',
-  sentiment: 'RISK-OFF',
-  sentimentCls: 'mkt-risk-off',
+  date: 'July 1, 2026',
+  updated: 'Call Up &mdash; Wed Jul 1 (Jun 30 close, LIVE Robinhood data)',
+  headline: 'LIVE DATA &mdash; ORCL BROKE $148 STOP ($146.55, thesis dead) &mdash; MSFT $373 at knife-edge stop $372 (bearish SMA stack) &mdash; PLTR $116.67 in-zone but FALLING KNIFE (below all SMAs) &mdash; MRVL $297.89 ONLY bullish stack, trail $290 &mdash; Buying power $13.64',
+  sentiment: 'SELECTIVE &mdash; DISCIPLINE OVER ENTRIES',
+  sentimentCls: 'mkt-caution',
   indices: [
-    {name:'S&P 500',   val:'7,384',  chg:'-2.64%',    dir:'down'},
-    {name:'Nasdaq',    val:'26,194', chg:'-4.0%',     dir:'down'},
-    {name:'SOX Semi',  val:'&mdash;', chg:'-10.4% wk', dir:'down'},
-    {name:'WTI Crude', val:'$96.02', chg:'+3.2% wk',  dir:'up'},
-    {name:'10Y Yield', val:'4.82%',  chg:'+0.18 wk',  dir:'up'},
-    {name:'VIX',       val:'22.1',   chg:'+4.3',       dir:'up'},
+    {name:'SPY',        val:'$746.77', chg:'+0.78% &mdash; near ATH',         dir:'up'},
+    {name:'QQQ',        val:'$736.40', chg:'+1.70% &mdash; AI bid',           dir:'up'},
+    {name:'VIX',        val:'16.45',   chg:'&ndash;1.20 &mdash; no fear bid',  dir:'down'},
+    {name:'10Y',        val:'4.42%',   chg:'+0.04 &mdash; stable',            dir:'up'},
+    {name:'MRVL',       val:'$297.89', chg:'bullish stack &mdash; trail $290 (AH $293)', dir:'up'},
+    {name:'ORCL',       val:'$146.55', chg:'BROKE $148 stop &mdash; thesis dead', dir:'down'},
+    {name:'MSFT',       val:'$373.02', chg:'$1 from stop $372 &mdash; bearish', dir:'down'},
+    {name:'PLTR',       val:'$116.67', chg:'in-zone but falling knife',       dir:'down'},
   ],
   events: [
-    {tag:'MACRO',    tagCls:'evt-macro', headline:'NFP +172K &mdash; Double Beat Kills June Cut', body:'May NFP: +172K jobs (est +170K). Unemployment 4.1% (est 4.2%). Wage growth +3.9% YoY (hot). Every number beat consensus. ADP Wednesday (+220K) was the warning &mdash; NFP confirmed it. Result: June Fed cut probability collapsed to near zero. Market repriced first cut to Sep/Oct 2026. This macro print is why the AI sector sold off hard Thursday AND Friday.'},
-    {tag:'GEO',      tagCls:'evt-geo',   headline:'Iran Conflict + Oil Above $96 All Week', body:'US-Iran strikes continued through the week. WTI crude +3.2% on the week to $96.02. Brent near $98. Oil above $95 is an inflation floor that prevents Fed rate cuts. Every dollar higher in crude compresses growth-stock multiples and reduces probability of accommodative policy. Strait of Hormuz disruption risk remains elevated into next week.'},
-    {tag:'EARNINGS', tagCls:'evt-earn',  headline:'PANW Gap Faded + AVGO Beat -8% AH = Distribution Signal', body:'PANW beat+raised but gapped to $338 then reversed to $283 &mdash; a full gap fade. AVGO Q2 AI rev +143% YoY, EPS beat, but fell 8% AH on no FY2027 guide raise. Two &ldquo;sell on good news&rdquo; events in the same sector within 48 hours. This is the pattern that should trigger put-buying per our new framework rule.'},
-    {tag:'WATCH',    tagCls:'evt-watch', headline:'NEW RULE: Two Sell-on-Good-News in 48hrs = Buy Sector Puts', body:'This week created a new permanent framework rule. PANW gapped +13% Tue then faded below pre-print level. AVGO beat but fell 8% AH Wednesday. Two distribution signals in AI within 48 hours = buy QQQ puts or SMH puts Thursday open &mdash; 30 days out, 3&ndash;5% OTM, 0.5% bankroll. Thu/Fri each saw Nasdaq -4%. QQQ puts would have paid 5&ndash;10&times; premium. SMH down -10.4% on the week.'},
+    {tag:'RISK',     tagCls:'evt-geo',   headline:'ORCL $146.55 &mdash; BROKE $148 STOP &mdash; Fell Through Entire Zone $165&ndash;182 &mdash; Setup DEAD', body:'ORCL closed $146.55 Jun 30 &mdash; below the $148 hard stop and $18+ below the zone top ($182) it was approaching two weeks ago. The beat-but-fell Jun 10 dilution was NOT a one-time dip; price kept sliding through the entire Graham value zone and out the bottom. The stop-becomes-entry setup is INVALIDATED: had an entry triggered near $182, it would have stopped out at $148 (&minus;19%). Lesson: a name falling INTO a zone from above on deteriorating momentum is a falling knife, not a value entry. ORCL removed as POTW. Re-evaluate only after a base forms and price reclaims $150+.'},
+    {tag:'WATCH',    tagCls:'evt-macro', headline:'MSFT $373.02 &mdash; $1 From Stop $372 &mdash; BEARISH SMA Stack (below 50/100/150/200) &mdash; Stand-Down Validated', body:'MSFT closed $373.02 Jun 30, one dollar above the $372 stop. Computed from live Robinhood historicals: price is BELOW all four SMAs (50=$410, 100=$401, 150=$425, 200=$447) &mdash; a clean bearish stack, downtrend from ~$540 in Aug 2025. The $393&ndash;412 zone now sits ABOVE all recent price action; it is stale/aspirational, not support. Stand-down was correct and capital was preserved. No entry here. If $372 breaks, the zone thesis is fully dead; wait for a base + reclaim of the rising SMAs before reconsidering.'},
+    {tag:'WATCH',    tagCls:'evt-watch', headline:'MRVL $297.89 &mdash; ONLY Bullish Full Stack on the Board &mdash; Above All SMAs, Rising SMA50 &mdash; Trail $290', body:'MRVL closed $297.89 Jun 30 (AH $293.53). Computed from live historicals: price ABOVE all SMAs (50=$216 and rising, 100=$154, 150=$131, 200=$120) &mdash; the single genuinely healthy uptrend among the 13 names. Post-inclusion fade from $311 is normal profit-taking; the trend is intact well above the rising SMA50. Trail stop $290 sits just under price &mdash; AH $293.53 is only ~$3 above it. ACTION: hold and trail. Trim into strength above $305; hard exit on a close below $290. No adds up here.'},
+    {tag:'WATCH',    tagCls:'evt-watch', headline:'PLTR $116.67 &mdash; IN Zone $108&ndash;122 BUT Falling Knife &mdash; Below All SMAs, SMA50 Falling &mdash; NO Valid Entry', body:'PLTR fell into the $108&ndash;122 zone (from ~$128) &mdash; the zone logic says &ldquo;entry.&rdquo; But the swing desk&#39;s own rule vetoes it: price is BELOW all SMAs (50=$136 falling, 100=$140, 150=$151, 200=$159). A declining SMA50 negates the zone. This is the exact conflict the framework was built to catch &mdash; catalyst/zone says buy, trend filter says NO. Verdict: NO entry. Wait for price to reclaim a flattening/rising SMA50 before treating the zone as support.'},
+    {tag:'MACRO',    tagCls:'evt-macro', headline:'Backdrop Risk-On &mdash; SPY $746.77 near ATH, VIX 16.45, 10Y 4.42% &mdash; But Watchlist Diverging', body:'Index tape is calm and bid: SPY $746.77 (+0.78%), QQQ $736.40, VIX 16.45. Yet the watchlist is splitting hard &mdash; AMD $581, PANW $341, DELL $431 ripped to new highs (far above zones, no entry) while MSFT, ORCL, PLTR broke down. Macro is not the constraint; individual price structure is. With SPY at highs and most quality names extended, there is no clean stop-becomes-entry setup this week. Discipline &mdash; managing MRVL and holding cash &mdash; is the play.'},
   ],
   portfolio: [
-    {ticker:'ORCL', cls:'pi-red',    impact:'POTW LOSS &mdash; EXITED',  note:'Entered ~$224. High $249 Thu. NFP crushed it -9.6% Fri &rarr; $213.68. Hard exit honored. Loss: -4.6%. Framework worked: exited before Jun 10 earnings binary. Watch for gap play Wed Jun 11 on beat.'},
-    {ticker:'NVDA', cls:'pi-green',  impact:'BACK IN ZONE',               note:'Pulled back to $204 &mdash; inside zone $200&ndash;$215. Trail stop $200. Zone re-entry confirmed &#10003;'},
-    {ticker:'MSFT', cls:'pi-red',    impact:'BELOW ZONE &#9888;',         note:'$412 &mdash; below entry zone $415&ndash;$430. Stop $390 intact. Watch closely next week.'},
-    {ticker:'ANET', cls:'pi-green',  impact:'BACK IN ZONE',               note:'$154 &mdash; inside zone $148&ndash;$168. Trail stop to $148. Zone re-entry confirmed &#10003;'},
-    {ticker:'NOW',  cls:'pi-red',    impact:'BELOW ZONE &#9888;',         note:'$111 &mdash; below entry zone $118&ndash;$132. Stop $103 critical. Monitoring closely.'},
-    {ticker:'PANW', cls:'pi-yellow', impact:'HOLD &mdash; TRAIL',         note:'$283 &mdash; above stop $275. Gap fully faded from $338. Long-term target $360 intact.'},
-    {ticker:'AVGO', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; HOLD',    note:'$472 &mdash; recovered from AH selloff. Stop $385. AI rev +143% YoY thesis intact.'},
-    {ticker:'LMND', cls:'pi-yellow', impact:'NEAR ZONE',                  note:'~$62, approaching zone $52&ndash;60. Trail stop to $58 if holding. Watch closely.'},
+    {ticker:'ACCOUNT', cls:'pi-red',    impact:'BUYING POWER $13.64 &#9888;',   note:'Margin acct ••8092: total $1,205.09 = equity $1,089.55 + options $31 + crypto $70.90 + cash $13.64. Buying power is $13.64 &mdash; NONE of the $100&ndash;580 watchlist names is actually buyable. The 13-name board is a research/paper watchlist; real capital is in QCML + 3 expiring options. Add cash or trade sub-$14 / fractional to act on any setup.'},
+    {ticker:'QCML',  cls:'pi-red',    impact:'REAL POSITION &mdash; DOWN 7% &#9660;', note:'55 shares @ $21.37 avg. Jun 30: $19.81 (&minus;7.3%, &asymp;&minus;$86). This is the actual equity holding (not GFS). No stop defined &mdash; SET ONE. Not on the AI watchlist; reconcile whether it fits the framework or should be exited.'},
+    {ticker:'OPTIONS', cls:'pi-red',  impact:'3 LOTTO CALLS EXPIRING &#9888;', note:'SOFI x15 (exp Jul 2), CLOV x12 (exp Jul 2), KWEB x4 (exp Jul 17) &mdash; all deep OTM, marks ~$0.01, chance-of-profit 1&ndash;3%. Total value ~$31 vs much larger cost basis. SOFI/CLOV expire in 2 days worthless. Nothing to do but let them expire (or close for ~$0 to free the ticket).'},
+    {ticker:'MRVL', cls:'pi-green',  impact:'BULLISH STACK &mdash; HOLD/TRAIL &#10003;', note:'$297.89 Jun 30 (AH $293.53). Above ALL SMAs (50=$216 rising), only healthy uptrend on the board. Trail stop $290 &mdash; AH is ~$3 above it. Trim above $305; hard exit on close below $290. No adds. (Paper unless capital added.)'},
+    {ticker:'ORCL', cls:'pi-red',    impact:'BROKE STOP &mdash; SETUP DEAD &#9888;', note:'$146.55 Jun 30. Below $148 stop, $18 under zone $165&ndash;182. Fell through everything &mdash; falling knife, not value. Removed as POTW. Re-evaluate only after a base + reclaim $150+.'},
+    {ticker:'MSFT', cls:'pi-red',    impact:'AT STOP $372 &mdash; BEARISH &#9888;', note:'$373.02, $1 above stop. Below all SMAs (50=$410...200=$447). Zone $393&ndash;412 now above all price action = stale. Stand-down correct. No entry; if $372 breaks the thesis is dead.'},
+    {ticker:'PLTR', cls:'pi-yellow', impact:'IN ZONE, NO ENTRY &mdash; KNIFE &#9888;', note:'$116.67 in zone $108&ndash;122 but below all SMAs, SMA50 falling. Trend filter vetoes the zone. NO entry until price reclaims a flattening SMA50.'},
+    {ticker:'AVGO', cls:'pi-yellow', impact:'AT ZONE TOP $375 &mdash; WATCH',  note:'$377.75 Jun 30, right at zone top $375. First watchlist name pulling back toward a zone. Watch for a hold + turn; stop $328, target $550. No entry yet &mdash; confirm SMA support first.'},
+    {ticker:'NOW',  cls:'pi-yellow', impact:'BELOW FLOOR, RECOVERING &#9650;', note:'$99.28 Jun 30 (up from $95). Still below zone floor $103. Thesis intact (Otto + Experian). Re-entry only on sustained $103+ close. Stop $88.'},
+    {ticker:'NVDA', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; MONITOR',   note:'$200.09 Jun 30 (pulled back from $210). Above zone $175&ndash;192. Monitor for a deeper pullback to zone. R/R 4.1:1 at zone.'},
+    {ticker:'AMD',  cls:'pi-green',  impact:'NEW HIGH &mdash; FAR ABOVE ZONE', note:'$580.91 Jun 30 (ripped from $536). +49% above zone top $390. Strong but un-buyable on framework. No chase. MI400 Q3 2026.'},
+    {ticker:'PANW', cls:'pi-green',  impact:'NEW HIGH &mdash; FAR ABOVE ZONE', note:'$341.02 Jun 30 (ripped from $288). Well above zone $232&ndash;252. Strongest breakout on the board. No chase; wait for a pullback that may never come.'},
+    {ticker:'DELL', cls:'pi-green',  impact:'NEW HIGH &mdash; FAR ABOVE ZONE', note:'$431.46 Jun 30. Far above zone $335&ndash;355. AI server thesis playing out. No entry at these levels.'},
+    {ticker:'VRT',  cls:'pi-yellow', impact:'ABOVE ZONE &mdash; MONITOR',   note:'$334.82 Jun 30. Above zone $290&ndash;312. Monitor for pullback into zone. Stop $268, target $420.'},
+    {ticker:'ANET', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; MONITOR',   note:'$169.88 Jun 30. Above zone $128&ndash;148. Monitor. Stop $112, target $220.'},
+    {ticker:'LMND', cls:'pi-yellow', impact:'ABOVE ZONE &mdash; NO CHASE',  note:'$65.05 Jun 30. Above zone $45&ndash;56. Tesla autonomous insurance live. Stop $38, target $88. Wait for zone.'},
   ],
   macro_watch: [
-    'Rate path reset: first cut now Sep/Oct 2026 after NFP double-beat &mdash; higher-for-longer headwind for growth multiples',
-    'Iran conflict: oil near $96&ndash;$100 is an inflation floor &mdash; prevents Fed dovish pivot. Watch Strait of Hormuz escalation',
-    'May CPI prints Tue Jun 10 AM &mdash; April CPI highest in 2 years (energy +18% YoY). Hot print = rate-hike fear extends = headwind on ORCL entry even on beat. Target: CPI &lt;+4.5% YoY for neutral market reaction.',
-    'ORCL earnings Tue Jun 10 AH &mdash; CORRECTED from Mon Jun 9. May CPI same day = double macro event. Entry window: Wed Jun 11 only on beat + raise + gap + 1.5&times; ADV.',
-    'LMND Morgan Stanley Financials Conference Tue Jun 10 &mdash; CEO Schreiber presenting. Tesla FSD insurance AZ+OR live. Not a new entry signal above zone &mdash; watch for sentiment shift if conference goes well.',
-    'NOW below zone $118 &mdash; stop $103 must hold. If breaks $103 with volume: requires thesis reassessment',
-    'NEW RULE active: next &ldquo;sell on good news&rdquo; week &mdash; buy QQQ puts + SMH puts at first signal (0.5% bankroll, 30 days out, 3&ndash;5% OTM)',
+    '💵 BUYING POWER $13.64 IS THE REAL CONSTRAINT: Margin acct ••8092 total $1,205 but only $13.64 spendable. None of the $100&ndash;580 watchlist names is buyable today. Real capital sits in QCML (55sh, &minus;7%) + 3 near-worthless expiring options. Priority: (1) set a stop on QCML, (2) let SOFI/CLOV expire Jul 2, (3) add cash or use fractional shares before any watchlist entry is more than paper.',
+    '🔪 ORCL SETUP DEAD: $146.55 Jun 30, below the $148 stop and $18 under zone $165&ndash;182. Fell straight through &mdash; a falling knife, not a value entry. Removed as POTW. Lesson banked: a name dropping INTO a zone on failing momentum is NOT the same as a base forming at support. Re-evaluate only after price bases and reclaims $150+.',
+    '📉 MSFT BEARISH SMA STACK: $373.02, $1 above stop $372. Live historicals show price below all SMAs (50=$410, 100=$401, 150=$425, 200=$447), downtrend since Aug 2025. Zone $393&ndash;412 sits above all price action = stale, not support. Stand-down validated, capital preserved. No entry. If $372 breaks, thesis fully dead.',
+    '✅ MRVL ONLY BULLISH STACK: $297.89 (AH $293.53). Above all SMAs, SMA50 rising ($216). The single healthy uptrend on the board. Trail stop $290 &mdash; AH only ~$3 above. Manage it: trim above $305, hard exit on close below $290, no adds. This is the whole active playbook this week.',
+    '🚫 PLTR ZONE-VS-TREND CONFLICT: $116.67 fell into zone $108&ndash;122, but it is below all SMAs with a falling SMA50. The swing desk rule vetoes the zone (declining SMA50 negates entry). Textbook example of why the SMA filter exists. NO entry until SMA50 flattens/turns.',
+    '📊 SMA REFRESH (live Robinhood historicals, Jun 30): MRVL = bullish full stack (buy/hold). MSFT & PLTR = below all SMAs (avoid). AMD/PANW/DELL ripping to new highs but far above zones (no framework entry). AVGO $377.75 first name pulling back toward zone top $375 &mdash; the one to watch for a future setup.',
+    '🌐 MACRO CALM, TAPE DIVERGING: SPY $746.77 near ATH, QQQ $736.40, VIX 16.45, 10Y 4.42%. No Fed event this week (next FOMC late July). Macro is not the problem &mdash; individual price structure is. With indices at highs and quality names extended, discipline (hold cash, manage MRVL) beats forcing a trade.',
   ],
   weekly: {
-    week: 'June 2&ndash;5, 2026',
-    updated: 'Fri Jun 6 &middot; 8 PM ET',
-    headline: 'Rate-Hike Fear Erased the Week &mdash; Puts Would Have Paid 5&ndash;10&times;',
+    week: 'June 22&ndash;30, 2026',
+    updated: 'Wed Jul 1 &middot; Call Up (live Robinhood close data)',
+    headline: 'Watchlist Diverged &mdash; ORCL Broke Stop, MSFT/PLTR Rolled Over, MRVL Held Uptrend &mdash; AMD/PANW/DELL New Highs &mdash; No Clean Entry',
     week_chg: [
-      {name:'S&P 500',   open:'7,609', close:'7,384',    chg:'-3.0%',   dir:'down'},
-      {name:'Nasdaq',    open:'27,200', close:'26,194',  chg:'-3.7%',   dir:'down'},
-      {name:'SOX Semi',  open:'&mdash;', close:'&mdash;', chg:'-10.4%', dir:'down'},
-      {name:'10Y Yield', open:'4.64%', close:'4.82%',    chg:'+0.18',   dir:'up'},
-      {name:'WTI Crude', open:'$93',   close:'$96',      chg:'+3.2%',   dir:'up'},
+      {name:'SPY',       open:'$741', close:'$746.77', chg:'+0.8% &mdash; near ATH', dir:'up'},
+      {name:'QQQ',       open:'$724', close:'$736.40', chg:'+1.7% &mdash; AI bid',   dir:'up'},
+      {name:'10Y Yield', open:'4.38%', close:'4.42%',  chg:'+0.04 &mdash; stable',   dir:'up'},
+      {name:'VIX',       open:'17.7', close:'16.45',   chg:'&ndash;7% &mdash; calm',  dir:'down'},
+      {name:'MRVL',      open:'$311', close:'$297.89', chg:'&ndash;4% fade, uptrend intact', dir:'down'},
     ],
     potw: {
-      ticker:'ORCL', type:'Pre-Earnings Drift (Primary)',
-      entry:'$224 est. (zone mid)', exit:'$213.68 (Fri Jun 5 hard exit)',
-      high:'$249 (Thu Jun 4)', pnl:'-$10.32 (-4.6%)',
-      verdict:'LOSS', verdictCls:'wr-loss',
-      note:'Worked through Thursday ($249 high). NFP Friday crushed ORCL -9.6%. Hard exit honored. Framework prevented holding into Jun 10 earnings.',
+      ticker:'ORCL', type:'Zone Entry Watch (Primary) &mdash; INVALIDATED',
+      entry:'Alert $183, zone $165&ndash;182', exit:'Never entered &mdash; fell through to $146.55',
+      high:'$184 Jun 18', pnl:'$0 held / &minus;19% if triggered',
+      verdict:'STOP BROKEN', verdictCls:'wr-loss',
+      note:'ORCL was $2 above the zone Jun 18, then slid straight through $182&hellip;$165&hellip;and out the $148 stop to $146.55. Had a &ldquo;touch $182&rdquo; entry triggered, it would have stopped out at &minus;19%. The alert-and-wait discipline avoided the knife. Lesson: falling INTO a zone on weak momentum &ne; basing at support. Setup dead until price reclaims $150+.',
     },
     missed: {
-      setup:'PANW full gap fade Tue + AVGO beat -8% AH Wed = two &ldquo;sell on good news&rdquo; signals in 48 hours.',
-      trade:'Buy QQQ puts or SMH puts at Thu Jun 4 open. 30 days out, 3&ndash;5% OTM. Size: 0.5% bankroll.',
-      result:'Thu Nasdaq -4%. Fri Nasdaq -4%. QQQ puts: 5&ndash;10&times; premium. SMH sector drop: -10.4% on week.',
+      setup:'AMD, PANW, DELL breaking to new highs while the AI &ldquo;value zone&rdquo; names (MSFT/ORCL/PLTR) rolled over. Momentum &gt; mean-reversion this week.',
+      trade:'The framework only buys pullbacks-to-zone, so it structurally sat out the AMD/PANW/DELL breakouts &mdash; and correctly avoided the MSFT/ORCL/PLTR knives. Net: no trade was the right trade.',
+      result:'AMD $536&rarr;$581, PANW $288&rarr;$341, DELL $410&rarr;$431. Un-chaseable on framework rules, but a reminder that a momentum sleeve could capture what the value sleeve cannot.',
     },
     lessons: [
-      {tag:'MISSED', cls:'lsn-miss', text:'Two &ldquo;sell on good news&rdquo; events in 48hrs = distribution signal. NEW RULE: buy sector puts immediately.'},
-      {tag:'MACRO',  cls:'lsn-macro', text:'NFP was in Macro Watch all week. ADP beat Wednesday was the warning. Should have triggered defensive hedging Thursday open.'},
-      {tag:'RULE',   cls:'lsn-rule', text:'Hard exit rule worked. ORCL out Fri Jun 5 before Jun 9 earnings. Framework prevented the worst-case binary hold.'},
-      {tag:'NEXT',   cls:'lsn-next', text:'Trail stops must tighten aggressively when AI sector sells -4% intraday. Did not execute this on Thursday.'},
+      {tag:'KNIFE',      cls:'lsn-rule', text:'ORCL and PLTR both fell INTO their zones from above &mdash; and both are below all SMAs. A zone touch on a downtrend is a falling knife, not a value entry. The SMA50 filter is what separates the two; honor it over the zone.'},
+      {tag:'SMA',        cls:'lsn-macro', text:'Live SMA refresh (Robinhood historicals) is now the tie-breaker: MRVL bullish full stack = hold; MSFT/PLTR below all SMAs = avoid. Rebuild the SMA scanner server-side so this runs every call-up, not just in-browser.'},
+      {tag:'CAPITAL',    cls:'lsn-next', text:'Buying power is $13.64. The 13-name board is paper until cash is added or fractional shares are used. Real risk lives in QCML (&minus;7%, no stop) and 3 expiring options. Manage what is actually held first.'},
+      {tag:'MRVL',       cls:'lsn-rule', text:'MRVL is the only healthy uptrend: above all SMAs, rising SMA50, trail $290 just under price. Trim above $305, hard-exit below $290. This is the entire active playbook this week.'},
     ],
     eow: [
-      {ticker:'NVDA', price:'$204', sCls:'eow-green',  status:'BACK IN ZONE',    note:'Zone $200&ndash;215 &#10003;'},
-      {ticker:'MSFT', price:'$412', sCls:'eow-red',    status:'BELOW ZONE &#9888;', note:'Stop $390 watch'},
-      {ticker:'ANET', price:'$154', sCls:'eow-green',  status:'BACK IN ZONE',    note:'Zone $148&ndash;168 &#10003;'},
-      {ticker:'NOW',  price:'$111', sCls:'eow-red',    status:'BELOW ZONE &#9888;', note:'Stop $103 critical'},
-      {ticker:'ORCL', price:'$213', sCls:'eow-yellow', status:'POTW EXIT &#10003;', note:'Out. Earnings Jun 9'},
-      {ticker:'PLTR', price:'$134', sCls:'eow-yellow', status:'HOLD &mdash; DOWN',  note:'Above stop $108'},
-      {ticker:'AMD',  price:'$458', sCls:'eow-yellow', status:'HOLD &mdash; DOWN',  note:'Above stop $370'},
-      {ticker:'AVGO', price:'$472', sCls:'eow-yellow', status:'ABOVE ZONE',       note:'Recovered. Stop $385'},
-      {ticker:'VRT',  price:'$323', sCls:'eow-green',  status:'IN ZONE',          note:'Zone $310&ndash;340'},
-      {ticker:'PANW', price:'$283', sCls:'eow-yellow', status:'HOLD &mdash; TRAIL', note:'Stop $275'},
-      {ticker:'LMND', price:'~$62', sCls:'eow-yellow', status:'NEAR ZONE',        note:'Watch $52&ndash;60'},
+      {ticker:'MRVL', price:'$297.89', sCls:'eow-green',  status:'BULLISH STACK &#10003;', note:'Above all SMAs. Trail $290 (AH $293)'},
+      {ticker:'AMD',  price:'$580.91', sCls:'eow-green',  status:'NEW HIGH &#9650;',       note:'Ripped from $536. Far above zone'},
+      {ticker:'PANW', price:'$341.02', sCls:'eow-green',  status:'NEW HIGH &#9650;',       note:'Ripped from $288. Breakout leader'},
+      {ticker:'DELL', price:'$431.46', sCls:'eow-green',  status:'NEW HIGH &#9650;',       note:'Above zone $335&ndash;355. AI servers'},
+      {ticker:'AVGO', price:'$377.75', sCls:'eow-yellow', status:'AT ZONE TOP &#9660;',    note:'Pulled to zone top $375. Watch'},
+      {ticker:'VRT',  price:'$334.82', sCls:'eow-yellow', status:'ABOVE ZONE',            note:'Zone $290&ndash;312. Monitor'},
+      {ticker:'NVDA', price:'$200.09', sCls:'eow-yellow', status:'ABOVE ZONE &#9660;',    note:'Pulled from $210. Zone $175&ndash;192'},
+      {ticker:'ANET', price:'$169.88', sCls:'eow-yellow', status:'ABOVE ZONE',            note:'Zone $128&ndash;148. Monitor'},
+      {ticker:'LMND', price:'$65.05',  sCls:'eow-yellow', status:'ABOVE ZONE',            note:'Zone $45&ndash;56. No chase'},
+      {ticker:'NOW',  price:'$99.28',  sCls:'eow-red',    status:'BELOW FLOOR &#9660;',   note:'Below $103 floor. Recovering. Stop $88'},
+      {ticker:'MSFT', price:'$373.02', sCls:'eow-red',    status:'AT STOP &#9888;',       note:'$1 above stop $372. Bearish stack'},
+      {ticker:'PLTR', price:'$116.67', sCls:'eow-red',    status:'FALLING KNIFE &#9888;', note:'In zone but below all SMAs. No entry'},
+      {ticker:'ORCL', price:'$146.55', sCls:'eow-red',    status:'STOP BROKEN &#9888;',   note:'Below $148 stop. Setup dead'},
     ],
   },
 };
