@@ -24,6 +24,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./rsvp
+          destination_dir: rsvp
           publish_branch: gh-pages
           enable_jekyll: false
           keep_files: true
