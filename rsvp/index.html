@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quynh & Benjamin | RSVP</title>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       PALETTE — sampled from the couple's Canva site (light & botanical):
+       warm cream base · avocado green · forest green accents · olive ink.
+       ════════════════════════════════════════════════════════════════ */
+    :root{
+      --cream:      #f0ead5;  /* page background — from swatch  */
+      --card:       #faf6ea;  /* lifted card surface            */
+      --paper:      #e9e2cb;  /* warm paper sections            */
+      --green:      #67845c;  /* sage green — from swatch       */
+      --green-deep: #4e6644;  /* deeper sage (buttons/accents)  */
+      --green-darker:#3e5236;
+      --ink:        #3b4232;  /* dark olive text                */
+      --ink-soft:   #6e7258;  /* muted text                     */
+      --on-green:   #f0ead5;  /* cream text on green            */
+      --gold:       #bfa14e;  /* subtle gold accent             */
+      --line:       #d6cdaf;  /* hairline rule                  */
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Cormorant Garamond',serif;background:var(--cream);color:var(--ink);
+      font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+    .script{font-family:'Pinyon Script',cursive;font-weight:400;}
+    .eyebrow{font-family:'Cormorant',serif;font-weight:500;font-size:.72rem;
+      letter-spacing:4px;text-transform:uppercase;color:var(--green-deep);}
+
+    /* ── Mock banner ── */
+    .mock-banner{background:var(--green-deep);color:var(--on-green);text-align:center;
+      padding:7px 16px;font-family:'Cormorant',serif;font-size:.8rem;letter-spacing:1.5px;
+      text-transform:uppercase;}
+
+    /* ── Top bar ── */
+    .topbar{text-align:center;padding:14px;border-bottom:1px solid var(--line);}
+    .topbar a{color:var(--green-deep);text-decoration:none;font-family:'Cormorant',serif;
+      font-weight:500;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;}
+    .topbar a:hover{color:var(--ink);}
+
+    /* ── Hero ── */
+    .hero{text-align:center;padding:58px 24px 20px;}
+    .hero .eyebrow{display:block;margin-bottom:14px;letter-spacing:5px;}
+    .hero h1{font-family:'Pinyon Script',cursive;font-size:5rem;line-height:1;
+      color:var(--green-deep);font-weight:400;margin:6px 0;}
+    .hero .meta{margin-top:22px;font-family:'Cormorant',serif;font-weight:500;font-size:.72rem;
+      letter-spacing:3px;text-transform:uppercase;color:var(--ink-soft);line-height:2.1;}
+    .ornament{display:flex;align-items:center;justify-content:center;gap:14px;margin:24px auto 0;}
+    .ornament .ln{width:48px;height:1px;background:var(--gold);}
+    .ornament .dot{width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg);}
+
+    /* ── Invite band (green) ── */
+    .invite-band{background:var(--green);color:var(--on-green);text-align:center;
+      padding:46px 26px;margin:34px 0 0;}
+    .invite-band .you{font-family:'Pinyon Script',cursive;font-size:3.4rem;line-height:1;
+      margin-bottom:16px;color:var(--on-green);}
+    .invite-band p{font-style:italic;font-weight:400;font-size:1.12rem;max-width:480px;
+      margin:0 auto;color:var(--on-green);opacity:.95;}
+
+    /* ── Layout ── */
+    .main{max-width:600px;margin:0 auto;padding:44px 22px 100px;}
+    .section-head{text-align:center;margin-bottom:30px;}
+    .section-head .script{display:block;font-size:2.7rem;color:var(--green-deep);line-height:1;margin-bottom:6px;}
+    .section-head h2{font-family:'Cormorant',serif;font-weight:500;font-size:1.4rem;
+      letter-spacing:3px;text-transform:uppercase;color:var(--ink);}
+    .section-head p{font-style:italic;color:var(--ink-soft);max-width:430px;margin:10px auto 0;font-size:1.05rem;}
+
+    /* ── Test guide ── */
+    .test-guide{background:var(--card);border:1px solid var(--line);border-radius:3px;
+      padding:22px 24px;margin-bottom:40px;}
+    .test-guide .eyebrow{display:block;margin-bottom:5px;}
+    .test-guide .gnote{font-style:italic;color:var(--ink-soft);font-size:.98rem;margin-bottom:16px;}
+    .tier{margin-bottom:15px;}.tier:last-child{margin-bottom:0;}
+    .tier .tname{font-family:'Cormorant',serif;font-weight:600;font-size:.66rem;letter-spacing:1.5px;
+      text-transform:uppercase;color:var(--green-deep);padding-bottom:5px;border-bottom:1px solid var(--line);margin-bottom:7px;}
+    .tier table{width:100%;border-collapse:collapse;margin-top:4px;}
+    .tier td{padding:3px 8px 3px 0;color:var(--ink);vertical-align:top;font-size:1.02rem;}
+    .tier td:first-child{font-weight:500;white-space:nowrap;}
+    .tier td:nth-child(2){font-style:italic;color:var(--ink-soft);font-size:.88rem;}
+
+    /* ── Search ── */
+    .search-wrap{position:relative;max-width:440px;margin:0 auto;}
+    .search-input{width:100%;padding:16px 20px;font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+      text-align:center;border:1px solid var(--green-deep);border-radius:3px;background:var(--card);
+      color:var(--ink);outline:none;transition:.25s;}
+    .search-input::placeholder{color:var(--ink-soft);opacity:.6;font-style:italic;}
+    .search-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(154,165,78,.15);}
+    .suggestion{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);
+      border:1px solid var(--green-deep);border-radius:3px;z-index:50;overflow:hidden;
+      box-shadow:0 12px 30px rgba(67,81,31,.18);display:none;}
+    .suggestion-item{padding:15px 20px;cursor:pointer;display:flex;justify-content:space-between;
+      align-items:center;transition:background .15s;}
+    .suggestion-item:hover{background:var(--paper);}
+    .suggest-name{font-family:'Cormorant',serif;font-weight:600;font-size:1.15rem;letter-spacing:.5px;color:var(--ink);}
+    .suggest-hint{font-family:'Cormorant',serif;font-weight:500;font-size:.64rem;letter-spacing:1.5px;
+      text-transform:uppercase;color:var(--green-deep);}
+    .hint-msg{margin:14px auto 0;text-align:center;font-style:italic;color:var(--ink-soft);
+      font-size:1.05rem;max-width:430px;display:none;}
+    .hint-msg b{font-style:normal;color:var(--green-deep);}
+    .not-found-box{max-width:440px;margin:14px auto 0;background:var(--paper);border:1px solid var(--line);
+      border-radius:3px;padding:18px 22px;text-align:center;font-style:italic;color:var(--ink-soft);
+      font-size:1.02rem;display:none;}
+    .not-found-box a{color:var(--green-deep);font-style:normal;font-weight:500;}
+
+    /* ── Welcome card ── */
+    .welcome-card{text-align:center;padding:26px 24px;margin-bottom:34px;background:var(--paper);
+      border-radius:3px;display:none;}
+    .welcome-card .wname{font-family:'Cormorant',serif;font-weight:500;font-size:1.5rem;
+      letter-spacing:1px;color:var(--ink);margin-bottom:6px;}
+    .welcome-card .wname b{font-weight:600;color:var(--green-deep);}
+    .welcome-card .winfo{font-style:italic;color:var(--ink-soft);font-size:1.08rem;}
+    .reset-link{margin-top:14px;display:inline-block;font-family:'Cormorant',serif;font-weight:500;
+      font-size:.64rem;letter-spacing:2px;text-transform:uppercase;color:var(--green-deep);
+      cursor:pointer;border-bottom:1px solid transparent;}
+    .reset-link:hover{border-bottom-color:var(--green-deep);}
+
+    /* ── Plus-one ── */
+    .plusone-section{margin-bottom:28px;display:none;}.plusone-section.visible{display:block;}
+    .plusone-section .eyebrow{display:block;text-align:center;margin-bottom:16px;}
+    .plusone-field{margin-bottom:14px;}.plusone-field:last-child{margin-bottom:0;}
+
+    /* ── Event cards ── */
+    .form-section{padding:28px 4px;border-top:1px solid var(--line);display:none;}
+    .form-section.visible{display:block;}
+    .form-section.first{border-top:none;}
+    .event-head{text-align:center;}
+    .event-head .ev-when{font-family:'Cormorant',serif;font-weight:600;font-size:.62rem;letter-spacing:2.5px;
+      text-transform:uppercase;color:var(--green-deep);margin-bottom:8px;}
+    .event-head .ev-title{font-family:'Pinyon Script',cursive;font-size:2.5rem;color:var(--ink);line-height:1;}
+    .event-head .ev-loc{font-style:italic;color:var(--ink-soft);font-size:1rem;margin-top:6px;}
+    .attend-q{text-align:center;font-style:italic;color:var(--ink-soft);margin:18px 0 12px;font-size:1.02rem;}
+    .yn-group{display:flex;gap:12px;max-width:440px;margin:0 auto;}
+    .yn-btn{flex:1;padding:13px 8px;border:1px solid var(--line);border-radius:3px;background:var(--card);
+      font-family:'Cormorant',serif;font-weight:600;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;
+      cursor:pointer;transition:.2s;color:var(--ink-soft);}
+    .yn-btn:hover{border-color:var(--green-deep);color:var(--green-deep);}
+    .yn-btn.yes.active{background:var(--green-deep);border-color:var(--green-deep);color:var(--on-green);}
+    .yn-btn.no.active{background:var(--paper);border-color:var(--line);color:var(--ink-soft);font-style:italic;}
+
+    /* ── General ── */
+    .general-section{padding-top:28px;border-top:1px solid var(--line);margin-bottom:8px;display:none;}
+    .general-section.visible{display:block;}
+    .field-group{margin-bottom:18px;max-width:460px;margin-left:auto;margin-right:auto;}
+    .field-group:last-child{margin-bottom:0;}
+    .field-label{display:block;text-align:center;font-family:'Cormorant',serif;font-weight:600;font-size:.62rem;
+      letter-spacing:2px;text-transform:uppercase;color:var(--green-deep);margin-bottom:9px;}
+    input[type=text],textarea{width:100%;padding:12px 16px;font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+      border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--ink);outline:none;
+      transition:.2s;text-align:center;}
+    input[type=text]:focus,textarea:focus{border-color:var(--green-deep);}
+    input::placeholder,textarea::placeholder{color:var(--ink-soft);opacity:.55;font-style:italic;}
+    textarea{resize:vertical;min-height:84px;text-align:left;line-height:1.5;}
+
+    /* ── Submit ── */
+    .submit-btn{display:none;margin:30px auto 0;padding:15px 52px;background:var(--green-deep);color:var(--on-green);
+      border:none;border-radius:3px;font-family:'Cormorant',serif;font-weight:600;font-size:.7rem;letter-spacing:3px;
+      text-transform:uppercase;cursor:pointer;transition:.2s;}
+    .submit-btn:hover{background:var(--green-darker);}
+    .submit-btn.visible{display:block;}
+
+    /* ── Confirmation ── */
+    .confirmation{text-align:center;padding:58px 20px;display:none;}.confirmation.visible{display:block;}
+    .conf-script{font-family:'Pinyon Script',cursive;font-size:3.6rem;color:var(--green-deep);line-height:1;margin-bottom:8px;}
+    .confirmation p{font-style:italic;color:var(--ink-soft);max-width:400px;margin:0 auto;font-size:1.1rem;}
+    .conf-detail{max-width:380px;margin:28px auto 0;text-align:left;background:var(--paper);
+      border-radius:3px;padding:20px 24px;}
+    .conf-detail .ch{display:block;text-align:center;font-family:'Cormorant',serif;font-weight:600;font-size:.6rem;
+      letter-spacing:2px;text-transform:uppercase;color:var(--green-deep);margin-bottom:12px;}
+    .conf-detail .row{padding:4px 0;color:var(--ink);font-size:1.05rem;}
+    .return-btn{display:inline-block;margin-top:30px;padding:14px 42px;background:transparent;color:var(--green-deep);
+      border:1px solid var(--green-deep);border-radius:3px;font-family:'Cormorant',serif;font-weight:600;font-size:.66rem;
+      letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;transition:.2s;}
+    .return-btn:hover{background:var(--green-deep);color:var(--on-green);}
+
+    footer{text-align:center;padding:30px;background:var(--green);color:var(--on-green);
+      font-family:'Cormorant',serif;font-weight:500;font-size:.64rem;letter-spacing:2.5px;text-transform:uppercase;}
+
+    @media(max-width:460px){
+      .hero h1{font-size:3.6rem;}
+      .invite-band .you{font-size:2.7rem;}
+      .yn-group{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="mock-banner">Prototype &middot; Testing Mode</div>
+
+<div class="topbar">
+  <!-- TODO: confirm final wedding-site URL before launch -->
+  <a href="https://quynh-ben.my.canva.site/wedding/" target="_blank">&lsaquo;&nbsp;&nbsp;Return to Wedding Website</a>
+</div>
+
+<div class="hero">
+  <span class="eyebrow">The Wedding of</span>
+  <h1>Quynh &amp; Benjamin</h1>
+  <div class="meta">
+    August 28, 2027 &nbsp;&middot;&nbsp; 5:00 PM<br>
+    The Grandover Hotel &amp; Resort
+  </div>
+  <div class="ornament"><span class="ln"></span><span class="dot"></span><span class="ln"></span></div>
+</div>
+
+<div class="invite-band">
+  <div class="you">You are invited</div>
+  <p>We&rsquo;re so delighted you&rsquo;re here and can&rsquo;t wait to celebrate this special moment with you. Kindly reply below.</p>
+</div>
+
+<div class="main">
+
+  <!-- Test guide -->
+  <div class="test-guide" id="testGuide">
+    <span class="eyebrow">Testing &mdash; Guests by Tier</span>
+    <div class="gnote">Each tier sees only its invited events. Try the nicknames and a typo or two.</div>
+    <div class="tier">
+      <div class="tname">Tier A &mdash; Full Weekend &middot; Welcome + Tea + Wedding</div>
+      <table>
+        <tr><td>Benjamin Wood</td><td>try &ldquo;Ben&rdquo;</td><td>+1</td></tr>
+        <tr><td>James Wilson</td><td>try &ldquo;Jim&rdquo;</td><td>+2</td></tr>
+        <tr><td>Lisa Williams</td><td></td><td>+1</td></tr>
+      </table>
+    </div>
+    <div class="tier">
+      <div class="tname">Tier B &mdash; Tea Ceremony + Wedding</div>
+      <table>
+        <tr><td>Michael Chen</td><td>try &ldquo;Mike&rdquo;</td><td>+1</td></tr>
+        <tr><td>Kyle Anderson</td><td></td><td>+1</td></tr>
+      </table>
+    </div>
+    <div class="tier">
+      <div class="tname">Tier C &mdash; Welcome Party + Wedding</div>
+      <table>
+        <tr><td>Sarah Johnson</td><td></td><td>+2</td></tr>
+        <tr><td>David Thompson</td><td>try &ldquo;Dave&rdquo;</td><td>+1</td></tr>
+      </table>
+    </div>
+    <div class="tier">
+      <div class="tname">Tier D &mdash; Wedding Only</div>
+      <table>
+        <tr><td>Kyle Smith</td><td></td><td>solo</td></tr>
+        <tr><td>Jennifer Martinez</td><td>try &ldquo;Jen&rdquo;</td><td>solo</td></tr>
+        <tr><td>Robert Brown</td><td>try &ldquo;Bob&rdquo;</td><td>+1</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 1 -->
+  <div id="searchSection">
+    <div class="section-head">
+      <span class="script">Kindly Reply</span>
+      <h2>Find Your Invitation</h2>
+      <p>Type your name &mdash; first, last, full, or a nickname.</p>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="nameInput" class="search-input" placeholder="Your name&hellip;"
+        autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="suggestion" id="suggestion">
+        <div class="suggestion-item" id="suggestionItem">
+          <span class="suggest-name" id="suggestName"></span>
+          <span class="suggest-hint">Tap to confirm &rsaquo;</span>
+        </div>
+      </div>
+    </div>
+    <div class="hint-msg" id="ambiguousHint">More than one guest matches &mdash; please type your <b>full name</b>.</div>
+    <div class="hint-msg" id="keepTypingHint">Keep typing &mdash; first name, last name, or both.</div>
+    <div class="not-found-box" id="notFoundBox">
+      We couldn&rsquo;t find that name. Please check the spelling, or reach us at
+      <a href="mailto:woodfamily.bq@gmail.com">woodfamily.bq@gmail.com</a>.
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div id="rsvpForm" style="display:none;">
+    <div class="welcome-card" id="welcomeCard">
+      <div class="wname" id="welcomeName"></div>
+      <div class="winfo" id="welcomeInfo"></div>
+      <span class="reset-link" onclick="resetForm()">Not you? Search again</span>
+    </div>
+
+    <div class="section-head">
+      <span class="script">Your Response</span>
+      <h2>RSVP</h2>
+      <p>Please reply to each event below.</p>
+    </div>
+
+    <div class="plusone-section" id="plusOneSection">
+      <span class="eyebrow">Your Additional Guest(s)</span>
+      <div id="plusOneFields"></div>
+    </div>
+
+    <div class="form-section first" id="event-welcome">
+      <div class="event-head">
+        <div class="ev-when">Friday &middot; August 27</div>
+        <div class="ev-title">Welcome Party</div>
+        <div class="ev-loc">8:00 PM &middot; Griffin Ballroom</div>
+      </div>
+      <div class="attend-q">Will you join us?</div>
+      <div class="yn-group">
+        <button class="yn-btn yes" onclick="toggleAttend('welcome',true)">Joyfully accepts</button>
+        <button class="yn-btn no" onclick="toggleAttend('welcome',false)">Regretfully declines</button>
+      </div>
+    </div>
+
+    <div class="form-section" id="event-tea">
+      <div class="event-head">
+        <div class="ev-when">Friday &middot; August 27</div>
+        <div class="ev-title">Tea Ceremony</div>
+        <div class="ev-loc">A traditional celebration with family</div>
+      </div>
+      <div class="attend-q">Will you join us?</div>
+      <div class="yn-group">
+        <button class="yn-btn yes" onclick="toggleAttend('tea',true)">Joyfully accepts</button>
+        <button class="yn-btn no" onclick="toggleAttend('tea',false)">Regretfully declines</button>
+      </div>
+    </div>
+
+    <div class="form-section" id="event-wedding">
+      <div class="event-head">
+        <div class="ev-when">Saturday &middot; August 28</div>
+        <div class="ev-title">The Wedding</div>
+        <div class="ev-loc">Ceremony 5:00 PM on the Resort Lawn &middot; Reception to follow in the Grandview Ballroom</div>
+      </div>
+      <div class="attend-q">Will you celebrate with us?</div>
+      <div class="yn-group">
+        <button class="yn-btn yes" onclick="toggleAttend('wedding',true)">Joyfully accepts</button>
+        <button class="yn-btn no" onclick="toggleAttend('wedding',false)">Regretfully declines</button>
+      </div>
+    </div>
+
+    <div class="general-section" id="generalSection">
+      <div class="field-group">
+        <label class="field-label">Dietary Restrictions or Allergies (optional)</label>
+        <input type="text" id="diet" placeholder="nut allergy, gluten-free, vegetarian&hellip;">
+      </div>
+      <div class="field-group">
+        <label class="field-label">A Note to Quynh &amp; Benjamin (optional)</label>
+        <textarea id="guestMessage" placeholder="Share a wish, a memory, or a song you&rsquo;d love to hear&hellip;"></textarea>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitRSVP()">Send My RSVP</button>
+  </div>
+
+  <!-- Confirmation -->
+  <div class="confirmation" id="confirmation">
+    <div class="conf-script">Thank You</div>
+    <p>Your RSVP is received. Quynh &amp; Benjamin can&rsquo;t wait to celebrate with you.</p>
+    <div class="conf-detail" id="confDetail"></div>
+    <!-- TODO: confirm final wedding-site URL before launch -->
+    <a class="return-btn" href="https://quynh-ben.my.canva.site/wedding/" target="_blank">Return to Wedding Website</a>
+  </div>
+
+</div>
+
+<footer>Quynh &amp; Benjamin &nbsp;&middot;&nbsp; August 28, 2027 &nbsp;&middot;&nbsp; The Grandover Hotel &amp; Resort</footer>
+
+<script>
+  const NICK = {
+    benjamin:['Ben','Benji','Benny'], ben:['Benjamin'],
+    michael:['Mike','Mickey','Mick'], mike:['Michael'],
+    william:['Will','Bill','Billy'], will:['William'], bill:['William'],
+    robert:['Rob','Bob','Bobby','Robbie'], rob:['Robert'], bob:['Robert'],
+    james:['Jim','Jimmy','Jamie'], jim:['James'],
+    jennifer:['Jen','Jenny'], jen:['Jennifer'],
+    elizabeth:['Liz','Beth','Lizzie','Eliza'], liz:['Elizabeth'], beth:['Elizabeth'],
+    katherine:['Kate','Katie','Kat','Kathy'], kate:['Katherine'], katie:['Katherine'],
+    david:['Dave','Davey'], dave:['David'],
+    christopher:['Chris'], chris:['Christopher'],
+    thomas:['Tom','Tommy'], tom:['Thomas'],
+    matthew:['Matt','Matty'], matt:['Matthew'],
+    samuel:['Sam','Sammy'], samantha:['Sam','Sammy'], sam:['Samuel','Samantha'],
+    alexander:['Alex','Xander'], alexandra:['Alex','Lexi'], alex:['Alexander','Alexandra'],
+    nicholas:['Nick','Nicky'], nick:['Nicholas'],
+    anthony:['Tony'], tony:['Anthony'],
+    andrew:['Andy','Drew'], andy:['Andrew'], drew:['Andrew'],
+    stephen:['Steve','Steven'], steven:['Steve','Stephen'], steve:['Stephen','Steven'],
+    daniel:['Dan','Danny'], dan:['Daniel'],
+    joseph:['Joe','Joey'], joe:['Joseph'],
+    patrick:['Pat'], patricia:['Pat','Patty'], pat:['Patrick','Patricia'],
+    richard:['Rich','Rick','Dick'], rich:['Richard'], rick:['Richard'],
+    charles:['Charlie','Chuck'], charlie:['Charles'],
+    jonathan:['Jon','Johnny'], jon:['Jonathan'],
+    edward:['Ed','Eddie','Ted'], ed:['Edward'],
+    margaret:['Maggie','Meg','Peggy'], maggie:['Margaret']
+  };
+
+  const GUESTS = [
+    {id:1,  name:"Benjamin Wood",     allowed:1, events:["welcome","tea","wedding"]},
+    {id:2,  name:"James Wilson",      allowed:2, events:["welcome","tea","wedding"]},
+    {id:3,  name:"Lisa Williams",     allowed:1, events:["welcome","tea","wedding"]},
+    {id:4,  name:"Michael Chen",      allowed:1, events:["tea","wedding"]},
+    {id:5,  name:"Kyle Anderson",     allowed:1, events:["tea","wedding"]},
+    {id:6,  name:"Sarah Johnson",     allowed:2, events:["welcome","wedding"]},
+    {id:7,  name:"David Thompson",    allowed:1, events:["welcome","wedding"]},
+    {id:8,  name:"Kyle Smith",        allowed:0, events:["wedding"]},
+    {id:9,  name:"Jennifer Martinez", allowed:0, events:["wedding"]},
+    {id:10, name:"Robert Brown",      allowed:1, events:["wedding"]},
+  ];
+
+  function aliasNames(full){
+    const parts=full.split(' '), first=parts[0], last=parts.slice(1).join(' ');
+    const set=new Set([full]);
+    (NICK[first.toLowerCase()]||[]).forEach(v=>set.add((v+' '+last).trim()));
+    return [...set];
+  }
+  const INDEX=[];
+  GUESTS.forEach(g=>aliasNames(g.name).forEach(term=>INDEX.push({term,guestId:g.id,guest:g})));
+  const fuse=new Fuse(INDEX,{keys:['term'],threshold:0.4,ignoreLocation:true,includeScore:true,minMatchCharLength:2,distance:100});
+
+  function searchGuests(q){
+    const raw=fuse.search(q),best={};
+    raw.forEach(r=>{const id=r.item.guestId;
+      if(!(id in best)||r.score<best[id].score) best[id]={guest:r.item.guest,score:r.score};});
+    return Object.values(best).sort((a,b)=>a.score-b.score);
+  }
+
+  let currentGuest=null,attendState={},t1=null;
+  const input=document.getElementById('nameInput');
+  const sugg=document.getElementById('suggestion');
+  const suggName=document.getElementById('suggestName');
+  const ambiguousHint=document.getElementById('ambiguousHint');
+  const keepTypingHint=document.getElementById('keepTypingHint');
+  const notFoundBox=document.getElementById('notFoundBox');
+
+  function hideAllHints(){sugg.style.display='none';ambiguousHint.style.display='none';
+    keepTypingHint.style.display='none';notFoundBox.style.display='none';}
+
+  input.addEventListener('input',()=>{
+    clearTimeout(t1);hideAllHints();
+    const val=input.value.trim();
+    if(val.length<2)return;
+    t1=setTimeout(()=>runSearch(val),240);
+  });
+
+  function runSearch(val){
+    const m=searchGuests(val);
+    if(m.length===0||m[0].score>0.42){
+      if(val.length>=3)notFoundBox.style.display='block';
+      else keepTypingHint.style.display='block';
+      return;
+    }
+    if(m.length>=2&&(m[1].score-m[0].score)<0.10){ambiguousHint.style.display='block';return;}
+    suggName.textContent=m[0].guest.name;
+    document.getElementById('suggestionItem').onclick=()=>selectGuest(m[0].guest);
+    sugg.style.display='block';
+  }
+
+  document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))sugg.style.display='none';});
+
+  function selectGuest(g){
+    currentGuest=g;attendState={};hideAllHints();input.value=g.name;
+    document.getElementById('searchSection').style.display='none';
+    document.getElementById('testGuide').style.display='none';
+    document.getElementById('rsvpForm').style.display='block';
+    document.getElementById('welcomeCard').style.display='block';
+    document.getElementById('welcomeName').innerHTML='Welcome, <b>'+g.name+'</b>';
+    document.getElementById('welcomeInfo').textContent=
+      g.allowed===0?'We have you reserved as our guest.'
+      :g.allowed===1?'You are invited with one additional guest.'
+      :'You are invited with '+g.allowed+' additional guests.';
+
+    const po=document.getElementById('plusOneSection'),pf=document.getElementById('plusOneFields');
+    pf.innerHTML='';
+    if(g.allowed>0){po.classList.add('visible');
+      for(let i=1;i<=g.allowed;i++){
+        pf.innerHTML+='<div class="plusone-field"><label class="field-label">Guest '+
+          (g.allowed>1?i:'')+' Full Name</label><input type="text" id="plusone-'+i+'" placeholder="First and last name"></div>';
+      }
+    } else po.classList.remove('visible');
+
+    let first=true;
+    ['welcome','tea','wedding'].forEach(ev=>{
+      const el=document.getElementById('event-'+ev);
+      el.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('active'));
+      const show=g.events.includes(ev);
+      el.classList.toggle('visible',show);
+      el.classList.remove('first');
+      if(show&&first){el.classList.add('first');first=false;}
+    });
+
+    document.getElementById('generalSection').classList.add('visible');
+    document.getElementById('submitBtn').classList.add('visible');
+    setTimeout(()=>document.getElementById('rsvpForm').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  }
+
+  function toggleAttend(ev,yes){
+    attendState[ev]=yes;
+    const s=document.getElementById('event-'+ev);
+    s.querySelector('.yn-btn.yes').classList.toggle('active',yes);
+    s.querySelector('.yn-btn.no').classList.toggle('active',!yes);
+  }
+
+  function submitRSVP(){
+    if(!currentGuest)return;
+    const labels={welcome:'Welcome Party',tea:'Tea Ceremony',wedding:'The Wedding'};
+    const lines=currentGuest.events.map(ev=>{
+      const a=attendState[ev];
+      if(a===true)return '&#10003;&nbsp; '+labels[ev]+' &mdash; Joyfully accepts';
+      if(a===false)return '&#10007;&nbsp; '+labels[ev]+' &mdash; Regretfully declines';
+      return '&middot;&nbsp; '+labels[ev]+' &mdash; (no response yet)';
+    });
+    document.getElementById('rsvpForm').style.display='none';
+    const c=document.getElementById('confirmation');c.classList.add('visible');
+    document.getElementById('confDetail').innerHTML='<span class="ch">Your Responses</span>'+
+      lines.map(l=>'<div class="row">'+l+'</div>').join('');
+    c.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  function resetForm(){
+    currentGuest=null;attendState={};input.value='';hideAllHints();
+    document.getElementById('rsvpForm').style.display='none';
+    document.getElementById('confirmation').classList.remove('visible');
+    document.getElementById('testGuide').style.display='block';
+    document.getElementById('searchSection').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+    setTimeout(()=>input.focus(),400);
+  }
+</script>
+</body>
+</html>
